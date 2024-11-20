@@ -1,0 +1,52 @@
+<template>
+        <lightning-card hide-header="true">
+            <lightning-layout class="slds-grid slds-grid_vertical-align-end">
+                <lightning-layout-item class="slds-p-right_x-small slds-p-left_x-small" >
+                        <lightning-input type="text"
+                         
+                                       label="관련 분야" 
+                                       onchange={handleCategory}
+                                       value={category}></lightning-input>
+                </lightning-layout-item>
+                
+                <lightning-layout-item class="slds-p-right_x-small" >
+                        <lightning-input type="text"
+                         
+                                       label="프로그램명" 
+                                       onchange={handleProgram}
+                                       value={program}></lightning-input>
+                </lightning-layout-item>
+                
+                <lightning-layout-item class="slds-p-right_x-small" >
+                        <lightning-input type="text"
+                         
+                                       label="사원명" 
+                                       onchange={handleEmployee}
+                                       value={employee}></lightning-input>
+                </lightning-layout-item>
+            
+                <lightning-layout-item class="slds-p-left_x-small slds-p-right_x-small">
+                    <div class="slds-grid slds-grid_align-end button-container">
+                        <lightning-button-group class="slds-p-bottom_xxx-small">
+                            <lightning-button-icon
+                                icon-name="utility:search"
+                                alternative-text="Search"
+                                variant="border"
+                                size="medium"
+                                class="icon-color"
+                                onclick={handleSearch}>
+                            </lightning-button-icon>
+                            <lightning-button-icon
+                                icon-name="utility:refresh"
+                                alternative-text="Refresh"
+                                variant="border"
+                                class="icon-color"
+                                size="medium"
+                                onclick={handleRefresh}>
+                            </lightning-button-icon>
+                        </lightning-button-group>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+        </lightning-card>
+    </template>
