@@ -1,0 +1,108 @@
+<template>
+    
+    
+
+    <!--전체 직원 정보 출력-->
+    <template if:true={isRole}>
+        <c-child-education-search ongetinfo={handleSearch} onrefresh={handleRefresh}></c-child-education-search>
+        
+        <lightning-card title="사원 별 미진행 프로그램">
+            <div class="slds-p-around_medium">
+                <lightning-datatable
+                key-field="id"
+                data={displayData}
+                columns={columns}
+                hide-checkbox-column
+                onsort={handleSort}
+                sorted-by={sortedBy}
+                sorted-direction={sortDirection}
+                default-sort-direction={defaultSortDirection}>
+            </lightning-datatable>
+            </div>
+        </lightning-card>
+
+        <lightning-card title="사원 별 진행 중/완료 프로그램">
+            <div class="slds-p-around_medium">
+                <lightning-datatable
+                key-field="id"
+                data={displayData2}
+                columns={columns2}
+                hide-checkbox-column
+                onsort={handleSort}
+                sorted-by={sortedBy}
+                sorted-direction={sortDirection}
+                default-sort-direction={defaultSortDirection}>
+            </lightning-datatable>
+            </div>
+        </lightning-card>
+    </template>
+
+    <template if:true={isCheck}>
+        
+        <lightning-card title={getRemainTitle}>
+            <div class="slds-p-around_medium">
+                <lightning-datatable
+                key-field="id"
+                data={displayData}
+                columns={columns}
+                hide-checkbox-column
+                onsort={handleSort}
+                sorted-by={sortedBy}
+                sorted-direction={sortDirection}
+                default-sort-direction={defaultSortDirection}>
+            </lightning-datatable>
+            </div>
+        </lightning-card>
+
+        <lightning-card title={getInProgressTitle}>
+            <div class="slds-p-around_medium">
+                <lightning-datatable
+                key-field="id"
+                data={displayData2}
+                columns={columns2}
+                hide-checkbox-column
+                onsort={handleSort}
+                sorted-by={sortedBy}
+                sorted-direction={sortDirection}
+                default-sort-direction={defaultSortDirection}>
+            </lightning-datatable>
+            </div>
+        </lightning-card>
+    </template>
+
+    <template if:true={isMentor}>
+        <c-child-education-search ongetinfo={handleSearch} onrefresh={handleRefresh}></c-child-education-search>
+        <lightning-card >
+        <h1 slot="title">사원 별 미진행 프로그램</h1>
+            <div class="slds-p-around_medium">
+                <lightning-datatable
+                key-field="id"
+                data={displayData}
+                columns={columns}
+                hide-checkbox-column
+                onsort={handleSort}
+                sorted-by={sortedBy}
+                sorted-direction={sortDirection}
+                default-sort-direction={defaultSortDirection}>
+            </lightning-datatable>
+            </div>
+        </lightning-card>
+
+        <lightning-card title="사원 별 진행 중/완료 프로그램">
+            <div class="slds-p-around_medium">
+                <lightning-datatable
+                key-field="id"
+                data={displayData2}
+                columns={columns2}
+                hide-checkbox-column
+                onsort={handleSort}
+                sorted-by={sortedBy}
+                sorted-direction={sortDirection}
+                default-sort-direction={defaultSortDirection}>
+            </lightning-datatable>
+            </div>
+        </lightning-card>
+    </template>
+
+
+</template>
