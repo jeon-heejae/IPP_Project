@@ -1,0 +1,86 @@
+<aura:component controller="TeacherProfilePictureController"
+                implements="flexipage:availableForAllPageTypes,force:hasRecordId">
+    
+    <aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="teacher" type="Object"/>
+    <aura:attribute name="pictureSrc" type="String" 
+            default="https://s3-us-west-1.amazonaws.com/sfdc-demo/image-placeholder.png"/>
+    <aura:attribute name="message" type="String" default="Drag profile picture here"/>
+    
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div class="slds-card">
+        <div class="slds-card__body slds-card__body_inner">
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col slds-size_1-of-12"></div>
+                <div class="slds-col slds-size_1-of-3">
+                    <div ondragover="{!c.handleDragOver}" ondrop="{!c.handleDrop}">
+                        <img src="{!v.pictureSrc}" alt="Profile Picture" class="slds-avatar slds-avatar_large"/>
+                        <p class="slds-text-body_small slds-text-color_weak">{!v.message}</p>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_2-of-3">
+                    <div class="slds-form" role="list">
+                        <div class="slds-form__row">
+                            <div class="slds-form__item" role="listitem">
+                                <div class="slds-form-element slds-form-element_horizontal">
+                                    <span class="slds-form-element__label">이름</span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">{!v.teacher.Name}</div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_2-of-12"></div>
+                            </div>
+                        </div>
+                        <div class="slds-form__row">
+                            <div class="slds-form__item" role="listitem">
+                                <div class="slds-form-element slds-form-element_horizontal">
+                                    <span class="slds-form-element__label">전화번호</span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">{!v.teacher.Mobile__c}</div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_2-of-12"></div>
+                            </div>
+                        </div>
+                        <div class="slds-form__row">
+                            <div class="slds-form__item" role="listitem">
+                                <div class="slds-form-element slds-form-element_horizontal">
+                                    <span class="slds-form-element__label">주소</span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">{!v.teacher.Address__c}</div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_2-of-12"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-card__footer">
+            <lightning:button label="파일 선택" onclick="{!c.handleFileSelect}" class="slds-m-right_x-small"/>
+        </div>
+    </div>
+    
+    <aura:html tag="style">
+        .slds-form-element__label {
+            font-weight: bold;
+        }
+        .slds-form-element__static {
+            border-bottom: 1px solid #d8dde6;
+            padding-bottom: 3px;
+            max-width: 100%;
+            word-break: break-word;
+        }
+        .slds-form-element_horizontal .slds-form-element__control {
+            padding-left: 0;
+        }
+        .slds-form-element_horizontal .slds-form-element__label {
+            max-width: 100%;
+            flex-basis: 100%;
+            padding-right: 0;
+        }
+    </aura:html>
+</aura:component>

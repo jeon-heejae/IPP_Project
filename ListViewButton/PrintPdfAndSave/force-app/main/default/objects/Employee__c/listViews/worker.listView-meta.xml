@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>worker</fullName>
+    <columns>EmployeeNo__c</columns>
+    <columns>NAME</columns>
+    <columns>Department__c</columns>
+    <columns>Position__c</columns>
+    <columns>MainRole__c</columns>
+    <columns>DeptPosition__c</columns>
+    <columns>JoinDate__c</columns>
+    <columns>WorkPeriode__c</columns>
+    <columns>Email__c</columns>
+    <columns>MobilePhone__c</columns>
+    <columns>Birthday__c</columns>
+    <columns>Age__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Status__c</field>
+        <operation>equals</operation>
+        <value>1</value>
+    </filters>
+    <filters>
+        <field>Type__c</field>
+        <operation>equals</operation>
+        <value>내부직원</value>
+    </filters>
+    <label>재직자목록</label>
+</ListView>

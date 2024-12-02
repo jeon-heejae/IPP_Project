@@ -1,0 +1,102 @@
+<aura:component description="AddressSearch" controller="AddressSearchController"
+    implements="force:hasRecordId,force:lightningQuickActionWithoutHeader,flexipage:availableForAllPageTypes">
+    <aura:attribute name="objAddress" type="Object" default="{ 'PostalCode__c': '', 'RoadAddress__c': '', 'DetailAddress__c': '' }"/>
+    <aura:attribute name="headerName" type="String" default="도로명 주소 찾기" />
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="searchKeyword" type="String" />
+    <aura:attribute name="searchResults" type="Object[]" default="[]" />
+    <aura:attribute name="isLoading" type="Boolean" default="false" />
+    <aura:attribute name="showSelectedAddress" type="Boolean" default="false"/>
+    <aura:attribute name="showSearchAddress" type="Boolean" default="true"/>
+
+    <aura:attribute name="selectedAddress" type="Object" default="{ 'PostalCode__c': '', 'RoadAddress__c': '', 'DetailAddress__c': '' }" />
+    
+    <aura:registerEvent name="addressSaved" 
+        type="c:AddressSavedEvent" />
+    <aura:registerEvent name="closeModal" 
+        type="c:CloseModalEvent" />
+
+
+    
+    
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container">
+                <aura:if isTrue="{!v.showSearchAddress}">
+                    <header class="slds-modal__header">
+                        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{!v.headerName}</h2>
+                    </header>
+                </aura:if>
+                
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                   
+                    
+                    <aura:if isTrue="{!v.showSearchAddress}">
+                        <div onkeyup="{!c.handleKeyUp}">
+                            <lightning:input type="search" 
+                            label="주소 검색" 
+                            value="{!v.searchKeyword}" 
+                            />
+                        </div>
+                       
+                        
+                        <!-- 검색 결과 표시 -->
+                    <aura:if isTrue="{!not(empty(v.searchResults))}">
+                        <div class="slds-text-body_small slds-m-top_x-small">
+                            도로명주소 검색 결과 ({!v.searchResults.length})
+                        </div>
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-m-top_x-small">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="slds-text-title_caps" scope="col">No</th>
+                                    <th class="slds-text-title_caps" scope="col">도로명주소</th>
+                                    <th class="slds-text-title_caps" scope="col">우편번호</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <aura:iteration items="{!v.searchResults}" var="result" indexVar="index">
+                                    <tr onclick="{!c.selectAddress}" data-address="{!result.roadAddress}" data-zipcode="{!result.zipCode}"
+                                    data-jibun="{!result.jibunAddress}">
+                                        <td>{!index + 1}</td>
+                                        <td>
+                                            <div>{!result.roadAddress}</div>
+                                            <div class="slds-text-color_weak">[지번] {!result.jibunAddress}</div>
+                                        </td>
+                                        <td>{!result.zipCode}</td>
+                                    </tr>
+                                </aura:iteration>
+                            </tbody>
+                        </table>
+                    </aura:if>
+                </aura:if>
+                    
+                    <aura:if isTrue="{!v.showSelectedAddress}">
+                        <div class="slds-m-top_medium">
+                            <lightning:input label="우편번호" value="{!v.selectedAddress.PostalCode__c}" disabled="true"/>
+                    <lightning:input label="도로명 주소" value="{!v.selectedAddress.RoadAddress__c}" disabled="true"/>
+                    <lightning:input label="상세 주소" value="{!v.selectedAddress.DetailAddress__c}"/>
+                            <div class="slds-grid slds-grid_align-spread slds-m-top_medium">
+                                <div class="slds-col">
+                                    <lightning:button label="취소" onclick="{!c.handleCancel}" variant="neutral"/>
+                                </div>
+                                <div class="slds-col slds-text-align_right">
+                                    <lightning:button label="이전" onclick="{!c.backToSearch}" variant="neutral" class="slds-m-right_x-small"/>
+                                    <lightning:button label="저장" onclick="{!c.saveAddress}" variant="brand"/>
+                                </div>
+                            </div>
+                        </div>
+                    </aura:if>
+                </div>
+                
+                <aura:if isTrue="{!v.showSearchAddress}">
+                    <footer class="slds-modal__footer">
+                        <lightning:button label="취소" onclick="{!c.closeModal}" />
+                    </footer>
+                </aura:if>
+
+                <aura:if isTrue="{!v.isLoading}">
+                    <lightning:spinner alternativeText="Loading" size="small" />
+                </aura:if>
+            </div>
+        </section>
+    
+</aura:component>

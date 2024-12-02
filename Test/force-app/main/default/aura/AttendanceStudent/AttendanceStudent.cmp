@@ -1,0 +1,44 @@
+<aura:component controller="AttendanceStudentController"
+    implements="flexipage:availableForAllPageTypes,force:hasRecordId">
+    <aura:attribute name="students" type="Object[]" />
+    <aura:attribute name="recordId" type="Id" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div class="slds-card">
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        화상강의 참석 학생 목록
+                    </h2>
+                </div>
+            </header>
+        </div>
+        <div class="slds-card__body">
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th scope="col">
+                            <div class="slds-truncate" title="이름">이름</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="생년월일">생년월일</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.students}" var="student">
+                        <tr>
+                            <td><a href="{! '/one/one.app?#/sObject/' + student.Id + '/view' }" 
+                                target="_blank">
+                                 {!student.LastName}
+                             </a></td>
+                            <td>{!student.BirthdayDate__c}</td>
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</aura:component>

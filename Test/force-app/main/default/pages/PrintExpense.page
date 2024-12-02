@@ -1,0 +1,69 @@
+<!--************************************************************************************
+ * Description : Order Item 출력
+ *
+ * Ver      Date           Author          Modification
+ * ===================================================================================
+   1.0                     yr.lee          Create
+*************************************************************************************-->
+
+<apex:page id="PrintExpense" controller="PrintExpenseController" renderAs="pdf">
+    <html>
+    <head>
+        <style>
+            .page {
+                width : 850px;
+                height : 1130px;
+                font-family: 'Arial Unicode MS';
+            }
+            @page {
+                size: A4;
+                margin 0;
+            }
+            table, th, tr, td{
+                table-layout: fixed;
+                border-collapse: collapse;
+                border:black solid 1px;
+                font-size : 10pt;
+            }
+            .body{
+                font-family: 'Arial Unicode MS';
+            }
+            div.onepage {
+                page-break-after: always;
+            }
+        </style>
+    </head>
+    <body>
+    <div style="text-align:center;width:100%;font-size:28px;font-family:'Arial Unicode MS'">프로젝트 경비 내역</div>
+
+    <apex:variable var="rowNum" value="{!0}" />
+    <apex:repeat value="{!listExpenseItem}" var="page">
+
+        <div style="{!IF(AND(rowNum > 0, MOD(rowNum, 20) == 0),'page-break-before:always','')}"/>
+        <div class="page">
+            <div style="margin-top:30px;padding-left:20%;font-family:'Arial Unicode MS'">
+                <table style="border:black solid 1px;border-collapse:collapse">
+                    <tr>
+                        <td style="border:black solid 1px;">순번</td>
+                        <td style="border:black solid 1px;">경비번호</td>
+                        <td style="border:black solid 1px;">내용</td>
+                        <td style="border:black solid 1px;">비용</td>
+                    </tr>
+                    <apex:repeat value="{!page}" var="obj">
+                        <apex:variable var="rowNum" value="{!rowNum+1}"/>
+                        <tr>
+                            <td style="border:black solid 1px;">{! rowNum }</td>
+                            <td style="border:black solid 1px;">{! obj.Name}</td>
+                            <td style="border:black solid 1px;">{! obj.Description__c}</td>
+                            <td style="border:black solid 1px;">{! obj.Spending__c}</td>
+                        </tr>
+                    </apex:repeat>
+                </table>
+            </div>
+        </div>
+    
+    </apex:repeat>
+    </body>
+    </html>
+
+</apex:page>

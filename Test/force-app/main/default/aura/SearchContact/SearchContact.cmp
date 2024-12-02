@@ -1,0 +1,67 @@
+<aura:component controller="SearchContactController" 
+    implements="force:hasRecordId,force:lightningQuickActionWithoutHeader,force:appHostable,flexipage:availableForAllPageTypes">
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/> 
+    <aura:attribute name="contacts" type="List" default="[]"/>
+    <aura:attribute name="columns" type="List" default="[]"/>
+    <aura:attribute name="totalCount" type="Integer" default="{!0}"/>
+    <aura:attribute name="pageSize" type="Integer" default="{!10}"/>
+    <aura:attribute name="searchLastName" type="String" default=""/>
+    <aura:attribute name="searchAccountName" type="String" default=""/>
+    <aura:attribute name="searchEmail" type="String" default=""/>
+    <aura:attribute name="currentPage" type="Integer" default=""/>
+    <aura:attribute name="totalPages" type="Integer" default=""/>
+    <aura:attribute name="currentContacts" type="List" default="[]"/>
+    
+    
+        <div class="slds-box slds-theme_shade">
+            <lightning:layout>
+                <lightning:layoutItem padding="around-small" size="3">
+                    <lightning:input type="text" label="Last Name" value="{!v.searchLastName}"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small" size="3">
+                    <lightning:input type="text" label="Account Name" value="{!v.searchAccountName}"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small" size="3">
+                    <lightning:input type="email" label="Email" value="{!v.searchEmail}"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small" size="2" class="slds-align-bottom">
+                    <lightning:button label="조회" 
+                                      iconName="utility:search" 
+                                      iconPosition="left" 
+                                      onclick="{!c.handleSearch}" 
+                                      variant="brand-outline"
+                                      class="search-button"/>
+                </lightning:layoutItem>
+            </lightning:layout>
+            
+        </div>
+        
+        <aura:if isTrue="{!v.totalCount > 0}">
+            <div class="total-count-box slds-text-body_small  slds-theme_shade">
+                총 {!v.totalCount} 건
+            </div>
+            <lightning:datatable
+                keyField="Id"
+                data="{!v.currentContacts}"
+                columns="{!v.columns}"
+                hideCheckboxColumn="true"
+                showRowNumberColumn="true"
+                onrowaction="{!c.handleRowAction}"/>
+            <div class="slds-button-group slds-align_absolute-center" role="group">
+                <button onclick="{!c.fnPrev}" class="slds-button slds-button--neutral">
+                    Prev
+                </button>
+                <button class="slds-button slds-button--neutral">
+                    {!v.currentPage} / {!v.totalPages}
+                </button>
+                <button onclick="{!c.fnNext}" class="slds-button slds-button--neutral">
+                    Next
+                </button>
+            </div>
+        </aura:if>
+
+        
+    
+</aura:component>
+
+

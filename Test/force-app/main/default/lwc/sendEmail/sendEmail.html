@@ -1,0 +1,15 @@
+<template>
+    <lightning-card title="설문조사 이메일 전송" icon-name="standard:survey">
+        <div class="slds-m-around_medium">
+            <lightning-button 
+                label="설문조사 이메일 전송" 
+                onclick={handleSendEmails} 
+                variant="brand"
+                disabled={isLoading}>
+            </lightning-button>
+        </div>
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+        </template>
+    </lightning-card>
+</template>

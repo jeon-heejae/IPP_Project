@@ -1,0 +1,14 @@
+<apex:page standardController="Account" recordSetVar="accounts" extensions="MassUpdateExtension">
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Update Status" action="{!updateStatus}" rerender="messages"/>
+            </apex:pageBlockButtons>
+            <apex:pageMessages id="messages"/>
+            <apex:pageBlockTable value="{!selected}" var="acc">
+                <apex:column value="{!acc.Name}"/>
+                <apex:column value="{!acc.Status__c}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

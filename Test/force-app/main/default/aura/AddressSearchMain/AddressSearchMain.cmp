@@ -1,0 +1,32 @@
+<aura:component description="AddressSearchMain" controller="AddressSearchMainController"
+    implements="force:hasRecordId,force:lightningQuickActionWithoutHeader,flexipage:availableForAllPageTypes">
+    <aura:attribute name="objAddress" type="Object" default="{ 'PostalCode__c': '', 'RoadAddress__c': '', 'DetailAddress__c': '' }"/>
+    <aura:handler name="init" value="{!this}" action="{!c.fnInit}" />
+    <aura:attribute name="showAddressSearch" type="Boolean" default="false" />
+
+    <lightning:card variant="Narrow" title="주소 검색" iconName="standard:address" footer="">
+        <aura:set attribute="actions">
+            <lightning:button label="주소 초기화" onclick="{!c.handleAddressReset}"/>
+            <lightning:button label="주소 등록" onclick="{!c.handleAddressSearch}"/>
+        </aura:set>
+        
+        <p class="slds-p-horizontal_small">
+            우편번호:    {!v.objAddress.PostalCode__c}
+        </p>
+        <p class="slds-p-horizontal_small">
+            도로명 주소:    {!v.objAddress.RoadAddress__c}
+        </p>
+        <p class="slds-p-horizontal_small">
+            상세 주소:    {!v.objAddress.DetailAddress__c}
+        </p>
+    </lightning:card>
+
+    <aura:if isTrue="{!v.showAddressSearch}">
+        <c:AddressSearch objAddress="{!v.objAddress}" 
+                         headerName="도로명 주소 찾기" 
+                         recordId="{!v.recordId}"
+                         addressSaved="{!c.handleAddressSaved}"
+                         closeModal="{!c.handleAddressSearchClose}"></c:AddressSearch>
+                         
+    </aura:if>
+</aura:component>	

@@ -1,0 +1,5 @@
+<aura:event type="COMPONENT" description="Address Saved Event">
+    <aura:attribute name="postalCode" type="String" />
+    <aura:attribute name="roadAddress" type="String" />
+    <aura:attribute name="detailAddress" type="String" />
+</aura:event>

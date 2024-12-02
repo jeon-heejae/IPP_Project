@@ -1,0 +1,153 @@
+<apex:page id="printTestPdf" controller="objInfController" renderAs="pdf" standardStylesheets="false" showHeader="false" applyHtmlTag="false" >
+    
+    
+    <head>
+        <style type="text/css">
+            @page {
+                size: A4;
+                margin: 2cm;
+                @top-center {
+                    content: "결재 문서";
+                }
+            }
+
+            body {
+                font-family: 'Arial Unicode MS';
+                font-size: 12px;
+            }
+
+            table, th, tr, td {
+                border-collapse: collapse;
+            }
+
+            .underline{
+                position: relative;
+                border-bottom: 1px solid #000;
+                display: inline-block;
+            }
+            .double-underline {
+                position: relative;
+                border-bottom: 1px solid #ffffff;
+                /* width: 190px; */
+            }
+
+            .double-underline::after {
+                content: '';
+                position: absolute;
+                bottom: -2px;
+                width: 250px;  
+                height: 1px;
+                background-color: #000000;
+            }
+
+
+            .table-a {
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            .table-a td {
+                border: 0.5px solid black;
+                padding: 5px;
+                text-align: center;
+                table-layout:fixed;
+                height: 40px; 
+                vertical-align: middle;
+            }
+
+            .table-b {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+
+            .table-b td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: center;
+            }
+        </style>
+        
+     
+    </head>
+
+    <apex:repeat value="{!listContact}" var="obj">
+        <body>
+            <!-- 기본 정보 테이블 -->
+            <table style="width:650px; height: 80px; margin-bottom: 20px;">
+                <tr>
+                    <td class="underline" style="font-size:12pt"></td>
+                    <td></td>
+                    <td style="margin-bottom: 5px; border: 1px solid lightgray; border-bottom:none;" bgcolor="#cccccc">
+                        ◎ 기업명 : (주)대유넥스티어
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td rowspan="2" class="double-underline" style="font-size:20pt;">학습근로자 면담일지</td>
+                    <td style="margin-bottom: 5px; border: 1px solid lightgray; border-bottom:none; border-top:none;" bgcolor="#cccccc">
+                        ◎ 기업현장교사 : {!obj.Name}
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="margin-bottom: 5px; border: 1px solid lightgray; border-bottom:none; border-top:none;" bgcolor="#cccccc">
+                        ◎ 학습근로자명 : 
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td style="margin-bottom: 5px; border: 1px solid lightgray; border-top:none;" bgcolor="#cccccc">
+                        ◎ 일 시 : 
+                    </td>
+                </tr>
+            </table>
+
+            <!-- 결재 테이블 -->
+            <div style="float:right; padding: 1% 0 0 0">
+                <table class="table-a">
+                    <tr>
+                        <td rowspan="2">결재</td>
+                        <td>총괄책임자<br/>(훈련책임자)</td>
+                    </tr>
+                    <tr>    
+                        <td>
+                            
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Clear float -->
+            <div style="clear:both;"></div>
+
+            <!-- 면담 내용 테이블 -->
+            <table class="table-b">
+                <tr>
+                    <td bgcolor="#cccccc" style="width:100px">구분</td>
+                    <td bgcolor="#cccccc">면담 내용</td>
+                </tr>
+                <tr>
+                    <td style="height:190px;">훈련 관련</td>
+                    <td style="height:190px;"></td>
+                </tr>
+                <tr>
+                    <td style="height:190px;">근로 관련</td>
+                    <td style="height:190px;"></td>
+                </tr>
+                <tr>
+                    <td style="height:190px;">기타</td>
+                    <td style="height:190px;"></td>
+                </tr>
+            </table>
+
+            <footer>
+                <p style="padding:14px 0 0 0; font-size:11pt">※ No.(예 : [2023-08-1/2]에서 '2023'는 연도, '08'은 월, '1/2'은 당월 해당 학습근로자에 대해 두 번의 면담이 있었으며, 첫 번째 면담을 의미함.<br/>
+                    
+                    ※ 학습근로자에 대한 면담 주기는 기업의 경우 월 단위 최소 1회 이상, 공동훈련센터의 경우 분기별 최소 1회 이상 실시
+                </p>
+            </footer>
+        </body>
+    </apex:repeat>
+</apex:page>

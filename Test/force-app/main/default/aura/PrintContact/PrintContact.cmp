@@ -1,0 +1,32 @@
+<aura:component controller="ResumeController" implements="force:hasRecordId,force:lightningQuickActionWithoutHeader,flexipage:availableForAllPageTypes">
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="contact" type="Object" />
+    <aura:attribute name="skills" type="List" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div class="slds-card">
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        {!v.contact.Name} 의 이력서
+                    </h2>
+                </div>
+            </header>
+        </div>
+        <div class="slds-card__body slds-card__body_inner">
+            <p><strong>이메일:</strong> {!v.contact.Email}</p>
+            <p><strong>전화번호:</strong> {!v.contact.Phone}</p>
+            <p><strong>스킬:</strong></p>
+            <ul>
+                <aura:iteration items="{!v.skills}" var="skill">
+                    <li>{!skill}</li>
+                </aura:iteration>
+            </ul>
+        </div>
+        <div class="slds-card__footer">
+            <lightning:button variant="brand" label="PDF 이력서 생성" onclick="{!c.generatePDF}" />
+        </div>
+    </div>
+</aura:component>

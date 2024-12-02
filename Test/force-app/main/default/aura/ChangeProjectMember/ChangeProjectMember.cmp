@@ -1,0 +1,84 @@
+<!--************************************************************************************
+ * Description : 프로젝트 멤버의 직원(Employee__c)정보를 교체하는 버튼
+ *
+ * Ver      Date           Author          Modification
+ * ===================================================================================
+   1.0      2024-05-09        yr.lee         Create
+            2024-08-20        hj.Jeon        Modify
+*************************************************************************************-->
+<aura:component description="ChangeProjectMember" controller="ChangeProjectMemberController"
+                implements="force:hasRecordId,force:lightningQuickActionWithoutHeader,flexipage:availableForAllPageTypes">
+    
+    <aura:handler name="init" value="{!this}" action="{!c.fnInit}"/>  
+    <lightning:combobox aura:id="selectItem" name="status" label="Status"
+                      placeholder="Choose Status"
+                      value="new"
+                      onchange="{!c.handleOptionSelected}"
+                      options="{!v.statusOptions}"/>  
+       
+<aura:html tag="style">
+    .slds-modal__container{
+        min-width: 702px !important;
+        max-width: fit-content !important;
+        padding: 0 20px;
+    }
+    .cuf-content {
+        padding: 0 0rem !important;
+    }
+    .slds-p-around--medium {
+        padding: 0rem !important;
+    }
+    .slds-modal__content {
+        overflow-y: hidden !important;
+        height: unset !important;
+        max-height: unset !important;
+    }
+    .slds-modal__close {
+        display: none !important;
+    }
+    </aura:html>
+    <aura:attribute name="ShowSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="ShowEmployeeOption" type="Boolean" default="false"/> <!--직원목록보이기 옵션-->
+
+    <!--초기화 function 호출-->
+    <aura:handler name="init" value="{!this}" action="{!c.fnInit}"/>
+    <aura:attribute name="CurrentEmployee" type="String" default=""/> 
+    <aura:attribute name="ListEmployee" type="List" default="[]"/> <!--투입가능 직원 목록-->
+    <aura:attribute name="ListMember" type="List" default="[]"/> <!--현재 프로젝트 직원목록-->
+    <aura:attribute name="ChangedMember" type="String" default=""/> <!--교체할 직원id-->
+    <aura:attribute name="SelectedEmployee" type="String" default=""/> <!--투입될 직원id-->
+
+    <div aura:id="modalContainer">
+        <section role="alertdialog" tabindex="-1" aria-labelledby="modal-heading-id" aria-describedby="modal-content-id" class="slds-modal slds-fade-in-open" aria-modal="true">
+            <div class="slds-modal__container">
+               
+                <header class="modal-header slds-modal__header">
+                    <div>프로젝트 멤버 변경</div>
+                </header>
+                
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning:combobox name="projectMember"
+                                        label="프로젝트 멤버 선택"
+                                        value="{!v.ChangedMember}"
+                                        placeholder="선택"
+                                        options="{!v.ListMember}"
+                                        onchange="{!c.handleMemberChange}" />
+                    
+                    <aura:if isTrue="{!v.ShowEmployeeOption}">
+                        <lightning:combobox name="employee"
+                                            label="직원 선택"
+                                            value="{!v.SelectedEmployee}"
+                                            placeholder="선택"
+                                            options="{!v.ListEmployee}"
+                                            onchange="{!c.handleEmployeeChange}" />
+                    </aura:if>
+                </div>
+                <footer class="modal-footer slds-modal__footer">
+                    <lightning:button variant="neutral" label="교체" onclick="{!c.fnChange}" />
+                    <lightning:button variant="neutral" label="취소" onclick="{!c.fnCancel}" />
+                </footer>
+            </div>
+        </section>
+    </div>
+    
+</aura:component>
