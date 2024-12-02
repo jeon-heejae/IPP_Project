@@ -1,0 +1,172 @@
+<aura:component description="sensitiveInformationView"
+    implements="force:hasRecordId,force:lightningQuickActionWithoutHeader,flexipage:availableForAllPageTypes,force:appHostable"
+    controller="sensitiveInformationViewController">
+ 
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="objEmpOriginal" type="Object"/>
+    <aura:attribute name="objEmpNew" type="Object"/>
+ 
+    <aura:attribute name="isEditMode" type="Boolean" default="false" />
+    <aura:attribute name="isCorrectUser" type="Boolean" default="false"/> <!--로그인한 유저가 맞는지 확인 -->
+    <aura:attribute name="hasPermission" type="Boolean" default="false"/>
+ 
+    <aura:attribute name="genderOptions" type="List" />
+    <aura:attribute name="militaryServiceDivOptions" type="List" />
+    <aura:attribute name="militaryTypeOptions" type="List" />
+ 
+    <aura:attribute name="activeSections" type="List" default="['Personal Details', 'Military Information', 'More Military Information', 'Special Info']" />
+ 
+    <aura:if isTrue="{!v.isCorrectUser}">
+        <div class="slds-page-header">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <span class="slds-page-header__title slds-truncate" title="sensitiveInfo">비공개
+                                            개인정보</span>
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-page-header__col-actions">
+                    <div class="slds-page-header__controls">
+                        <div class="slds-page-header__control">
+                            <ul class="slds-button-group-list">
+                                <li>
+                                    <!-- Edit 모드가 아닐 때만 Edit 버튼을 표시 -->
+                                    <aura:if isTrue="{!AND(not(v.isEditMode), not(v.hasPermission))}">
+                                        <lightning:button label="Edit" onclick="{!c.handleEdit}" />
+                                    </aura:if>
+ 
+                                </li>
+                                <li>
+                                    <!-- Edit 모드일 때 Save 및 Cancel 버튼 표시 -->
+                                    <aura:if isTrue="{!v.isEditMode}">
+                                        <lightning:button label="Save" onclick="{!c.handleSave}" />
+                                        <lightning:button label="Cancel" onclick="{!c.handleCancel}" />
+                                    </aura:if>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <lightning:accordion aura:id="accordion" activeSectionName="{!v.activeSections}" allowMultipleSectionsOpen="true">
+                <lightning:accordionSection name="Personal Details" label="신상 정보" class="customAccordion">
+                    <aura:set attribute="body">
+                        <div class="c-container">
+                            <lightning:layout pullToBoundary="medium">
+                                <lightning:layoutItem flexibility="auto" padding="horizontal-medium">
+                                    <lightning:select label="성별" value="{!v.objEmpNew.Gender__c}" disabled="{!not(v.isEditMode)}" class="slds-m-bottom_small" >
+                                        <aura:iteration items="{!v.genderOptions}" var="option">
+                                            <option value="{!option.value}" selected="{!v.objEmpNew.Gender__c==option.value}">{!option.label}</option>
+                                        </aura:iteration>
+                                </lightning:select>
+                                    <lightning:input label="주거지 주소" value="{!v.objEmpNew.CurrentAddress__c}" disabled="{!not(v.isEditMode)}"
+                                        class="slds-m-bottom_small" />
+                                    <lightning:input label="생년월일" type="date" value="{!v.objEmpNew.Birthday__c}" disabled="{!not(v.isEditMode)}"
+                                        class="slds-m-bottom_small" />
+                                </lightning:layoutItem>
+                                <lightning:layoutItem flexibility="auto" padding="horizontal-medium">
+                                    <lightning:input label="영문명" value="{!v.objEmpNew.EnglishName__c}" disabled="{!not(v.isEditMode)}" class="slds-m-bottom_small" />
+                                   
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size_4-of-12">
+                                            <span>
+                                                <label class="slds-form-element__label">
+                                                    주민등록번호
+                                                </label>
+                                            </span>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-12">
+                                            <span>
+                                                <lightning:helptext content="123456-1234567" class="slds-m-left_xx-small" />
+                                            </span>
+                                        </div>
+                                    </div>
+ 
+                                    <lightning:input value="{!v.objEmpNew.IdNumber__c}" disabled="{!not(v.isEditMode)}" class="slds-m-bottom_small" variant="label-hidden"/>    
+                                    <lightning:input label="우편번호" value="{!v.objEmpNew.AddressNumber__c}" disabled="{!not(v.isEditMode)}"
+                                        class="slds-m-bottom_small" />
+                                    <lightning:input label="결혼기념일" type="date" value="{!v.objEmpNew.WeddingAnniversary__c}" disabled="{!not(v.isEditMode)}"
+                                        class="slds-m-bottom_small" />
+                                </lightning:layoutItem>
+                            </lightning:layout>
+                        </div>
+ 
+                    </aura:set>
+                </lightning:accordionSection>
+ 
+                <lightning:accordionSection name="Military Information" label="병역 정보" class="customAccordion">
+                    <aura:set attribute="body">
+ 
+                        <div class="c-container">
+                            <lightning:layout pullToBoundary="medium">
+                                <lightning:layoutItem flexibility="auto" padding="horizontal-medium">
+                                    <lightning:input label="입대일" type="date" value="{!v.objEmpNew.JoinArmyDate__c}" disabled="{!not(v.isEditMode)}"
+                                        class="slds-m-bottom_small" />
+                                    <lightning:input label="전역일" type="date" value="{!v.objEmpNew.DischargeDate__c}" disabled="{!not(v.isEditMode)}"
+                                        class="slds-m-bottom_small" />
+                                </lightning:layoutItem>
+                                <lightning:layoutItem flexibility="auto" padding="horizontal-medium">
+                                    <lightning:select label="병역구분" value="{!v.objEmpNew.MilitaryServiceDiv__c}" disabled="{!not(v.isEditMode)}" class="slds-m-bottom_small">
+                                        <aura:iteration items="{!v.militaryServiceDivOptions}" var="option">
+                                            <option value="{!option.value}" selected="{!v.objEmpNew.MilitaryServiceDiv__c==option.value}">{!option.label}</option>
+                                        </aura:iteration>
+                                </lightning:select>
+                                <lightning:select label="군별" value="{!v.objEmpNew.MilitaryType__c}" disabled="{!not(v.isEditMode)}" class="slds-m-bottom_small">
+                                    <aura:iteration items="{!v.militaryTypeOptions}" var="option">
+                                        <option value="{!option.value}" selected="{!v.objEmpNew.MilitaryType__c==option.value}">{!option.label}</option>
+                                    </aura:iteration>
+                                </lightning:select>
+                                    <lightning:input label="계급" value="{!v.objEmpNew.Class__c}" disabled="{!not(v.isEditMode)}"
+                                        class="slds-m-bottom_small" />
+                                </lightning:layoutItem>
+                            </lightning:layout>
+                        </div>
+ 
+                    </aura:set>
+                </lightning:accordionSection>
+ 
+                <lightning:accordionSection name="More Military Information" label="병역 추가정보" class="customAccordion">
+                    <aura:set attribute="body">
+                        <lightning:textarea label="미필사유" value="{!v.objEmpNew.MilitaryTypeDescription__c}" disabled="{!not(v.isEditMode)}"
+                            class=" slds-m-bottom_small" />
+                    </aura:set>
+                </lightning:accordionSection>
+ 
+                <lightning:accordionSection name="Special Info" label="별도 관리정보" class="customAccordion">
+                    <aura:set attribute="body">
+ 
+                        <div class="c-container">
+                            <lightning:layout pullToBoundary="medium">
+                                <lightning:layoutItem flexibility="auto" padding="horizontal-medium">
+                                    <lightning:input label="부양가족" value="{!v.objEmpNew.Dependents__c}" disabled="{!not(v.isEditMode)}"
+                                        class="slds-m-bottom_small" />
+                                    <lightning:input label="근로계약갱신일" value="{!v.objEmpNew.UpdateDate__c}" disabled="{!not(v.isEditMode)}"
+                                        class="slds-m-bottom_small" />
+                                </lightning:layoutItem>
+                                <lightning:layoutItem flexibility="auto" padding="horizontal-medium">
+                                    <lightning:input label="해고일자" value="{!v.objEmpNew.DismissalDate__c}" disabled="{!not(v.isEditMode)}"
+                                        class="slds-m-bottom_small" />
+                                    <lightning:input label="사유" value="{!v.objEmpNew.Reason__c}" disabled="{!not(v.isEditMode)}"
+                                        class="slds-m-bottom_small" />
+                                    <lightning:input label="금품청산 등" value="{! v.objEmpNew.Clear__c}" disabled="{!not(v.isEditMode)}"
+                                        class="slds-m-bottom_small" />
+                                </lightning:layoutItem>
+                            </lightning:layout>
+                        </div>
+                    </aura:set>
+                </lightning:accordionSection>
+            </lightning:accordion>
+        </div>
+    </aura:if>
+       
+   
+       
+</aura:component>
