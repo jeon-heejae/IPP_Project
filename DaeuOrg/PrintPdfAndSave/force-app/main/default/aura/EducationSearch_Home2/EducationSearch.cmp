@@ -1,0 +1,88 @@
+<aura:component description="EducationSearch" controller="RemainEducationController" implements="force:hasRecordId,force:lightningQuickActionWithoutHeader,flexipage:availableForAllPageTypes">
+    
+    <aura:attribute name="data" type="Object" />
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute name="data2" type="List" />
+    <aura:attribute name="columns2" type="List" />
+    <aura:attribute name="isRole" type="boolean" />
+
+    <aura:attribute name="objName" type="String" />
+    <aura:attribute name="listAllEmployee" type="List" />
+    <aura:attribute name="objColumns" type="List" />
+    <aura:attribute name="objColumns2" type="List" />
+    <aura:attribute name="objData" type="List" />
+    <aura:attribute name="objData2" type="List" />
+    <aura:attribute name="isCheck" type="boolean" default="false"/>
+
+    <aura:attribute name="isMentor" type="boolean" default="false"/>
+    <aura:attribute name="MenteeData" type="List" />
+    <aura:attribute name="MenteeColumns" type="List" />
+    <aura:attribute name="MenteeData2" type="List" />
+    <aura:attribute name="MenteeColumns2" type="List" />
+
+    <aura:attribute name="sortedBy" type="String"/>
+    <aura:attribute name="sortDirection" type="String" default="asc" />
+    <aura:attribute name="defaultSortDirection" type="String" default="asc"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.fnInit}" />
+
+
+
+
+
+    <!-- 전체 직원 정보 출력 -->
+    <aura:if isTrue="{!v.isRole}">
+        <!-- 남은 프로그램 Datatable -->
+        <lightning:card title="사원 별 미진행 프로그램">
+            <div class="slds-p-around_medium">
+                <lightning:datatable data="{!v.data}" columns="{!v.columns}" keyField="id" hideCheckboxColumn="true"
+                    onsort="{!c.handleSort1}" sortedBy="{!v.sortedBy}" sortDirection="{!v.sortDirection}" defaultSortDirection="{!v.defaultSortDirection}">
+                </lightning:datatable>
+            </div>
+        </lightning:card>
+
+        <!-- 진행 중 프로그램 Datatable -->
+        <lightning:card title="사원 별 진행 중/완료 프로그램">
+            <div class="slds-p-around_medium">
+                <lightning:datatable data="{!v.data2}" columns="{!v.columns2}" keyField="id" hideCheckboxColumn="true" 
+                onsort="{!c.handleSort1}" sortedBy="{!v.sortedBy}" sortDirection="{!v.sortDirection}" />
+            </div>
+        </lightning:card>
+    </aura:if>
+
+    <!-- 신입 정보 출력 -->
+    <aura:if isTrue="{!v.isCheck}">
+        <lightning:card title="{!v.objName+' 님 미진행 프로그램'}">
+            <div class="slds-p-around_medium">
+                <lightning:datatable data="{!v.objData}" columns="{!v.objColumns}" keyField="id" hideCheckboxColumn="true" 
+                onsort="{!c.handleSort1}" sortedBy="{!v.sortedBy}" sortDirection="{!v.sortDirection}" />
+            </div>
+        </lightning:card>
+        <lightning:card title="{!v.objName+' 님 진행 중/완료 프로그램'}">
+            <div class="slds-p-around_medium">
+                <lightning:datatable data="{!v.objData2}" columns="{!v.objColumns2}" keyField="id" hideCheckboxColumn="true" 
+                onsort="{!c.handleSort1}" sortedBy="{!v.sortedBy}" sortDirection="{!v.sortDirection}" />
+            </div>
+        </lightning:card>
+    </aura:if>
+
+    <!-- 멘토 정보 출력 -->
+    <aura:if isTrue="{!v.isMentor}">
+        <!-- 남은 프로그램 Datatable -->
+        <lightning:card title="사원 별 미진행 프로그램">
+            <div class="slds-p-around_medium">
+                <lightning:datatable data="{!v.MenteeData}" columns="{!v.MenteeColumns}" keyField="id" hideCheckboxColumn="true" 
+                    onsort="{!c.handleSort}" sortedBy="{!v.SortedBy}" sortDirection="{!v.SortDirection}">
+                </lightning:datatable>
+            </div>
+        </lightning:card>
+
+        <!-- 진행 중 프로그램 Datatable -->
+        <lightning:card title="사원 별 진행 중/완료 프로그램">
+            <div class="slds-p-around_medium">
+                <lightning:datatable data="{!v.MenteeData2}" columns="{!v.MenteeColumns2}" keyField="id" hideCheckboxColumn="true" 
+                onsort="{!c.handleSort}" sortedBy="{!v.SortedBy}" sortDirection="{!v.SortDirection}" />
+            </div>
+        </lightning:card>
+    </aura:if>
+</aura:component>
