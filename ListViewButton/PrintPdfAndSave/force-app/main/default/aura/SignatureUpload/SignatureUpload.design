@@ -1,3 +1,0 @@
-<design:component label="SignatureUpload">
-	<design:attribute name="message" label="Message"/>
-</design:component>
