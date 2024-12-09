@@ -175,7 +175,7 @@
         <excludedStandardButtons>ChangeOwner</excludedStandardButtons>
         <excludedStandardButtons>MassChangeOwner</excludedStandardButtons>
         <excludedStandardButtons>PrintableListView</excludedStandardButtons>
-        <excludedStandardButtons>IsotopeSubscription</excludedStandardButtons>
+        <!-- <excludedStandardButtons>IsotopeSubscription</excludedStandardButtons> -->
         <listViewButtons>EmployeeProfileExport</listViewButtons>
         <listViewButtons>AssignMentor</listViewButtons>
         <listViewButtons>EmployeeList</listViewButtons>
