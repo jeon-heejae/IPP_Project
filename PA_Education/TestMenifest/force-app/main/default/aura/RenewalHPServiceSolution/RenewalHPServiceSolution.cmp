@@ -1,0 +1,78 @@
+<!--
+ - @description       : Solution Delivery of Homepage Renewal Project
+ - @author            : Chan Kang
+ - @group             : Boundary
+ - Modifications Log
+ - Ver   Date         Author           Modification
+ - 1.0   2021.12.24   Chan Kang        Initial Version
+   1.1   2022.04.17   Gunwoo Kim       Load english data conditionally
+                                       Add event handler to load english data
+                                       Add isEnglish parameter to APEX callout
+-->
+
+<aura:component
+    implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes"
+    access="global" controller="RenewalHPServiceSolution">
+    <aura:attribute name="isEnglish" type="boolean" access="global" default="false" />
+    <aura:attribute name="deliveries" type="List" />
+    <aura:attribute name="deliveryItem" type="SolutionDelivery__c" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:handler event="c:i18nEvent" action="{!c.init}" />
+
+    <section>
+        <div class="contents" id="solution">
+            <p class="pageTitle">
+                Solution Delivery
+            </p>
+            <div class="solutions">
+                <aura:iteration items="{!v.deliveries}" var="delivery">
+                    <div id="{!delivery.Id}" onclick="{!c.showRecordModal}">
+                        <span>
+                            <p>{!delivery.Title__c}</p>
+                            <br />
+                            <pre>{!delivery.Subtitle__c}</pre>
+                        </span>
+                    </div>
+                </aura:iteration>
+            </div>
+        </div>
+        <div class="modal-background" aura:id="modal" onclick="{!c.hideRecordModal}">
+            <div class="modal">
+                <aura:renderIf isTrue="{!not(empty(v.deliveryItem))}">
+                    <header>
+                        <h2>{!v.deliveryItem.Title__c}</h2>
+                        <button class="close" onclick="{!c.hideRecordModal}">
+                            &times;
+                        </button>
+                    </header>
+                    <section>
+                        <aura:if isTrue="{!v.isEnglish}">
+                            <h1>Solution Overview</h1>
+                            <p>
+                                <aura:unescapedHtml value="{!v.deliveryItem.SummaryEng__c}" />
+                            </p>
+                            <aura:set attribute="else">
+                                <h1>솔루션 개요</h1>
+                                <p>
+                                    <aura:unescapedHtml value="{!v.deliveryItem.Summary__c}" />
+                                </p>
+                            </aura:set>
+                        </aura:if>
+                        <aura:if isTrue="{!v.isEnglish}">
+                            <h1>Main Function</h1>
+                            <p>
+                                <aura:unescapedHtml value="{!v.deliveryItem.DescriptionEng__c}" />
+                            </p>
+                            <aura:set attribute="else">
+                                <h1>주요기능</h1>
+                                <p>
+                                    <aura:unescapedHtml value="{!v.deliveryItem.Description__c}" />
+                                </p>
+                            </aura:set>
+                        </aura:if>
+                    </section>
+                </aura:renderIf>
+            </div>
+        </div>
+    </section>
+</aura:component>

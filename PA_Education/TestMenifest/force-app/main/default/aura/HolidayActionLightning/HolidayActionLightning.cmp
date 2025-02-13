@@ -1,0 +1,219 @@
+<!--
+* Component Name                : HolidayActionLightning.cmp
+* Component Controller          : HolidayActionLightningController.js
+* Component Helper              : HolidayActionLightningHelper.js
+* Component Contorlller Class   : HolidayActionLightningExtension.cls
+* Test Class                    : HolidayActionLightningExtension_Test.cls
+* Description                   : 휴일관리 라이트닝 신청 폼
+* Modification Log 
+* =============================================================== 
+* Ver     Date          Author           Modification
+* ===============================================================
+  1.0   2018.08.27      JK.lee              Create
+  2.0   2019.01.09      JK.lee              Modified
+  3.0   2021.01.14      CJ.Sohn             Modified(2차 승인 여부 필드 사용X → 승인자 지정 필드 기본값 설정 및 부서(Department), 현재 상태 표시(Position; 프로젝트 PM, 프로젝트 팀원, 본사근무, 임원)
+  4.0   2021.09.23      CJ.Sohn             Modified(2차 승인자 지정 필드 사용)
+-->
+<aura:component controller="HolidayActionLightningExtension" implements="force:lightningQuickAction,force:lightningQuickAction,force:appHostable,flexipage:availableForRecordHome,force:hasRecordId" >
+
+    <aura:attribute name="holidayModalView" type="boolean" default="true"/>
+    <aura:attribute name="thisRecordId" type="String" />
+    <!--
+    <aura:attribute name="HIF" type="HolidayAction__c"
+        default="{ 'HolidayAction_Type__c': '',
+                   'Name': '',
+                   'HolidayAction_IsEmergency__c': false,
+                   'HolidayAction_IsConfirm__c': '',
+                   'HolidayAction_Description__c': '',
+                   'HolidayAction_Date1__c': '',
+                   'HolidayAction_Date2__c': '',
+                   'HolidayAction_Date3__c': '',
+                   'HolidayAction_Date4__c': '',
+                   'HolidayAction_Date5__c': '',
+                   'HolidayAction_Days__c': '',
+                   'FirstHolidayRequest__c':'',
+                   'HolidayAction_Parent__c':'',
+                   'SecondApproverSelection__c': false,
+                   'HolidayAction_HalfdayTime__c':''}"/>
+    @author            : cj.sohn@daeunextier.com
+    @description       : 2차 승인 여부 필드 사용X → 프로젝트 투입 여부 필드 사용O
+    @last modified on  : 2021-01-12
+    -->
+    <aura:attribute name="HIF" type="HolidayAction__c"
+        default="{ 'HolidayAction_Type__c': '',
+                   'Name': '',
+                   'HolidayAction_IsEmergency__c': false,
+                   'HolidayAction_IsConfirm__c': '',
+                   'HolidayAction_Description__c': '',
+                   'HolidayAction_Date1__c': '',
+                   'HolidayAction_Date2__c': '',
+                   'HolidayAction_Date3__c': '',
+                   'HolidayAction_Date4__c': '',
+                   'HolidayAction_Date5__c': '',
+                   'HolidayAction_Days__c': '',
+                   'FirstHolidayRequest__c':'',
+                   'HolidayAction_Parent__c':'',
+                   'HolidayAction_HalfdayTime__c':'',
+                   'FirstHolidayRequest__c':'',
+                   'SecondApproverSelection__c': false,
+                   'SecondApproverRequest__c':'',
+                   'Department__c':'',
+                   'Position__c':'',
+                   'Project__c':''}"/>
+
+    <aura:attribute name="resultMessage" type="String" />
+    <aura:attribute name="holidayAction" type="list" default="[]" />
+    <aura:attribute name="checkRequiredColumn" type="List" default="['type','name','first','half','date']"/>
+    <aura:attribute name="listDate" type="list" default="['1']" />
+    <aura:attribute name="userList" type="list"/>
+    <aura:attribute name="firstApproverId" type="String"/>
+    <aura:attribute name="secondApproverId" type="String"/>
+
+    <aura:attribute name="employeeStatus" type="Object"/>
+    <aura:attribute name="department" type="String"/>
+    <aura:attribute name="position" type="String"/>
+    <aura:attribute name="projectId" type="String"/>
+    <aura:attribute name="isProject" type="Boolean" default="false"/>
+
+    <aura:attribute name="daycheck" type="boolean" default="false"/>
+    <aura:attribute name="halfcheck" type="boolean" default="false"/>
+    <aura:attribute name="selectedType" type="string"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+
+    <div class="slds-m-around--xx-large" aura:id="divModal">
+        <div role="dialog" tabindex="1" aria-labelledby="header99" class="slds-modal slds-fade-in-open">
+            <aura:if isTrue="{!v.showSpinner}">
+                <lightning:spinner aura:id="spinner" alternativeText="Loading" size="large" variant="brand"/>
+            </aura:if>
+            <div class="slds-modal__container customDSize">
+                <div class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.close}">
+                        <lightning:icon iconName="utility:close" size="x-small"/>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="header43" class="slds-text-heading--medium">{!$Label.c.Holiday_Request}</h2>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <!-- 데이터 입력 -->
+                <fieldset class="slds-box slds-theme--default slds-container--large">
+
+                    <lightning:recordEditForm aura:id="recordViewForm"
+                                              onload="{!c.showRequiredFields}"
+                                              recordId="{!v.recordId}"
+                                              objectApiName="HolidayAction__c">
+                        <lightning:layout multipleRows="true">
+                            <lightning:layoutItem flexibility="auto" class="slds-p-around_xx-small slds-size_1-of-1 slds-form_horizontal">
+                                <lightning:inputField class="customRequired none" type="HolidayAction__c"  aura:id="type" fieldName="HolidayAction_Type__c" onchange="{!c.fnTypeChange}"  />
+
+                                <div class="slds-hide slds-required slds-float_right" aura:id="typeErrorMessage">{!$Label.c.RequiredField}</div>
+
+                            </lightning:layoutItem>
+
+                            <lightning:layoutItem flexibility="auto" class="slds-p-around_xx-small slds-size_1-of-1 slds-form_horizontal">
+                                <aura:if isTrue="{!v.selectedType=='Half-day Leave'}">
+                                    <lightning:inputField class="customRequired none slds-p-top_small" type="HolidayAction__c"  aura:id="half" fieldName="HolidayAction_HalfdayTime__c" onchange="{!c.fnTypeChange}" />
+                                    <div class="slds-hide slds-required slds-float_right" aura:id="halfErrorMessage">{!$Label.c.RequiredField}</div>
+                                </aura:if>
+
+                            </lightning:layoutItem>
+
+                            <lightning:layoutItem flexibility="auto" class="slds-p-around_xx-small slds-size_1-of-1 slds-form_horizontal">
+                                <lightning:inputField class="customRequired none slds-p-top_small" type="HolidayAction__c" aura:id="name" fieldName="Name" onchange="{!c.typeRlatedDate}" />
+                                <div class="slds-hide slds-required slds-float_right" aura:id="nameErrorMessage">{!$Label.c.RequiredField}</div>
+                            </lightning:layoutItem>
+
+                            <lightning:layoutItem flexibility="auto" class="slds-p-around_xx-small slds-size_1-of-1 slds-form_horizontal">
+                                <aura:if isTrue="{!and(v.selectedType!='Half-day Leave', v.selectedType!='Women Holiday')}">
+                                    <div class="slds-form_horizontal">
+                                        <lightning:select aura:id="days" label="{!$Label.c.Holiday_ApplyDate}" onchange="{!c.fnDateChange}" required="true" value="{!v.HIF.HolidayAction_Days__c}">
+                                            <option value="1">&nbsp;&nbsp;1</option>
+                                            <option value="2">&nbsp;&nbsp;2</option>
+                                            <option value="3">&nbsp;&nbsp;3</option>
+                                            <option value="4">&nbsp;&nbsp;4</option>
+                                            <option value="5">&nbsp;&nbsp;5</option>
+                                        </lightning:select>
+                                    </div>
+                                </aura:if>
+                                <div class="slds-hide slds-required slds-float_right" aura:id="daysErrorMessage">{!$Label.c.RequiredField}</div>
+                            </lightning:layoutItem>
+
+                            <lightning:layoutItem flexibility="auto" class="slds-p-around_xx-small slds-size_1-of-1 slds-form_horizontal">
+                                <aura:iteration items="{!v.listDate}" var="item">
+                                    <!-- <label class="slds-form-element__label slds-form_element customRequired" for="lookup-348">{!'Date' + item}</label> -->
+
+                                    <lightning:inputField type="HolidayAction__c" class="none"
+                                                            fieldName="{!'HolidayAction_Date'+ item + '__c'}"
+                                                            onchange="{!c.fnDateSave}" aura:id="date" />
+                                    <div class="slds-hide slds-required slds-float_right" aura:id="dateErrorMessage">{!$Label.c.RequiredField}</div>
+                                </aura:iteration>
+                            </lightning:layoutItem>
+
+                            <lightning:layoutItem flexibility="auto" class="slds-p-around_xx-small slds-size_1-of-1 slds-float_right">
+                                <lightning:inputField  type="HolidayAction__c" aura:id="El_HolidayAction_IsEmergency__c" fieldName="HolidayAction_IsEmergency__c" onchange="{!c.typeRlatedDate}"/>
+                            </lightning:layoutItem>
+
+                            <!--
+                                @author            : cj.sohn@daeunextier.com
+                                @description       : 사용자 포지션 및 부서 정보, 프로젝트 필드 사용
+                                @last modified on  : 2021-01-12
+                            -->
+                            <lightning:layoutItem flexibility="auto" class="slds-p-around_xx-small slds-size_1-of-1 slds-float_right">
+                                <lightning:inputField class="slds-p-top_small" type="HolidayAction__c" aura:id="El_Department__c" fieldName="Department__c" value="{!v.department}" disabled="true"/>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem flexibility="auto" class="slds-p-around_xx-small slds-size_1-of-1 slds-float_right">
+                                <lightning:inputField class="slds-p-top_small" type="HolidayAction__c" aura:id="El_Position__c" fieldName="Position__c" value="{!v.position}" onchange="{!c.fnCheckIsProject}"/>
+                            </lightning:layoutItem>
+                            <aura:if isTrue="{!v.isProject}">
+                                <lightning:layoutItem flexibility="auto" class="slds-p-around_xx-small slds-size_1-of-1 slds-float_right">
+                                    <lightning:inputField class="slds-p-top_small" type="HolidayAction__c" aura:id="El_Project__c" fieldName="Project__c" value="{!v.projectId}" onchange="{!c.typeRlatedDate}"/>
+                                </lightning:layoutItem>
+                            </aura:if>
+
+                            <!--
+                                @author            : cj.sohn@daeunextier.com
+                                @description       : 승인자 지정 필드 기본값 설정
+                                @last modified on  : 2021-01-18
+                            -->
+                            <lightning:layoutItem flexibility="auto" class="slds-p-around_xx-small slds-size_1-of-1 slds-float_right">
+                                <lightning:inputField type="HolidayAction__c" class="customRequired none slds-p-top_small" aura:id="first" fieldName="FirstHolidayRequest__c" value="{!v.firstApproverId}" onchange="{!c.typeRlatedDate}" />
+                                <div class="slds-hide slds-required slds-float_right" aura:id="firstErrorMessage">{!$Label.c.RequiredField}</div>
+                            </lightning:layoutItem>
+
+                            <!--
+                                @author            : cj.sohn@daeunextier.com
+                                @description       : 2차 승인자 지정 필드 추가
+                                @last modified on  : 2021-09-23
+                            -->
+                            <lightning:layoutItem flexibility="auto" class="slds-p-around_xx-small slds-size_1-of-1 slds-float_right">
+                                <lightning:inputField type="HolidayAction__c" class="slds-p-top_small" aura:id="second" fieldName="SecondApproverRequest__c" value="{!v.secondApproverId}" onchange="{!c.typeRlatedDate}" />
+                            </lightning:layoutItem>
+
+                            <lightning:layoutItem flexibility="auto" class="slds-p-around_xx-small slds-size_1-of-1 slds-float_right">
+                                <lightning:inputField class="slds-p-top_medium" type="HolidayAction__c" aura:id="El_HolidayAction_Description__c" fieldName="HolidayAction_Description__c" onchange="{!c.typeRlatedDate}" />
+                            </lightning:layoutItem>
+
+                            <lightning:layoutItem flexibility="auto" class="slds-p-around_xx-small slds-size_1-of-1 slds-float_right">
+                                <lightning:inputField aura:id="titleField" fieldName="Title" class="slds-hidden" />
+                                <br/>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+
+                    </lightning:recordEditForm>
+                </fieldset>
+
+                <!-- 데이터 입력 -->
+                </div>
+                <div class="slds-modal__footer">
+                    <lightning:button class="slds-button slds-button--brand" aura:id="workEnd" onclick="{!c.clickCreate}" label="{!$Label.c.Save_H}"/>
+                    <lightning:button class="slds-button slds-button--neutral" aura:id="workEndCannel" onclick="{!c.close}" label="{!$Label.c.Close_H}"/>
+                </div>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"/>
+    </div>
+
+<!--예전 레이아웃-->    
+   
+</aura:component>

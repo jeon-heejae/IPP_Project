@@ -1,0 +1,33 @@
+/**
+ * Created by # on 2023-07-04.
+ */
+
+.THIS {
+    background-color : white;
+}
+
+.THIS .title {
+    border : 2px solid black;
+    text-align : center;
+    width : 100%;
+    font-size : 23px;
+    margin-bottom : 25px;
+}
+
+.THIS .projectTitle {
+    border : 1px solid black;
+    font-size : 15px;
+}
+
+.THIS .borderBox {
+    border : 1px solid black;
+    margin-bottom : 5px;
+}
+
+.THIS .label-hidden > label {
+    display : none;
+}
+
+.THIS .textCenter {
+    text-align : center;
+}

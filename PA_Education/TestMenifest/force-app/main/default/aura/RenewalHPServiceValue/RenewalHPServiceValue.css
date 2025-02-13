@@ -1,0 +1,119 @@
+.THIS {
+	width: 100%;
+    height: auto;
+    background: #ffffff;
+}
+
+.THIS .contents {
+    width: 900px;
+    height: auto;
+    margin: 0 auto;
+    padding: 120px 0;
+}
+
+.THIS .pageTitle {
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 30px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.THIS h1 {
+    font-size: 44px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 62px;
+    letter-spacing: -2px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.85);
+    margin-top: 80px;
+}
+
+.THIS h1 b {
+    color: #179FE0;
+    font-weight: 400;
+}
+
+.THIS h2 {
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 43px;
+    letter-spacing: -1px;
+    text-align: center;
+    margin-top: 32px;
+}
+
+.THIS img {
+    margin-top: 80px;
+}
+
+.THIS p.market {
+    margin: 0 auto;
+    margin-top: 44px;
+    width: 380px;
+    height: 36px;
+    line-height: 36px;
+    background: rgba(0, 0, 0, 0.05);
+    text-align: center;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.6);
+    border-radius: 4px;
+}
+
+@media (min-width: 769px) {
+    .THIS .is_mobile {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .THIS .is_pc {
+        display: none;
+    }
+    
+    .THIS .contents {
+        width: calc(100% - 40px);
+        height: auto;
+        margin: 0 20px;
+        padding: 56px 0;
+    }
+    
+    .THIS .pageTitle {
+        font-size: 16px;
+        line-height: 24px;
+    }
+    
+    .THIS h1 {
+        font-size: 28px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 39.2px;
+        letter-spacing: -2px;
+        text-align: left;
+        color: rgba(0, 0, 0, 0.85);
+        margin-top: 56px;
+        word-break: break-word;
+    }
+    
+    .THIS h2 {
+        font-size: 20px;
+        line-height: 36px;
+        text-align: left;
+        word-break: break-word;
+    }
+    
+    .THIS img {
+        margin-top: 56px;
+    }
+    
+    .THIS p.market {
+        margin: 0 auto;
+        margin-top: 0;
+        width: 100%;
+        height: 36px;
+    }
+}

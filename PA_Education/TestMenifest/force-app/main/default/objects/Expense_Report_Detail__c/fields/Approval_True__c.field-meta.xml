@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Approval_True__c</fullName>
+    <formula>ISPICKVAL(Expense_Report__r.ApprovalStatus__c, &apos;Approved&apos;) = True</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>승인여부</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

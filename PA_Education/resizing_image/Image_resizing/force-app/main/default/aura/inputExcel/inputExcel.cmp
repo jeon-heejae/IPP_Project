@@ -1,0 +1,94 @@
+<aura:component description="inputExcel" controller="ExcelCopyUploadController"
+    implements="force:hasRecordId,flexipage:availableForRecordHome,force:lightningQuickActionWithoutHeader">
+    <aura:handler name="init" value="{!this}" action="{!c.fnInit}"/>  
+    <aura:attribute name="textValue" type="String"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="ShowSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="tableData" type="List" default="[]"/>
+
+    <aura:html tag="style">
+    /* 모달 크기 조정 */
+    .slds-modal__container {
+        min-width: 1200px !important; /* 모달 너비 증가 */
+        max-width: 90% !important; /* 화면 크기에 따라 조정 가능 */
+    }
+    .cuf-content {
+        padding: 0 0rem !important;
+    }
+    .slds-p-around--medium {
+        padding: 0rem !important;
+    }
+    .slds-modal__content {
+        overflow-y: hidden !important;
+        height: unset !important;
+        max-height: unset !important;
+    }
+    .slds-modal__close {
+        display: none !important;
+    }
+    </aura:html>
+    
+    
+
+    <div aura:id="modalContainer">
+        <section role="alertdialog" tabindex="-1" aria-labelledby="modal-heading-id" aria-describedby="modal-content-id" class="slds-modal slds-fade-in-open" aria-modal="true">
+            <div class="slds-modal__container">
+               
+                <header class="modal-header slds-modal__header">
+                    <div>Excel Data Upload</div>
+                </header>
+                
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning:tabset>
+                        <lightning:tab label="Data Insert">
+                            
+                        </lightning:tab>
+                        <lightning:tab label="Data Update">
+                           <lightning:textarea aura:id="mytextarea" class="textarea_size" value="{!v.textValue}"></lightning:textarea>
+                           <lightning:button label="적용" onclick="{!c.fnClick}" class="slds-m-top_medium slds-m-bottom_medium slds-float_right"></lightning:button>
+
+                           <aura:if isTrue="{!v.ShowSpinner}">
+                                <table class="
+                                slds-table 
+                                slds-table_bordered
+                                slds-table_col-bordered 
+                                slds-m-top_medium 
+                                slds-table_cell-buffer 
+                                slds-table_fixed-layout">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:15%;">ContactNo</th>
+                                            <th style="width:15%;">LastName</th>
+                                            <th style="width:15%;">Birthdate</th>
+                                            <th>Address</th>
+                                            <th style="width:15%;">ParentPhone</th>
+                                            <th style="width:15%;">MobilePhone</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <aura:iteration items="{!v.tableData}" var="row">
+                                            <tr>
+                                                <td>{!row.ContactNo}</td>
+                                                <td>{!row.LastName}</td>
+                                                <td>{!row.Birthdate}</td>
+                                                <td>{!row.Address}</td>
+                                                <td>{!row.ParentPhone}</td>
+                                                <td>{!row.MobilePhone}</td>
+                                            </tr>
+                                        </aura:iteration>
+                                    </tbody>
+                                </table>
+                           </aura:if>
+                           
+                        </lightning:tab>
+                    </lightning:tabset>
+                </div>
+                <footer class="modal-footer slds-modal__footer">
+                    <lightning:button variant="neutral" label="저장" onclick="{!c.fnSave}" />
+                    <lightning:button variant="neutral" label="취소" onclick="{!c.fnCancel}" />
+                </footer>
+            </div>
+        </section>
+    </div>
+
+</aura:component>

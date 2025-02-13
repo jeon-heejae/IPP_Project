@@ -1,0 +1,321 @@
+<!--
+  * ===============================================================
+  * File Name   : ResourceProfile_doc.page
+  * Author      : Soyoung.Jung
+  * Date        : 2019.01.09
+  * Description : 사원 프로필 문서 생성 페이지 - .doc
+  * Modification Log
+  * ===============================================================
+  * Ver     Date        Author          Modification
+  * ===============================================================
+  * 1.0     2019.01.09  Soyoung.Jung    Create
+  * 1.1     2019.01.22  Harper Jung     데이터 없는 오브젝트 렌더 안하게 수정
+  * 1.2     2019.02.19  Soyoung.Jung    프로젝트 경력 테이블 형식으로 변경
+  * ===============================================================
+-->
+
+<apex:page sidebar="false" showHeader="false" contentType="application/msword#{!sFileName}.doc"
+            standardController="Employee__c" extensions="ResourceProfileController" cache="true"> <!-- contentType="application/msword#{!sFileName}.doc"  -->
+    
+    <html>
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+            <base href="{!'https://' + baseURL + '/'}" />
+
+            <style type="text/css"> 
+                @page {
+                    size: A4 portrait;
+                }
+
+                body {
+                    font-family: 'Roboto', '맑은 고딕';
+                    font-size: 0.8em;
+                }
+
+                h3 {
+                    font-size: 1.1em;
+                }
+
+                .title {
+                    font-size: 3em;
+                    color: #00BFFF;
+                }
+
+                .cloud {
+                    font-size: 1.1em;
+                    color: #00BFFF;
+                }
+
+                .deptPosition {
+                    font-size: 1.5em;
+                }
+
+                .page_break {
+                    page-break-after: always;
+                }
+
+                .font_blue {
+                    color: #00BFFF;
+                }
+
+                .header_hr {
+                    border: 7px solid;
+                    color: #08298A;
+                }
+
+                .custom_liNone {
+                    list-style-type: none;
+                }
+
+                /* 머리글 바닥글 CSS 설정 */
+                p.MsoHeader, li.MsoHeader, div.MsoHeader{
+                    margin:0in;
+                    margin-top:.0001pt;
+                    mso-pagination:widow-orphan;
+                    tab-stops:center 3.0in right 6.0in;
+                }
+
+                p.MsoFooter, li.MsoFooter, div.MsoFooter{
+                    margin:0in;
+                    margin-bottom:.0001pt;
+                    mso-pagination:widow-orphan;
+                    tab-stops:center 3.0in right 6.0in;
+                }
+
+                @page Section1 {
+                    mso-header-margin:20;
+                    mso-footer-margin:20;
+
+                    mso-title-page:yes;
+
+                    mso-first-header-id: fh1;
+                    mso-header-id: h1;
+                    
+                    mso-first-footer-id: f1;
+                    mso-footer-id: ff1;
+                    
+                    mso-paper-source:0;
+                }
+                
+                div.Section1 {
+                    page:Section1;
+                }
+
+                /*Below is the style to prevent the repetition of header and Footer.. Cheers!!!*/
+                .headerfooterTable {
+                    margin:0in 0in 0in 9in;
+                    display: none;
+                }
+            </style>
+        </head> 
+
+        <body>
+            <apex:variable value="0" var="idx" />
+            
+            <!-- 표지 -->
+            <div>
+                <b class="cloud">Business on the cloud</b>
+                <p>
+                    Deliver Customer’s Value <br />
+                    With The Best Cloud Technology, <br />
+                    Combined With the Industry Insight
+                </p>
+
+                <br /><br /><br /><br /><br /><br /><br /><br />
+                
+                <center>
+                    <h1 class="title">Resource Profile</h1>
+                </center>
+
+                <!-- <br /><br /><br /><br /><br /><br /><br /><br />
+                <br /><br /><br /><br /><br /><br /><br /><br />
+                <br /><br /><br /><br /> -->
+
+                <!-- logo -->
+                <center>
+                    <!-- <apex:image value="{!'/servlet/servlet.ImageServer?id=' + mapImage['Main03_BL'] + '&oid=' + $Organization.Id}" width="240" height="58" /> -->
+                </center>
+            </div>
+
+            <br class="page_break" />
+
+            <!-- 선택한 사원 수 만큼 반복 -->
+            <apex:repeat value="{!listWrapperEmployee}" var="wrap">
+                <div class="Section1">
+                <!-- Page -->
+                <div>
+                    <!-- Page Header -->
+                    <h1 class="deptPosition">{!wrap.objEmployee.MainRole__c}</h1>
+
+                    <hr class="header_hr" />
+                    
+                    <!-- Page Body -->
+                    <!-- Personnel Profile -->
+                    <h3 class="font_blue">Personnel Profile</h3>
+                    <table width="100%">
+                        <tr>
+                            <td rowspan="5" width="20%">
+                                <!-- <apex:outputPanel rendered="{!mapAttachment[objEmployee.Id] != null}"> -->
+                                    <!-- 25 * 30 증명사진 규격 -->
+                                    <!-- <apex:image value="{!'/servlet/servlet.FileDownload?file=' + mapAttachment[objEmployee.Id] + '&oid=' + $Organization.Id}" width="95" height="114" />
+                                    <apex:image value="{!'/servlet/servlet.imageServer?id=' + mapAttachment[objEmployee.Id] + '&oid=' + $Organization.Id}" width="95" height="114" /> -->
+                                    
+                                    <apex:outputPanel rendered="{!wrap.objEmployee.DocumentPhotoId__c != null}">
+                                        <apex:image value="{!'/servlet/servlet.ImageServer?id=' + wrap.objEmployee.DocumentPhotoId__c + '&oid=' + $Organization.Id}" width="95" height="114" />
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!wrap.objEmployee.DocumentPhotoId__c == null}">
+                                        <apex:image value="{!'/servlet/servlet.ImageServer?id=' + mapImage['NonePhoto'] + '&oid=' + $Organization.Id}" width="95" height="114" />
+                                    </apex:outputPanel>
+
+                                    
+                                <!-- </apex:outputPanel> -->
+                            </td>
+                            <td width="15%">Name</td>
+                            <td width="5%"> : </td>
+                            <td width="60%">{!wrap.objEmployee.Name}</td>
+                        </tr>
+                        <tr>
+                            <td>Position</td>
+                            <td> : </td>
+                            <td>{!wrap.objEmployee.Position__c}</td>
+                        </tr>
+                        <!--총경력-->                        
+                        <tr>
+                            <td>Working Years</td>
+                            <td> : </td>                                
+                                <td>                                                                                    
+                                    <apex:outputText value="{!wrap.totalCareer}"/>                         
+                                </td>
+                        </tr>                        
+                        <tr>
+                            <td>Birth</td>
+                            <td> : </td>
+                            <td>
+                                <apex:outputText value="{0, date, yyyy. M. d}">
+                                    <apex:param value="{!wrap.objEmployee.Birthday__c}" />    
+                                </apex:outputText> 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Education</td>
+                            <td> : </td>
+                            <apex:repeat value="{!wrap.objEmployee.Re_Education__r}" var="objEdu" rows="1">
+                                <td>{!objEdu.Major__c}, {!objEdu.Degree__c}</td>
+                            </apex:repeat>
+                        </tr>
+                    </table>
+                    <apex:repeat value="{!listChildObject}" var="child">
+                        <apex:outputPanel rendered="{!child == 'Re_License__r' && wrap.objEmployee.Re_License__r.size > 0}">
+                            <h3 class="font_blue">Certification</h3>
+                            <ul>
+                                <apex:repeat value="{!wrap.objEmployee.Re_License__r}" var="objLicense">
+                                    <li>{!objLicense.Name}</li>
+                                </apex:repeat>
+                            </ul>   
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{! child == 'EmployeePerformPjt__r' }">
+                            <h3 class="font_blue" >Project Experience</h3>
+                            <ul>
+                                <apex:repeat value="{!wrap.objEmployee.EmployeePerformPjt__r}" var="objPerfPjt">
+                                    <li>
+                                        {!objPerfPjt.Project__r.Name}
+                                        
+                                        <ul>
+                                            <li class="custom_liNone">{!objPerfPjt.fm_Term__c} / {!objPerfPjt.WorkDescription__c}</li>
+                                        </ul>
+                                    </li>
+                                </apex:repeat>
+                                
+                                <apex:repeat value="{!wrap.objEmployee.Re_Project_Career__r}" var="objCareer">
+                                    <li>
+                                        {!objCareer.Name}
+                                        
+                                        <ul>
+                                            <li class="custom_liNone">{!objCareer.fm_Date__c} / {!objCareer.WorkDescription__c}</li>
+                                        </ul>
+                                    </li>
+                                </apex:repeat>
+                            </ul>
+                        </apex:outputPanel>       
+
+                        <apex:outputPanel rendered="{! AND(child != 'Re_Education__r', child != 'Re_License__r', child != 'EmployeePerformPjt__r' , child != 'FormRequest_Employee__r', child != 'Re_Project_Career__r') }"> 
+                            <apex:variable value="{!wrap.objEmployee[child]}" var="objList"/>
+                            <apex:outputPanel rendered="{!objList.size > 0}" >
+                                <h3 class="font_blue">{!IF(child == 'Re_Project_Career__r' , '' ,mapChildLabel[child])}</h3>
+                                <ul>
+                                    <apex:outputPanel rendered="{!child == 'Re_Career__r'}">
+                                        <li>(주)대유넥스티어 - 재직중</li>
+                                    </apex:outputPanel>
+                                    <apex:repeat value="{!objList}" var="obj">
+                                        <li>{!obj.Name}
+                                        <!-- <apex:outputPanel rendered="{!child == 'Re_Project_Career__r'}">
+                                            &emsp;{!obj.fm_Date__c}
+                                            &emsp;{!obj.WorkDescription__c}
+                                        </apex:outputPanel> -->
+                                        </li>
+                                    </apex:repeat>
+                                </ul>
+                            </apex:outputPanel>
+                        </apex:outputPanel>
+                    </apex:repeat>
+
+                    <!-- Page Footer -->
+                    <!--Header and Footer Starts-->
+                    <table class='headerfooterTable' border='0' cellspacing='0' cellpadding='0'>
+                        <tr>
+                            <td>
+                                <div style='mso-element:header' id="h1" >
+                                    <p class="MsoHeader">
+                                    </p>
+                                </div>
+                            </td>
+                            <td>
+                                <div style='mso-element:footer' id="f1">
+                                    <p class="MsoFooter">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td align="center" width="100%">
+                                                    <apex:image value="{!'/servlet/servlet.ImageServer?id=' + mapImage['Main03_BL'] + '&oid=' + $Organization.Id}" width="240" height="58" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </p>
+                                </div>
+                            </td>
+                            <td>
+                                <div style='mso-element:header' id="fh1">
+                                    <p class="MsoHeader">
+                                    </p>
+                                </div>
+                            </td>
+                            <td>
+                                <div style='mso-element:footer' id="ff1">
+                                    <p class="MsoFooter">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td align="center" width="100%">
+                                                    <apex:image value="{!'/servlet/servlet.ImageServer?id=' + mapImage['Main03_BL'] + '&oid=' + $Organization.Id}" width="156" height="38" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </p>
+                                </div>
+                            </td>
+
+                        </tr>
+                    </table>
+                </div>
+                
+                <apex:outputPanel rendered="{!VALUE(idx) < listEmployee.size - 1}">
+                    <br class="page_break" />
+                </apex:outputPanel>
+
+                <apex:variable var="idx" value="{!VALUE(idx) + 1}" />
+
+                </div>
+            </apex:repeat>
+        </body>
+    </html>
+
+</apex:page>

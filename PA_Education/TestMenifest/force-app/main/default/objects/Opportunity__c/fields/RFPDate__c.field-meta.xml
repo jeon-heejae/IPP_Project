@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RFPDate__c</fullName>
+    <inlineHelpText>03. Demo &amp; Value Proposal - 예상 RFP 일자
+04. Presentation Proposal &amp; Budget Confirmed - RFP 일자</inlineHelpText>
+    <label>RFP 일자</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

@@ -1,0 +1,34 @@
+.textarea-container {
+    position: relative;
+    width: 100%;
+}
+
+.custom-textarea {
+    width: 100%;
+    height: 200px; /* 원하는 높이 설정 */
+    padding: 1rem;
+    font-family: monospace;
+    font-size: 1rem;
+    border: 1px solid #d8dde6;
+    border-radius: 5px;
+    resize: none;
+    overflow-y: auto;
+}
+
+.download-button {
+    position: absolute;
+    top: 10px; /* 버튼의 위치 조정 */
+    right: 10px; /* 오른쪽 정렬 */
+    z-index: 1; /* 버튼이 텍스트 위로 나타나도록 설정 */
+}
+
+.copy-button {
+    position: absolute;
+    top: 10px; /* 버튼의 위치 조정 */
+    right: 30px; /* 오른쪽 정렬 */
+    z-index: 1; /* 버튼이 텍스트 위로 나타나도록 설정 */
+}
+
+.my-card {
+    display: block;
+}

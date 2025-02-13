@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Fm_First_Evaluation_Check__c</fullName>
+    <description>외부직원이며 투입일자가 30일이 경과 했을 경우 1차 평가 발송을 위한 포뮬라 필드</description>
+    <formula>IF(
+				AND(ISPICKVAL(Employee__r.Type__c, &apos;외부직원&apos;), 
+								(TODAY() - InputDate__c &gt; 29)
+								),
+				TRUE,
+				FALSE)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>1차평가 필요여부</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

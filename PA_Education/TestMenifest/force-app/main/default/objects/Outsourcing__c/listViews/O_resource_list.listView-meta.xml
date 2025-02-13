@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>O_resource_list</fullName>
+    <columns>NAME</columns>
+    <columns>O_Name__c</columns>
+    <columns>O_Company__c</columns>
+    <columns>O_Area__c</columns>
+    <columns>O_Birth__c</columns>
+    <columns>O_Age__c</columns>
+    <columns>O_Email__c</columns>
+    <columns>O_Phone__c</columns>
+    <columns>O_TRAINING__c</columns>
+    <columns>O_Certification__c</columns>
+    <filterScope>Everything</filterScope>
+    <label>외주인력</label>
+</ListView>

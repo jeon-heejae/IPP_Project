@@ -1,0 +1,358 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="Site07Support">
+
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"></html> <!--<![endif]-->
+<head>
+
+    <!-- Basic Page Needs
+  ================================================== -->
+	<meta charset="utf-8" />
+	<title>(주)대유넥스티어, DaeU NexTier, Daeunextier</title>
+	
+    <!-- Mobile Specific Metas
+  ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+	<meta name="fb_admins_meta_tag" content="daeunextier"/>
+	<meta name="keywords" content="Daeunextier, Radian6, 대유넥티어, 데이터사이언티스트, 벨류인에이블러, 에반젤리스트"/>
+	<meta name="description" content="클라우드 기반 솔루션 프로바이더로서 기업이 필요로 하는 어플리케이션을 일일이 구축하지 않고 즉시 활용할 수 있는 서비스를 제공함으로써 중견,중소 기업의 비용부담을 최소화하고 생산성 향상 및 고객가치 증진에 기여하고자 합니다. ㈜대유넥스티어에 보내주시는 관심과 성원에 감사를 드립니다."/>
+    <!-- CSS
+  ================================================== -->
+	<apex:stylesheet value="{!URLFOR($Resource.daeunextier, 'css/zerogrid.css')}"/>
+	<apex:stylesheet value="{!URLFOR($Resource.daeunextier, 'css/style.css')}"/>
+	<apex:stylesheet value="{!URLFOR($Resource.daeunextier, 'css/responsive.css')}"/>
+	<apex:stylesheet value="{!URLFOR($Resource.daeunextier, 'css/responsiveslides.css')}"/>
+	
+	<!--[if lt IE 8]>
+       <div style=' clear: both; text-align:center; position: relative;'>
+         <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+           <img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." />
+        </a>
+      </div>
+    <![endif]-->
+    <!--[if lt IE 9]>
+		<script src="js/html5.js"></script>
+		<script src="js/css3-mediaqueries.js"></script>
+	<![endif]-->
+	
+	<link href='./images/favicon.ico' rel='icon' type='image/x-icon'/>
+  	<apex:includeScript value="{!URLFOR($Resource.daeunextier, 'js/jquery.min.js')}"/>
+  	<apex:includeScript value="{!URLFOR($Resource.daeunextier, 'js/responsiveslides.js')}"/>
+		<script>
+			$(function () {
+				  $("#slider").responsiveSlides({
+						auto: false,
+						pager: false,
+						nav: true,
+						speed: 500,
+						/**maxwidth: 962,*/
+						maxwidth: 540,
+						namespace: "centered-btns"
+				  });
+			});
+		
+			$(function () {
+				  $("#slider2").responsiveSlides({
+						auto: true,
+						pager: false,
+						nav: false,
+						speed: 500,
+						maxwidth: 200,
+						namespace: "centered-btns"
+				  });
+			});
+
+
+			$(function () {
+				  $("#slider3").responsiveSlides({
+						auto: true,
+						pager: false,
+						nav: false,
+						speed: 500,
+						maxwidth: 222,
+						namespace: "centered-btns"
+				  });
+			});
+		</script>
+		<!-- Google Analysis -->
+		<script type="text/javascript">
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-42633798-1']);
+		  _gaq.push(['_trackPageview']);
+		
+		  (function() {
+		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+		
+		</script>
+</head>
+<body>
+<!--------------Header--------------->
+<header>
+	<div class="wrap-header zerogrid">
+		<div id="logo">
+			<a href="/"><apex:image dir="100RTL" value="{!URLFOR($Resource.daeunextier, '/images/logo7.png')}" alt=""/></a>
+			<nav>
+				<div class="wrap-nav" style="left:180px;">
+					<div class="menu">
+						<ul>
+							<li id="nav1"><a href="/">Home</a></li>
+							<li id="nav2" ><a href="Site02AboutUs">About Us</a></li>
+							<li id="nav3" ><a href="Site03Service">Services</a></li>
+							<li id="nav4" ><a href="Site04MarketingCloud">Salesforce.com</a></li>
+							<li id="nav5" ><a href="Site08ANAPLAN">ANAPLAN</a></li>
+							<li id="nav6" ><a href="Site05Clients">Clients</a></li>
+							<li id="nav7" ><a href="Site06Careers">Careers</a></li>
+							<li id="nav8" class="active"><a href="Site07Support">Support</a></li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</div>
+	</div>
+</header>
+
+<div class="featured">
+	<div class="wrap-featured zerogrid">
+		<table cellpadding="0" cellspacing="0" border="0">
+			<tr>
+				<!-- 동영상 슬라이더 시작 -->
+				<td>
+					<div class="slider">
+						<div class="rslides_container">
+							<ul class="rslides" id="slider">
+								<li><embed width="540" height="290" src="http://www.youtube.com/v/tWaqWweP6Uw" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true"></embed></li>
+								<li><embed width="540" height="290" src="http://www.youtube.com/v/iXnvCdzbo7E" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true"></embed></li>
+								<li><embed width="540" height="290" src="http://www.youtube.com/v/l07HSG8YIkU" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true"></embed></li>
+								<li><embed width="540" height="290" src="http://www.youtube.com/v/fGar_bO49Ro" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true"></embed></li>
+								<li><embed width="540" height="290" src="http://www.youtube.com/v/nvCOXTa1e7k" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true"></embed></li>
+							</ul>
+						</div>
+					</div>
+				</td>				
+				<!-- 동영상 슬라이더 끝 -->
+
+				<!-- 슬라이더 2 시작 -->
+				<td>
+					<div class="slider">
+						<div class="rslides_container" style="padding-top: 3px; padding-left: 20px;">
+							<ul class="rslides" id="slider2">
+								<li>
+									<b style="padding-left: 10px;">SALES CLOUD</b><br />
+									<br/>
+									<a href="/MarketingCloud"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Sales.jpg')}" alt=""/></a>
+								</li>
+								<li>
+									<b style="padding-left: 10px;">SERVICE CLOUD</b><br />
+									<br/>
+									<a href="/MarketingCloud"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Service.jpg')}" alt=""/></a>
+								</li>
+								<li>
+									<b style="padding-left: 10px;">MARKETING CLOUD</b><br />
+									<br/>
+									<a href="/MarketingCloud"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Market.jpg')}" alt=""/></a>
+								</li>
+								<li>
+									<b style="padding-left: 10px;">PLATFORM</b><br />
+									<br/>
+									<a href="/MarketingCloud"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Platform.jpg')}" alt=""/></a>
+								</li>
+								<li>
+									<b style="padding-left: 10px;">Anaplan for Finance</b><br />
+									<br/>
+									<a href="/ANAPLAN"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Platform.jpg')}" alt=""/></a>
+								</li>
+								<li>
+									<b style="padding-left: 10px;">Anaplan for Sales</b><br />
+									<br/>
+									<a href="/ANAPLAN"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Service.jpg')}" alt=""/></a>
+								</li>
+								<li>
+									<b style="padding-left: 10px;">Anaplan &amp; Salesforce</b><br />
+									<br/>
+									<a href="/ANAPLAN"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Market.jpg')}" alt=""/></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</td>
+				<!-- 슬라이더 2 끝 -->
+				<!-- 슬라이더 3 시작 -->
+				
+				<td>
+					<div class="slider">
+						<div class="rslides_container" style="padding-top: 50px;">
+							<ul class="rslides" id="slider3">
+								<li><a href="/MarketingCloud">Salesforce1 Platform에 기반한 <br></br>Sales Cloud에 오신 것을 환영합니다.<br></br>새로운 세상, 더 나은 영업 방식,<br></br>현장 영업팀은 모바일 기기만으로도 <br></br>영업을 수행할 수 있으며 내부 영업팀은<br></br>최고의 리드만 공급받습니다. <br></br>영업 관리자는 어떤 거래가 성사되며, <br></br>언제 성사될 지 알 수 있습니다.</a></li> 
+								<li><a href="/MarketingCloud">고객 충성도 구축.첫 번째 통화 해결률<br></br>(first call resolution)증대.<br></br>고객 만족도 37% 향상. <br></br>Salesforce1 Platform 위에 구축된 Service Cloud를 사용하여 장소에<br></br>상관없이 놀라운 고객 서비스를<br></br>제공하면서 동시에 수행할 수 있습니다.</a></li>
+								<li><a href="/MarketingCloud">Salesforce1 Platform에 구축된 ExactTarget Marketing Cloud을 사용하여 마케팅 담당자가 전혀 새로운 1:1 캠페인을 만들 수 있습니다. 이메일, 모바일, <br></br>소셜 및 웹과 같은 기존 디지털 채널과 <br></br>모든 제품(예: 치솔부터 자동차까지)을 <br></br>결합하여 소비자를 고객으로 바꿀 수<br></br>있습니다.</a></li>
+								<li><a href="/MarketingCloud">한 장소에 모든 요소를 갖춘 완벽한 개방형 고객 플랫폼을 소개합니다. 새로운 API 및 도구로 응용 프로그램을 더욱 신속하게<br></br> 구축하여 고객, 직원, 파트너, 차세대 기기 및 응용 프로그램과 연결할 수 있습니다.</a></li>
+								<li><a href="/ANAPLAN">운영 데이터와의 실시간 연결로<br></br>완벽한 재무 통합분석 예산수립,<br></br> 예측(Forecasting) 보고서 이익/손실 분석<br></br> 전략적인 계획으로 효율성 증대 현금 계획 인력자원 계획</a></li>
+								<li><a href="/ANAPLAN">영업사원들의 영업목표 계획관리<br></br>영업사원들의 인센티브 보상 계산 <br></br>영업 담당 구역/지역 계획 판매 예측(forecasting)<br></br>제품가격 및 견적관리 영업리소스 계획</a></li>
+								<li><a href="/ANAPLAN">영업 담당 구역 및 영업목표 계획관리<br></br>영업사원들의 인센티브 보상 계산<br></br>판매 예측(forecasting)<br></br>하나로 통합된 솔루션<br></br> (Anaplan은 단 한번의 사용자 인증을 통해 Salesforce내에서 영업프로세스를 계획, 관리, 이행할 수 있도록 지원)</a></li>
+							</ul>
+						</div>
+					</div>
+				</td>
+				
+				<!-- 슬라이더 3 끝 -->
+			</tr>
+		</table>
+	</div>
+</div>
+<!--------------Content--------------->
+
+<section id="content">
+	<div class="wrap-content zerogrid">
+		<article id="content">
+			<div class="wrapper">
+				<h2 class="under"></h2>
+					<div class="wrapper">
+						<section class="col-full">
+							<!--
+							<form id="ContactForm" method="post">
+							-->
+							
+								<div>
+									<div class="row block02">
+									<div class="col-full"><h2>Support</h2></div>
+									<div class="divider"></div>
+										<table border="0" width="100%" cellpadding="0" cellspacing="0">
+											<tr>
+												<td>
+													<apex:image value="{!URLFOR($Resource.daeunextier, 'images/page3_img6.gif')}" alt=""/>
+												</td>
+												<td>
+													<strong>&nbsp;&nbsp;당사 서비스에 관심을 보여주신점 감사드립니다.<br />
+													&nbsp;&nbsp;당사 서비스에 대한 "문의" 또는 "Trial 신청"은 아래 양식으로 요청해 주시기 바랍니다.<br /><br/></strong>
+												</td>
+											</tr>
+										</table>
+								</div>
+										<p></p>
+								<apex:form id="contactform">
+									<div  class="wrapper" style="min-height:30px">
+										<span style="width:109px;float:left;line-height:26px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>+ 소속회사 :</strong></span>
+										<apex:inputText disabled="{!IsRegistedOk}" id="Company" style="width:549px;height:18px;border:1px solid #aaaaaa;background:#fff;padding:3px 5px;color:#696968;font:14px 돋움, 'Trebuchet MS', Arial, Helvetica, sans-serif;font-style::italic;margin:0" value="{!Company}"/>
+										<apex:outputPanel rendered="{!IsErrorIsCompany}" id="thePanel">
+											<strong style="color:red;">회사는 필수 입력입니다.</strong>
+										</apex:outputPanel>
+									<!--</div>
+									<div  class="wrapper" style="min-height:30px">
+										<span style="width:109px;float:left;line-height:26px">+ 소속부서 :</span>
+										<apex:inputText disabled="{!IsRegistedOk}" id="username" style="width:549px;height:18px;border:1px solid #e5e5e5;background:#fff;padding:3px 5px;color:#696968;font:14px 돋움, 'Trebuchet MS', Arial, Helvetica, sans-serif;font-style::italic;margin:0" value="{!username}"/>
+										<apex:outputPanel rendered="{!IsErrorIsName}" id="thePane2">
+											<strong style="color:red;">소속부서는 필수 입력입니다.</strong>
+										</apex:outputPanel>-->
+										
+									</div>
+									<div  class="wrapper" style="min-height:30px">
+										<span style="width:109px;float:left;line-height:26px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>+ 이름</strong> :</span>
+										<apex:inputText disabled="{!IsRegistedOk}" id="username" style="width:549px;height:18px;border:1px solid #aaaaaa;background:#fff;padding:3px 5px;color:#696968;font:14px 돋움, 'Trebuchet MS', Arial, Helvetica, sans-serif;font-style::italic;margin:0" value="{!username}"/>
+										<apex:outputPanel rendered="{!IsErrorIsName}" id="thePane3">
+											<strong style="color:red;">이름은 필수 입력입니다.</strong>
+										</apex:outputPanel>
+									</div>
+									<div  class="wrapper" style="min-height:30px">
+										<span style="width:109px;float:left;line-height:26px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>+ 이메일 :</strong></span>
+										<apex:inputText disabled="{!IsRegistedOk}" id="email" style="width:549px;height:18px;border:1px solid #aaaaaa;background:#fff;padding:3px 5px;color:#696968;font:14px 돋움, 'Trebuchet MS', Arial, Helvetica, sans-serif;font-style::italic;margin:0" value="{!email}"/>
+										<apex:outputPanel rendered="{!IsErrorIsEmail}" id="thePane4">
+													<strong style="color:red;">이메일은 필수 입력입니다.</strong>
+										</apex:outputPanel>
+										<apex:outputPanel rendered="{!IsErrorValidEmail}" id="thePane5">
+													<strong style="color:red;">이메일형식이 잘못되었습니다.</strong>
+										</apex:outputPanel>
+									</div>
+									<div  class="wrapper" style="min-height:30px">
+										<span style="width:109px;float:left;line-height:26px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>+ 관심제품군 :</strong></span>
+								        <apex:selectList disabled="{!IsRegistedOk}" id="InterestProduct" value="{!InterestProduct}" size="1" style="width:560px;height:26px;border:1px solid #aaaaaa;background:#fff;padding:3px 5px;color:#696968;font:14px 돋움, 'Trebuchet MS', Arial, Helvetica, sans-serif;font-style::italic;margin:0">
+								            <apex:selectOption itemValue="Radian6" itemLabel="Radian6"/>
+								            <apex:selectOption itemValue="Sales Cloud" itemLabel="Sales Cloud"/>
+								            <apex:selectOption itemValue="Service Cloud" itemLabel="Service Cloud"/>
+								            <apex:selectOption itemValue="Force.com" itemLabel="Force.com"/>
+								            <apex:selectOption itemValue="Marketing Cloud" itemLabel="Marketing Cloud"/>
+								            <apex:selectOption itemValue="ANAPLAN" itemLabel="Anaplan"/>
+								        </apex:selectList> 
+									</div>
+									<div  class="wrapper" style="min-height:30px">
+										<span style="width:109px;float:left;line-height:26px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>+ 제목 :</strong> </span>
+										<apex:inputText disabled="{!IsRegistedOk}" id="subject" style="width:549px;height:18px;border:1px solid #aaaaaa;background:#fff;padding:3px 5px;color:#696968;font:14px 돋움, 'Trebuchet MS', Arial, Helvetica, sans-serif;font-style::italic;margin:0" value="{!subject}"/>
+									</div>
+									<div  class="textarea_box" style="min-height:275px;width:100%;overflow:hidden;padding-bottom:6px">
+										<span style="width:109px;float:left;line-height:26px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>+ 상세설명:</strong></span>
+										<apex:inputTextarea disabled="{!IsRegistedOk}" id="message" rows="10" value="{!message}" style="overflow:auto;width:549px;height:258px;border:1px solid #aaaaaa;background:#fff;padding:3px 5px;color:#696968;font:14px 'Trebuchet MS', Arial, Helvetica, sans-serif;font-style:italic;margin:0"  />
+									</div>
+									<div  class="wrapper" style="min-height:50px;width:660px;">
+										<!-- 
+										<span style="width:300px;float:left;line-height:26px">&nbsp;</span>
+										 -->
+										<apex:commandButton action="{!registerLead}" value="Send" id="submit" rerender="contactform" rendered="{!!IsRegistedOk}" style="cursor:pointer;float:right;width:62px;font-style:normal;font-weight:bold;color:#fff;height:32px;line-height:32px;text-decoration:none;background:#60b000;" />
+										<!--
+										<apex:commandButton rendered="{! !IsRegistedOk}" styleClass="button" action="{!registerLead}" value="Send" id="submit" rerender="contactform"/>
+										-->
+										<apex:outputPanel style="float:right;" rendered="{!IsRegistedOk}" id="thePane6">
+											<strong>문의가 접수되었습니다. 등록하신 이메일로 회신을 드리겠습니다. 감사드립니다.</strong>
+										</apex:outputPanel>
+									</div>
+									
+									
+								</apex:form>
+																
+									<!--
+									<a href="#" onClick="document.getElementById('ContactForm').submit()">Send</a>
+									
+									<a href="#" onClick="document.getElementById('ContactForm').reset()">Clear</a>
+									-->
+								</div>
+						</section>
+					</div>
+			</div>
+		</article>
+	</div>
+</section>
+
+<!--------------Footer--------------->
+<footer>
+	<div class="wrap-footer zerogrid">
+		<div class="row">
+			<div class="col-2-3">
+				<div class="wrap-col">
+					<div class="box">
+						<div class="heading"><h2>Contact Us</h2></div>
+						<div class="content">
+							<ul>
+								<li>+ Address: 138-832 서울시 성동구 성수이로22길 37 아크밸리(성수IT종합센터)505호</li>
+								<li>+ TEL: 082-02-553-9981, + FAX: 082-02-553-9967, + Email:info@daeunextier.com</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-1-3">
+				<div class="wrap-col">
+					<div class="box">
+						<div class="heading"><h2>Follow Us</h2></div>
+						<div class="content">
+							<ul id="icons">
+								<li>
+																													
+									<a href="https://www.facebook.com/daeunextier" target="_blank" title="Facebook"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/social/icon1.png')}" alt=""/>Facebook</a>
+									<a href="https://twitter.com/daeunextier" target="_blank" title="Twitter"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/social/icon2.png')}" alt=""/>Twitter</a>
+									<a href="http://blog.daeunextier.com" target="_blank" title="Blog"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/social/icon3.png')}" alt=""/>Blog</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="copyright">
+		<p>Copyright &copy; 2014 Daeunextier Inc.</p>
+	</div>
+</footer>
+</body>
+</apex:page>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Quote_Date__c</fullName>
+    <defaultValue>Today()</defaultValue>
+    <description>Default Value : Today()
+견적일은 당일 원칙으로 하나 전일 또는 익일에 작성 발송하는 경우를 위해 입력 가능토록 함</description>
+    <label>견적일</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

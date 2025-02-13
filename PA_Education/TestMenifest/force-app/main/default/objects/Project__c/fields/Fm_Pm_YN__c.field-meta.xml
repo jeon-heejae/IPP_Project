@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Fm_Pm_YN__c</fullName>
+    <description>프로젝트 화면에서 [투입인력 평가서]에 대한 가시성 설정을 위한 필드</description>
+    <formula>IF(PM__c = $User.Id, true, false)</formula>
+    <label>PM 여부확인</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

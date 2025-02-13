@@ -1,0 +1,214 @@
+<!--
+
+-->
+<apex:page controller="ShipmentManage" tabstyle="TabShipment__tab">
+	<head>
+		<apex:stylesheet value="{!URLFOR($Resource.CssMenu, '/menu_source/styles.css')}" />
+		<apex:stylesheet value="{!URLFOR($Resource.jquery_ui, 'themes/base/jquery-ui.css')}"/>
+		<style>
+		input#InputBarcode {
+			ime-mode: disabled;
+		}
+		</style>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'jquery-1.10.2.js')}"/>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'ui/jquery-ui.js')}"/>
+		
+		<script type="text/javascript">
+			$(function() {
+				$( "#dialog-modal" ).dialog({
+					autoOpen: true,
+					height: 140,
+					modal: true	,
+					open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); }
+				});
+			});
+		</script>
+	        	
+		<script type="text/javascript">
+			function barcode_select(){
+				var text_input = document.getElementById ('InputBarcode');
+				text_input.focus();
+				text_input.select();
+			}
+			function refreshPage(){
+				document.location.href = '/apex/Shipment_Main';
+				//reset2StartStep();
+			}
+			function endCall(){
+				var id = document.getElementById('pId').value;
+				var a = document.getElementById('pAccount').value;
+				var d = document.getElementById('pDate').value;
+				var c = document.getElementById('pCnt').value;
+				var s = document.getElementById('pSeq').value;
+				var b = document.getElementById('pBar').value;
+				var url = '/apex/PrintBarcode2?ItemId='
+						+ id
+						+ '&AccountId='
+						+ a
+						+ '&DateManufacture='
+						+ d  
+						+ '&CntImportInspection='
+						+ c
+						+ '&seq='
+						+ s
+						+ '&barcode='
+						+ b
+						;
+				window.open(url,'','width=330,height=320,resizeable,scrollbars');
+			}
+	        function invokeSaveFn(i,a,d,c,s){ 
+				printDummy(i,a,d,c,s);	        	
+	        }
+			function showDialog(){
+				$("#dialog-modal").dialog( "open" );
+				return false;
+			}
+			
+			function hideDialog(){
+				var id = document.getElementById('pId').value;
+				if(id != '') endCall();
+				
+				$("#dialog-modal").dialog( "close" );
+				document.getElementById('InputBarcode').focus();
+				barcode_select();
+				return false;
+			}
+			function formInit() {
+				hideDialog();
+			}
+			
+			try {
+				window.addEventListener('load',formInit,false);
+			}catch(e){
+				window.attachEvent('onload',formInit);
+			}
+		</script>
+		<script type="text/javascript">
+			function KeyPressIvName(e, strSeq1, strSeq2){
+				var keynum;
+				if(window.event){		// IE
+					keynum = e.keyCode;
+				}
+				if(keynum == 13){
+					InputBarcodeForPage(document.getElementById('InputBarcode').value, strSeq1, strSeq2);
+					return false;
+				}
+			}
+
+		</script>
+	</head>
+	<apex:form id="mainFrm">
+		<input type="hidden" id="pId"      	value="{!pId}"	 />
+		<input type="hidden" id="pAccount"	value="{!pAccount}"	 />
+		<input type="hidden" id="pDate" 	value="{!pDate}"	 />
+		<input type="hidden" id="pCnt" 		value="{!pCnt}"	 />
+		<input type="hidden" id="pSeq" 		value="{!pSeq}"	 />
+		<input type="hidden" id="pBar" 		value="{!pBar}"	 /> 
+		 
+		<apex:actionStatus onstart="showDialog();" onstop="hideDialog();"  id="IngStatus"/>
+		<apex:outputText value="{!strMsg}" escape="true" />
+		<br/>
+		<apex:actionFunction action="{!printDummys}" name="printDummy" status="IngStatus" rerender="mainFrm">
+			<apex:param name="pId" assignTo="{!pId}" value="" />
+			<apex:param name="pAccount" assignTo="{!pAccount}" value="" />
+			<apex:param name="pDate" assignTo="{!pDate}" value="" />
+			<apex:param name="pCnt" assignTo="{!pCnt}" value="" />
+			<apex:param name="pSeq" assignTo="{!pSeq}" value="" />
+		</apex:actionFunction>
+		<apex:actionFunction action="{!reset2StartStep}" name="reset2StartStep" status="IngStatus" rerender="mainFrm" />
+		 
+		<!-- 출하제품, 수량 선택 -->
+        <apex:actionFunction action="{!SelectShipmentItem}" name="SelectShipmentItem" rerender="mainFrm" status="IngStatus">
+            <apex:param name="strSelectSeq" assignTo="{!strSelectSeq}" value="" />
+        </apex:actionFunction>
+        <!-- 출하제품, 수량 선택 취소 -->
+        <apex:actionFunction action="{!SelectShipmentItemCancel}" name="SelectShipmentItemCancel" rerender="mainFrm" status="IngStatus">
+            <apex:param name="strSelectSeq" assignTo="{!strSelectSeq}" value="" />
+        </apex:actionFunction>
+		<!-- 바코드 입력 -->
+        <apex:actionFunction action="{!InputBarcodeForPage}" name="InputBarcodeForPage" rerender="mainFrm" status="IngStatus">
+			<apex:param name="getVal" assignTo="{!InputBarcodeGetVal}" value="" />
+            <apex:param name="seq1" assignTo="{!strSelectSeq}" value="" />
+            <apex:param name="seq2" assignTo="{!strSelectSeq2}" value="" />
+        </apex:actionFunction>
+		
+		<!-- 행삭제 -->
+        <apex:actionFunction action="{!ShipmentDetailDelete}" name="ShipmentDetailDelete" rerender="mainFrm" status="IngStatus">
+            <apex:param name="seq1" assignTo="{!strSelectSeq}" value="" />
+            <apex:param name="seq2" assignTo="{!strSelectSeq2}" value="" />
+        </apex:actionFunction>		
+		
+
+		<apex:sectionHeader title="출하관리" />
+		<apex:pageMessages escape="false" />
+		<div id='cssmenu'>
+			<ul>
+			   <li class='active'><a href='#'><span>출하 처리</span></a></li>
+			   <li class='last'><a href='/apex/Shipment_Search'><span>출하 조회</span></a></li>
+			</ul>
+		</div>
+		
+		
+		
+		<apex:pageBlock title="출하 처리" id="pgBlock">
+			<apex:outputPanel layout="block" rendered="{!SMSM.state==1}">
+				<b>{!$ObjectType.Shipment__c.Fields.Date__c.Label}</b> : <apex:inputField required="false" value="{!SMSM.SM.Date__c}" />
+				&nbsp;&nbsp;<b>{!$ObjectType.Shipment__c.Fields.Account__c.Label}</b> : <apex:inputField required="false" value="{!SMSM.SM.Account__c}" />
+				&nbsp;&nbsp;&nbsp;<apex:commandButton value="선택" action="{!SelectDateAccount}" status="IngStatus"/>
+			</apex:outputPanel>
+			<apex:outputPanel layout="block" rendered="{!SMSM.state==2}">
+				<b>{!$ObjectType.Shipment__c.Fields.Date__c.Label}</b> : <apex:outputField value="{!SMSM.SM.Date__c}" />
+				&nbsp;&nbsp;<b>{!$ObjectType.Shipment__c.Fields.Account__c.Label}</b> : <apex:outputField value="{!SMSM.SM.Account__c}" />
+				&nbsp;&nbsp;&nbsp;<apex:commandButton value="취소" action="{!SelectDateAccountCancel}" rendered="{!!IsAllSaved}" status="IngStatus"/>
+			</apex:outputPanel>
+			<br/>
+			<apex:repeat value="{!cShips}" var="item">
+				<apex:outputPanel layout="block" rendered="{!item.state==1}">
+					<b>{!$ObjectType.Shipment__c.Fields.ShipmentItem__c.Label}</b> : <apex:inputField required="false" value="{!item.SearchSM.ShipmentItem__c}" />
+					&nbsp;&nbsp;<b>출하할 수량</b> : <apex:inputText value="{!item.ShipCountGoal}" />
+					&nbsp;&nbsp;&nbsp;<apex:commandButton value="선택" onclick="SelectShipmentItem('{!item.Seq}');return false;" status="IngStatus"/>
+				</apex:outputPanel>
+				<apex:outputPanel layout="block" rendered="{!item.state<>1}">
+					<b>{!$ObjectType.Shipment__c.Fields.ShipmentItem__c.Label}</b> : <apex:outputField value="{!item.SearchSM.ShipmentItem__c}" />
+					&nbsp;&nbsp;<b>출하할 수량</b> : <apex:outputText value="{!item.ShipCountGoal}" />
+					&nbsp;&nbsp;<b>선택된 수량</b> : <apex:outputText value="{!item.ShipCountRollUp}" />
+					&nbsp;&nbsp;&nbsp;<apex:commandButton value="취소" onclick="SelectShipmentItemCancel('{!item.Seq}');return false;" rendered="{!!IsAllSaved}" status="IngStatus"/>
+					&nbsp;&nbsp;<apex:commandButton value="저장 및 출력" onclick="invokeSaveFn('{!item.SearchSM.ShipmentItem__c}','{!SMSM.SM.Account__c}','{!SMSM.SM.Date__c}','{!item.ShipCountGoal}','{!item.Seq}'); return false;" rendered="{!!IsAllSaved}" status="IngStatus"/>
+					&nbsp;&nbsp;<apex:commandButton value="계속 입력" onclick="refreshPage();return false;" rendered="{!IsAllSaved}" status="IngStatus"/>				
+				</apex:outputPanel>
+				
+				<apex:pageBlockTable value="{!item.cSMDs}" var="item2" id="pgBlockTable">
+					<apex:column headerValue="Seq" value="{!item2.Seq}"/>
+			    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Name.Label}" id="clBar">
+			    		<apex:outputField value="{!item2.IV.Name}" rendered="{!item2.state<>1}" />
+			    		<apex:outputPanel rendered="{!item2.state==1}">
+				    		<input type="text" id="InputBarcode" 
+				    			value="{!InputBarcodeGetVal}"
+				    			onkeypress="return KeyPressIvName(event, '{!item.Seq}', '{!item2.Seq}');"
+				    		/>
+			    		</apex:outputPanel>
+			    	</apex:column>
+		    		<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Item__c.Label}" value="{!item2.IV.Item__c}"/>
+		    		
+		    		<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Account__c.Label}" value="{!item2.IV.Account__c}"/>
+		    		<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.DateManufacture__c.Label}" value="{!item2.IV.DateManufacture__c}"/>
+		    		<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Warehouse__c.Label}" value="{!item2.IV.Warehouse__c}"/>
+		    		<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.CntInventory2__c.Label}" value="{!item2.IV.CntInventory2__c}"/>
+			    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.CntShipment__c.Label}">
+						<apex:outputText value="{0, number, ###,###,###,##0}" >
+							<apex:param value="{!item2.ShipCount}"/>
+						</apex:outputText>
+			    	</apex:column>
+			        <apex:column headerValue="기능">
+			            <apex:commandButton value="삭제" onclick="ShipmentDetailDelete('{!item.seq}', '{!item2.seq}');return false;" rendered="{!item2.state==9 && item.state<>9}" />
+			        </apex:column>
+				</apex:pageBlockTable>
+				<br/>
+			</apex:repeat>
+		</apex:pageBlock>
+	</apex:form>
+
+	<div id="dialog-modal" title="처리중...">
+		<p>처리중입니다.</p>
+	</div>
+</apex:page>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Memo__c</fullName>
+    <inlineHelpText>비용 에산을 산출한 근거를 기록. ex) 인원수 3명 * 주5일 * 2달 * 2회</inlineHelpText>
+    <label>비고(산출근거)</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>TextArea</type>
+</CustomField>

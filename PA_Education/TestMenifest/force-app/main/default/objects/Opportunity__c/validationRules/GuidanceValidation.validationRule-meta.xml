@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>GuidanceValidation</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    OR(
+        ISCHANGED(Stage__c),
+        ISCHANGED(StageDetail__c)
+    ),
+    NOT(BypassGuidance__c),
+    NOT(        
+        AND(
+            ISPICKVAL(Stage__c, &apos;01. Lead&apos;),
+            OR(
+                ISPICKVAL(StageDetail__c, &apos;01. Lead&apos;),
+                ISPICKVAL(StageDetail__c, &apos;&apos;)
+            )
+        )
+    ),
+    OR(
+        AND(
+            OR(
+                ISPICKVAL(Stage__c, &apos;02. Identified &amp; Customer Interviewed&apos;),
+                ISPICKVAL(Stage__c, &apos;03. Demo &amp; Value Proposal&apos;),
+                ISPICKVAL(Stage__c, &apos;04. Presentation Proposal &amp; Budget Confirmed&apos;),
+                ISPICKVAL(Stage__c, &apos;05. Negotiation&apos;),
+                ISPICKVAL(StageDetail__c, &apos;06-1. Close Won&apos;)
+            ),
+            OR(
+                ISBLANK(Contact__c),
+                ISBLANK(Sales_In_Charge__c),
+                ISPICKVAL(Source__c,&apos;&apos;)
+            )
+        ),
+        AND(
+            OR(
+                ISPICKVAL(Stage__c, &apos;03. Demo &amp; Value Proposal&apos;),
+                ISPICKVAL(Stage__c, &apos;04. Presentation Proposal &amp; Budget Confirmed&apos;),
+                ISPICKVAL(Stage__c, &apos;05. Negotiation&apos;),
+                ISPICKVAL(StageDetail__c, &apos;06-1. Close Won&apos;)
+            ),
+            OR(                
+                ISBLANK(Amount__c),
+                ISBLANK(Service_Type__c),
+                ISBLANK(DescriptionPurpose__c),
+                ISBLANK(Estimated_Close_Month__c),
+                ISBLANK(DescriptionPushPart__c)
+            )
+        ),
+        AND(
+            OR(
+                ISPICKVAL(Stage__c, &apos;04. Presentation Proposal &amp; Budget Confirmed&apos;),
+                ISPICKVAL(Stage__c, &apos;05. Negotiation&apos;),
+                ISPICKVAL(StageDetail__c, &apos;06-1. Close Won&apos;)
+            ),
+            OR(    
+                ISBLANK(RFPDate__c),
+                ISBLANK(ProposalDate__c),
+                ISBLANK(Amount__c),
+                ISBLANK(DemoDate__c)
+            )
+        ),
+        AND(
+            OR(
+                ISPICKVAL(Stage__c, &apos;05. Negotiation&apos;),
+                ISPICKVAL(StageDetail__c, &apos;06-1. Close Won&apos;)
+            ),
+            ISBLANK(QuoteDate__c)
+        )        
+    )
+)</errorConditionFormula>
+    <errorMessage>Guidance에 해당하는 Key Fields 값이 누락되었습니다.
+이전 단계를 확인하세요.</errorMessage>
+</ValidationRule>

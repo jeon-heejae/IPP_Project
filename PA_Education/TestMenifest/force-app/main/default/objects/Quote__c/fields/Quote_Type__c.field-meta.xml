@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Quote_Type__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(Quote_ConsultCount__c&gt;0 &amp;&amp; Quote_LicenseCount__c &gt; 0, &apos;Both&apos;,
+ IF(Quote_ConsultCount__c&gt;0 , &apos;Consult&apos; , IF(Quote_LicenseCount__c&gt;0, &apos;License&apos;,IF(Quote_TrainingSubTotal__c&gt;0, &apos;Training&apos;,&apos;None&apos;))))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>견적 종류</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

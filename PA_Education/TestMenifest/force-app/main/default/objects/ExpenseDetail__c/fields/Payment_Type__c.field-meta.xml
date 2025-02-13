@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Payment_Type__c</fullName>
+    <label>지출구분</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>개인카드</fullName>
+                <default>false</default>
+                <label>개인카드</label>
+            </value>
+            <value>
+                <fullName>법인카드</fullName>
+                <default>false</default>
+                <label>법인카드</label>
+            </value>
+            <value>
+                <fullName>현금</fullName>
+                <default>false</default>
+                <label>현금</label>
+            </value>
+            <value>
+                <fullName>세금계산서</fullName>
+                <default>false</default>
+                <label>세금계산서</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

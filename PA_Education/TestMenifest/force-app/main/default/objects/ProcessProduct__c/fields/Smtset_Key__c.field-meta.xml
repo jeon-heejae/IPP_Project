@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Smtset_Key__c</fullName>
+    <caseSensitive>false</caseSensitive>
+    <description>Tracebility smtset의 seq가 2개가 _를 구분으로 들어간다.
+예) 31_32
+한개일 경우는 1개만 구분자 없이 들어간다.
+구분자가 있는 경우 해당하는 Smtset_Key의 2개의 Partlist를 합치도록 한다. (트리거처리)</description>
+    <externalId>true</externalId>
+    <label>Smtset_Key</label>
+    <length>200</length>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>true</unique>
+</CustomField>

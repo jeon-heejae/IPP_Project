@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_UpsertUser</fullName>
+    <active>false</active>
+    <description>휴일근무의 프로젝트가 없을 경우 Role이 CEO, Business Management, Sales Manager인 사용자만 생성 가능, 프로젝트가 있을 경우 프로젝트의 PM만 생성 가능 (어드민은 Validation 제외)</description>
+    <errorConditionFormula>IF( ISBLANK( HolidayWork__r.Project__c ),
+			AND( $UserRole.DeveloperName != &apos;CEO&apos;,
+							 $UserRole.DeveloperName != &apos;Business_Management&apos;,
+							 $UserRole.DeveloperName != &apos;Sales_Manager&apos;,
+						  $Profile.Name != &apos;System Administrator&apos;),
+			IF( ISBLANK( HolidayWork__r.Project__r.PM__c ),
+						FALSE,
+						AND( HolidayWork__r.Project__r.PM__c != $User.Id,
+									 	$Profile.Name != &apos;System Administrator&apos;)
+						)
+			)</errorConditionFormula>
+    <errorMessage>휴일근무의 프로젝트가 없을 경우 Role이 CEO, Business Management, Sales Manager인 사용자만, 프로젝트가 있을 경우 프로젝트의 PM만 생성 가능합니다.</errorMessage>
+</ValidationRule>

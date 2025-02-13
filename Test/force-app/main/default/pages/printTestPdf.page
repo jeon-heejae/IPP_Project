@@ -13,7 +13,6 @@
 
             body {
                 font-family: 'Arial Unicode MS';
-                font-size: 12px;
             }
 
             table, th, tr, td {
@@ -74,35 +73,7 @@
     <apex:repeat value="{!listContact}" var="obj">
         <body>
             <!-- 기본 정보 테이블 -->
-            <table style="width:650px; height: 80px; margin-bottom: 20px;">
-                <tr>
-                    <td class="underline" style="font-size:12pt"></td>
-                    <td></td>
-                    <td style="margin-bottom: 5px; border: 1px solid lightgray; border-bottom:none;" bgcolor="#cccccc">
-                        ◎ 기업명 : (주)대유넥스티어
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td rowspan="2" class="double-underline" style="font-size:20pt;">학습근로자 면담일지</td>
-                    <td style="margin-bottom: 5px; border: 1px solid lightgray; border-bottom:none; border-top:none;" bgcolor="#cccccc">
-                        ◎ 기업현장교사 : {!obj.Name}
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td style="margin-bottom: 5px; border: 1px solid lightgray; border-bottom:none; border-top:none;" bgcolor="#cccccc">
-                        ◎ 학습근로자명 : 
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td style="margin-bottom: 5px; border: 1px solid lightgray; border-top:none;" bgcolor="#cccccc">
-                        ◎ 일 시 : 
-                    </td>
-                </tr>
-            </table>
+            <h1 class="double-underline">test</h1>
 
             <!-- 결재 테이블 -->
             <div style="float:right; padding: 1% 0 0 0">

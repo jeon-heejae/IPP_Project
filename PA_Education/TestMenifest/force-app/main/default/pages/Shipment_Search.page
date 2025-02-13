@@ -1,0 +1,107 @@
+<!--
+
+-->
+<apex:page controller="ShipmentManage" tabstyle="TabShipment__tab">
+	<head>
+		<apex:stylesheet value="{!URLFOR($Resource.CssMenu, '/menu_source/styles.css')}" />
+		
+		<apex:stylesheet value="{!URLFOR($Resource.jquery_ui, 'themes/base/jquery-ui.css')}"/>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'jquery-1.10.2.js')}"/>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'ui/jquery-ui.js')}"/>
+		
+		<script type="text/javascript">
+			$(function() {
+				$( "#dialog-modal" ).dialog({
+					autoOpen: true,
+					height: 140,
+					modal: true	,
+					open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); }
+				});
+			});
+		</script>
+		<script type="text/javascript">
+			function printBarcode(i,a,d,c,s,b){
+				var url = '/apex/PrintBarcode2?ItemId=' 
+						+ i
+						+ '&AccountId='
+						+ a
+						+ '&DateManufacture='
+						+ d
+						+ '&CntImportInspection='
+						+ c
+						+ '&seq='
+						+ s
+						+ '&barcode='
+						+ b
+						;
+				window.open(url,'','width=330,height=320,resizeable,scrollbars');
+			}
+			function showDialog(){
+				$("#dialog-modal").dialog( "open" );
+				return false;
+			}
+			
+			function hideDialog(){
+				$("#dialog-modal").dialog( "close" );
+				return false;
+			}
+			function formInit() {
+				hideDialog();
+			}
+			
+			try {
+				window.addEventListener('load',formInit,false);
+			}catch(e){
+				window.attachEvent('onload',formInit);
+			}
+		</script>
+	</head>
+	<apex:form id="mainFrm">
+		<apex:actionStatus onstart="showDialog();" onstop="hideDialog();"  id="IngStatus"/>
+		<apex:outputText value="{!strMsg}" escape="true" />
+		<br/>
+		<apex:sectionHeader title="출하관리" />
+		<apex:pageMessages escape="false" />
+		<div id='cssmenu'>
+			<ul>
+			   <li class=''><a href='/apex/Shipment_Main'><span>출하 처리</span></a></li>
+			   <li class='active last'><a href='#'><span>출하 조회</span></a></li>
+			</ul>
+		</div>
+		<apex:pageBlock title="출하 조회" id="pgBlock">
+			<!-- 검색 -->
+			<apex:outputPanel layout="block">
+				<b>{!$ObjectType.Shipment__c.Fields.ShipmentItem__c.Label}</b> : <apex:inputField required="false" value="{!SearchSM1.ShipmentItem__c}" />
+				&nbsp;&nbsp;<b>{!$ObjectType.Shipment__c.Fields.Account__c.Label}</b> : <apex:inputField required="false" value="{!SearchSM1.Account__c}" />
+				&nbsp;&nbsp;<b>{!$ObjectType.Shipment__c.Fields.Date__c.Label}</b> : 
+					&nbsp;<apex:inputField required="false" value="{!SearchSM1.Date__c}" />
+					&nbsp;~
+					&nbsp;<apex:inputField required="false" value="{!SearchSM2.Date__c}" />
+				&nbsp;&nbsp;&nbsp;<apex:commandButton value="조회" action="{!SearchShipment}" status="IngStatus"/>
+			</apex:outputPanel>
+			<br/>
+			<apex:pageBlockTable value="{!SMDs}" var="item" id="pgBlockTable">
+				<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Name.Label}" value="{!item.Inventory__r.Name}"/>
+				<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Item__c.Label}" value="{!item.Inventory__r.Item__c}"/>
+				<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Account__c.Label}" value="{!item.Inventory__r.Account__c}"/>
+				<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.DateManufacture__c.Label}" value="{!item.Inventory__r.DateManufacture__c}"/>
+				<apex:column headerValue="{!$ObjectType.Shipment__c.Fields.Account__c.Label}" value="{!item.Shipment__r.Account__c}"/>
+				<apex:column headerValue="{!$ObjectType.Shipment__c.Fields.Date__c.Label}" value="{!item.Shipment__r.Date__c}"/>
+				<apex:column headerValue="{!$ObjectType.ShipmentDetail__c.Fields.Count__c.Label}" value="{!item.Count__c}"/>
+				<apex:column headerValue="출력">
+					<apex:commandLink value="새창" onclick="printBarcode('{!item.Inventory__r.Item__c}', '{!item.Inventory__r.Account__c}', '{!item.Shipment__r.Date__c}', '{!item.Shipment__r.ShipmentCount__c}', '1', '{!item.Shipment__r.ShipmentBarcode__c}'); return fasle;" />
+				</apex:column>
+			</apex:pageBlockTable>
+			<apex:pageBlockSection columns="1" collapsible="false" rendered="{!SMDs.size<1}" >
+				<apex:outputPanel layout="block">
+					검색된 결과가 없습니다.
+				</apex:outputPanel>
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+		
+	</apex:form>
+
+	<div id="dialog-modal" title="처리중...">
+		<p>처리중입니다.</p>
+	</div>
+</apex:page>

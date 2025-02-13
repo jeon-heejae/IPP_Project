@@ -1,0 +1,123 @@
+<!--
+ - Created by jihwa on 2023-11-23.
+ -->
+
+<aura:component implements="force:appHostable,force:hasRecordId,force:lightningQuickActionWithoutHeader" controller="WinnerBingoBoardController">
+    <aura:handler name="init" value="{!this}" action="{!c.fnInit}" />
+    <aura:attribute name="bingoModalVisible" type="Boolean" />
+    <aura:attribute name="bingoWinnerName" type="String" />
+    <aura:attribute name="bingoCellParticipant" type="String[]"
+                    default="['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']"/>
+    <aura:attribute name="bingoCellParticipantName" type="String[]"
+                    default="['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']"/>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <lightning:buttonIcon iconName="utility:close"
+                                      onclick="{! c.closeBingoModal }"
+                                      alternativeText="close"
+                                      variant="bare-inverse"
+                                      class="slds-modal__close"/>
+                <h2 id="modal-heading-01" class="modalTitle slds-text-heading_medium slds-hyphenate">{!v.bingoWinnerName}님의 빙고</h2>
+            </header>
+            <div class="modalContent slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <table class="winnerTable">
+                    <tr>
+                        <td aura:id="block20">
+                            <span class="bingoText">{!v.bingoCellParticipantName[20]}</span>
+                        </td>
+                        <td aura:id="block21">
+                            <span class="bingoText">{!v.bingoCellParticipantName[21]}</span>
+                        </td>
+                        <td aura:id="block22">
+                            <span class="bingoText">{!v.bingoCellParticipantName[22]}</span>
+                        </td>
+                        <td aura:id="block23">
+                            <span class="bingoText">{!v.bingoCellParticipantName[23]}</span>
+                        </td>
+                        <td aura:id="block24">
+                            <span class="bingoText">{!v.bingoCellParticipantName[24]}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td aura:id="block15">
+                            <span class="bingoText">{!v.bingoCellParticipantName[15]}</span>
+                        </td>
+                        <td aura:id="block16">
+                            <span class="bingoText">{!v.bingoCellParticipantName[16]}</span>
+                        </td>
+                        <td aura:id="block17">
+                            <span class="bingoText">{!v.bingoCellParticipantName[17]}</span>
+                        </td>
+                        <td aura:id="block18">
+                            <span class="bingoText">{!v.bingoCellParticipantName[18]}</span>
+                        </td>
+                        <td aura:id="block19">
+                            <span class="bingoText">{!v.bingoCellParticipantName[19]}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td aura:id="block10">
+                            <span class="bingoText">{!v.bingoCellParticipantName[10]}</span>
+                        </td>
+                        <td aura:id="block11">
+                            <span class="bingoText">{!v.bingoCellParticipantName[11]}</span>
+                        </td>
+                        <td aura:id="block12">
+                            <span class="bingoText">{!v.bingoCellParticipantName[12]}</span>
+                        </td>
+                        <td aura:id="block13">
+                            <span class="bingoText">{!v.bingoCellParticipantName[13]}</span>
+                        </td>
+                        <td aura:id="block14">
+                            <span class="bingoText">{!v.bingoCellParticipantName[14]}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td aura:id="block5">
+                            <span class="bingoText">{!v.bingoCellParticipantName[5]}</span>
+                        </td>
+                        <td aura:id="block6">
+                            <span class="bingoText">{!v.bingoCellParticipantName[6]}</span>
+                        </td>
+                        <td aura:id="block7">
+                            <span class="bingoText">{!v.bingoCellParticipantName[7]}</span>
+                        </td>
+                        <td aura:id="block8">
+                            <span class="bingoText">{!v.bingoCellParticipantName[8]}</span>
+                        </td>
+                        <td aura:id="block9">
+                            <span class="bingoText">{!v.bingoCellParticipantName[9]}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td aura:id="block0">
+                            <span class="bingoText">{!v.bingoCellParticipantName[0]}</span>
+                        </td>
+                        <td aura:id="block1">
+                            <span class="bingoText">{!v.bingoCellParticipantName[1]}</span>
+                        </td>
+                        <td aura:id="block2">
+                            <span class="bingoText">{!v.bingoCellParticipantName[2]}</span>
+                        </td>
+                        <td aura:id="block3">
+                            <span class="bingoText">{!v.bingoCellParticipantName[3]}</span>
+                        </td>
+                        <td aura:id="block4">
+                            <span class="bingoText">{!v.bingoCellParticipantName[4]}</span>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+
+            <footer class="slds-modal__footer">
+                <lightning:button class="modalFooter" variant="neutral"
+                                  label="닫기"
+                                  title="닫기"
+                                  onclick="{! c.closeBingoModal }"/>
+            </footer>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</aura:component>

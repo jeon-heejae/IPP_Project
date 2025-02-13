@@ -1,0 +1,72 @@
+<aura:component >
+
+    <aura:attribute name="recordInfo" type="Object" />
+    <aura:attribute name="sIconName" type="string"/>
+    
+    <aura:attribute name="searchKeyword"    type="String" />
+    <aura:attribute name="outputText"       type="String" />
+
+    <aura:attribute name="sParentId"       type="String" />
+    <aura:attribute name="sParentField"       type="String" />
+
+    <aura:attribute name="bIsBasic" type="Boolean" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.fnInit}" />
+
+    <!--Register the component level event-->
+    <aura:registerEvent name="selectedLookupEvent" type="c:CommonLookup_evt"/>
+    
+    <!-- <li role="presentation">
+        <a onclick="{!c.doSelectItem}">
+        <span class="slds-lookup__item-action slds-media slds-media-center" id="lookup-option-350" role="option">
+            <div class="slds-media__body">
+                <div class="slds-input-has-icon slds-input-has-icon-right">
+                    <lightning:icon iconName="{! v.sIconName}" class="slds-input__icon"  size="x-small"/>
+                    <div class="slds-lookup__result-text">{!v.recordInfo.strName}</div>
+                </div>
+            </div>    
+        </span>
+        </a>
+    </li> -->
+    
+    <aura:if isTrue="{!v.bIsBasic}">
+        <li role="presentation" class="slds-listbox__item" onclick="{!c.doSelectItem}" style="padding: 5px;">
+            <span class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" id="lookup-option-350" role="option">
+                <span class="slds-media__figure">
+                    <span class="slds-icon_container" title="Description of icon when needed">
+                        <lightning:icon iconName="{!v.sIconName}" class="slds-icon slds-icon_small" size="small" alternativeText="icon"/>
+                        <span class="slds-assistive-text">Click To Me</span>
+                    </span>
+                </span>
+                <div class="slds-media__body">
+                    <span class="slds-listbox__option-text slds-listbox__option-text_entity">
+                        <!-- {!v.recordInfo.strName} -->
+                        <ui:outputRichText value="{!v.outputText}" class="slds-text-align_left"/>
+                    </span>
+                </div>    
+            </span>
+        </li>
+
+        <aura:set attribute="else">
+            <tr class="custom_tr" onclick="{!c.doSelectItem}" style="margin-bottom: 2px; cursor: pointer;">
+                <td>
+                    <span class="slds-media__figure">
+                        <span class="slds-icon_container" title="Description of icon when needed">
+                            <lightning:icon iconName="{!v.sIconName}" class="slds-icon slds-icon_small" size="small" alternativeText="icon"/>
+                            <span class="slds-assistive-text">Click To Me</span>
+                        </span>
+                    </span>
+                    <span class="slds-media__body">
+                        <span class="slds-listbox__option-text slds-listbox__option-text_entity" style="display: inline;">
+                            {!v.recordInfo.strName}
+                        </span>
+                    </span>   
+                </td>
+                <td>{!v.recordInfo.strSub1}</td>
+                <td>{!v.recordInfo.strSub2}</td>
+                <td>{!v.recordInfo.strSub3}</td>
+            </tr>
+        </aura:set>
+    </aura:if>
+
+</aura:component>

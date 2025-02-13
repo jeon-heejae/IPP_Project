@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All</fullName>
+    <columns>NAME</columns>
+    <columns>CardCompany__c</columns>
+    <columns>CardNumber__c</columns>
+    <columns>CardNickname__c</columns>
+    <columns>CardType__c</columns>
+    <columns>HolderName__c</columns>
+    <columns>fm_CardClassification__c</columns>
+    <columns>RealUser__c</columns>
+    <columns>OWNER.ALIAS</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Everything</filterScope>
+    <label>All</label>
+</ListView>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>HolidayAction_AlternativeBase__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <inlineHelpText>Fill this if use Alternative Holiday.
+If you can&apos;t see any rows then you don&apos;t have Alternative Holiday Register.</inlineHelpText>
+    <label>Base of Alternative Holiday</label>
+    <lookupFilter>
+        <active>true</active>
+        <booleanFilter>1 AND ((2 AND 3 AND 4) OR (5 AND 6 AND 7))</booleanFilter>
+        <filterItems>
+            <field>HolidayAction__c.HolidayAction_IsConfirm__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </filterItems>
+        <filterItems>
+            <field>$Source.HolidayAction_Type__c</field>
+            <operation>equals</operation>
+            <value>Alternative Holiday</value>
+        </filterItems>
+        <filterItems>
+            <field>HolidayAction__c.HolidayAction_Type__c</field>
+            <operation>equals</operation>
+            <value>Alternative Holiday Register</value>
+        </filterItems>
+        <filterItems>
+            <field>HolidayAction__c.HolidayAction_AlternativeBase__c</field>
+            <operation>equals</operation>
+            <value></value>
+        </filterItems>
+        <filterItems>
+            <field>$Source.HolidayAction_Type__c</field>
+            <operation>equals</operation>
+            <value>Alternative Holiday Register</value>
+        </filterItems>
+        <filterItems>
+            <field>HolidayAction__c.HolidayAction_Type__c</field>
+            <operation>equals</operation>
+            <value>Alternative Holiday</value>
+        </filterItems>
+        <filterItems>
+            <field>HolidayAction__c.HolidayAction_AlternativeBase__c</field>
+            <operation>equals</operation>
+            <valueField>$Source.Id</valueField>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>HolidayAction__c</referenceTo>
+    <relationshipName>Holiday_Action</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

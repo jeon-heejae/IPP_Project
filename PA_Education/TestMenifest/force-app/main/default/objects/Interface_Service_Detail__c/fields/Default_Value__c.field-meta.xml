@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Default_Value__c</fullName>
+    <description>요청과 응답 파라메터에 값이 없는 경우, 기본으로 입력될 값을 기재
+1.응답할 데이터를 생성하기 위한 쿼리 수행시에는 기본값을 요청 파라메터의 Key로 설정할 수 있음
+2.요청 파라메터에 소스필드를 지정할 경우, 우선적으로 요청 파라메터 값으로 치환됨</description>
+    <externalId>false</externalId>
+    <inlineHelpText>요청과 응답 파라메터에 값이 없는 경우, 기본으로 입력될 값을 기재
+1.응답할 데이터를 생성하기 위한 쿼리 수행시에는 기본값을 요청 파라메터의 Key로 설정할 수 있음
+2.요청 파라메터에 소스필드를 지정할 경우, 우선적으로 요청 파라메터 값으로 치환됨</inlineHelpText>
+    <label>기본값</label>
+    <length>100</length>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

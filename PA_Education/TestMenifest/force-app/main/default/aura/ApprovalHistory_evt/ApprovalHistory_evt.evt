@@ -1,0 +1,5 @@
+<aura:event type="APPLICATION">
+    <aura:attribute name="listApprover"   type="List"    description="현재 레코드의 승인자 리스트"/>
+    <aura:attribute name="listAppName"	  type="List" />
+    <aura:attribute name="sPendingUser"   type="String"  description="Pending 중인 승인자"/>
+</aura:event>

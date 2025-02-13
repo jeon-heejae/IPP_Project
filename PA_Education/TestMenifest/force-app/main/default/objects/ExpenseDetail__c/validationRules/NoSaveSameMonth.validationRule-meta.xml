@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NoSaveSameMonth</fullName>
+    <active>false</active>
+    <errorConditionFormula>Month(Date__c) &lt;&gt; VALUE(TEXT(Expense__r.UseMonth__c))</errorConditionFormula>
+    <errorMessage>경비 사용 월과 사용 일자의 월은 동일해야합니다.</errorMessage>
+</ValidationRule>

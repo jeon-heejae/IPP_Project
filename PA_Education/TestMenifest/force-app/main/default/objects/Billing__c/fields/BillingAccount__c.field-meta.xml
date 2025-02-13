@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BillingAccount__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <inlineHelpText>세금계산서 발송 대상 업체(미입력시 계약거래처가 자동으로 셋팅됨)</inlineHelpText>
+    <label>청구대상</label>
+    <referenceTo>Account</referenceTo>
+    <relationshipName>BillingAccount</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

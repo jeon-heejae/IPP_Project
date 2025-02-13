@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>OtherCertification__c</fullName>
+    <inlineHelpText>기타 자격증도 발급기관/자격명을 기입</inlineHelpText>
+    <label>기타 자격증 설명</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>TextArea</type>
+</CustomField>

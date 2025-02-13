@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>fm_UseDate__c</fullName>
+    <externalId>false</externalId>
+    <formula>TEXT(Date1__c) &amp; &quot;(&quot; &amp; 
+CASE( WEEKDAY(Date1__c),
+1, &quot;일&quot;,
+2, &quot;월&quot;,
+3, &quot;화&quot;,
+4, &quot;수&quot;,
+5, &quot;목&quot;,
+6, &quot;금&quot;,
+&quot;토&quot;
+) &amp; &quot;)~&quot; &amp;
+
+IF( TEXT(UseType__c) = &apos;1박&apos;, TEXT( Date1__c + 1), TEXT(Date1__c + 2)) &amp; &quot;(&quot; &amp;
+
+CASE( WEEKDAY(IF( TEXT(UseType__c) = &apos;1박&apos;, Date1__c + 1, Date1__c + 2)),
+1, &quot;일&quot;,
+2, &quot;월&quot;,
+3, &quot;화&quot;,
+4, &quot;수&quot;,
+5, &quot;목&quot;,
+6, &quot;금&quot;,
+&quot;토&quot;
+) &amp; &quot;)&quot;</formula>
+    <label>이용일</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>UPDATE_COLUMN_VALUE__c</fullName>
+    <description>update 시 적용할 값을 가지고 있는 파라메터명 지정(단, UPSERT 컬럼 포함여부 적용시에만 사용됨)</description>
+    <externalId>false</externalId>
+    <inlineHelpText>update 시 적용할 값을 가지고 있는 파라메터명 지정(단, UPSERT 컬럼 포함여부 적용시에만 사용됨)</inlineHelpText>
+    <label>UPDATE_컬럼_파라메터명</label>
+    <length>100</length>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

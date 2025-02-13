@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AuraDefinitionBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>46.0</apiVersion>
+    <description>Google에 연동되어 있는 Remember App 내 명함 정보를 조회 일자 기준으로 출력한다.</description>
+</AuraDefinitionBundle>

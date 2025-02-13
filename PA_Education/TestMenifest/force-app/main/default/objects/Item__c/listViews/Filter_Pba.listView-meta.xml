@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Filter_Pba</fullName>
+    <columns>CREATED_DATE</columns>
+    <columns>NAME</columns>
+    <columns>Standard__c</columns>
+    <columns>Code__c</columns>
+    <columns>Type__c</columns>
+    <columns>ItemMaster__c</columns>
+    <columns>IsCommon__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Type__c</field>
+        <operation>equals</operation>
+        <value>PBA</value>
+    </filters>
+    <label>Filter_PBA</label>
+    <language>ko</language>
+</ListView>

@@ -1,0 +1,334 @@
+<!--
+
+-->
+<apex:page controller="InventoryManage" tabstyle="TabInventoryManage__tab">
+	<style>
+		.tactive{
+			    background-color: rgb(51, 122, 195);
+			    color: white;
+			}
+	</style>
+	<head>
+		<apex:stylesheet value="{!URLFOR($Resource.CssMenu, '/menu_source/styles.css')}" />
+		
+		<apex:stylesheet value="{!URLFOR($Resource.jquery_ui, 'themes/base/jquery-ui.css')}"/>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'jquery-1.10.2.js')}"/>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'ui/jquery-ui.js')}"/>
+		
+		<script type="text/javascript">
+			var $j = jQuery.noConflict();
+			$j(function() {
+				$j( "#dialog-modal" ).dialog({
+					autoOpen: true,
+					height: 140,
+					modal: true,
+					open: function(event, ui) { $j(".ui-dialog-titlebar-close").hide(); }
+				});
+			});
+		</script>
+		<script type="text/javascript">
+			function showDialog(){
+				$j("#dialog-modal").dialog( "open" );
+				return false;
+			}
+			
+			function hideDialog(){
+				addClassOnSelectedItem();
+				
+				$j("#dialog-modal").dialog( "close" );
+				return false;
+			}
+			function formInit() {
+				hideDialog();
+			}
+			try {
+				window.addEventListener('load',formInit,false);
+			}catch(e){
+				window.attachEvent('onload',formInit);
+			}
+			
+			function select(str){           
+	            //alert(str);
+	            document.getElementById('theHiddenInput').innerHTML = str;
+	            temp2();
+	        }
+	        function onSearch(i, n, s){
+				n = decodeURIComponent(n);
+				s = decodeURIComponent(s);
+				Search(i, n, s);
+				
+			}
+	        function addClassOnSelectedItem(){
+				var val = document.getElementById('selectedName').value;
+				var val2 = document.getElementById('selectedStandard').value;
+				
+				$j('.colorTarget').each(function(){  
+					if($j(this).text() == val && $j(this).next().next().text() == val2)
+						$j(this).addClass('tactive');
+				});   
+			}
+			
+		</script>
+	</head>
+	<apex:form id="mainFrm">
+		<input type="hidden" id="selectedName" value="{!item_name}" />
+		<input type="hidden" id="selectedStandard" value="{!item_standard}" />		
+		
+		<apex:actionStatus onstart="showDialog();" onstop="hideDialog();"  id="IngStatus"/>
+				
+		<apex:actionFunction name="Search" action="{!Search}"  rerender="mainFrm" status="IngStatus">
+			<apex:param name="ItemId" value="" assignTo="{!item_id}"/>
+			<apex:param name="ItemName" value="" assignTo="{!item_name}"/>
+			<apex:param name="ItemStandard" value="" assignTo="{!item_standard}"/>			
+		</apex:actionFunction>
+		
+		<apex:actionFunction name="ClickPlus" action="{!ClickPlus}"  rerender="mainFrm" status="IngStatus">
+		    <apex:param name="ClickSeq" value="" assignTo="{!ClickSeq}"/>
+		    <apex:param name="ClickItemId" value="" assignTo="{!ClickItemId}"/>
+		    <apex:param name="ClickLevel" value="" assignTo="{!ClickLevel}"/>
+		</apex:actionFunction>
+
+		<apex:actionFunction name="ClickMinus" action="{!ClickMinus}"  rerender="mainFrm" status="IngStatus">
+		    <apex:param name="ClickSeq" value="" assignTo="{!ClickSeq}"/>
+		</apex:actionFunction>
+		
+		
+		<br/>
+		<apex:outputText value="{!strMsg}" escape="false" />
+		
+		<apex:sectionHeader title="자재관리" />
+		<apex:pageMessages escape="false" />
+		<div id='cssmenu'>
+			<ul>
+			   <li class='active'><a href='/apex/Inventory_Search'><span>부품 조회</span></a></li>
+			   <li ><a href='/apex/Inventory_Stock'><span>생산현장 출고</span></a></li>
+			   <li ><a href='/apex/Inventory_Line'><span>생산현장 재고</span></a></li>
+			   <li ><a href='/apex/Inventory_Delivery'><span>자재창고 반납</span></a></li>
+			   <li class='last'><a href='/apex/Inventory_PrintBarcodeOnly'><span>일반바코드출력</span></a></li>
+			</ul>
+		</div>
+		
+		<apex:pageBlock title="부품 조회" id="pageBlock">
+			<!-- <b>{!$ObjectType.Inventory__c.Fields.Item__c.Label}</b> <apex:inputField id="SearchIV" required="false" value="{!SearchIV.Item__c}" />
+			<apex:commandButton value="조회" action="{!Search}" status="IngStatus"/>
+			<br/> -->
+			<b>{!$ObjectType.Inventory__c.Fields.Item__c.Label}</b>
+			<apex:inputtext value="{!item_keyword}" />
+			<apex:commandButton value="조회" action="{!keyword_Search}" status="IngStatus"/>			
+			<br/>
+			<br/> 
+			
+			<apex:pageBlock title="품목 검색 결과" rendered="{!if(keyword_list.size==null||keyword_list.size<1,false,true)}"> 
+			<table cellspacing="0" cellpadding="0" border="0" class="list">
+					<tr class="headerRow">
+						<th class="headerRow">
+							<apex:outputText value="{!$ObjectType.Item__c.label}"/>
+						</th>
+						<th class="headerRow">
+							<apex:outputText value="{!$ObjectType.Item__c.fields.Type__c.label}"/>
+						</th>
+						<th class="headerRow">
+							<apex:outputText value="{!$ObjectType.Item__c.fields.Standard__c.label}"/>
+						</th>
+					</tr>
+				<apex:repeat value="{!keyword_list}" var="item">
+					<tr style="cursor:pointer"  onclick='onSearch("{!item.Id}", encodeURIComponent("{!item.Name}"), encodeURIComponent("{!item.standard__c}"))'> 
+						<td class="colorTarget">
+							<apex:outputField value="{!item.Name}"/>
+						</td>
+						<td>
+							<apex:outputField value="{!item.Type__c}"/>
+						</td>
+						<td class="colorTarget2">
+							<apex:outputField value="{!item.Standard__c}"/>
+						</td>
+					</tr>
+				</apex:repeat>
+			</table>
+			</apex:pageBlock>
+			<br/>
+			<apex:pageBlock title="품목의 부품에 대한 재고" rendered="{!if(cSums.size==null||cSums.size<1,false,true)}"> 
+			<table cellspacing="0" cellpadding="0" border="0" class="list">
+					<tr class="headerRow">
+						<!--
+						<th class="headerRow">
+							<apex:outputText value="Level"/>
+						</th>
+						-->
+						<th class="headerRow">
+							<apex:outputText value="{!$ObjectType.ProcessInfoDetail__c.fields.Item__c.label}"/>
+						</th>
+						<!-- 
+						<th class="headerRow">
+							<apex:outputText value="{!$ObjectType.ProcessInfoDetail__c.fields.InjectPart__c.label}"/>
+						</th>						
+						<th class="headerRow">
+							<apex:outputText value="{!$ObjectType.ProcessInfoDetail__c.fields.Seq__c.label}"/>
+						</th>
+						 -->
+						<th class="headerRow">
+							<apex:outputText value="{!$ObjectType.ProcessInfoDetail__c.fields.Count__c.label}"/>
+						</th>
+						<th class="headerRow">
+							<apex:outputText value="{!$ObjectType.Inventory__c.fields.IsCommon__c.label}"/>
+						</th>
+						<th class="headerRow">
+							<apex:outputText value="{!$ObjectType.Inventory__c.fields.Warehouse__c.label}"/>
+						</th>
+						<th class="headerRow">
+							<apex:outputText value="{!$ObjectType.Inventory__c.fields.CntInventory2__c.label}"/>
+						</th>
+						<th class="headerRow">
+							<apex:outputText value="생산현장 재고"/>
+						</th>
+						<th class="headerRow">
+							<apex:outputText value="{!$ObjectType.Item__c.fields.CntOptimalInventory__c.label}"/>
+						</th>
+					</tr>
+				<apex:repeat value="{!cSums}" var="item">
+					<tr id="row{!item.strSeq}">
+						<!--
+						<td>
+							<apex:outputText value="{!item.SubInfo}"/>|
+							<apex:outputText value="{!item.strSeq}"/>|
+							<apex:outputText value="{!item.Level.size}"/>|
+						</td>
+						-->
+						<td>
+							<apex:repeat value="{!item.Level}" var="item3">
+								<apex:outputPanel styleClass="ui-icon ui-icon-blank" style="float:left;"/>
+							</apex:repeat>
+							<apex:outputPanel styleClass="ui-icon ui-icon-carat-1-sw" rendered="{!item.Level.size>0}" style="float:left;"/>
+							<apex:outputPanel styleClass="ui-icon ui-icon-blank" rendered="{!item.SubInfo==0}" style="float:left;"/>
+							<apex:outputPanel styleClass="ui-icon ui-icon-circle-plus"
+								onclick="ClickPlus('{!item.strSeq}','{!item.PID.Item__c}','{!item.Level.size}');return false;" 
+								rendered="{!item.SubInfo==1}" style="float:left;"
+							/>
+							<apex:outputPanel styleClass="ui-icon ui-icon-circle-minus" 
+								onclick="ClickMinus('{!item.strSeq}');return false;"
+								rendered="{!item.SubInfo==2}" style="float:left;"
+							/>
+							<apex:outputField value="{!item.PID.Item__c}"/>
+						</td>
+						<!--
+						<td>
+							<apex:outputField value="{!item.PID.InjectPart__c}"/>
+						</td>
+						<td>
+							<apex:outputField value="{!item.PID.Seq__c}"/>
+						</td>
+						-->
+						<td>
+							<apex:outputField value="{!item.PID.Count__c}"/>
+						</td>
+						<td>
+							<apex:outputField value="{!item.PID.IsCommon__c}"/>
+						</td>
+						<td>
+							<apex:repeat value="{!item.BWs}" var="item2">
+								<apex:outputText rendered="{!item2.Type='창고'}">
+									<apex:outputText value="{!item2.Warehouse}"/>
+									 : 
+									<apex:outputText value="{0, number, ###,###,###,##0}" >
+										<apex:param value="{!item2.Cnt}"/>
+									</apex:outputText>
+									<br/>
+								</apex:outputText>
+							</apex:repeat>
+						</td>
+						<td>
+							<apex:outputText value="{0, number, ###,###,###,##0}" style="color:{!IF(item.cntOptimalInventory<>null && item.cntOptimalInventory>0 && item.InventoryCnt<item.cntOptimalInventory, 'red', '')};">
+								<apex:param value="{!item.InventoryCnt}"/>
+							</apex:outputText>
+						</td>
+						<td>
+							<apex:outputText value="{0, number, ###,###,###,##0}" >
+								<apex:param value="{!item.CntLineInventory}"/>
+							</apex:outputText>
+						</td>
+						<td>
+							<apex:outputText value="{0, number, ###,###,###,##0}" >
+								<apex:param value="{!item.cntOptimalInventory}"/>
+							</apex:outputText>
+						</td>
+					</tr>
+				</apex:repeat>
+			</table>
+			</apex:pageBlock>
+			<apex:pageBlock rendered="{!if(keyword_list.size==null||keyword_list.size<1,false,
+			if(item_id!=null,if(cSums.size==null||cSums.size<1,true,false),false))}"> 
+			해당 품목의 부품에 대한 재고가 없습니다.  
+			</apex:pageBlock>
+			<br/>
+			<apex:pageBlock title="품목의 재고" rendered="{!if(cSums2.size==null||cSums2.size<1,false,true)}"> 	
+			<table cellspacing="0" cellpadding="0" border="0" class="list">
+					<tr class="headerRow">						
+						<th class="headerRow">
+							<apex:outputText value="{!$ObjectType.ProcessInfoDetail__c.fields.Item__c.label}"/>
+						</th>
+						<th class="headerRow">
+							<apex:outputText value="{!$ObjectType.Inventory__c.fields.Warehouse__c.label}"/>
+						</th>											
+					</tr>
+				<apex:repeat value="{!cSums2}" var="item">
+					<tr>						
+						<td>
+							<apex:outputtext value="{!item_name}"/>
+						</td>
+						<td>
+							<apex:repeat value="{!item.BWs}" var="item2">
+								<apex:outputText value="{!item2.Warehouse}"/>
+								 : 
+								<apex:outputText value="{0, number, ###,###,###,##0}" >
+									<apex:param value="{!item2.Cnt}"/>
+								</apex:outputText>
+								<br/>
+							</apex:repeat>
+						</td>												
+					</tr>
+				</apex:repeat>
+			</table>
+			</apex:pageBlock>
+			<apex:pageBlock rendered="{!if(keyword_list.size==null||keyword_list.size<1,false,
+			if(item_id!=null,if(cSums2.size==null||cSums2.size<1,true,false),false))}"> 
+			해당 품목의 재고가 없습니다. 
+			</apex:pageBlock>
+		</apex:pageblock>
+	</apex:form>
+	<div id="dialog-modal" title="처리중...">
+		<p>처리중입니다.</p>
+	</div>
+</apex:page>
+
+<!--
+
+<apex:actionFunction name="readCell" action="{!readCellMethod}">
+    <apex:param name="rowID" value="" assignTo="{!clickedRowId}"/>
+</apex:actionFunction>
+
+<table cellspacing="0" cellpadding="0" border="0" class="list">
+    <apex:repeat value="{!account}" var="acc">
+        <tr class="headerRow">
+            <th class="headerRow">
+                <apex:outputText value="{!$ObjectType.Account.fields.Id.label}"/>
+            </th>
+            <th class="headerRow">
+                <apex:outputText value="{!$ObjectType.Account.fields.Name.label}"/>
+            </th>
+        </tr>
+        <tr id="row{!acc.Id}">
+            <script>
+                document.getElementById('row{!acc.Id}').onclick = function() {
+                    return readCell('{!acc.Id}')
+                };
+            </script>
+            <td>
+                <apex:outputText value="{!acc.Id}"/>
+            </td>
+            <td>
+                <apex:outputText value="{!acc.Name}"/>
+            </td>
+        </tr>
+    </apex:repeat>
+</table>
+-->

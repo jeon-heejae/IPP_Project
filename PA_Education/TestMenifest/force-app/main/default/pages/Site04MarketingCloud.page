@@ -1,0 +1,332 @@
+<apex:page showHeader="false" standardStylesheets="false">
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"></html> <!--<![endif]-->
+<head>
+
+    <!-- Basic Page Needs
+  ================================================== -->
+	<meta charset="utf-8" />
+	<title>(주)대유넥스티어, DaeU NexTier, Daeunextier</title>
+	
+    <!-- Mobile Specific Metas
+  ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+	<meta name="fb_admins_meta_tag" content="daeunextier"/>
+	<meta name="keywords" content="Daeunextier, Radian6, 대유넥티어, 데이터사이언티스트, 벨류인에이블러, 에반젤리스트"/>
+	<meta name="description" content="클라우드 기반 솔루션 프로바이더로서 기업이 필요로 하는 어플리케이션을 일일이 구축하지 않고 즉시 활용할 수 있는 서비스를 제공함으로써 중견,중소 기업의 비용부담을 최소화하고 생산성 향상 및 고객가치 증진에 기여하고자 합니다. ㈜대유넥스티어에 보내주시는 관심과 성원에 감사를 드립니다."/>
+    <!-- CSS
+  ================================================== -->
+	<apex:stylesheet value="{!URLFOR($Resource.daeunextier, 'css/zerogrid.css')}"/>
+	<apex:stylesheet value="{!URLFOR($Resource.daeunextier, 'css/style.css')}"/>
+	<apex:stylesheet value="{!URLFOR($Resource.daeunextier, 'css/responsive.css')}"/>
+	<apex:stylesheet value="{!URLFOR($Resource.daeunextier, 'css/responsiveslides.css')}"/>
+	
+	<!--[if lt IE 8]>
+       <div style=' clear: both; text-align:center; position: relative;'>
+         <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+           <img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." />
+        </a>
+      </div>
+    <![endif]-->
+    <!--[if lt IE 9]>
+		<script src="js/html5.js"></script>
+		<script src="js/css3-mediaqueries.js"></script>
+	<![endif]-->
+	
+	<link href='./images/favicon.ico' rel='icon' type='image/x-icon'/>
+  	<apex:includeScript value="{!URLFOR($Resource.daeunextier, 'js/jquery.min.js')}"/>
+  	<apex:includeScript value="{!URLFOR($Resource.daeunextier, 'js/responsiveslides.js')}"/>
+		<script>
+			$(function () {
+				  $("#slider").responsiveSlides({
+						auto: false,
+						pager: false,
+						nav: true,
+						speed: 500,
+						/**maxwidth: 962,*/
+						maxwidth: 540,
+						namespace: "centered-btns"
+				  });
+			});
+		
+			$(function () {
+				  $("#slider2").responsiveSlides({
+						auto: true,
+						pager: false,
+						nav: false,
+						speed: 500,
+						maxwidth: 200,
+						namespace: "centered-btns"
+				  });
+			});
+
+
+			$(function () {
+				  $("#slider3").responsiveSlides({
+						auto: true,
+						pager: false,
+						nav: false,
+						speed: 500,
+						maxwidth: 222,
+						namespace: "centered-btns"
+				  });
+			});
+		</script>
+		<!-- Google Analysis -->
+		<script type="text/javascript">
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-42633798-1']);
+		  _gaq.push(['_trackPageview']);
+		
+		  (function() {
+		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+		
+		</script>
+</head>
+<body>
+<!--------------Header--------------->
+<header>
+	<div class="wrap-header zerogrid">
+		<div id="logo">
+			<a href="/"><apex:image dir="100RTL" value="{!URLFOR($Resource.daeunextier, '/images/logo7.png')}" alt=""/></a>
+			<nav>
+				<div class="wrap-nav" style="left:180px;">
+					<div class="menu">
+						<ul>
+							<li id="nav1"><a href="/">Home</a></li>
+							<li id="nav2" ><a href="Site02AboutUs">About Us</a></li>
+							<li id="nav3" ><a href="Site03Service">Services</a></li>
+							<li id="nav4" class="active"><a href="Site04MarketingCloud">Salesforce.com</a></li>
+							<li id="nav5"><a href="Site08ANAPLAN">ANAPLAN</a></li>
+							<li id="nav6"><a href="Site05Clients">Clients</a></li>
+							<li id="nav7"><a href="Site06Careers">Careers</a></li>
+							<li id="nav8"><a href="Site07Support">Support</a></li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</div>
+	</div>
+</header>
+<div class="featured">
+	<div class="wrap-featured zerogrid">
+		<table cellpadding="0" cellspacing="0" border="0">
+			<tr>
+				<!-- 동영상 슬라이더 시작 -->
+				<td>
+					<div class="slider">
+						<div class="rslides_container">
+							<ul class="rslides" id="slider">
+								<li><embed width="540" height="290" src="http://www.youtube.com/v/tWaqWweP6Uw" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true"></embed></li>
+								<li><embed width="540" height="290" src="http://www.youtube.com/v/iXnvCdzbo7E" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true"></embed></li>
+								<li><embed width="540" height="290" src="http://www.youtube.com/v/l07HSG8YIkU" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true"></embed></li>
+								<li><embed width="540" height="290" src="http://www.youtube.com/v/fGar_bO49Ro" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true"></embed></li>
+									
+							</ul>
+						</div>
+					</div>
+				</td>				
+				<!-- 동영상 슬라이더 끝 -->
+
+				<!-- 슬라이더 2 시작 -->
+				<td>
+					<div class="slider">
+						<div class="rslides_container" style="padding-top: 3px; padding-left: 20px;">
+							<ul class="rslides" id="slider2">
+								<li>
+									<b style="padding-left: 10px;">SALES CLOUD</b><br />
+									<br/>
+									<a href="/MarketingCloud"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Sales.jpg')}" alt=""/></a>
+								</li>
+								<li>
+									<b style="padding-left: 10px;">SERVICE CLOUD</b><br />
+									<br/>
+									<a href="/MarketingCloud"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Service.jpg')}" alt=""/></a>
+								</li>
+								<li>
+									<b style="padding-left: 10px;">MARKETING CLOUD</b><br />
+									<br/>
+									<a href="/MarketingCloud"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Market.jpg')}" alt=""/></a>
+								</li>
+								<li>
+									<b style="padding-left: 10px;">PLATFORM</b><br />
+									<br/>
+									<a href="/MarketingCloud"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Platform.jpg')}" alt=""/></a>
+								</li>
+							
+							</ul>
+						</div>
+					</div>
+				</td>
+				<!-- 슬라이더 2 끝 -->
+
+				<!-- 슬라이더 3 시작 -->
+				<td>
+					<div class="slider">
+						<div class="rslides_container" style="padding-top: 50px;">
+							<ul class="rslides" id="slider3">
+								<li><a href="/MarketingCloud">Salesforce1 Platform에 기반한 <br></br>Sales Cloud에 오신 것을 환영합니다.<br></br>새로운 세상, 더 나은 영업 방식,<br></br>현장 영업팀은 모바일 기기만으로도 <br></br>영업을 수행할 수 있으며 내부 영업팀은<br></br>최고의 리드만 공급받습니다. <br></br>영업 관리자는 어떤 거래가 성사되며, <br></br>언제 성사될 지 알 수 있습니다.</a></li> 
+								<li><a href="/MarketingCloud">고객 충성도 구축.첫 번째 통화 해결률<br></br>(first call resolution)증대.<br></br>고객 만족도 37% 향상. <br></br>Salesforce1 Platform 위에 구축된 Service Cloud를 사용하여 장소에<br></br>상관없이 놀라운 고객 서비스를<br></br>제공하면서 동시에 수행할 수 있습니다.</a></li>
+								<li><a href="/MarketingCloud">Salesforce1 Platform에 구축된 ExactTarget Marketing Cloud을 사용하여 마케팅 담당자가 전혀 새로운 1:1 캠페인을 만들 수 있습니다. 이메일, 모바일, <br></br>소셜 및 웹과 같은 기존 디지털 채널과 <br></br>모든 제품(예: 치솔부터 자동차까지)을 <br></br>결합하여 소비자를 고객으로 바꿀 수<br></br>있습니다.</a></li>
+								<li><a href="/MarketingCloud">한 장소에 모든 요소를 갖춘 완벽한 개방형 고객 플랫폼을 소개합니다. 새로운 API 및 도구로 응용 프로그램을 더욱 신속하게<br></br> 구축하여 고객, 직원, 파트너, 차세대 기기 및 응용 프로그램과 연결할 수 있습니다.</a></li>
+								
+							</ul>
+						</div>
+					</div>
+				</td>
+				<!-- 슬라이더 3 끝 -->
+			</tr>
+		</table>
+	</div>
+</div>
+<!--------------Content--------------->
+<section id="content">
+	<div class="wrap-content zerogrid">
+		
+		<div class="row block02">
+			<div class="col-full"><h2>Sales Cloud</h2></div>
+			<div class="divider"></div>
+			<br />
+			<table border="0" width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<td width="40%"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Sales.jpg')}" alt=""/></td>
+					<td width="60%">
+						<br />
+						<h2><span>S</span>ales Cloud</h2>에 구축된 Sales Cloud는 차세대 응용 프로그램, 기기 및 고객을 하나로 연결합니다.
+						리드, 연락처, 고객 및 중요한 비즈니스 정보에 즉시 연결해 줍니다. 거래를 더욱 빠르게 체결하기 위해 필요한 모든 것입니다.
+						어디에서나 언제든지, 모든 기기에서 사용할 수 있습니다. 기존과 차원이 다른 빠르고 효과적인 영업을 가능하게 해주는 Sales Cloud와 함께하세요.
+						<br />
+						<br />
+						<br />
+						<br />
+						<br />
+						<br />
+						<div align="right"><a href="https://ap1.salesforce.com/sfc/p/90000000kHEk/a/900000008bE1/GpUGt5MjrqmBiQ6QdeY5wCBQnNLlsvUn41Ycyq69_Io=">Sales Cloud 소개자료 다운로드</a></div>
+					</td>
+				</tr>
+			</table>
+			<br />
+
+			<div class="col-full"><h2>Service Cloud</h2></div>
+			<div class="divider"></div>
+			<br />
+			<table border="0" width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<td width="30%"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Service.jpg')}" alt=""/></td>
+					<td width="70%">
+						<br />
+						<h2><span>S</span>ervice Cloud</h2>에 구축된 Service Cloud는 언제 어디서나 모든 기기에서 혁신적인 고객 서비스를 제공할 수 있도록 도와줍니다. 임베드된 원 터치 서비스로 직접 제품을 만나볼 수 있습니다. 이를 통해 Service Cloud의 모든 성능과 기능을 어디에서든지 이용하실 수 있습니다.
+						<br />
+						<br />
+						<br />
+						<br />
+						<br />
+						<div align="right"><a href="https://ap1.salesforce.com/sfc/p/90000000kHEk/a/900000008bE6/TsXnDpCCx5tfsBLjVrJBCPL3PutyP7ED77eZrub43BA=">Service Cloud 소개자료 다운로드</a></div>
+					</td>
+				</tr>
+			</table>
+			<br />
+
+			<div class="col-full"><h2>Marketing Cloud</h2></div>
+			<div class="divider"></div>
+			<br />
+			<table border="0" width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<td width="40%"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Market.jpg')}" alt=""/></td>
+					<td width="70%">
+						<br />
+						<h2><span>M</span>arketing Cloud</h2>에 구축된 ExactTarget Marketing Cloud는 마케팅 담당자가 이메일, 모바일, 소셜, 웹, 제품 등을 통해 고객과 연결하여 1:1 관계를 구축할 수 있도록 해주며, 글로벌 No. 1 소셜 마케팅 통합 솔루션입니다.<br />
+						<br />
+						+ Radian6 : 소셜미디어 및 웹의 대화를 모니터링하고 참여할 수 있게 하는 리스닝 플랫폼입니다.<br />
+						+ Buddy Media : 어떻게 기업의 소셜 미디어 프로파일이 수행되고 있는지 모니터링 할 수 있게 해주는<br />
+						&nbsp;&nbsp;&nbsp;소셜 미디어 마케팅 툴입니다.<br />
+						+ Social.com : 트위터, 페이스북에 효과적으로 메시지 전달 및 광고를 하기 위한 툴입니다.<br />
+						<br />
+						<br />
+						<div align="right"><a href="https://ap1.salesforce.com/sfc/p/90000000kHEk/a/900000008bEB/Zl3mI2CzYRsRE2mfISfgsUeEXxLK7i9oSGDmzLsnOQU=">Marketing Cloud 소개자료 다운로드</a></div>
+					</td>
+				</tr>
+			</table>
+			<br />
+
+			<div class="col-full"><h2>Platform</h2></div>
+			<div class="divider"></div>
+			<br />
+			<table border="0" width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<td width="30%"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Platform.jpg')}" alt=""/></td>
+					<td width="70%">
+						<br />
+						<h2><span>S</span>alesforce1 Platform</h2>은 응용 프로그램 개발과 배포 속도를 높여줍니다. 100% 클라우드 기반의 고객 플랫폼을 통해 다음 혜택을 누리십시오.<br />
+						+ 강력한 API로 어디에나 더욱 신속하게 연결<br />
+						+ Salesforce에서 모든 응용 프로그램 배포 및 액세스<br />
+						+ 2,000개가 넘는 AppExchange의 응용 프로그램 활용<br />
+						<br />
+						<br />
+						<br />
+						<div align="right"><a href="https://ap1.salesforce.com/sfc/p/90000000kHEk/a/900000008bEp/Y10NqcroblB.8mNrfwwmjQoEV8bVVv3Q7F2Qq9Z58mk=">Salesforce platform 소개자료 다운로드</a></div>
+					</td>
+				</tr>
+			</table>
+
+		</div>
+		
+	</div>
+</section>
+<!--------------Footer--------------->
+<footer>
+	<div class="wrap-footer zerogrid">
+		<div class="row">
+			<div class="col-2-3">
+				<div class="wrap-col">
+					<div class="box">
+						<div class="heading"><h2>Contact Us</h2></div>
+						<div class="content">
+							<ul>
+								<li>+ Address: 138-832 서울시 성동구 성수이로22길 37 아크밸리(성수IT종합센터)505호</li>
+								<li>+ TEL: 082-02-553-9981, + FAX: 082-02-553-9967, + Email:info@daeunextier.com</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-1-3">
+				<div class="wrap-col">
+					<div class="box">
+						<div class="heading"><h2>Follow Us</h2></div>
+						<div class="content">
+							<ul id="icons">
+								<li>
+																													
+									<a href="https://www.facebook.com/daeunextier" target="_blank" title="Facebook"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/social/icon1.png')}" alt=""/>Facebook</a>
+									<a href="https://twitter.com/daeunextier" target="_blank" title="Twitter"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/social/icon2.png')}" alt=""/>Twitter</a>
+									<a href="http://blog.daeunextier.com" target="_blank" title="Blog"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/social/icon3.png')}" alt=""/>Blog</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="copyright">
+		<p>Copyright &copy; 2014 Daeunextier Inc.</p>
+	</div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-42633798-1', 'daeunextier.com');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</apex:page>

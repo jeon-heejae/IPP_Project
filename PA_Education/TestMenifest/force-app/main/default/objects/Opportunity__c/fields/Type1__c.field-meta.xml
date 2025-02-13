@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Type1__c</fullName>
+    <label>영업기회 유형</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>전략/프로세스</fullName>
+                <default>false</default>
+                <label>전략/프로세스</label>
+            </value>
+            <value>
+                <fullName>Salesforce 구축</fullName>
+                <default>false</default>
+                <label>Salesforce 구축</label>
+            </value>
+            <value>
+                <fullName>시스템 관리</fullName>
+                <default>false</default>
+                <label>시스템 관리</label>
+            </value>
+            <value>
+                <fullName>교육</fullName>
+                <default>false</default>
+                <label>교육</label>
+            </value>
+            <value>
+                <fullName>라이센스 납품</fullName>
+                <default>false</default>
+                <label>라이센스 납품</label>
+            </value>
+            <value>
+                <fullName>솔루션</fullName>
+                <default>false</default>
+                <label>솔루션</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

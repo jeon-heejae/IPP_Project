@@ -1,0 +1,649 @@
+<!--
+* Component Name                :
+MyHolidayInfoLightning.cmp
+* Component Controller          : MyHolidayInfoLightningController.js
+* Component Helper              : MyHolidayInfoLightningHelper.js
+* Component Contorlller Class   : HolidayController.cls
+* Test Class                    : HolidayController_Test.cls
+* Description                   : 휴가정보 Detail
+* Modification Log
+* ===============================================================
+* Ver     Date          Author           Modification
+* ===============================================================
+  1.0   2018.08.27      MH.Kwak             Create
+  1.1   2018.10.29      Jk.Lee              Modified
+  2.0   2021.01.14      CJ.Sohn             연차여부 값에 대한 올바른 참조값으로 변경
+  2.1   2021.09.23      CJ.Sohn             2차 승인자 지정 필드 표시
+  2.2   2021.12.28      CJ.Sohn             전년도 연차 관련 필드 표시
+-->
+
+<aura:component controller="HolidayController" implements="lightning:actionOverride,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="fireAppEvent" Type="String"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="currentId" type="String"/>
+    <aura:attribute name="holidayOwnerCheck" type="Boolean"/>
+
+    <!--action 버튼 클릭 핸들러-->
+    <aura:attribute name="clickType"  Type="Boolean"/>
+    <aura:attribute name="clickType2" Type="Boolean"/>
+    <aura:attribute name="clickType21" Type="Boolean"/>
+    <aura:attribute name="clickType22" Type="Boolean"/>
+    <aura:attribute name="clickType23" Type="Boolean"/>
+    <aura:attribute name="clickType24" Type="Boolean"/>
+    <aura:attribute name="clickType3" Type="Boolean"/>
+    <aura:attribute name="clickType4" Type="Boolean"/>
+
+    <!--expendable tab 각각의 속성값-->
+    <aura:attribute name="viewList" type="list" />
+    <aura:attribute name="holiday" type="list" />
+    <aura:attribute name="holidayAction" type="HolidayAction__c"/>
+    <aura:attribute name="holidayHistory" type="list"/>
+    <aura:attribute name="holidayMapLabel" type="Map"/>
+    <aura:attribute name="holidayActionMapLabel" type="Map"/>
+    <aura:attribute name="holidayPerm" type="boolean"/>
+
+    <!-- Spinner Container -->
+    <aura:attribute name="toggleSpinner" type="boolean" default="true"/>
+    <aura:if isTrue="{!v.toggleSpinner}">
+        <lightning:spinner aura:id="spinner" alternativeText="Loading" size="large" variant="brand"/>
+    </aura:if>
+
+    <div class="slds-box">
+        <div class="slds-card">
+
+            <!-- 휴가 정보 -->
+            <div class="slds-section slds-is-open slds-p-around_medium slds-card">
+                <h5 class="slds-section__title">
+                    <button class="slds-button slds-section__title-action" aria-controls="expando-unique-id" tabindex="0" aria-expanded="true"  onclick="{!c.clickStatus}">
+                        <span class="test" style="margin-right: 3%;">
+                            <lightning:icon iconName="{!v.clickType != false ? 'utility:chevrondown' : 'utility:chevronright'}" size="small" class="slds-button__icon slds-button__icon_hint slds-button__icon_edit"/>
+                        </span>
+                        <p align="left">
+                            <lightning:icon iconName="custom:custom62" size="small" alternativeText="My Expenses"/>
+                        </p>
+
+                        <h4 style ="margin-left:1%;"><b>{!$Label.c.Holiday_Title_Info}</b></h4>
+                    </button>
+                    <lightning:button class="slds-button slds-button_brand" label="{!$Label.c.Register}" onclick="{!c.gotoURL}"/>
+                    {!v.body}
+                </h5>
+
+                <div aria-hidden="false" class="slds-section__content" id="myDIV">
+                    <table class="slds-table slds-table_bordered slds-table--fixed-layout">
+                        <aura:iteration items="{!v.holiday}" var="holiday">
+                            <thead>
+                                <tr class="slds-text-title_caps">
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="입사일자"><b>{!v.holidayMapLabel.Holiday_JoinDate__c}</b></div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="근속연수"><b>{!v.holidayMapLabel.Holiday_WorkingYears__c}</b></div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">
+                                        <div class="slds-truncate"><b>{!holiday.Holiday_JoinDate__c}</b></div>
+                                    </th>
+                                    <td>
+                                        <div class="slds-truncate"><b>{!holiday.Holiday_WorkingYears__c}</b></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </aura:iteration>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 산정 휴가 -->
+            <div class="slds-section slds-is-open slds-p-around_medium slds-card">
+                <h5 class="slds-section__title">
+                    <button class="slds-button slds-section__title-action" aria-controls="expando-unique-id" tabindex="1" aria-expanded="true"  onclick="{!c.clickStatus2}">
+                        <span class="test1" style="margin-right: 3%;">
+                            <lightning:icon iconName="{!v.clickType2 != false ? 'utility:chevrondown' : 'utility:chevronright'}" size="small" class="slds-button__icon slds-button__icon_hint slds-button__icon_edit"/>
+                        </span>
+                        <p align="left">
+                            <lightning:icon iconName="custom:custom18" size="small"/>
+                        </p>
+                        <h4 style ="margin-left:1%;"><b>{!$Label.c.Holiday_Title_Days}</b></h4>
+                    </button>
+                </h5>
+
+                <div aria-hidden="true" class="slds-section__content" id="myDIV2">
+                    <!-- Calculated Days / Given Days-->
+                    <aura:iteration items="{!v.holiday}" var="holiday">
+
+                        <!-- 연월차 -->
+                        <h3 class="slds-section__title">
+                            <button class="slds-button slds-section__title-action" aria-controls="expando-unique-id" tabindex="1" aria-expanded="true" onclick="{!c.clickStatus21}">
+                                <span class="test1" style="margin-right: 1%;">
+                                    <lightning:icon iconName="{!v.clickType21 != false ? 'utility:chevrondown' : 'utility:chevronright'}" size="small" class="slds-button__icon slds-button__icon_hint slds-button__icon_edit"/>
+                                </span>
+                                <h2 style ="margin-left:1%;"><b>연월차</b></h2>
+                            </button>
+                        </h3>
+                        <div aria-hidden="true" class="slds-section__content" id="myDIV21">
+                            <table class="slds-table slds-table_bordered slds-table--fixed-layout">
+                                <thead>
+                                    <tr class="slds-text-title_caps">
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="총 연월차일수">{!v.holidayMapLabel.Holiday_Total_Count__c}<lightning:helptext content="올해 월차일수 + 올해 연차일수 + 전년도 연차 잔여일수"/></div>
+
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="올해 연차일수">{!v.holidayMapLabel.Holiday_Annual_Calculated__c}<lightning:helptext content="올해 발생한 연차일수"/></div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="slds-truncate"><b>{!holiday.Holiday_Total_Count__c}</b></div>
+                                        </th>
+                                        <td>
+                                            <div class="slds-truncate"><b>{!holiday.Holiday_Annual_Calculated__c}</b></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                                <thead>
+                                    <tr class="slds-text-title_caps">
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="연월차 사용일수">{!v.holidayMapLabel.Holiday_UseDays__c}<lightning:helptext content="올해 연월차 사용일수"/></div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="올해 월차일수">{!v.holidayMapLabel.Holiday_Monthly_Calculated__c}<lightning:helptext content="올해 발생한 월차일수 (월차는 입사일에 해당하는 일자 하루 전 날 부여됩니다.)"/></div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="slds-truncate"><b>{!holiday.Holiday_UseDays__c}</b></div>
+                                        </th>
+                                        <th scope="row">
+                                            <div class="slds-truncate"><b>{!holiday.Holiday_Monthly_Calculated__c}</b></div>
+                                        </th>
+                                    </tr>
+                                </tbody>
+
+                                <thead>
+                                    <tr class="slds-text-title_caps">
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="연월차 잔여일수">{!v.holidayMapLabel.Holiday_Total_Remain__c}<lightning:helptext content="총 연월차일수 + 추가 부여 일수 - 연월차 사용일수"/></div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="추가 부여일수">{!v.holidayMapLabel.Holiday_GivenHolidays__c}<lightning:helptext content="추가적으로 부여된 연월차일수"/></div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="slds-truncate"><b>{!holiday.Holiday_Total_Remain__c}</b></div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-truncate"><b>{!holiday.Holiday_GivenHolidays__c}</b></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- 대체 휴가 -->
+                        <h3 class="slds-section__title">
+                            <button class="slds-button slds-section__title-action" aria-controls="expando-unique-id" tabindex="1" aria-expanded="true" onclick="{!c.clickStatus24}">
+                                <span class="test1" style="margin-right: 1%;">
+                                    <lightning:icon iconName="{!v.clickType24 != false ? 'utility:chevrondown' : 'utility:chevronright'}" size="small" class="slds-button__icon slds-button__icon_hint slds-button__icon_edit"/>
+                                </span>
+                                <h2 style ="margin-left:1%;"><b>대체 휴가</b></h2>
+                            </button>
+                        </h3>
+                        <div aria-hidden="true" class="slds-section__content" id="myDIV24">
+                            <table class="slds-table slds-table_bordered slds-table--fixed-layout">
+                                <thead>
+                                <tr class="slds-text-title_caps">
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="총 대체휴가일수">{!v.holidayMapLabel.Holiday_reward_Total_Count__c}<lightning:helptext content="올해 발생한 대체휴가일수 + 전년도 대체휴가 잔여일수"/></div>
+                                        <!--                                        <div class="slds-truncate" title="대체휴가 사용일수">{!v.holidayMapLabel.Holiday_UseDays__c}</div>-->
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="대체휴가 사용일수">{!v.holidayMapLabel.Holiday_rewardDays__c}<lightning:helptext content="올해 대체휴가 사용일수"/></div>
+                                        <!--                                        <div class="slds-truncate" title="대체휴가 수당 지급일수">{!v.holidayMapLabel.Holiday_Monthly_Calculated__c}</div>-->
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">
+                                        <div class="slds-truncate"><b>{!holiday.Holiday_reward_Total_Count__c}</b></div>
+                                    </th>
+                                    <th scope="row">
+                                        <div class="slds-truncate"><b>{!holiday.Holiday_rewardDays__c}</b></div>
+                                    </th>
+                                </tr>
+                                </tbody>
+
+                                <thead>
+                                <tr class="slds-text-title_caps">
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="대체휴가 잔여일수">{!v.holidayMapLabel.fm_Holiday_rewardRemainDays__c}<lightning:helptext content="총 대체휴가일수 - 대체휴가 사용일수 - 대체휴가 수당 지급일수"/></div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="대체휴가 수당 지급일수">{!v.holidayMapLabel.Holiday_BenefitPaymentDays__c}<lightning:helptext content="올해 수당 지급완료된 대체휴가일수"/></div>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="slds-truncate"><b>{!holiday.fm_Holiday_rewardRemainDays__c}</b></div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate"><b>{!holiday.Holiday_BenefitPaymentDays__c}</b></div>
+                                    </td>
+                                </tr>
+                                </tbody>
+
+
+
+                            </table>
+                        </div>
+
+                        <!-- 기타 휴가 -->
+                        <h3 class="slds-section__title">
+                            <button class="slds-button slds-section__title-action" aria-controls="expando-unique-id" tabindex="1" aria-expanded="true" onclick="{!c.clickStatus22}">
+                                <span class="test1" style="margin-right: 1%;">
+                                    <lightning:icon iconName="{!v.clickType22 != false ? 'utility:chevrondown' : 'utility:chevronright'}" size="small" class="slds-button__icon slds-button__icon_hint slds-button__icon_edit"/>
+                                </span>
+                                <h2 style ="margin-left:1%;"><b>기타 휴가</b></h2>
+                            </button>
+                        </h3>
+                        <div aria-hidden="true" class="slds-section__content" id="myDIV22">
+                            <table class="slds-table slds-table_bordered slds-table--fixed-layout">
+                                <thead>
+                                    <tr class="slds-text-title_caps">
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="경조휴가">{!v.holidayMapLabel.Holiday_FamilyEvent_Count__c}</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="공가">{!v.holidayMapLabel.Holiday_PublicWorks_Count__c}</div>
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="slds-truncate"><b>{!holiday.Holiday_FamilyEvent_Count__c}</b></div>
+                                        </th>
+                                        <td>
+                                            <div class="slds-truncate"><b>{!holiday.Holiday_PublicWorks_Count__c}</b></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                                <thead>
+                                    <tr class="slds-text-title_caps">
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="생리휴가">{!v.holidayMapLabel.Holiday_WomenHoliday_Count__c}</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="병가">{!v.holidayMapLabel.Holiday_SickLeave_Count__c}</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="slds-truncate"><b>{!holiday.Holiday_WomenHoliday_Count__c}</b></div>
+                                        </th>
+                                        <td>
+                                            <div class="slds-truncate"><b>{!holiday.Holiday_SickLeave_Count__c}</b></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+
+                            </table>
+                        </div>
+
+                        <!-- Days for Last Year -->
+                        <h3 class="slds-section__title">
+                            <button class="slds-button slds-section__title-action" aria-controls="expando-unique-id" tabindex="1" aria-expanded="true" onclick="{!c.clickStatus23}">
+                                <span class="test1" style="margin-right: 1%;">
+                                    <lightning:icon iconName="{!v.clickType23 != false ? 'utility:chevrondown' : 'utility:chevronright'}" size="small" class="slds-button__icon slds-button__icon_hint slds-button__icon_edit"/>
+                                </span>
+                                <h2 style ="margin-left:1%;"><b>전년도 연월차</b></h2>
+                            </button>
+                        </h3>
+                        <div aria-hidden="true" class="slds-section__content" id="myDIV23">
+                            <table class="slds-table slds-table_bordered slds-table--fixed-layout">
+                                <thead>
+                                    <tr class="slds-text-title_caps">
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="전년도 월차일수">{!v.holidayMapLabel.MonthlyOfLastYear__c}<lightning:helptext content="전년도에 발생한 월차일수"/></div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="전년도 연차일수">{!v.holidayMapLabel.CarriedOverOfLastYear__c}<lightning:helptext content="전년도에 발생한 연차일수"/></div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="slds-truncate"><b>{!holiday.MonthlyOfLastYear__c}</b></div>
+                                        </th>
+                                        <td>
+                                            <div class="slds-truncate"><b>{!holiday.CarriedOverOfLastYear__c}</b></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <thead>
+                                    <tr class="slds-text-title_caps">
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="전년도 연월차 사용일수">{!v.holidayMapLabel.UseDaysOfLastYear__c}<lightning:helptext content="전년도에 발생한 연월차 사용일수"/></div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="전년도 연월차 잔여일수">{!v.holidayMapLabel.HolidayRemainOfLastYear__c}<lightning:helptext content="전년도에 발생한 연월차 사용 후 잔여일수"/></div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="slds-truncate"><b>{!holiday.UseDaysOfLastYear__c}</b></div>
+                                        </th>
+                                        <td>
+                                            <div class="slds-truncate"><b>{!holiday.HolidayRemainOfLastYear__c}</b></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <h3 class="slds-section__title">
+                            <button class="slds-button slds-section__title-action" aria-controls="expando-unique-id" tabindex="1" aria-expanded="true" onclick="{!c.clickStatus23}">
+                                <span class="test1" style="margin-right: 1%;">
+                                    <lightning:icon iconName="{!v.clickType23 != false ? 'utility:chevrondown' : 'utility:chevronright'}" size="small" class="slds-button__icon slds-button__icon_hint slds-button__icon_edit"/>
+                                </span>
+                                <h2 style ="margin-left:1%;"><b>전년도 대체휴가</b></h2>
+                            </button>
+                        </h3>
+                        <div aria-hidden="true" class="slds-section__content" id="myDIV23">
+                            <table class="slds-table slds-table_bordered slds-table--fixed-layout">
+                                <thead>
+                                <tr class="slds-text-title_caps">
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="전년도 대체휴가일수">{!v.holidayMapLabel.RewardHolidayTotalOfLastYear__c}</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="전년도 대체휴가 사용일수">{!v.holidayMapLabel.RewardHolidayUseDaysOfLastYear__c}</div>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">
+                                        <div class="slds-truncate"><b>{!holiday.RewardHolidayTotalOfLastYear__c}</b></div>
+                                    </th>
+                                    <td>
+                                        <div class="slds-truncate"><b>{!holiday.RewardHolidayUseDaysOfLastYear__c}</b></div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <thead>
+                                <tr class="slds-text-title_caps">
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="전년도 대체휴가 잔여일수">{!v.holidayMapLabel.RewardHolidayRemainOfLastYear__c}</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="전년도 대체휴가 수당 지급일수">{!v.holidayMapLabel.RewardHolidayPaymentDaysOfLastYear__c}</div>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">
+                                        <div class="slds-truncate"><b>{!holiday.RewardHolidayRemainOfLastYear__c}</b></div>
+                                    </th>
+                                    <td>
+                                        <div class="slds-truncate"><b>{!holiday.RewardHolidayPaymentDaysOfLastYear__c}</b></div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </aura:iteration>
+                </div>
+            </div>
+
+            <!-- Action History (휴가 승인 내역) -->
+            <div class="slds-section slds-is-open slds-p-around_medium slds-card">
+                <h5 class="slds-section__title">
+                    <button class="slds-button slds-section__title-action" aria-controls="expando-unique-id" tabindex="3" aria-expanded="true"  onclick="{!c.clickStatus4}">
+                        <span class="test1" style="margin-right: 3%;">
+                            <lightning:icon iconName="{!v.clickType4 != false ? 'utility:chevrondown' : 'utility:chevronright'}" size="small" class="slds-button__icon slds-button__icon_hint slds-button__icon_edit"/>
+                        </span>
+                        <p align="left">
+                            <lightning:icon iconName="custom:custom31" size="small" alternativeText="My Expenses"/>
+                        </p>
+                        <h4 style ="margin-left:1%;"><b>{!$Label.c.Holiday_Title_ActionHistory}</b></h4>
+                    </button>
+                </h5>
+
+                <div aria-hidden="true" class="slds-section__content" id="myDIV4">
+                    <table class="slds-table slds-table_bordered slds-table--fixed-layout">
+                        <thead>
+                            <tr class="slds-text-title_caps">
+                                <th scope="col">
+                                    <div class="slds-truncate" title="휴가신청 제목">{!v.holidayActionMapLabel.Name}</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="휴가신청 일 수">{!v.holidayActionMapLabel.HolidayAction_Days__c}</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="휴가신청 종류">{!v.holidayActionMapLabel.HolidayAction_Type__c}</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="휴가신청 승인여부">{!v.holidayActionMapLabel.HolidayAction_IsConfirm__c}</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="1차승인">{!v.holidayActionMapLabel.FirstHolidayRequest__c}</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="2차승인">{!v.holidayActionMapLabel.SecondApproverRequest__c}</div>
+                                    <!-- <div class="slds-truncate" title="2차승인">{!v.holidayActionMapLabel.SecondApproverSelection__c}</div> -->
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="휴가신청 일자/시간">{!v.holidayActionMapLabel.CreatedDate}</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.holidayAction}" var="item">
+                                <tr>
+                                    <th scope="row" >
+                                        <div class="slds-truncate"><a href="{!'/one/one.app?#/sObject/'+ item.Id + '/view'}" target="_blank">{!item.Name}</a></div>
+                                    </th>
+                                    <td>
+                                        <div class="slds-truncate">{!item.HolidayAction_Days__c}</div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate">{!item.HolidayAction_Type__c}</div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate">
+                                            <ui:outputCheckbox value="{!item.HolidayAction_IsConfirm__c}"/>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate">{!item.FirstHolidayRequest__r.Name}</div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate">{!item.SecondApproverRequest__r.Name}</div>
+                                        <!-- <ui:outputCheckbox value="{!item.SecondApproverSelection__c}"/></div> -->
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate">
+                                            <lightning:formattedDateTime value="{!item.CreatedDate}" year="2-digit" month="2-digit" day="2-digit"  hour="2-digit" minute="2-digit" timeZoneName="short"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 휴가 변동 내역 -->
+            <div class="slds-section slds-is-open slds-p-around_medium slds-card">
+                <h5 class="slds-section__title">
+                    <button class="slds-button slds-section__title-action" aria-controls="expando-unique-id" tabindex="2" aria-expanded="true"  onclick="{!c.clickStatus3}">
+                        <span class="test1" style="margin-right: 3%;">
+                            <lightning:icon iconName="{!v.clickType3 != false ? 'utility:chevrondown' : 'utility:chevronright'}" size="small" class="slds-button__icon slds-button__icon_hint slds-button__icon_edit"/>
+                        </span>
+                        <p align="left">
+                            <lightning:icon iconName="custom:custom20" size="small" alternativeText="My Expenses"/>
+                        </p>
+                        <h4 style ="margin-left:1%;"><b>{!$Label.c.Holiday_Title_InfoHistory}</b></h4>
+                    </button>
+                </h5>
+
+                <div aria-hidden="true" class="slds-section__content" id="myDIV3">
+
+                    <!-- Holiday Info History 세부내용 부분 -->
+                    <table class="slds-table slds-table_bordered slds-table--fixed-layout">
+                        <colgroup>
+                            <col width="20%"/>
+                            <col width="15%"/>
+                            <col width=""/>
+                        </colgroup>
+                        <thead>
+                            <tr class="slds-text-title_caps">
+                                <th scope="col">
+                                    <div class="slds-truncate">{!$Label.c.Holiday_Date}</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate">{!v.holidayActionMapLabel.HolidayAction_Approver__c}</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate">{!$Label.c.Holiday_Activity}</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.holidayHistory}" var="item2">
+                                <tr>
+                                    <th scope="row" >
+                                        <div class="slds-truncate">
+                                            <lightning:formattedDateTime value="{!item2.CreatedDate}" year="2-digit" month="2-digit" day="2-digit"  hour="2-digit" minute="2-digit" timeZoneName="short"/>
+                                        </div>
+                                    </th>
+                                    <td>
+                                        <div class="slds-truncate">{!item2.CreatedBy.Name}</div>
+                                    </td>
+                                    <!-- Changed Use days</div> -->
+                                    <td>
+                                        <div class="slds-truncate">Changed <b><c:DN_MapEntries map="{!v.holidayMapLabel}" key="{!item2.Field}"/></b> from <b>{!item2.OldValue}</b> to&nbsp;<b>{!item2.NewValue}</b></div>
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <aura:set attribute="else">
+        <div class="slds-box">
+            <div class="slds-card">
+                <h5 class="slds-section__title">
+                <button class="slds-button slds-section__title-action" aria-controls="expando-unique-id" tabindex="0" aria-expanded="true">
+                    <span class="test" style="margin-right: 3%;">
+                        <lightning:icon iconName="{!v.clickType != false ? 'utility:chevrondown' : 'utility:chevronright'}" size="small" class="slds-button__icon slds-button__icon_hint slds-button__icon_edit"/>
+                    </span>
+                    <p align="left">
+                        <lightning:icon iconName="custom:custom62" size="small" alternativeText="My Expenses"/>
+                    </p>
+
+                    <h4 style ="margin-left:1%;"><b>{!$Label.c.Holiday_Title_Info}</b></h4>
+                </button>
+                    <lightning:button class="slds-button slds-button_brand" label="{!$Label.c.Register}" onclick="{!c.gotoURL}"/>
+                </h5>
+                <center class="slds-p-around_small">
+                    <div class="slds-illustration slds-illustration_large" aria-hidden="false">
+                        <img src="/img/chatter/OpenRoad.svg" class="slds-illustration__svg" alt=""/>
+                        <div class="slds-text-longform">
+                            <h3 class="slds-text-heading_medium">No Access</h3>
+                        </div>
+                    </div>
+                    <h3 class="slds-text-heading_medium">Sorry, not allowed to see other's Holiday Information</h3>
+                </center>
+
+                <table class="slds-table slds-table_bordered slds-table--fixed-layout">
+                    <thead>
+                        <tr class="slds-text-title_caps">
+                            <th scope="col">
+                                <div class="slds-truncate" title="휴가신청 제목">{!v.holidayActionMapLabel.Name}</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="휴가신청 일 수">{!v.holidayActionMapLabel.HolidayAction_Days__c}</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="휴가신청 종류">{!v.holidayActionMapLabel.HolidayAction_Type__c}</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="휴가신청 승인여부">{!v.holidayActionMapLabel.HolidayAction_IsConfirm__c}</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="1차승인">{!v.holidayActionMapLabel.FirstHolidayRequest__c}</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="2차승인">{!v.holidayActionMapLabel.SecondApproverRequest__c}</div>
+                                <!-- <div class="slds-truncate" title="2차승인">{!v.holidayActionMapLabel.SecondApproverSelection__c}</div> -->
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="휴가신청 일자/시간">{!v.holidayActionMapLabel.CreatedDate}</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.holidayAction}" var="item">
+                            <tr>
+                                <th scope="row" >
+                                    <div class="slds-truncate"><a href="{!'/one/one.app?#/sObject/'+ item.Id + '/view'}" target="_blank">{!item.Name}</a></div>
+                                </th>
+                                <td>
+                                    <div class="slds-truncate">{!item.HolidayAction_Days__c}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">{!item.HolidayAction_Type__c}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">
+                                        <ui:outputCheckbox value="{!item.HolidayAction_IsConfirm__c}"/>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">{!item.FirstHolidayRequest__r.Name}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">{!item.SecondApproverRequest__r.Name}</div>
+                                    <!-- <ui:outputCheckbox value="{!item.SecondApproverSelection__c}"/></div> -->
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">
+                                          <lightning:formattedDateTime value="{!item.CreatedDate}" year="2-digit" month="2-digit" day="2-digit"  hour="2-digit" minute="2-digit" timeZoneName="short"/>
+                                    </div>
+                                </td>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </aura:set>
+</aura:component>

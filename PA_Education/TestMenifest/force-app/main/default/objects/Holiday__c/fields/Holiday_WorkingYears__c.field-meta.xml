@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Holiday_WorkingYears__c</fullName>
+    <description>입사일 기준 근속 년수</description>
+    <externalId>false</externalId>
+    <formula>YEAR(TODAY()) - YEAR(Holiday_JoinDate__c) 
++ IF(
+   MONTH(TODAY()) * 100 + DAY(TODAY()) &gt;= 
+   MONTH(Holiday_JoinDate__c) * 100 + 
+   DAY( Holiday_JoinDate__c) 
+   , 0 
+   , -1
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>근속연수</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

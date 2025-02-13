@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>User__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <inlineHelpText>직원을 추가하면 영업기회의 읽기권한이 부여됩니다.</inlineHelpText>
+    <label>이름</label>
+    <referenceTo>User</referenceTo>
+    <relationshipName>User</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

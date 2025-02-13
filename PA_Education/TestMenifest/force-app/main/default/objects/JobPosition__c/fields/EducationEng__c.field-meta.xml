@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>EducationEng__c</fullName>
+    <label>학력 (English)</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>No Academic Background Required</fullName>
+                <default>false</default>
+                <label>No Academic Background Required</label>
+            </value>
+            <value>
+                <fullName>Graduated High School</fullName>
+                <default>false</default>
+                <label>Graduated High School</label>
+            </value>
+            <value>
+                <fullName>Associate Degree</fullName>
+                <default>false</default>
+                <label>Associate Degree</label>
+            </value>
+            <value>
+                <fullName>Bachelor’s Degree</fullName>
+                <default>false</default>
+                <label>Bachelor’s Degree</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

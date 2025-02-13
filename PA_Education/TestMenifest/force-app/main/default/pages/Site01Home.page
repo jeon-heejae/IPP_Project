@@ -1,0 +1,656 @@
+<apex:page showHeader="false" standardStylesheets="false">
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"></html> <!--<![endif]-->
+<head>
+
+    <!-- Basic Page Needs
+  ================================================== -->
+	<meta charset="utf-8" />
+	<title>(주)대유넥스티어, DaeU NexTier, Daeunextier</title>
+	
+    <!-- Mobile Specific Metas
+  ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+	<meta name="fb_admins_meta_tag" content="daeunextier"/>
+	<meta name="keywords" content="Daeunextier, Radian6, 대유넥티어, 데이터사이언티스트, 벨류인에이블러, 에반젤리스트"/>
+	<meta name="description" content="클라우드 기반 솔루션 프로바이더로서 기업이 필요로 하는 어플리케이션을 일일이 구축하지 않고 즉시 활용할 수 있는 서비스를 제공함으로써 중견,중소 기업의 비용부담을 최소화하고 생산성 향상 및 고객가치 증진에 기여하고자 합니다. ㈜대유넥스티어에 보내주시는 관심과 성원에 감사를 드립니다."/>
+    <!-- CSS
+  ================================================== -->
+	<apex:stylesheet value="{!URLFOR($Resource.daeunextier, 'css/zerogrid.css')}"/>
+	<apex:stylesheet value="{!URLFOR($Resource.daeunextier, 'css/style.css')}"/>
+	<apex:stylesheet value="{!URLFOR($Resource.daeunextier, 'css/responsive.css')}"/>
+	<apex:stylesheet value="{!URLFOR($Resource.daeunextier, 'css/responsiveslides.css')}"/>
+	
+	<!--[if lt IE 8]>
+       <div style=' clear: both; text-align:center; position: relative;'>
+         <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+           <img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." />
+        </a>
+      </div>
+    <![endif]-->
+    <!--[if lt IE 9]>
+		<script src="js/html5.js"></script>
+		<script src="js/css3-mediaqueries.js"></script>
+	<![endif]-->
+	
+	<link href='./images/favicon.ico' rel='icon' type='image/x-icon'/>
+  	<apex:includeScript value="{!URLFOR($Resource.daeunextier, 'js/jquery.min.js')}"/>
+  	<apex:includeScript value="{!URLFOR($Resource.daeunextier, 'js/responsiveslides.js')}"/>
+		<script>
+			$(function () {
+				  $("#slider").responsiveSlides({
+						auto: false,
+						pager: false,
+						nav: true,
+						speed: 500,
+						/**maxwidth: 962,*/
+						maxwidth: 540,
+						namespace: "centered-btns"
+				  });
+			});
+		
+			$(function () {
+				  $("#slider2").responsiveSlides({
+						auto: true,
+						pager: false,
+						nav: false,
+						speed: 500,
+						maxwidth: 200,
+						namespace: "centered-btns"
+				  });
+			});
+
+
+			$(function () {
+				  $("#slider3").responsiveSlides({
+						auto: true,
+						pager: false,
+						nav: false,
+						speed: 500,
+						maxwidth: 222,
+						namespace: "centered-btns"
+				  });
+			});
+		</script>
+				
+			<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+			<style padding-left="100PX"></style> 
+			<style type="text/css">
+				
+						.titlefield{ /*CSS for RSS title link in general*/
+						text-decoration: none;
+						}
+				
+						.labelfield{ /*CSS for label field in general*/
+						color:brown;
+						font-size: 90%;
+						}
+				
+						.datefield{ /*CSS for date field in general*/
+						color:gray;
+						font-size: 90%;
+						}
+				
+						#example1{ /*Demo 1 main container*/
+						width: 540px;
+						height: 28px;
+						border: 0px solid black;
+						padding: 4px;
+						background-color: white;
+						}
+
+						#example2{ /*Demo 1 main container*/
+						height: 28px;
+						border: 0px solid black;
+						padding: 4px;
+						background-color: white;
+						}
+						
+				
+						code{ /*CSS for insructions*/
+						color: red;
+						}
+				
+			</style>
+		<script type="text/javascript">
+		// -------------------------------------------------------------------
+		// gAjax RSS Ticker- By Dynamic Drive, available at: http://www.dynamicdrive.com
+		// Created: Aug 2nd, 2007 Updated: n/a
+		// REQUIRES: gfeedfetcher.js class, available at http://dynamicdrive.com/dynamicindex18/gajaxrssdisplayer.htm
+		// -------------------------------------------------------------------
+	
+			var gfeedfetcher_loading_image="{!URLFOR($Resource.Daeunextier, 'images/indicator.gif')}" //Specify full URL to "loading" image. Overwrites same var from gfeedfetcher.js
+			
+		
+			function gfeedrssticker(divid, divClass, delay, linktarget){
+				this.tickerid=divid //ID of ticker div
+				this.delay=parseInt(delay) //Default delay between msg change, in miliseconds.
+				this.mouseoverBol=0 //Boolean to indicate whether mouse is currently over ticker (and pause it if it is)
+				this.itemsperpage=1 //Entries to show per page
+				this.messagepointer=0
+				gfeedfetcher.call(this, divid, divClass, linktarget) //inherit properties from "gfeedfetcher" class and also use DIV generated by "gfeedfetcher"
+				this.itemcontainer="<div>" //default element wrapping around each RSS entry
+				this.tickerdiv=document.getElementById(divid)
+			}
+		
+			gfeedrssticker.prototype=new gfeedfetcher //inherit methods from gfeedfetcher class
+			gfeedrssticker.prototype.constructor=gfeedrssticker
+			gfeedrssticker.prototype._displayresult=null //Remove inherited method "_displayresult()"
+	
+	
+		// -------------------------------------------------------------------
+		// entries_per_page()- Sets the number of RSS entries to display per page (at once)
+		// -------------------------------------------------------------------
+	
+			gfeedrssticker.prototype.entries_per_page=function(num){
+				this.itemsperpage=num
+			}
+	
+		// -------------------------------------------------------------------
+		// _signaldownloadcomplete()- Signals to the rest of the script when the fetching of all RSS feeds is complete
+		// -------------------------------------------------------------------
+	
+			gfeedrssticker.prototype._signaldownloadcomplete=function(){ //overwrite inherited method "_signaldownloadcomplete()"
+				this.feedsfetched+=1
+				if (this.feedsfetched==this.feedurls.length) //if all feeds fetched
+					this._initscroller(this.feeds) //Populate the two DIVs within scroller with the fetched data
+			}
+	
+		// -------------------------------------------------------------------
+		// _initscroller()- Initialize the ticker by populating it with the first batch of RSS feeds, and prepare to rotate it
+		// -------------------------------------------------------------------
+	
+			gfeedrssticker.prototype._initscroller=function(feeds){
+				var scrollerinstance=this
+				gfeedfetcher._sortarray(feeds, this.sortstring)
+				this.itemsperpage=(this.itemsperpage>=feeds.length)? 1 : this.itemsperpage //Adjust "itemsperpage" if needed (based on total # of avail entries)
+				var feedslice=feeds.slice(this.messagepointer, this.itemsperpage) //Get subsection of feed array based on how many entries to show at once
+				this.tickerdiv.innerHTML=formatrssmessage(feedslice, this.showoptions, this.itemcontainer, this.linktarget)
+				this.tickerdiv.onmouseover=function(){scrollerinstance.mouseoverBol=1}
+				this.tickerdiv.onmouseout=function(){scrollerinstance.mouseoverBol=0}
+				this.messagepointer=this.itemsperpage //increment message pointer
+				if (window.attachEvent) //Clean up loose references in IE
+					window.attachEvent("onunload", function(){scrollerinstance.tickerdiv.onmouseover=scrollerinstance.tickerdiv.onmouseout=null})
+				setTimeout(function(){scrollerinstance._rotatemessage()}, this.delay)
+			}
+	
+	
+		// -------------------------------------------------------------------
+		// formatrssmessage()- Global function that formats a RSS entry(s) to the desired components (title, date, description etc)
+		// -------------------------------------------------------------------
+	
+			function formatrssmessage(feedslice, showoptions, itemcontainer, linktarget){
+				var rssoutput=(itemcontainer=="<li>")? "<ul>\n" : "" //if "itemcontainer" is set to "<li>", define a "<ul>" tag to wrap around the result
+				for (var i=0; i<feedslice.length; i++){ //Loop through the entered slice of a RSS feed (1 or more entries)
+					var itemtitle="<a href=\"" + feedslice[i].link + "\" target=\"" + linktarget + "\" class=\"titlefield\">" + feedslice[i].title + "</a>"
+					var itemlabel=/label/i.test(showoptions)? '<span class="labelfield">['+feedslice[i].ddlabel+']</span>' : " "
+					var itemdate=gfeedfetcher._formatdate(feedslice[i].publishedDate, showoptions)
+					var itemdescription=/description/i.test(showoptions)? "<br />"+feedslice[i].content : /snippet/i.test(showoptions)? "<br />"+feedslice[i].contentSnippet  : ""
+					rssoutput+=itemcontainer + itemtitle + " " + itemlabel + " " + itemdate + "\n" + itemdescription + itemcontainer.replace("<", "</") + "\n\n"
+			}
+				rssoutput+=(itemcontainer=="<li>")? "</ul>\n" : ""
+				return rssoutput
+				}
+	
+	
+		// -------------------------------------------------------------------
+		// _rotatemessage()- Rotates the ticker with the next batch of RSS entries, plus update message pointer
+		// -------------------------------------------------------------------
+	
+			gfeedrssticker.prototype._rotatemessage=function(){
+				var scrollerinstance=this
+				if (this.mouseoverBol==1) //if mouse is currently over scoller, do nothing (pause it)
+					setTimeout(function(){scrollerinstance._rotatemessage()}, 100)
+				else{
+					var feedslice=this.feeds.slice(this.messagepointer, this.messagepointer+this.itemsperpage)
+					this.tickerdiv.innerHTML=formatrssmessage(feedslice, this.showoptions, this.itemcontainer, this.linktarget)
+					this.messagepointer=(this.messagepointer+this.itemsperpage > this.feeds.length-1)? 0 : this.messagepointer+this.itemsperpage
+					setTimeout(function(){scrollerinstance._rotatemessage()}, this.delay)
+					}
+				}
+	
+		// -------------------------------------------------------------------
+		// gAjax RSS Feeds Displayer- By Dynamic Drive, available at: http://www.dynamicdrive.com
+		// Created: July 17th, 2007
+		// Updated June 14th, 10': Fixed issue in IE where labels would sometimes be associated with the incorrect feed items
+		// Updated May 24th, 12': Added onfeedload event handler to run code when a RSS displayer has fully loaded 2) Script now skips the loading of a RSS feed if it's invalid (instead of alert a message)
+		// Updated Sept 20th, 12': Version 2. Adds support for templating of entries' output, search and replace via regular expressions inside any RSS field
+		// -------------------------------------------------------------------
+	
+			var gfeedfetcher_loading_image="{!URLFOR($Resource.Daeunextier, 'images/indicator.gif')}" //Full URL to "loading" image. No need to config after this line!!
+	
+			google.load("feeds", "1") //Load Google Ajax Feed API (version 1)
+	
+			function gfeedfetcher(divid, divClass, linktarget){
+				this.linktarget=linktarget || "" //link target of RSS entries
+				this.feedlabels=[] //array holding lables for each RSS feed
+				this.feedurls=[]
+				this.feeds=[] //array holding combined RSS feeds' entries from Feed API (result.feed.entries)
+				this.feedsfetched=0 //number of feeds fetched
+				this.feedlimit=5
+				this.showoptions="" //Optional components of RSS entry to show (none by default)
+				this.outputtemplate="{title} {label} {date}<br />{description}" // output template for each RSS entry
+				this.regexprules=[] // array to hold regexp rules [regex, replacestr, field_to_apply_to]
+				this.sortstring="date" //sort by "date" by default
+				document.write('<div id="'+divid+'" class="'+divClass+'"></div>') //output div to contain RSS entries
+				this.feedcontainer=document.getElementById(divid)
+				this.containertag=["li", "<li>"] // [tag to wrap around each rss entry, final tag]
+				this.onfeedload=function(){}
+			}
+	
+	
+			gfeedfetcher.prototype.addFeed=function(label, url){
+				this.feedlabels[this.feedlabels.length]=label
+				this.feedurls[this.feedurls.length]=url
+				
+				
+			}
+	
+			gfeedfetcher.prototype.filterfeed=function(feedlimit, sortstr){
+				this.feedlimit=feedlimit
+				if (typeof sortstr!="undefined")
+				this.sortstring=sortstr
+			}
+	
+			gfeedfetcher.prototype.displayoptions=function(parts){
+				this.showoptions=parts //set RSS entry options to show ("date, datetime, time, snippet, label, description")
+			}
+	
+			gfeedfetcher.prototype.definetemplate=function(str){
+				this.outputtemplate=str
+			}
+	
+			gfeedfetcher.prototype.addregexp=function(regliteral, replacewith, field){
+				this.regexprules.push([
+					regliteral,
+					replacewith,
+					field
+				])
+			}
+	
+			gfeedfetcher.prototype.setentrycontainer=function(containertag, cssclass){  //set element that should wrap around each RSS entry item
+				this.containertag=[containertag.toLowerCase(), '<' + containertag.toLowerCase ()+ (cssclass? ' class="'+cssclass+'"' : '') + ' >']
+			}
+	
+			gfeedfetcher.prototype.init=function(){
+				this.feedsfetched=0 //reset number of feeds fetched to 0 (in case init() is called more than once)
+				this.feeds=[] //reset feeds[] array to empty (in case init() is called more than once)
+				this.feedcontainer.innerHTML='<img src="'+gfeedfetcher_loading_image+'" /> Retrieving RSS feed(s)'
+				var displayer=this
+				for (var i=0; i<this.feedurls.length; i++){ //loop through the specified RSS feeds' URLs
+					var feedpointer=new google.feeds.Feed(this.feedurls[i]) //create new instance of Google Ajax Feed API
+					var items_to_show=(this.feedlimit<=this.feedurls.length)? 1 : Math.floor(this.feedlimit/this.feedurls.length) //Calculate # of entries to show for each RSS feed
+					if (this.feedlimit%this.feedurls.length>0 && this.feedlimit>this.feedurls.length && i==this.feedurls.length-1) //If this is the last RSS feed, and feedlimit/feedurls.length yields a remainder
+						items_to_show+=(this.feedlimit%this.feedurls.length) //Add that remainder to the number of entries to show for last RSS feed
+						
+
+					
+					feedpointer.setNumEntries(items_to_show) //set number of items to display
+					feedpointer.load(function(label){
+						return function(r){
+							displayer._fetch_data_as_array(r, label)
+						}
+					}(this.feedlabels[i])) //call Feed.load() to retrieve and output RSS feed.
+				}
+			}
+	
+	
+		gfeedfetcher._formatdate=function(datestr, showoptions){
+			var itemdate=new Date(datestr)
+			var parseddate=(showoptions.indexOf("datetime")!=-1)? itemdate.toLocaleString() : (showoptions.indexOf("date")!=-1)? itemdate.toLocaleDateString() : (showoptions.indexOf("time")!=-1)? itemdate.toLocaleTimeString() : ""
+			return "<span class='datefield'>"+parseddate+"</span>\n"
+		}
+	
+		gfeedfetcher._sortarray=function(arr, sortstr){
+			var sortstr=(sortstr=="label")? "ddlabel" : sortstr //change "label" string (if entered) to "ddlabel" instead, for internal use
+			if (sortstr=="title" || sortstr=="ddlabel"){ //sort array by "title" or "ddlabel" property of RSS feed entries[]
+				arr.sort(function(a,b){
+				var fielda=a[sortstr].toLowerCase()
+				var fieldb=b[sortstr].toLowerCase()
+				return (fielda<fieldb)? -1 : (fielda>fieldb)? 1 : 0
+				})
+			}
+			else{ //else, sort by "publishedDate" property (using error handling, as "publishedDate" may not be a valid date str if an error has occured while getting feed
+				try{
+					arr.sort(function(a,b){return new Date(b.publishedDate)-new Date(a.publishedDate)})
+				}
+				catch(err){}
+			}
+		}
+	
+		gfeedfetcher.prototype._fetch_data_as_array=function(result, ddlabel){	
+			var thisfeed=(!result.error)? result.feed.entries : "" //get all feed entries as a JSON array or "" if failed
+			
+			
+			if (thisfeed==""){ //if error has occured fetching feed
+				this._signaldownloadcomplete()
+				return
+			}
+			for (var i=0; i<thisfeed.length; i++){ //For each entry within feed
+				result.feed.entries[i].ddlabel=ddlabel //extend it with a "ddlabel" property
+			}
+			this.feeds=this.feeds.concat(thisfeed) //add entry to array holding all feed entries
+			this._signaldownloadcomplete() //signal the retrieval of this feed as complete (and move on to next one if defined)
+		}
+	
+		gfeedfetcher.prototype._signaldownloadcomplete=function(){
+			this.feedsfetched+=1
+			if (this.feedsfetched==this.feedurls.length){ //if all feeds fetched
+				this._displayresult(this.feeds) //display results
+				this.onfeedload()
+			}
+		}
+	
+	
+		gfeedfetcher.prototype._displayresult=function(feeds){
+			var rssoutput=(this.containertag[0]=="li")? "<ul>\n" : ""
+			gfeedfetcher._sortarray(feeds, this.sortstring)
+			var itemurl=[], itemtitle=[], itemlabel=[], itemdate=[], itemdescription=[]
+			
+			for (var i=0; i<feeds.length; i++){
+				itemurl.push(feeds[i].link)
+				itemtitle.push('<span class="titlefield"><a href="' + feeds[i].link + '" target="' + this.linktarget + '">' + feeds[i].title + '</a></span>\n')
+				itemlabel.push(/label/i.test(this.showoptions)? '<span class="labelfield">'+this.feeds[i].ddlabel+'</span>\n' : "")
+				itemdate.push(gfeedfetcher._formatdate(feeds[i].publishedDate, this.showoptions))
+				var itemdescriptionsingle=/description/i.test(this.showoptions)? feeds[i].content : /snippet/i.test(this.showoptions)? feeds[i].contentSnippet  : ""
+				itemdescriptionsingle=(itemdescriptionsingle!="")? '<span class="descriptionfield">' + itemdescriptionsingle + '</span>\n' : ""
+				itemdescription.push(itemdescriptionsingle)
+			}
+		 	// create temp object to store references to rss components, for access dynamically:
+			var holder={urlfield: itemurl, titlefield: itemtitle, labelfield: itemlabel, datefield: itemdate, descriptionfield: itemdescription}
+			var regexprules=this.regexprules
+			for (var i=(this.regexprules && this.regexprules.length>0? this.regexprules.length-1 : -1); i>=0; i--){ // loop thru regexprules array
+				if (regexprules[i][2]=="titlefield" || regexprules[i][2]=="labelfield" || regexprules[i][2]=="datefield" || regexprules[i][2]=="descriptionfield"){
+					var targetarray=holder[regexprules[i][2]] // reference array containing said field type (ie: itemdescription if regexprules[i][2]=="descriptionfield")
+					targetarray=targetarray.join('***delimiter***') // combine array elements before doing search and replace
+						.replace(regexprules[i][0], regexprules[i][1])
+						.split('***delimiter***') // revert back to array
+					holder[regexprules[i][2]]=targetarray
+					regexprules.splice(i,1) // remove this rule from regexprules
+				}
+			}
+			for (var i=0; i<feeds.length; i++){ // loop thru feeds, molding each feed entry based on template
+				rssoutput+= this.containertag[1] + this.outputtemplate.replace(/({title})|({url})|({label})|({date})|({description})/ig, function(m){
+					if (m == "{title}")
+						return holder.titlefield[i]
+					else if (m == "{url}")
+						return holder.urlfield[i]
+					else if (m == "{label}")
+						return holder.labelfield[i]
+					else if (m == "{date}")
+						return holder.datefield[i]
+					else if (m == "{description}")
+						return holder.descriptionfield[i]
+						
+						
+				}) + "</" + this.containertag[0] + ">" + "\n\n"
+			}
+			rssoutput+=(this.containertag[0]=="li")? "</ul>" : ""
+			for (var i=0; i<this.regexprules.length; i++){ // loop thru remaining regexprules array that target the entire feed in general (versus specific field)
+				rssoutput=rssoutput.replace(this.regexprules[i][0], this.regexprules[i][1])
+			}
+			this.feedcontainer.innerHTML=rssoutput
+		}
+	</script>
+	
+	<!-- Google Analysis -->
+	<script type="text/javascript">
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-42633798-1']);
+	  _gaq.push(['_trackPageview']);
+	
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+	
+	</script>
+</head>
+<body>
+<!--------------Header--------------->
+<header>
+	<div class="wrap-header zerogrid">
+		<div id="logo">
+			<a href="/" ><apex:image dir="100RTL" value="{!URLFOR($Resource.Daeunextier, '/images/logo7.png') }" alt=""/></a> 
+			<nav>
+				<div class="wrap-nav" style="left:180px;">
+					<div class="menu">
+						<ul>
+							<li id="nav1" class="active"><a href="/">Home</a></li>
+							<li id="nav2"><a href="Site02AboutUs">About Us</a></li>
+							<li id="nav3"><a href="Site03Service">Services</a></li>
+							<li id="nav4"><a href="Site04MarketingCloud">Salesforce.com</a></li>
+							<li id="nav5"><a href="Site08ANAPLAN">ANAPLAN</a></li>
+							<li id="nav6"><a href="Site05Clients">Clients</a></li>
+							<li id="nav7"><a href="Site06Careers">Careers</a></li>
+							<li id="nav8"><a href="Site07Support">Support</a></li>
+						
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</div>
+	</div>
+</header>
+<div class="featured">
+	<div class="wrap-featured zerogrid">
+		<table cellpadding="0" cellspacing="0" border="0">
+			<tr>
+				<!-- 동영상 슬라이더 시작 -->
+				<td>
+					<div class="slider">
+						<div class="rslides_container">
+							<ul class="rslides" id="slider">
+								<li><embed width="540" height="290" src="http://www.youtube.com/v/tWaqWweP6Uw" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true"></embed></li>
+								<li><embed width="540" height="290" src="http://www.youtube.com/v/iXnvCdzbo7E" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true"></embed></li>
+								<li><embed width="540" height="290" src="http://www.youtube.com/v/l07HSG8YIkU" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true"></embed></li>
+								<li><embed width="540" height="290" src="http://www.youtube.com/v/fGar_bO49Ro" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true"></embed></li>
+								<li><embed width="540" height="290" src="http://www.youtube.com/v/nvCOXTa1e7k" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true"></embed></li>
+											
+										
+							</ul>
+						</div>
+					</div>
+				</td>				
+				<!-- 동영상 슬라이더 끝 -->
+
+				<!-- 슬라이더 2 시작 -->
+				<td>
+					<div class="slider">
+						<div class="rslides_container" style="padding-top: 3px; padding-left: 20px;">
+							<ul class="rslides" id="slider2">
+								<li>
+									<b style="padding-left: 10px;">SALES CLOUD</b><br />
+									<br/>
+									<a href="/MarketingCloud"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Sales.jpg')}" alt=""/></a>
+								</li>
+								<li>
+									<b style="padding-left: 10px;">SERVICE CLOUD</b><br />
+									<br/>
+									<a href="/MarketingCloud"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Service.jpg')}" alt=""/></a>
+								</li>
+								<li>
+									<b style="padding-left: 10px;">MARKETING CLOUD</b><br />
+									<br/>
+									<a href="/MarketingCloud"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Market.jpg')}" alt=""/></a>
+								</li>
+								<li>
+									<b style="padding-left: 10px;">PLATFORM</b><br />
+									<br/>
+									<a href="/MarketingCloud"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Platform.jpg')}" alt=""/></a>
+								</li>
+								<li>
+									<b style="padding-left: 10px;">Anaplan for Finance</b><br />
+									<br/>
+									<a href="/ANAPLAN"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Platform.jpg')}" alt=""/></a>
+								</li>
+								<li>
+									<b style="padding-left: 10px;">Anaplan for Sales</b><br />
+									<br/>
+									<a href="/ANAPLAN"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Service.jpg')}" alt=""/></a>
+								</li>
+								<li>
+									<b style="padding-left: 10px;">Anaplan &amp; Salesforce</b><br />
+									<br/>
+									<a href="/ANAPLAN"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Market.jpg')}" alt=""/></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</td>
+				<!-- 슬라이더 2 끝 -->
+
+				<!-- 슬라이더 3 시작 -->
+				<td>
+					<div class="slider">
+						<div class="rslides_container" style="padding-top: 50px;">
+							<ul class="rslides" id="slider3">
+									<li><a href="/MarketingCloud">Salesforce1 Platform에 기반한 <br></br>Sales Cloud에 오신 것을 환영합니다.<br></br>새로운 세상, 더 나은 영업 방식,<br></br>현장 영업팀은 모바일 기기만으로도 <br></br>영업을 수행할 수 있으며 내부 영업팀은<br></br>최고의 리드만 공급받습니다. <br></br>영업 관리자는 어떤 거래가 성사되며, <br></br>언제 성사될 지 알 수 있습니다.</a></li> 
+								<li><a href="/MarketingCloud">고객 충성도 구축.첫 번째 통화 해결률<br></br>(first call resolution)증대.<br></br>고객 만족도 37% 향상. <br></br>Salesforce1 Platform 위에 구축된 Service Cloud를 사용하여 장소에<br></br>상관없이 놀라운 고객 서비스를<br></br>제공하면서 동시에 수행할 수 있습니다.</a></li>
+								<li><a href="/MarketingCloud">Salesforce1 Platform에 구축된 ExactTarget Marketing Cloud을 사용하여 마케팅 담당자가 전혀 새로운 1:1 캠페인을 만들 수 있습니다. 이메일, 모바일, <br></br>소셜 및 웹과 같은 기존 디지털 채널과 <br></br>모든 제품(예: 치솔부터 자동차까지)을 <br></br>결합하여 소비자를 고객으로 바꿀 수<br></br>있습니다.</a></li>
+								<li><a href="/MarketingCloud">한 장소에 모든 요소를 갖춘 완벽한 개방형 고객 플랫폼을 소개합니다. 새로운 API 및 도구로 응용 프로그램을 더욱 신속하게<br></br> 구축하여 고객, 직원, 파트너, 차세대 기기 및 응용 프로그램과 연결할 수 있습니다.</a></li>
+								<li><a href="/ANAPLAN">운영 데이터와의 실시간 연결로<br></br>완벽한 재무 통합분석 예산수립,<br></br> 예측(Forecasting) 보고서 이익/손실 분석<br></br> 전략적인 계획으로 효율성 증대 현금 계획 인력자원 계획</a></li>
+								<li><a href="/ANAPLAN">영업사원들의 영업목표 계획관리<br></br>영업사원들의 인센티브 보상 계산 <br></br>영업 담당 구역/지역 계획 판매 예측(forecasting)<br></br>제품가격 및 견적관리 영업리소스 계획</a></li>
+								<li><a href="/ANAPLAN">영업 담당 구역 및 영업목표 계획관리<br></br>영업사원들의 인센티브 보상 계산<br></br>판매 예측(forecasting)<br></br>하나로 통합된 솔루션<br></br> (Anaplan은 단 한번의 사용자 인증을 통해 Salesforce내에서 영업프로세스를 계획, 관리, 이행할 수 있도록 지원)</a></li>
+							</ul>
+						</div>
+					</div>
+				</td>
+				<!-- 슬라이더 3 끝 -->
+			</tr>
+		</table>
+	</div>
+</div>
+
+<!--------------Content--------------->
+<section id="content">
+	<div class="wrap-content zerogrid">
+
+		
+		<!--<div class=divider></div>-->
+		<table>
+			<tr>
+				<td width="540px">
+					<script type="text/javascript">
+						var cssfeed=new gfeedrssticker("example1", "example1class", 2000, "_new")
+						cssfeed.addFeed("DaeuNextier RSS", "http://blog.rss.naver.com/daeunextier.xml") //Specify "label" plus URL to RSS feed
+						cssfeed.displayoptions("date") //show the specified additional fields
+						cssfeed.setentrycontainer("div") //Wrap each entry with a DIV tag
+						cssfeed.filterfeed(2, "date") //Show 10 entries, sort by date
+						cssfeed.entries_per_page(1)
+						cssfeed.init()
+					</script>
+				</td>
+				<td >
+					<script type="text/javascript">
+						var cssfeed=new gfeedrssticker("example2", "example1class", 2000, "_self") 
+						cssfeed.addFeed("DaeuNextier RSS", "http://sb-daeunextier.cs6.force.com/Site01HomeNewsFeed") //Specify "label" plus URL to RSS feed
+						//cssfeed.displayoptions("date") //show the specified additional fields
+						cssfeed.setentrycontainer("div") //Wrap each entry with a DIV tag
+						//cssfeed.filterfeed(10, "date") //Show 10 entries, sort by date
+						cssfeed.entries_per_page(1)
+						cssfeed.init()
+					</script>
+				</td>
+			</tr>
+		</table>
+		<div class="wrap-content zerogrid"></div>
+		<div class="row block02">
+		
+			<div class="col-1-3">
+				<div class="wrap-col">
+					<a href="/MarketingCloud"><h2><span>C</span>loud Computing</h2></a>
+					<p>전통적인 비즈니스 어플리케이션 도입은 적지 않은 소프트웨어 구매비용 이외에 구축에 소요되는 높은 개발비용, IT 인프라와 플랫폼구성의 복잡성 증대, 업그레이드 및 유지보수에 추가 비용이 소요되고 있어 보다 경제적인 방식으로 소프트웨어를 이용하고자 하는 기업의 요구가 증대되고 있습니다.</p>
+				</div>
+			</div>
+			<div class="col-1-3">
+				<div class="wrap-col">
+					<a href="/MarketingCloud"><h2><span>S</span>ocial Analytics</h2></a>
+					<p>인터넷은 네트워크 연결성에 기반한 정보접근성의 혁신에서 출발하여 현재는 '참여', '개방', '공유'의 방향으로 진화해가고 있습니다. 더 이상 소셜은 개인의 화두가 아니며 소셜을 활용하는 기업과 그렇지 못한 기업간의 경쟁력은 기업의 생존을 좌우할 만큼 중요합니다.</p>
+				</div>
+			</div>
+			<div class="col-1-3">
+				<div class="wrap-col">
+					<a href="/MarketingCloud"><h2><span>B</span>igdata Analytics</h2></a>
+					<p>점진적인 CPU성능의 향상과 저장장치 가격의 하락, 데이터 분산처리 기술인 하둡의 등장과 확장성이 뛰어난 NoSQL기술 등으로 기존에 기업이 처리하기 힘들었던 다양한 유형(정형,비정형)의 대량의 데이터를 신속하게 처리할수 있는 환경이 다가왔습니다.</p>
+				</div>
+			</div>
+		</div>
+		
+		<!--
+		<div class="row block03 gallery">
+			<div class="title"><span>Our Products</span></div>
+			<div class="col-1-2">
+				<div class="wrap-col">
+					<h2>Sales Cloud</h2>
+					<a href="#"><img src="images/Sales.jpg" class="grayscale"/></a>
+				</div>
+			</div>
+			<div class="col-1-2">
+				<div class="wrap-col">
+					<h2>Service Cloud</h2>
+					<a href="#"><img src="images/Service.jpg" class="grayscale"/></a>
+				</div>
+			</div>
+			<div class="col-1-2">
+				<div class="wrap-col">
+					<h2>Exacttarget Marketing Cloud</h2>
+					<a href="#"><img src="images/Market.jpg" class="grayscale"/></a>
+				</div>
+			</div>
+			<div class="col-1-2">
+				<div class="wrap-col">
+					<h2>SalesForce1 Platform</h2>
+					<a href="#"><img src="images/Platform.jpg" class="grayscale"/></a>
+				</div>
+			</div>
+		</div>
+		-->
+		
+	</div>
+</section>
+<!--------------Footer--------------->
+<footer>
+	<div class="wrap-footer zerogrid">
+		<div class="row">
+			<div class="col-2-3">
+				<div class="wrap-col">
+					<div class="box">
+						<div class="heading"><h2>Contact Us</h2></div>
+						<div class="content">
+							<ul>
+								<li>+ Address: 138-832 서울시 성동구 성수이로22길 37 아크밸리(성수IT종합센터)505호</li>
+								<li>+ TEL: 082-02-553-9981, + FAX: 082-02-553-9967, + Email:info@daeunextier.com</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-1-3">
+				<div class="wrap-col">
+					<div class="box">
+						<div class="heading"><h2>Follow Us</h2></div>
+						<div class="content">
+							<ul id="icons">
+								<li>
+																													
+									<a href="https://www.facebook.com/daeunextier" target="_blank" title="Facebook"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/social/icon1.png')}" alt=""/>Facebook</a>
+									<a href="https://twitter.com/daeunextier" target="_blank" title="Twitter"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/social/icon2.png')}" alt=""/>Twitter</a>
+									<a href="http://blog.daeunextier.com" target="_blank" title="Blog"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/social/icon3.png')}" alt=""/>Blog</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="copyright">
+		<p>Copyright &copy; 2014 Daeunextier Inc.</p>
+	</div>
+</footer>
+</body>
+</apex:page>

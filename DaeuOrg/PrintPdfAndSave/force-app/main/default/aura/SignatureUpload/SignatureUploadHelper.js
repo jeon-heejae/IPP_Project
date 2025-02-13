@@ -1,4 +1,5 @@
 ({
+    
     readFile: function(component, helper, file) {
         if (!file) return;
         if (!file.type.match(/(image.*)/)) {

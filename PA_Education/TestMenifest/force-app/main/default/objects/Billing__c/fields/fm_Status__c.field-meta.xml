@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>fm_Status__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(TaxBillingDate__c &gt; TODAY(), 
+&apos;청구 예정&apos;, 
+IF(NOT(IsBilling__c), 
+&apos;청구 지연 &apos; + TEXT(TODAY() - TaxBillingDate__c) + &apos;일&apos;, 
+IF(CollectionDate__c &gt; TODAY(), 
+&apos;입금예정&apos;, 
+IF(NOT(IsCollection__c), 
+&apos;입금 지연 &apos; + TEXT(TODAY() - CollectionDate__c) + &apos;일&apos;, 
+&apos;입금완료&apos; 
+) 
+) 
+) 
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>진행상태</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

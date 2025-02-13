@@ -26,7 +26,7 @@ public with sharing class RemainEducationController {
         String role = currentUser.UserRole != null ? currentUser.UserRole.Name : '';
         System.debug('role: ' + role);
 
-        return (role == 'CEO' || role == 'Business Management');
+        return (role == 'CEO' || role == 'Business Management' || role == '관리부');
     }
 
     // Get the name of the logged-in user
@@ -61,7 +61,7 @@ public with sharing class RemainEducationController {
         String position = listPosition.size() > 0 ? listPosition[0].Position__c : '';
         System.debug('position: '+position);
 
-        if(position == '9' || position == '13' || position == '14'){
+        if(position == '13' || position == '17' || position == '18'){
             flag=true;
         }
 
@@ -301,7 +301,7 @@ public with sharing class RemainEducationController {
     @AuraEnabled(cacheable=true)
     public static List<Map<String, Object>> getAllEmployeeRemain() {
         // 신입, 직무 조건 쿼리
-        String[] roles = new String[] { '9', '13', '14' };
+        String[] roles = new String[] { '13', '17', '18' };
         String[] mainRole = new String[] { 'Developer', 'Consultant' };
 
         List<Employee__c> listEmployee = [
@@ -311,6 +311,7 @@ public with sharing class RemainEducationController {
             AND MainRole__c IN :mainRole
             AND Owner.isActive=true
             AND ExitDate__c = NULL 
+            AND MentorUser__c!=NULL
         ];
         System.debug('listEmployee: ' + listEmployee);
 
@@ -425,7 +426,7 @@ public with sharing class RemainEducationController {
     @AuraEnabled(cacheable=true)
     public static List<Map<String, Object>> getAllEmployeeInProgress() {
         
-        String[] roles = new String[]{'9', '13', '14'};
+        String[] roles = new String[]{'13', '17', '18'};
         String[] mainRoles = new String[]{'Developer', 'Consultant'};
         
         
@@ -434,6 +435,9 @@ public with sharing class RemainEducationController {
             FROM Employee__c 
             WHERE Position__c IN :roles
             AND MainRole__c IN :mainRoles
+            AND Owner.isActive=true
+            AND ExitDate__c = NULL 
+            AND MentorUser__c!=NULL
         ];
         
         System.debug('listEmployee: ' + listEmployee);

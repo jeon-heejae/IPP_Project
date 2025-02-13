@@ -1,0 +1,46 @@
+<apex:page >
+<apex:includeLightning/>
+<!-- <apex:form>
+    <apex:commandButton onclick="unsubscribe(); return false;" value="unSubscribe"></apex:commandButton>
+</apex:form> -->
+
+<!-- Begin Default Content REMOVE THIS -->
+ <textarea id="MCMessageText"></textarea>
+ <button onclick="unsubscribe()" type="button">unsubscribe</button>
+<script>
+    var SAMPLEMC="{!$MessageChannel.msgChannel__c}";
+    var subscriptionToMc;
+
+    //publish
+    document.getElementById('MCMessageText').addEventListener('keydown',function(event){
+        if(event.keyCode===13){
+            const payload={
+                contents:document.getElementById("MCMessageText").value
+            }
+            sforce.one.publish(SAMPLEMC,payload);
+        }
+    });
+
+    //subscribe
+    document.addEventListener('DOMContentLoaded', ()=>{
+        function onMCPublished(message){
+            document.getElementById("MCMessageText").value=message.contents;
+        }
+
+        if(sforce && sforce.one){
+            subscriptionToMC=sforce.one.subscribe(SAMPLEMC, onMCPublished, {scope:"APPLICATION"});
+        }
+        else{
+            console.log('sforce 객체가 존재하지 않음.');
+        }
+    });
+
+    //unsubscribe
+    function unsubscribe(){
+        sforce.one.unsubscribe(subscriptionToMC);
+        subscriptionToMC = null;
+    }
+    
+</script>
+<!-- End Default Content REMOVE THIS -->
+</apex:page>

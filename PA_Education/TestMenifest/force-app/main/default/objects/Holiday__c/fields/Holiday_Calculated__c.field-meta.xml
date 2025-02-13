@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Holiday_Calculated__c</fullName>
+    <description>대유넥스티어 사내 규칙에 맞는 연차여부 필드 수정으로 인한 예시 변경(수정일: 2021-12-31, 수정자: cj.sohn@daeunextier.com)
+* 연차여부 수식 수정:
+입사기준일인 경우, 입사일 + 365일
+연차기준일(2020. 1. 1)인 경우, 입사일 다음년도 (연차 기준일)월 (연차 기준일)일 - 1
+
+필드 설명
+연차여부가 TRUE일 때, 15일 + 추가연차일수
+연차여부가 FALSE일 때, 12 - (입사월 + 1)
+ex)  오늘 2022년 3월 17일
+       사원A: 입사일 2020-03-17 → 연차적용시작일(2020-12-31) → 연차여부 = TRUE → 15 + 0 개
+       사원B: 입사일 2021-12-07 → 연차적용시작일(2021-12-31) → 연차여부 = TRUE → 15 + 0 개
+       사원C: 입사일 2022-01-01 → 연차적용시작일(2022-12-31) → 연차여부 = FALSE → 12 - 1 = 11개
+       사원D: 입사일 2022-01-04 → 연차적용시작일(2022-12-31) → 연차여부 = FALSE → 12 - (1 + 1) = 10개
+
+휴가 연차일수 부여 개편으로 인한 수정(필드 수식 수정일: 2021-01-12, 필드 수정자: cj.sohn@daeunextier.com)
+연차여부 수식 수정 이전 예시:
+ex)  오늘 2021년 2월 4일
+       사원A: 입사일 2020-12-07 → 연차적용시작일(2021-01-01) → 연차여부 = TRUE → 15 + 0 개
+       사원B: 입사일 2021-01-01 → 연차적용시작일(2022-01-01) → 연차여부 = FALSE → 12 - 1 = 11개
+       사원C: 입사일 2021-01-04 → 연차적용시작일(2022-01-01) → 연차여부 = FALSE → 12 - (1 + 1) = 10개</description>
+    <externalId>false</externalId>
+    <formula>IF(
+	Holiday_IsAnnualleave__c,
+	15 + MIN(Holiday_Additionaldays__c , 10 ),
+        IF(
+                DAY(Holiday_JoinDate__c) = 1,
+                IF(
+	        	12 - (MONTH(Holiday_JoinDate__c) + 1) &lt; 0, 
+	        	1,
+	        	12 - MONTH(Holiday_JoinDate__c)
+        	),
+               	IF(
+	        	12 - (MONTH(Holiday_JoinDate__c) + 1) &lt; 0, 
+	        	0,
+	        	12 - (MONTH(Holiday_JoinDate__c) + 1)
+        	)
+        )
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>연차일수</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

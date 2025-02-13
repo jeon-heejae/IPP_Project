@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MemberUniqueValidation</fullName>
+    <active>false</active>
+    <description>BingoBoard__c 값이 같으면서 BingoMember__c가 같은 레코드 생성 불가</description>
+    <errorConditionFormula>ISNEW() || NOT(
+  AND(
+    BingoBoard__c = PRIORVALUE(BingoBoard__c),
+    BingoMember__c = PRIORVALUE(BingoMember__c)
+  )
+)</errorConditionFormula>
+    <errorMessage>BingoBoard__c 값이 같으면서 BingoMember__c가 같은 레코드 생성 불가</errorMessage>
+</ValidationRule>

@@ -1,0 +1,92 @@
+<!--
+
+-->
+<apex:page controller="Inventory_PrintBarcodeOnly" tabstyle="TabInventoryManage__tab">
+	<head>
+		<apex:stylesheet value="{!URLFOR($Resource.CssMenu, '/menu_source/styles.css')}" />
+		<apex:stylesheet value="{!URLFOR($Resource.jquery_ui, 'themes/base/jquery-ui.css')}"/>
+		<style>
+		input#InputBarcode {
+			ime-mode: disabled;
+		}
+		</style>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'jquery-1.10.2.js')}"/>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'ui/jquery-ui.js')}"/>
+		<script type="text/javascript">
+			function barcode_select(){
+				var text_input = document.getElementById ('InputBarcode');
+				text_input.focus();
+				text_input.select();
+			}
+		</script>
+		<script type="text/javascript">
+			function KeyPressIvName(e){
+				var keynum;
+				if(window.event){		// IE
+					keynum = e.keyCode;
+				}
+				if(keynum == 13){
+					InputBarcodeForPage(document.getElementById('InputBarcode').value);
+					return false;
+				}
+			}
+			//바코드 출력창
+			function popupBarcode(form, barcode) {
+			    window.open('', 'formBarcode','width=325,height=200,resizeable,scrollbars');
+			    form.barcode.value = barcode;
+			    form.target = 'formBarcode';
+			}
+			function submitFormBarocde(barcode){
+				popupBarcode(document.frmBarcode, barcode);
+				document.frmBarcode.submit();
+			}
+		</script>
+	</head>
+	<apex:form id="mainFrm">
+		<!-- 바코드 등록 -->
+        <apex:actionFunction action="{!BarcodePut}" name="InputBarcodeForPage" rerender="mainFrm">
+			<apex:param name="getVal" assignTo="{!InputBarcodeGetVal}" value="" />
+        </apex:actionFunction>
+        
+		<apex:sectionHeader title="자재관리" />
+		<apex:pageMessages escape="false" />
+		<div id='cssmenu'>
+			<ul>
+			   <li ><a href='/apex/Inventory_Search'><span>부품 조회</span></a></li>
+			   <li ><a href='/apex/Inventory_Stock'><span>생산현장 출고</span></a></li>
+			   <li ><a href='/apex/Inventory_Line'><span>생산현장 재고</span></a></li>
+			   <li ><a href='/apex/Inventory_Delivery'><span>자재창고 반납</span></a></li>
+			   <li class='active last'><a href='/apex/Inventory_PrintBarcodeOnly'><span>일반바코드출력</span></a></li>
+			</ul>
+		</div>
+		<apex:pageBlock title="자재창고 반납" id="pgBlock">
+			* 출력할 바코드 텍스트를 입력하신 후 출력하세요. 
+			<br/>
+			<br/>
+		    <apex:pageBlockTable value="{!Barcodes}" var="item" id="pgBlockTable">
+		    	<apex:column headerValue="Seq" value="{!item.Seq}"/>
+		    	<apex:column headerValue="바코드입력" id="clBar">
+		    		<apex:outputText id="IV_Name" value="{!item.barcode}" rendered="{!item.seq<>Barcodes.size}" />
+		    		<apex:outputPanel rendered="{!item.seq==Barcodes.size}">
+			    		<input type="text" id="InputBarcode" 
+			    			value="{!InputBarcodeGetVal}"
+			    			onkeypress="return KeyPressIvName(event);"
+			    		/>
+		    		</apex:outputPanel>
+		    	</apex:column>
+		    	<apex:column headerValue="기능">
+					<apex:commandButton value="바코드출력"
+						onclick="submitFormBarocde('{!item.barcode}');return false;"
+						rendered="{!item.seq<>Barcodes.size}" />
+				</apex:column>
+		    </apex:pageBlockTable>
+		</apex:pageBlock>
+		<script type="text/javascript">
+			barcode_select();
+		</script>
+	</apex:form>
+	
+	<form name="frmBarcode" action="PrintBarcodeOnly" method="post">
+		<input type="hidden" name="barcode" value="" />
+	</form>
+</apex:page>

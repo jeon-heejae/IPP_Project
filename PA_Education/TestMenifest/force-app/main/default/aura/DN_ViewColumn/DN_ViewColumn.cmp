@@ -1,0 +1,77 @@
+<!--
+* ==================================================================================
+*   File Name   : DN_ViewColumn.cmp
+*   Author      : Soyoung.Jung
+*   Date        : 2019.04.01
+*   Description : 조회 테이블의 컬럼 컴포넌트
+*   Modification Log
+* ==================================================================================
+*   Ver     Date            Author          Modification
+* ==================================================================================
+*   1.0     2019.04.01      Soyoung.Jung    Create
+* ==================================================================================
+-->
+
+<aura:component>
+    
+    <!-- * Parameter Attribute -->
+    <aura:attribute name="uniqueIdentifier" type="String" />
+    <aura:attribute name="header" type="Object" />
+    <aura:attribute name="data" type="Object" />
+
+    <!-- * Attribute -->
+    <aura:attribute name="columnValue" type="String" />
+
+    <!-- * Handler -->
+    <aura:handler name="init" value="{!this}" action="{!c.fnInit}" />
+
+    
+    <!-- * Contents -->
+    <td>
+        <!-- CURRENCY -->
+        <aura:if isTrue="{!v.header.type == 'CURRENCY'}">
+            <aura:if isTrue="{!v.columnValue == 0}">
+                ￦0   
+                <aura:set attribute="else">
+                    <ui:outputCurrency value="{!v.columnValue}" format="￦#,###" />        
+                </aura:set>
+            </aura:if>
+        </aura:if>
+
+        <!-- HTML -->
+        <aura:if isTrue="{!v.header.type == 'HTML'}">
+            <aura:unescapedHtml value="{!v.columnValue}" />
+        </aura:if>
+
+        <!-- PERCENT -->
+        <aura:if isTrue="{!v.header.type == 'PERCENT'}">
+            <lightning:formattedNumber value="{!v.columnValue}" style="percent" minimumFractionDigits="2" />
+        </aura:if>
+        
+        <!-- DATETIME -->
+        <aura:if isTrue="{!v.header.type == 'DATETIME'}">
+            <ui:outputDateTime value="{!v.columnValue}" />
+        </aura:if>
+
+        <!-- DATE -->
+        <aura:if isTrue="{!v.header.type == 'DATE'}">
+            <ui:outputDate value="{!v.columnValue}" />
+        </aura:if>
+
+        <!-- STRING -->
+        <aura:if isTrue="{!or(v.header.type == 'text', v.header.type == 'STRING', v.header.type == 'PICKLIST')}">
+            {!v.columnValue}
+        </aura:if>
+
+        <!-- PHONE -->
+        <aura:if isTrue="{!v.header.type == 'PHONE'}">
+            <lightning:formattedPhone value="{!v.columnValue}" />
+        </aura:if>
+
+        <!-- EMAIL -->
+        <aura:if isTrue="{!v.header.type == 'EMAIL'}">
+            <lightning:formattedEmail value="{!v.columnValue}" />
+        </aura:if>
+    </td>
+    
+</aura:component>

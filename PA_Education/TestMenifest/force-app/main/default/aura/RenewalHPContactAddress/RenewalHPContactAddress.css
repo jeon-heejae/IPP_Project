@@ -1,0 +1,118 @@
+.THIS {
+	width: 100%;
+    height: auto;
+    background: #ffffff;
+}
+
+.THIS .contents {
+    width: 900px;
+    height: auto;
+    margin: 0 auto;
+    padding: 120px 0;
+}
+
+.THIS .pageTitle {
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 30px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.THIS img {
+    width: 100%;
+    margin-top: 56px;
+}
+
+.THIS .contentsArea {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.THIS .contentsArea .icon {
+    width: 20px;
+    height: 20px;
+    margin-bottom: 16px;
+}
+
+.THIS .contentsArea p {
+    font-size: 20px;
+    line-height: 36px;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.THIS .contentsArea i {
+    font-style: normal;
+    font-size: 20px;
+    color: rgba(0, 0, 0, 0.4);
+    margin-right: 4px;
+}
+
+.THIS .additionalContents {
+    display: flex;
+    flex-direction: row;
+}
+
+.THIS .additionalContents > div:first-of-type {
+    flex: 1;
+    margin-right: 28px;
+}
+
+.THIS .additionalContents > div:last-of-type {
+    flex: 1;
+    margin-left: 28px;
+}
+
+@media (min-width: 769px) {
+    .THIS .is_mobile {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .THIS .is_pc {
+        display: none;
+    }
+    
+    .THIS .contents {
+        width: calc(100% - 40px);
+        height: auto;
+        margin: 0 20px;
+        padding: 56px 0;
+    }
+    
+    .THIS .pageTitle {
+        font-size: 16px;
+        line-height: 24px;
+    }
+    
+    .THIS h1 {
+        font-size: 28px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 39.2px;
+        letter-spacing: -2px;
+        text-align: left;
+        color: rgba(0, 0, 0, 0.85);
+        margin-top: 56px;
+        word-break: break-word;
+    }
+    
+    .THIS h2 {
+        font-size: 20px;
+        line-height: 36px;
+        text-align: left;
+        word-break: break-word;
+    }
+    
+    .THIS .contentsArea {
+        flex-direction: column;
+    }
+
+    .THIS .contentsArea .call {
+        margin-left: 0;
+    }
+}

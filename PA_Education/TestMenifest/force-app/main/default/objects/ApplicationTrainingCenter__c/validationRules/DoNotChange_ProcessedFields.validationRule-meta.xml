@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DoNotChange_ProcessedFields</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( OR( ISPICKVAL( Status__c , &apos;확정&apos; ),
+			      ISPICKVAL( Status__c , &apos;실패&apos; ),
+ 	     		ISPICKVAL( Status__c , &apos;취소&apos; )),
+		 		OR( ISCHANGED( RoomType__c ),
+								 ISCHANGED( UseType__c ),
+								 ISCHANGED( Date1__c ),
+								 ISCHANGED( Date2__c ),
+								 ISCHANGED( MemberNumber__c ),
+								 ISCHANGED( Bigo__c ))
+				)</errorConditionFormula>
+    <errorMessage>이미 처리된 레코드의 경우 상세내용을 변경할 수 없습니다.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,322 @@
+<aura:component implements="force:appHostable" controller="HolidayManageController">
+    <aura:attribute name="showRetired"  type="Boolean"  default="false"/>
+    <aura:attribute name="showGDC"      type="Boolean"  default="false"/>
+    <aura:attribute name="isChanged"    type="Boolean"  default="false"/>
+    <aura:attribute name="checked"      type="Boolean"  default="false"/>
+    <aura:attribute name="hldChkLst"    type="List"/>
+    <aura:attribute name="modifyDays"   type="Integer"/>
+    <aura:attribute name="reason"       type="String"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.fnInit}"/>
+    <!-- Spinner Container -->
+    <aura:attribute name="toggleSpinner" type="boolean" default="false"/>
+    <aura:if isTrue="{!v.toggleSpinner}">
+        <lightning:spinner aura:id="spinner" alternativeText="Loading" size="large" variant="brand"/>
+    </aura:if>
+
+    <lightning:layout>
+        <lightning:layoutItem size="12">
+            <div class="slds-page-header">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <lightning:icon iconName="custom:custom100"/>
+                    </div>
+                    <div class="slds-media__body">
+                        <lightning:layout multipleRows="true">
+                            <lightning:layoutItem size="7">
+                                <h1 class="slds-page-header__title slds-truncate slds-align-middle"
+                                    title="Manage Employee Holiday">휴가관리</h1>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="5">
+                                <div class="slds-float_right">
+                                    <lightning:button variant="Neutral" label="업데이트" title="기존 직원 정보 업데이트" onclick="{!c.fnDoUpdate}"/>
+                                    <lightning:button variant="Neutral" label="신규" title="신규 직원의 휴가 정보를 생성" onclick="{!c.fnDoCreate}"/>
+                                </div>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </div>
+                </div>
+                <br/>
+                <lightning:layoutItem size="12">
+                    <p class="slds-text-body_small slds-line-height_reset">전 직원의 휴가 정보를 확인, 추가일수 부여 또는 조정</p>
+                </lightning:layoutItem>
+            </div>
+        </lightning:layoutItem>
+    </lightning:layout>
+    <br/>
+    <lightning:accordion aura:id="accordion" activeSectionName="" allowMultipleSectionsOpen="true" class="slds-card">
+        <lightning:accordionSection name="A" label="기능" class="cutPadding">
+            <aura:set attribute="actions">
+                <lightning:input type="toggle"
+                                 label="GDC 표시"
+                                 name="gdc"
+                                 class="slds-p-around_x-small "
+                                 checked="{!v.showGDC}"
+                                 value="{!v.showGDC}"
+                                 messageToggleActive=""
+                                 messageToggleInactive=""
+                                 onchange="{!c.fnInit}"/>
+
+                <lightning:input type="toggle"
+                                 label="퇴사자 표시"
+                                 name="retired"
+                                 class="slds-p-around_x-small "
+                                 checked="{!v.showRetired}"
+                                 value="{!v.showRetired}"
+                                 messageToggleActive=""
+                                 messageToggleInactive=""
+                                 onchange="{!c.fnInit}"/>
+            </aura:set>
+            <table class="slds-table">
+                <tr>
+                    <td width="100px">
+                        <lightning:button variant="Neutral" label="초기화" onclick="{!c.fnDoResetUnPaid}"/>
+                    </td>
+                    <td>
+                        <p class="slds-text-body_small slds-line-height_reset">선택한 직원의 무급 휴가 일수를 초기화 합니다.</p>
+                    </td>
+                    <td width="100px">
+                        <lightning:button variant="Neutral" label="발송" onclick="{!c.fnDoSend}"/>
+                    </td>
+                    <td width="330px">
+                        <p class="slds-text-body_small slds-line-height_reset">선택한 직원에게 휴가정보 메일을 발송합니다.</p>
+                    </td>
+                    <td width="180px">
+                    </td>
+                    <td width="300px">
+                    </td>
+                </tr>
+                <tr class="cutLabel">
+                    <td>
+                        <lightning:button variant="Neutral" label="초기화" onclick="{!c.fnDoResetUncountable}"/>
+                    </td>
+                    <td>
+                        <p class="slds-text-body_small slds-line-height_reset">선택한 직원의 공무 휴가 일수를 초기화 합니다.</p>
+                    </td>
+                    <td>
+                        <lightning:button variant="Neutral" label="부여" onclick="{!c.fnDoModify}"/>
+                    </td>
+                    <td>
+                        <p class="slds-text-body_small slds-line-height_reset">선택한 직원의 추가 휴가일수를 부여/차감 합니다.</p>
+                    </td>
+                    <td>
+                        <div class="slds-form-element_horizontal">
+                            <lightning:input type="number" label="일수 : " value="{!v.modifyDays}"/>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="slds-form-element_horizontal">
+                            <lightning:input type="text" label="사유 : " value="{!v.reason}"/>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </lightning:accordionSection>
+
+        <div class="container-fluid" style="height: 550px;">
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                <tr class="slds-line-height_reset slds-scrollable" style="text-align: center; border-left: 1.5px solid #c9c9c9;">
+                    <th scope="col" rowspan="2">
+                        <lightning:input type="checkbox" name="checkall" checked="{!v.checked}" onchange="{!c.fnCheckAll}"/>
+                    </th>
+                    <th scope="col" rowspan="2">
+                        <div class="slds-truncate" style="width: 5vw; text-align: center;">Holiday No.</div>
+                    </th>
+                    <th scope="col" rowspan="2">
+                        <div class="slds-truncate" style="width: 5vw; text-align: center;">사번</div>
+                    </th>
+                    <th scope="col" rowspan="2">
+                        <div class="slds-truncate" style="width: 5vw; text-align: center;">임직원</div>
+                    </th>
+                    <th scope="col" rowspan="2">
+                        <div class="slds-truncate" style="width: 6vw; text-align: center;">부서</div>
+                    </th>
+                    <th scope="col" rowspan="2">
+                        <div class="slds-truncate" style="width: 5vw; text-align: center;">직급</div>
+                    </th>
+                    <th scope="col" rowspan="2">
+                        <div class="slds-truncate" style="width: 5vw; text-align: center;">입사일자</div>
+                    </th>
+                    <th scope="col" colspan="4" style="border-left: 1.5px solid #c9c9c9;">
+                        <div class="slds-truncate" style="text-align: center;">연월차</div>
+                    </th>
+                    <th scope="col" colspan="4" style="border-left: 1.5px solid #c9c9c9;">
+                        <div class="slds-truncate" style="text-align: center;">대체휴가</div>
+                    </th>
+                    <th scope="col" colspan="4" style="border-left: 1.5px solid #c9c9c9;">
+                        <div class="slds-truncate" style="text-align: center;">기타휴가</div>
+                    </th>
+
+                </tr>
+                <tr class="slds-line-height_reset slds-scrollable" style="text-align: center;">
+                    <th scope="col" style="border-left: 1.5px solid #c9c9c9;">
+                        <div class="slds-truncate" style="width: 4vw; text-align: center;">총 일수</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" style="width: 5vw; text-align: center;">사용일수</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" style="width: 6vw; text-align: center;">사용일수 조정</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" style="width: 6vw; text-align: center;">잔여일수</div>
+                    </th>
+                    <th scope="col" style="border-left: 1.5px solid #c9c9c9;">
+                        <div class="slds-truncate" style="width: 4vw; text-align: center;">총 일수</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" style="width: 5vw; text-align: center;">사용일수</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" style="width: 5vw; text-align: center;">수당지급</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" style="width: 5vw; text-align: center;">잔여일수</div>
+                    </th>
+                    <th scope="col" style="border-left: 1.5px solid #c9c9c9;">
+                        <div class="slds-truncate" style="width: 4vw; text-align: center;">공가</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" style="width: 4vw; text-align: center;">경조휴가</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" style="width: 4vw; text-align: center;">병가</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" style="width: 4vw; text-align: center;">생리휴가</div>
+                    </th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <aura:iteration items="{!v.hldChkLst}" var="hld" indexVar="idx">
+                    <tr class="slds-line-height_reset slds-table_fixed-layout nonLabel nonLabel1 nonLabel2 nonLabel3 nonLabel4">
+                        <td style="text-align:center;">
+                            <lightning:input type="checkbox" checked="{!hld.isChecked}" name="check"/>
+                        </td>
+                        <td style="text-align:center;" title="Holiday No.">
+                            <a onclick="{!c.fnGoRecord}" data-index="{!hld.Id}">
+                                <lightning:button variant="base" label="{!hld.Name}" title="휴일관리 상세로 이동"/>
+                            </a>
+                        </td>
+                        <td style="text-align:center;" title="사번">
+                            <ui:outputText value="{!hld.EmployeeNo}"/>
+                        </td>
+                        <td style="text-align:center;" title="임직원">
+                            <a onclick="{!c.fnGoRecord}" data-index="{!hld.User}">
+                                <lightning:button variant="base" label="{!hld.UserName}" title="사용자 상세로 이동"/>
+                            </a>
+                        </td>
+                        <td style="text-align:center;" title="부서">
+                            <ui:outputText value="{!hld.Department}"/>
+                        </td>
+                        <td style="text-align:center;" title="직급">
+                            <ui:outputText value="{!hld.Position}"/>
+                        </td>
+                        <td style="text-align:center;" title="입사일자">
+                            <lightning:input type="date" value="{!hld.JoinDate}" onchange="{!c.fnValueChange}" disabled="true"/>
+                        </td>
+                        <td style="text-align:center;" title="총 연월차">
+                            <ui:outputNumber value="{!hld.SumAnnualCalcRemainLastYear}"/>
+                        </td>
+                        <td style="text-align:center;" title="사용일수">
+                            <aura:if isTrue="{!hld.UseDays != null}">
+                                <ui:outputNumber value="{!hld.UseDays}"/>
+                                <aura:set attribute="else">
+                                    <ui:outputNumber value="0"/>
+                                </aura:set>
+                            </aura:if>
+                        </td>
+                        <td style="text-align:center;" title="사용일수 조정">
+                            <aura:if isTrue="{!hld.GivenHolidays != null}">
+                                <ui:outputNumber value="{!hld.GivenHolidays}"/>
+                                <aura:set attribute="else">
+                                    <ui:outputNumber value="0"/>
+                                </aura:set>
+                            </aura:if>
+                        </td>
+                        <td style="text-align:center;" title="잔여 연월차">
+                            <ui:outputNumber value="{!hld.TotalRemain}"/>
+                        </td>
+                        <td style="text-align:center;" title="총 대체휴가">
+                            <aura:if isTrue="{!hld.totalrewardDays != null}">
+                                <ui:outputNumber value="{!hld.totalrewardDays}"/>
+                                <aura:set attribute="else">
+                                    <ui:outputNumber value="0"/>
+                                </aura:set>
+                            </aura:if>
+                        </td>
+                        <td style="text-align:center;" title="대체휴가 사용일수">
+                            <aura:if isTrue="{!hld.rewardDaysCount != null}">
+                                <ui:outputNumber value="{!hld.rewardDaysCount}"/>
+                                <aura:set attribute="else">
+                                    <ui:outputNumber value="0"/>
+                                </aura:set>
+                            </aura:if>
+                        </td>
+                        <td style="text-align:center;" title="대체휴가 수당지급일수">
+                            <aura:if isTrue="{!hld.BenefitPaymentDays != null}">
+                                <ui:outputNumber value="{!hld.BenefitPaymentDays}"/>
+                                <aura:set attribute="else">
+                                    <ui:outputNumber value="0"/>
+                                </aura:set>
+                            </aura:if>
+                        </td>
+                        <td style="text-align:center;" title="대체휴가 잔여일수">
+                            <aura:if isTrue="{!hld.rewardRemainDays != null}">
+                                <ui:outputNumber value="{!hld.rewardRemainDays}"/>
+                                <aura:set attribute="else">
+                                    <ui:outputNumber value="0"/>
+                                </aura:set>
+                            </aura:if>
+                        </td>
+                        <td style="text-align:center;" title="공가">
+                            <aura:if isTrue="{!hld.PublicWorksCount != null}">
+                                <ui:outputNumber value="{!hld.PublicWorksCount}"/>
+                                <aura:set attribute="else">
+                                    <ui:outputNumber value="0"/>
+                                </aura:set>
+                            </aura:if>
+                        </td>
+                        <td style="text-align:center;" title="경조휴가">
+                            <aura:if isTrue="{!hld.FamilyEventCount != null}">
+                                <ui:outputNumber value="{!hld.FamilyEventCount}"/>
+                                <aura:set attribute="else">
+                                    <ui:outputNumber value="0"/>
+                                </aura:set>
+                            </aura:if>
+                        </td>
+                        <td style="text-align:center;" title="병가">
+                            <aura:if isTrue="{!hld.SickLeaveCount != null}">
+                                <ui:outputNumber value="{!hld.SickLeaveCount}"/>
+                                <aura:set attribute="else">
+                                    <ui:outputNumber value="0"/>
+                                </aura:set>
+                            </aura:if>
+                        </td>
+                        <td style="text-align:center;" title="생리휴가">
+                            <aura:if isTrue="{!hld.WomenHolidayCount != null}">
+                                <ui:outputNumber value="{!hld.WomenHolidayCount}"/>
+                                <aura:set attribute="else">
+                                    <ui:outputNumber value="0"/>
+                                </aura:set>
+                            </aura:if>
+                        </td>
+
+                    </tr>
+                </aura:iteration>
+                </tbody>
+            </table>
+        </div>
+
+        <br/>
+        <aura:if isTrue="{!v.isChanged}">
+            <div class="slds-align_absolute-center">
+                <lightning:button variant="Neutral" label="Save" title="Save" onclick="{!c.fnDoSave}"/>
+                <lightning:button variant="Neutral" label="Cancel" title="Cancel" onclick="{!c.fnInit}"/>
+            </div>
+            <br/>
+        </aura:if>
+    </lightning:accordion>
+</aura:component>

@@ -1,0 +1,229 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="Site07Support">
+<head>
+	<meta charset="utf-8"/>
+	<title>대유넥스티어,DaeU NexTier,Daeunextier</title>
+	<meta name="fb_admins_meta_tag" content="daeunextier"/>
+	<meta name="keywords" content="Daeunextier, Radian6, 대유넥티어, 데이터사이언티스트, 벨류인에이블러, 에반젤리스트"/>
+	<meta name="description" content="클라우드 기반 솔루션 프로바이더로서 기업이 필요로 하는 어플리케이션을 일일이 구축하지 않고 즉시 활용할 수 있는 서비스를 제공함으로써 중견,중소 기업의 비용부담을 최소화하고 생산성 향상 및 고객가치 증진에 기여하고자 합니다. ㈜대유넥스티어에 보내주시는 관심과 성원에 감사를 드립니다."/>
+    
+    <apex:stylesheet value="{!URLFOR($Resource.DaeuWebsite, 'css/reset.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.DaeuWebsite, 'css/style.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.DaeuWebsite, 'css/layout.css')}"/>
+    
+    <apex:includeScript value="{!URLFOR($Resource.DaeuWebsite, 'js/jquery-1.4.4.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.DaeuWebsite, 'js/cufon-yui.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.DaeuWebsite, 'js/cufon-replace.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.DaeuWebsite, 'js/Lora_400.font.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.DaeuWebsite, 'js/FF-cash.js')}"/>
+    
+	<!--[if lt IE 7]>
+        <div style=' clear: both; text-align:center; position: relative;'>
+            <a href="http://www.microsoft.com/windows/internet-explorer/default.aspx?ocid=ie6_countdown_bannercode"><img src="http://www.theie6countdown.com/images/upgrade.jpg" border="0"  alt="" /></a>
+        </div>
+	<![endif]-->
+    <!--[if lt IE 9]>
+    	<apex:includeScript value="{!URLFOR($Resource.DaeuWebsite, 'js/html5.js')}"/>
+    	<apex:stylesheet value="{!URLFOR($Resource.DaeuWebsite, 'css/ie.css')}"/>
+	<![endif]-->
+</head>
+<body id="page4">
+<!-- header -->
+    <header>
+    	<div class="row-top">
+        	<div class="main">
+                <div class="wrap-nav" style="left:200px;">
+                    <h1><a class="logo" href="/">DaeuNextier</a></h1>
+                    <nav>
+                        <ul class="menu">
+                            <li id="nav1"><a href="/">Home</a></li>
+                            <li id="nav2" ><a href="Site02AboutUs">About Us</a></li>
+                            <li id="nav3" ><a href="Site03Service">Services</a></li>
+                            <li id="nav4" ><a href="Site04MarketingCloud">Salesforce.com</a></li>
+                            <li id="nav5" ><a href="Site08ANAPLAN">ANAPLAN</a></li>
+                            <li id="nav6" ><a href="Site05Clients">Clients</a></li>
+                            <li id="nav7" ><a href="Site06Careers">Careers</a></li>
+                            <li id="nav8" class="active"><a href="Site07Support">Support</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <div class="row-bot">
+        	<div class="main">
+                <strong class="news-title fleft">Wise Friend for Your Business!!!</strong>
+            </div>
+        </div>
+    </header>
+<!-- content -->
+    <section id="content">
+        <div class="bg-2">
+        	<div class="main">
+            	<div class="wrapper">
+            		<h3>Support</h3>
+                    <div class="wrapper">
+                        <div class="extra-wrap">
+                        	<br/><br/>
+                        	당사 서비스에 관심을 보여주신점 감사드립니다. 당사 서비스에 대한 문의는 아래 Contact Us를 통해 요청해주시기 바랍니다.
+							<br/>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="wrapper">
+                        <div class="extra-wrap">
+	                    	<apex:form id="contactform">
+	                    		<!--  -->
+                                <div class="wrapper">
+                                	<table width="100%">
+                                		<tr>
+                                			<td style="width:100px;padding-bottom:15px;">
+                                				Name
+                                			</td>
+                                			<td>
+												<apex:inputText disabled="{!IsRegistedOk}" id="username" style="width:500px;height=20px;" value="{!username}"/>
+												<apex:outputPanel rendered="{!IsErrorIsName}" id="thePanel">
+													<strong style="color:red;">이름은 필수 입력입니다.</strong>
+												</apex:outputPanel>
+                                			</td>
+                                		</tr>
+                                		<tr>
+                                			<td style="width:100px;padding-bottom:15px;">
+                                				Email
+                                			</td>
+                                			<td>
+                                				<apex:inputText disabled="{!IsRegistedOk}" id="email" style="width:500px;height=20px;" value="{!email}"/>
+												<apex:outputPanel rendered="{!IsErrorIsEmail}" id="thePane2">
+													<strong style="color:red;">이메일은 필수 입력입니다.</strong>
+												</apex:outputPanel>
+												<apex:outputPanel rendered="{!IsErrorValidEmail}" id="thePane3">
+													<strong style="color:red;">이메일형식이 잘못되었습니다.</strong>
+												</apex:outputPanel>
+                                			</td>
+                                		</tr>
+                                		<tr>
+                                			<td style="width:100px;padding-bottom:15px;">
+                                				Subject
+                                			</td>
+                                			<td>
+                                				<apex:inputText disabled="{!IsRegistedOk}" id="subject" style="width:500px;height=20px;" value="{!subject}"/>
+                                			</td>
+                                		</tr>
+                                		<tr>
+                                			<td style="width:100px;padding-bottom:15px;">
+                                				Message
+                                			</td>
+                                			<td>
+                                				<apex:inputTextarea disabled="{!IsRegistedOk}" id="message" rows="10" style="width:500px;" value="{!message}" />
+                                			</td>
+                                		</tr>
+                                		<tr>
+                                			<td>
+                                				&nbsp;
+                                			</td>
+                                			<td style="text-align:left;padding-top:15px;">
+                                				<!--
+												<a class="button" href="#" onClick="document.getElementById('{!$Component.contactform}').reset()">Clear</a>
+												<a class="button" href="#" onClick="document.getElementById('contactform').submit()">Send</a>
+												-->
+												<apex:commandButton rendered="{!!IsRegistedOk}" style="cursor:pointer;" styleClass="button" action="{!registerLead}" value="Send" id="submit" rerender="contactform"/>
+												<apex:outputPanel rendered="{!IsRegistedOk}" id="thePane4">
+													<strong>문의가 접수되었습니다. 등록하신 이메일로 회신을 드리겠습니다. 감사드립니다.</strong>
+												</apex:outputPanel>
+												
+                                			</td>
+                                		</tr>
+                                	</table>
+                                </div>
+							</apex:form>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+            	<div class="wrapper">
+            		<h3>Contact  Us</h3>
+                    <div class="wrapper">
+                        <div class="extra-wrap">
+                        	<br/><br/>
+                        	당사의 서비스에 대한 문의 및 방문은
+							<br/><br/>
+							<table width="100%">
+								<tr>
+									<td style="width:100px;padding-bottom:10px;">
+										. TEL
+									</td>
+									<td>
+										: 082-02-553-9981
+									</td>
+								</tr>
+								<tr>
+									<td style="width:100px;padding-bottom:10px;">
+										. FAX
+									</td>
+									<td>
+										: 082-02-553-9967
+									</td>
+								</tr>
+								<tr>
+									<td style="width:100px;padding-bottom:10px;">
+										. e-mail
+									</td>
+									<td>
+										: info@daeunextier.com
+									</td>
+								</tr>
+								<tr>
+									<td style="width:100px;padding-bottom:10px;">
+										. FaceBook
+									</td>
+									<td>
+										: https://www.facebook.com/daeunextier
+									</td>
+								</tr>
+								<tr>
+									<td style="width:100px;padding-bottom:10px;">
+										. Address
+									</td>
+									<td>
+										 : 서울시 성동구 성수이로 22길 37 성수IT센터(아크밸리) 505호
+									</td>
+								</tr>
+							</table>
+                        </div>
+                    </div>
+				</div>
+            </div>
+        </div>
+    </section>
+<!-- footer -->
+    <footer>
+        <div class="main">
+        	<div class="wrapper">
+            	<div class="col-1">
+            		<a href="/AboutUs">About Us</a> | 
+            		<a href="/Service">Services</a> | 
+            		<a href="/MarketingCloud">Marketing Cloud</a> | 
+            		<a href="/Clients">Clients</a> | 
+            		<a href="/Careers">Careers</a> | 
+            		<a href="/Support">Support</a>
+                    <div><br/></div>
+                    <div>©Copyright 2013  DaeU Nextier</div>
+                </div>
+                <div class="col-2">
+                	<strong class="social-title">Follow Us</strong>
+                    <div class="wrapper">
+                        <ul class="list-services">
+                            <li><a class="item-1" target="_blank" href="https://www.facebook.com/daeunextier"></a></li>
+                            <li><a class="item-3" target="_blank" href="https://twitter.com/daeunextier"></a></li>
+                            <li><a class="item-5" target="_blank" href="http://blog.daeunextier.com"></a></li>
+                            <!--
+                            <li><a class="item-2" href="#"></a></li>
+                            <li><a class="item-4" href="#"></a></li>
+                            <li><a class="item-5" href="#"></a></li>
+                            -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</apex:page>

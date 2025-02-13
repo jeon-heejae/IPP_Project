@@ -1,0 +1,24 @@
+<!--
+ - Created by hs.jung on 2024-05-31.
+ -->
+
+<template>
+    <lightning-card title="문서 다운로드" icon-name="custom:custom63">
+        <div class="slds-m-around_medium">
+            <p>선택한 문서를 PDF 파일로 다운로드합니다. 다운로드한 파일은 관련 탭의 '노트 및 첨부 파일'에서 다시 다운로드 가능합니다.</p>
+
+            <template if:true={isCompleted}>
+                <lightning-input
+                        type="checkbox"
+                        label="감사추적증명서 포함"
+                        checked={includeAuditCertificate}
+                        onchange={handleCheckboxChange}></lightning-input>
+            </template>
+
+            <div class="slds-align_absolute-center">
+                <lightning-button label="취소" onclick={handleCancel} class="slds-m-right_x-small"></lightning-button>
+                <lightning-button label="다운로드" variant="brand" onclick={handleDownload}></lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+</template>

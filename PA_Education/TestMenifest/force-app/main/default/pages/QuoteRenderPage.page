@@ -1,0 +1,480 @@
+<apex:page standardController="Quote__c" extensions="QuoteRenderController" showHeader="false" sidebar="false">
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script type="text/javascript">
+     $(document).ready(function() {
+        $("#btnExport").click(function(e) {
+            var pageHtml = encodeURIComponent( $('div[id$=table_wrapper]').html());
+            pageHtml.replace('resource','{!extUrl}/resource');
+             window.open('data:application/vnd.ms-excel,' + pageHtml);
+    e.preventDefault();
+        });
+    });
+    </script>-->
+    <style>
+        .tableClass{width:100%; border-collapse: collapse;}
+        .underLine{border-bottom : 1.5px solid #4e5151; width:250px;}
+        table th{padding : 5px;}
+        table td{padding : 5px;}        
+        .container {
+            width:100%;
+            position: relative;
+            text-align: center;
+        }
+        .bottom-right {
+            position: absolute;
+            bottom: -20px;
+            right: 20px;
+        }
+        
+        .bottom-left {
+            position: absolute;
+            bottom: -20px;
+            left: 20px;
+        }
+        .rightAlign{text-align:right;}
+        .rightPadding{padding-right :0px !important;}
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        * {
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+        }
+        .page {
+            width: 21cm;
+            min-height: 28cm;
+            padding: 1cm;
+            margin: 0 auto;
+        }
+        .subpage {
+            background:#fff; 
+            height: 270mm;
+        }
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        @media print {
+            html, body {
+            width: 210mm;
+            }
+            .page {
+                margin: 0;
+                border: initial;
+                width: 200mm;
+                min-height: initial;
+                box-shadow: initial;
+                background: initial;
+                page-break-after: always;
+            }
+        }
+    </style>
+<!--    
+<button id="btnExport">Export to xls</button>-->
+    <div id="table_wrapper">
+        <apex:form rendered="{!hasCon}">
+            <div class="page">
+                <div class="subpage">
+                <table class = "tableClass">
+                    <apex:outputPanel rendered="{!IF(Quote__c.Quote_Status__c == 'Approved',false,true)}">
+                        <tr>
+                            <td><apex:commandButton action="{!cancel}" value="Back" rendered="{!IF(Quote__c.Quote_Status__c == 'Approved',false,true)}"/></td>
+                        </tr>
+                    </apex:outputPanel>
+                    <tr>
+                        <td colspan="4" style="text-align:right;"><apex:image value="{!URLFOR($Resource.newlogo3)}" width="205px" height="50px" /></td>
+                    </tr>
+                    
+                    <tr>
+                        <td colspan="4" style="font-size : 25px;text-align:center;;">
+                            <U>견&nbsp;&nbsp;&nbsp;적&nbsp;&nbsp;&nbsp;서</U>
+                        </td>
+                    </tr>
+            
+                    <tr style="height:30px;">
+                    </tr>
+                    <tr>
+                        <td class = "rightPadding" style="width:60px;"><font style="letter-spacing: 4px">문서번</font>호</td>
+                        <td style="width: 55%;">: {!Quote__c.Name}</td>
+                        <td class = "rightPadding" style="width:60px;"><font style="letter-spacing: 11.5px">공급</font>자</td>
+                        <td>: (주)대유넥스티어</td>
+                    </tr>
+                    <tr>
+                        <td class = "rightPadding"><font style="letter-spacing: 35.5px">수</font>신</td>
+                        <td >: {!Quote__c.Quote_Customer__c}</td>
+                        <td class = "rightPadding"><font style="letter-spacing: 11.5px">대표</font>자</td>
+                        <td >: 최현택&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(인)
+                            <div  class="container">
+                            <apex:image styleClass="bottom-right" value="{!URLFOR($Resource.ComSeal)}" width="64px" height="64px" 
+                            rendered="{!IF(Quote__c.Quote_Status__c == 'Approved',true,false)}" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class = "rightPadding"><font style="letter-spacing: 35.5px">참</font>조</td>
+                        <td  >: {!Quote__c.Quote_CarbonCopy__c}</td>
+                        <td class = "rightPadding">사업자번호</td>
+                        <td>: 220-88-53899</td>
+                    </tr>
+                    <tr>
+                        <td class = "rightPadding"><font style="letter-spacing: 11.5px">견적</font>일</td>
+                        <td  >:&nbsp;<apex:outputField value="{!Quote__c.Quote_Date__c}"/></td>
+                        <td class = "rightPadding"><font style="letter-spacing: 35.5px">업</font>태</td>
+                        <td>: 서비스</td>
+                    </tr>
+                    <tr>
+                        <td class = "rightPadding"><font style="letter-spacing: 11.5px">견적</font>명</td>
+                        <td  >: {!Quote__c.Quote_Subject__c}</td>
+                        <td class = "rightPadding"><font style="letter-spacing: 35.5px">종</font>목</td>
+                        <td>: S/W제조 및 공급, 경영컨설팅</td>
+                    </tr>
+                    <tr>
+                        <td class = "rightPadding" colspan="2">아래와 같이 견적합니다.</td>
+                        <td class = "rightPadding"><font style="letter-spacing: 4px">견적문</font>의</td>
+                        <td>: {!Quote__c.Quote_InChargeSales__c}</td>
+                    </tr>
+                    <tr style="height:30px;">
+                    </tr>
+                </table>
+            
+            
+                <table class = "tableClass">
+            
+                    <thead>
+                        <tr ><td style="text-align:right;" colspan = "5">[ 단위: 원, VAT 별도 ]</td></tr>
+                        <tr style="background-color : #525659; -webkit-print-color-adjust: exact; color: white; height:30px;">
+                            <th style="width:250px;" colspan="{!IF(Quote__c.Quote_ConsultDiscount__c > 0, 1, 2)}">구분</th>
+                            <th class= "rightAlign">표준단가</th>
+                            <apex:outputPanel id="thePanel" rendered="{!IF(Quote__c.Quote_ConsultDiscount__c > 0, true, false)}">
+                                <th class= "rightAlign">할인단가</th>
+                            </apex:outputPanel>
+                            <th class= "rightAlign" >투입공수 M/M</th>
+                            <th class= "rightAlign">금액</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            
+                    <apex:variable var="num" value="{!0}"/>
+                    <apex:repeat value="{!consultLst}" var="obj">
+                        <tr style="{!IF(MOD(num,2) == 0 ,'background-color: white;','background-color : #dee5ec; -webkit-print-color-adjust: exact;')}">
+                            <td style="border-right:  1.5px solid black;" colspan="{!IF(Quote__c.Quote_ConsultDiscount__c > 0, 1, 2)}">
+                                {!obj.QuoteItem_ConsultType__c} {!IF(ISBLANK(obj.QuoteItem_ConsultLevel__c),'',' - '+obj.QuoteItem_ConsultLevel__c)}
+                            </td>
+                            <td style="text-align:right; border-right:  1.5px solid black;"><apex:outputField value="{!obj.QuoteItem_ConsultListPrice__c}"/> </td>
+                            <apex:outputPanel id="thePanel" rendered="{!IF(Quote__c.Quote_ConsultDiscount__c > 0, true, false)}">
+                                <td style="text-align:right; border-right:  1.5px solid black;"><apex:outputField value="{!obj.QuoteItem_ConsultDiscountedPrice__c}"/></td>
+                            </apex:outputPanel>
+                            <td style="text-align:right; border-right:  1.5px solid black;"><apex:outputField value="{!obj.QuoteItem_ConsultManMonths__c}"/></td>
+                            <td style="text-align:right; border-right:  1.5px solid black;"><apex:outputField value="{!obj.QuoteItem_ConsultAmount__c}"/></td>
+                        </tr>
+                        <apex:variable var="num" value="{!num + 1}"/>
+                    </apex:repeat>
+                    </tbody>
+                    <tfoot>
+                        <tr style="height:30px;">
+                            <td colspan = "3"></td>
+                            <td class= "rightAlign">공수 계 : {!Quote__c.Quote_TotalManMonths__c}</td>
+                        </tr>
+                        <apex:outputPanel rendered="{!IF(Quote__c.Quote_ConsultAmount__c < Quote__c.Quote_ConsultListSubTotal__c, true, false)}">
+                            <tr>
+                                <td colspan = "3"></td>
+                                <td>표준금액</td>
+                                <td class= "rightAlign"><apex:outputField value="{!Quote__c.Quote_ConsultListSubTotal__c}"/></td>
+                            </tr>
+                            <tr>
+                                <td colspan = "3"></td>
+                                <td>할인율</td>
+                                <td class= "rightAlign"><apex:outputField value="{!Quote__c.Quote_ConsultDiscountRate__c}"/></td>
+                            </tr>
+                        </apex:outputPanel>
+                        <tr>
+                            <td colspan = "3"></td>
+                            <td><b>견적 금액</b></td>
+                            <td class= "rightAlign"><b><apex:outputField value="{!Quote__c.Quote_ConsultAmount__c}"/></b></td>
+                        </tr>
+                        <apex:outputPanel rendered="{!Quote__c.Quote_ShowVAT__c}">
+                            <!--<tr><td></td></tr>-->
+                            <tr>
+                                <td colspan = "3"></td>
+                                <td>VAT</td>
+                                <td class= "rightAlign"><apex:outputField value="{!Quote__c.Quote_ConsultVAT__c}"/></td>
+                            </tr>
+                            <!--<tr>
+                                <td colspan = "3"></td>
+                                <td><b>총 견적 금액<br/>(VAT포함)</b></td>
+                                <td class= "rightAlign"><b><apex:outputField value="{!Quote__c.Quote_ConsultTotalAmount__c}"/></b></td>
+                            </tr>-->
+                        </apex:outputPanel>
+                    </tfoot>
+                </table>
+                <br/>
+                <apex:outputField value="{!Quote__c.Quote_ConsultRemark__c}"/>
+                </div>
+                <div style="bottom-left">주소 : {!$Organization.Street}   </div>
+                <!--<div style="bottom-left">주소 : 서울시 성동구 성수이로 22길 37<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;성수IT센터(아크밸리) 505호</div>-->
+            </div>
+        </apex:form>
+        <apex:form rendered="{!hasLis}">
+            <div class="page">
+                <div class="subpage">
+                <table class = "tableClass">
+                    <tr>
+                        <td colspan="5" style="text-align:right;"><apex:image value="{!URLFOR($Resource.newlogo3)}" width="205px" height="50px" /></td>
+                    </tr>
+                    
+                    
+                    <tr>
+                        <td colspan="5" style="font-size : 25px;text-align:center;;">
+                            <U>견&nbsp;&nbsp;&nbsp;적&nbsp;&nbsp;&nbsp;서</U>
+                        </td>
+                    </tr>
+            
+                    <tr style="height:30px;">
+                    </tr>
+                    <tr>
+                        <td class = "rightPadding" style="width:60px;"><font style="letter-spacing: 4px">문서번</font>호</td>
+                        <td style="width: 55%;">: {!Quote__c.Name}</td>
+                        <td class = "rightPadding" style="width:60px;"><font style="letter-spacing: 11.5px">공급</font>자</td>
+                        <td >: (주)대유넥스티어</td>
+                    </tr>
+                    <tr>
+                        <td class = "rightPadding"><font style="letter-spacing: 35.5px">수</font>신</td>
+                        <td >: {!Quote__c.Quote_Customer__c}</td>
+                        <td class = "rightPadding"><font style="letter-spacing: 11.5px">대표</font>자</td>
+                        <td >: 최현택&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(인)
+                            <div  class="container">
+                            <apex:image styleClass="bottom-right" value="{!URLFOR($Resource.ComSeal)}" width="64px" height="64px" 
+                            rendered="{!IF(Quote__c.Quote_Status__c == 'Approved',true,false)}" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class = "rightPadding"><font style="letter-spacing: 35.5px">참</font>조</td>
+                        <td  >: {!Quote__c.Quote_CarbonCopy__c}</td>
+                        <td class = "rightPadding">사업자번호</td>
+                        <td>: 220-88-53899</td>
+                    </tr>
+                    <tr>
+                        <td class = "rightPadding"><font style="letter-spacing: 11.5px">견적</font>일</td>
+                        <td  >:&nbsp;<apex:outputField value="{!Quote__c.Quote_Date__c}"/></td>
+                        <td class = "rightPadding"><font style="letter-spacing: 35.5px">업</font>태</td>
+                        <td>: 서비스</td>
+                    </tr> 
+                    <tr>
+                        <td class = "rightPadding"><font style="letter-spacing: 11.5px">견적</font>명</td>
+                        <td >: {!Quote__c.Quote_Subject__c}</td>
+                        <td class = "rightPadding"><font style="letter-spacing: 35.5px">종</font>목</td>
+                        <td>: S/W제조 및 공급, 경영컨설팅</td>
+                    </tr>
+                    <tr>
+                        <td class = "rightPadding" colspan="2">아래와 같이 견적합니다.</td>
+                        <td class = "rightPadding"><font style="letter-spacing: 4px">견적문</font>의</td>
+                        <td>: {!Quote__c.Quote_InChargeSales__c}</td>
+                    </tr>
+                    <tr style="height:30px;">
+                    </tr>
+                </table>
+            
+                
+                <table class = "tableClass">
+
+                    <thead>
+                        <tr ><td style="text-align:right;" colspan = "6">[ 단위: USD, VAT 별도 ]</td></tr>
+                        <tr style="background-color : #525659; -webkit-print-color-adjust: exact; color: white; height:30px;">
+                            <th style="width:250px;" >구분</th>
+                            <th class= "rightAlign">월사용료</th>
+                            <apex:outputPanel id="thePanel" rendered="{!IF(Quote__c.Quote_LicenseDiscount__c> 0, true, false)}">
+                                <th class= "rightAlign">할인사용료</th>
+                            </apex:outputPanel>
+                            <th class= "rightAlign">년간 사용료</th>
+                            <th class= "rightAlign">사용자</th>
+                            <th class= "rightAlign">금액</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            
+                    <!-- repeat에 변수 돌리면서 짝수, 홀수 냐에 따라 td에 background-color 부여 -->
+                    <apex:variable var="num2" value="{!0}"/>
+                    <apex:repeat value="{!licenseLst}" var="obj">
+                        <tr style="{!IF(MOD(num2,2) == 0 ,'background-color: white;','background-color : #dee5ec; -webkit-print-color-adjust: exact;')}">
+                            <td style="border-right:  1.5px solid black;">{!obj.QuoteItem_LicenseType__c}</td>
+                            <td style="text-align:right; border-right:  1.5px solid black;"><apex:outputField value="{!obj.QuoteItem_LicenseListPrice__c}"/> </td>
+                            <apex:outputPanel id="thePanel" rendered="{!IF(Quote__c.Quote_LicenseDiscount__c> 0, true, false)}">
+                                <td style="text-align:right; border-right:  1.5px solid black;"><apex:outputField value="{!obj.QuoteItem_LicenseDiscountedPrice__c}"/></td>
+                            </apex:outputPanel>
+                            <td style="text-align:right; border-right:  1.5px solid black;"><apex:outputField value="{!obj.QuoteItem_LicenseDiscountedPriceYear__c}"/></td>
+                            <td style="text-align:right; border-right:  1.5px solid black;"><apex:outputField value="{!obj.QuoteItem_LicenseNumberOfUser__c}"/></td>
+                            <td style="text-align:right; border-right:  1.5px solid black;"><apex:outputField value="{!obj.QuoteItem_LicenseAmount__c}"/></td>
+                        </tr>
+                        <apex:variable var="num2" value="{!num2 + 1}"/>
+                    </apex:repeat>
+                    </tbody>
+                    <tfoot>
+                        <tr style="height:30px;">
+                            <td colspan = "4"></td>
+                            <td class= "rightAlign">사용자 계 : {!Quote__c.Quote_NumberOfUsers__c}</td>
+                        </tr>
+                        <apex:outputPanel rendered="{!IF(Quote__c.Quote_LicenseDiscount__c> 0, true, false)}">
+                            <tr>
+                                <td colspan = "4"></td>
+                                <td>표준금액</td>
+                                <td class= "rightAlign"><apex:outputField value="{!Quote__c.Quote_LicenseListAmount__c}"/></td>
+                            </tr>
+                            <tr>
+                                <td colspan = "4"></td>
+                                <td>할인율</td>
+                                <td class= "rightAlign"><apex:outputField value="{!Quote__c.Quote_LicenseDiscountRate__c}"/></td>
+                            </tr>
+                        </apex:outputPanel>
+                        <tr>
+                            <td colspan = "4"></td>
+                            <td><b>라이선스 견적 금액</b></td>
+                            <td class= "rightAlign"><b><apex:outputField value="{!Quote__c.Quote_LicenseSubTotal__c}"/></b></td>
+                        </tr>
+                    </tfoot>
+                </table>
+                    <br/>
+                <apex:outputField value="{!Quote__c.Quote_LicenseRemark__c}"/>
+                </div>
+                <div style="bottom-left">주소 : {!$Organization.Street}   </div>
+            </div>
+        </apex:form>
+        <apex:form rendered="{!hasTrn}">
+            <div class="page">
+                <div class="subpage">
+                <table class = "tableClass">
+                    <tr>
+                        <td colspan="5" style="text-align:right;"><apex:image value="{!URLFOR($Resource.newlogo3)}" width="205px" height="50px" /></td>
+                    </tr>
+                    
+                    
+                    <tr>
+                        <td colspan="5" style="font-size : 25px;text-align:center;;">
+                            <U>견&nbsp;&nbsp;&nbsp;적&nbsp;&nbsp;&nbsp;서</U>
+                        </td>
+                    </tr>
+            
+                    <tr style="height:30px;">
+                    </tr>
+                    <tr>
+                        <td class = "rightPadding" style="width:60px;"><font style="letter-spacing: 4px">문서번</font>호</td>
+                        <td style="width: 55%;">: {!Quote__c.Name}</td>
+                        <td class = "rightPadding" style="width:60px;"><font style="letter-spacing: 11.5px">공급</font>자</td>
+                        <td >: (주)대유넥스티어</td>
+                    </tr>
+                    <tr>
+                        <td class = "rightPadding"><font style="letter-spacing: 35.5px">수</font>신</td>
+                        <td >: {!Quote__c.Quote_Customer__c}</td>
+                        <td class = "rightPadding"><font style="letter-spacing: 11.5px">대표</font>자</td>
+                        <td >: 최현택&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(인)
+                            <div  class="container">
+                            <apex:image styleClass="bottom-right" value="{!URLFOR($Resource.ComSeal)}" width="64px" height="64px" 
+                            rendered="{!IF(Quote__c.Quote_Status__c == 'Approved',true,false)}" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class = "rightPadding"><font style="letter-spacing: 35.5px">참</font>조</td>
+                        <td  >: {!Quote__c.Quote_CarbonCopy__c}</td>
+                        <td class = "rightPadding">사업자번호</td>
+                        <td>: 220-88-53899</td>
+                    </tr>
+                    <tr>
+                        <td class = "rightPadding"><font style="letter-spacing: 11.5px">견적</font>일</td>
+                        <td  >:&nbsp;<apex:outputField value="{!Quote__c.Quote_Date__c}"/></td>
+                        <td class = "rightPadding"><font style="letter-spacing: 35.5px">업</font>태</td>
+                        <td>: 서비스</td>
+                    </tr> 
+                    <tr>
+                        <td class = "rightPadding"><font style="letter-spacing: 11.5px">견적</font>명</td>
+                        <td >: {!Quote__c.Quote_Subject__c}</td>
+                        <td class = "rightPadding"><font style="letter-spacing: 35.5px">종</font>목</td>
+                        <td>: S/W제조 및 공급, 경영컨설팅</td>
+                    </tr>
+                    <tr>
+                        <td class = "rightPadding" colspan="2">아래와 같이 견적합니다.</td>
+                        <td class = "rightPadding"><font style="letter-spacing: 4px">견적문</font>의</td>
+                        <td>: {!Quote__c.Quote_InChargeSales__c}</td>
+                    </tr>
+                    <tr style="height:30px;">
+                    </tr>
+                </table>
+            
+                
+                <table class = "tableClass">
+
+                    <thead>
+                        <tr ><td style="text-align:right;" colspan = "6">[ 단위: 원, VAT 별도 ]</td></tr>
+                        <tr style="background-color : #525659; -webkit-print-color-adjust: exact; color: white; height:30px;">
+                            <th style="width:250px;" colspan="2">상세항목</th>
+                            <!-- <th class= "rightAlign">등급</th> -->
+                            <th class= "rightAlign">표준가격</th>
+                            <th class= "rightAlign">제안단가</th>
+                            <th class= "rightAlign">수강인원</th>
+                            <th class= "rightAlign">제안 금액</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            
+                    <!-- repeat에 변수 돌리면서 짝수, 홀수 냐에 따라 td에 background-color 부여 -->
+                    <apex:variable var="num2" value="{!0}"/>
+                    <apex:repeat value="{!trainingLst}" var="obj">
+                        <tr style="{!IF(MOD(num2,2) == 0 ,'background-color: white;','background-color : #dee5ec; -webkit-print-color-adjust: exact;')}">
+                            <td style="border-right:  1.5px solid black;" colspan="2">{!obj.QuoteItem_TrainingDescription__c}</td>
+                            <!-- <td style="text-align:right; border-right:  1.5px solid black;"><apex:outputField value="{!obj.QuoteItem_ConsultLevel__c}"/> </td> -->
+                            <td style="text-align:right; border-right:  1.5px solid black;"><apex:outputField value="{!obj.QuoteItem_TrainingStandardPrice__c}"/></td>
+                            <td style="text-align:right; border-right:  1.5px solid black;"><apex:outputField value="{!obj.QuoteItem_TrainingSalesPrice__c}"/></td>
+                            <td style="text-align:right; border-right:  1.5px solid black;"><apex:outputField value="{!obj.QuoteItem_TrainingCount__c}"/></td>
+                            <td style="text-align:right; border-right:  1.5px solid black;"><apex:outputField value="{!obj.QuoteItem_TrainingSalesAmount__c}"/></td>
+                        </tr>
+                        <apex:variable var="num2" value="{!num2 + 1}"/>
+                    </apex:repeat>
+                    </tbody>
+                    <tfoot>
+                        <tr style="height:30px;">
+                            <td colspan = "4"></td>
+                            <td class= "rightAlign">수강인원 계 : {!Quote__c.Quote_TrainingCount__c}</td>
+                        </tr>
+                        <tr>
+                            <td colspan = "4"></td>
+                            <td>표준금액</td>
+                            <td class= "rightAlign"><apex:outputField value="{!Quote__c.Quote_TrainingListAmount__c}"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan = "4"></td>
+                            <td>할인율</td>
+                            <td class= "rightAlign"><apex:outputField value="{!Quote__c.Quote_TrainingDiscountRate__c}"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan = "4"></td>
+                            <td><b>교육 견적 금액</b></td>
+                            <td class= "rightAlign"><b><apex:outputField value="{!Quote__c.Quote_TrainingSubTotal__c}"/></b></td>
+                        </tr>
+                    </tfoot>
+                </table>
+                    <br/>
+                <apex:outputField value="{!Quote__c.Quote_TrainingRemark__c}"/>
+                </div>
+                <div style="bottom-left">주소 : {!$Organization.Street}   </div>
+            </div>
+        </apex:form>
+    </div>
+    
+    <script>
+        var delay = ( function() {
+            var timer = 0;
+            return function(callback, ms) {
+                clearTimeout (timer);
+                timer = setTimeout(callback, ms);
+            };
+        })();
+        var status = '{!Quote__c.Quote_Status__c}';
+        if(status == 'Approved'){
+            delay(function(){
+                window.print();window.history.back();window.close();
+            }, 200 );
+                    
+        }
+    </script>
+</apex:page>

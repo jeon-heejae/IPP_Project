@@ -1,0 +1,147 @@
+<!--
+
+-->
+<apex:page controller="ProductManage" tabstyle="TabProductManage__tab">
+	<head>
+		<style>
+			.tactive{
+			    background-color: rgb(51, 122, 195);
+			    color: white;
+			}
+		</style>
+		
+		<apex:stylesheet value="{!URLFOR($Resource.CssMenu, '/menu_source/styles.css')}" />
+		
+		<apex:stylesheet value="{!URLFOR($Resource.jquery_ui, 'themes/base/jquery-ui.css')}"/>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'jquery-1.10.2.js')}"/>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'ui/jquery-ui.js')}"/>
+		
+		<script type="text/javascript">
+			var $j = jQuery.noConflict();
+			$j(function() {
+				$j( "#dialog-modal" ).dialog({
+					autoOpen: true,
+					height: 140,
+					modal: true,
+					open: function(event, ui) { $j(".ui-dialog-titlebar-close").hide(); }
+				});
+			});
+		</script>
+		<script type="text/javascript">
+			function showDialog(){
+				$j("#dialog-modal").dialog( "open" );
+				return false;
+			}
+			
+			function hideDialog(){
+				addClassOnSelectedItem();
+				
+				$j("#dialog-modal").dialog( "close" );
+				return false;
+			}
+			function formInit() {
+				hideDialog();
+			}
+			function addClassOnSelectedItem(){
+				var val = document.getElementById('selectedName').value;
+				var val2 = document.getElementById('selectedStandard').value;
+				
+				$j('.colorTarget').each(function(){  
+					if($j(this).text() == val && $j(this).next().text() == val2)
+						$j(this).addClass('tactive');
+				});  
+			}
+			function onSearch(i, n, s){
+				n = decodeURIComponent(n);
+				s = decodeURIComponent(s);
+				Search(i, n, s);
+			}
+			try {
+				window.addEventListener('load',formInit,false);
+			}catch(e){
+				window.attachEvent('onload',formInit);
+			}
+		</script>
+	</head>
+	<apex:form id="mainFrm">
+		<input type="hidden" id="selectedName" value="{!item_name}" />		
+		<input type="hidden" id="selectedStandard" value="{!item_standard}" />
+		
+		<apex:actionStatus onstart="showDialog();" onstop="hideDialog();"  id="IngStatus"/>
+		
+		<apex:actionFunction name="Search" action="{!Search}"  rerender="mainFrm" status="IngStatus">
+			<apex:param name="ItemId" value="" assignTo="{!item_id}"/>
+			<apex:param name="ItemName" value="" assignTo="{!item_name}"/>
+			<apex:param name="ItemStandard" value="" assignTo="{!item_standard}"/>	
+		</apex:actionFunction>
+		
+		<br/>
+		<apex:outputText value="{!strMsg}" escape="false" />
+		
+		<apex:sectionHeader title="제품관리" />
+		<apex:pageMessages escape="false" />
+		<div id='cssmenu'>
+			<ul>
+			   <li class='active'><a href='#'><span>제품 조회</span></a></li>
+			   <!-- <li><a href='/apex/Product_Box'><span>제품 Box 처리</span></a></li>  -->
+			   <li class='last'><a href='/apex/Product_Stock'><span>입고 처리</span></a></li>
+			   <li class='last'><a href='/apex/Product_Barcode'><span>제품 Box 바코드 출력</span></a></li>
+			</ul> 
+		</div> 
+		
+		<apex:pageBlock title="제품 조회" id="pageBlock">
+			<!-- <b>{!$ObjectType.Inventory__c.Fields.Item__c.Label}</b> <apex:inputField id="SearchIV" required="false" value="{!SearchIV.Item__c}" />
+			<apex:commandButton value="조회" action="{!Search}" status="IngStatus"/>
+			<br/> --> 
+			<b>{!$ObjectType.Inventory__c.Fields.Item__c.Label}</b>
+			<apex:inputtext value="{!item_keyword}" />
+			<apex:commandButton value="조회" action="{!keyword_Search}" status="IngStatus"/>	
+			<br/>
+			<br/>
+			
+			<table cellspacing="0" cellpadding="0" border="0" class="list">
+					<tr class="headerRow">
+						<th class="headerRow">
+							<apex:outputText value="{!$ObjectType.Item__c.label}"/>
+						</th>
+						<th class="headerRow">
+							<apex:outputText value="{!$ObjectType.Item__c.fields.Standard__c.label}"/>
+						</th>
+					</tr>
+				<apex:repeat value="{!keyword_list}" var="item">
+					<tr onclick='onSearch("{!item.Id}", encodeURIComponent("{!item.Name}"), encodeURIComponent("{!item.standard__c}"))'> 
+						<td class="colorTarget">
+							<apex:outputField value="{!item.Name}"/>
+						</td>
+						<td>
+							<apex:outputField value="{!item.Standard__c}"/>
+						</td>
+					</tr>
+				</apex:repeat>
+			</table>
+			<apex:pageBlockSection columns="1" collapsible="false" rendered="{!keyword_list.size<1}" >
+				<apex:outputPanel layout="block">
+					검색된 결과가 없습니다.
+				</apex:outputPanel>
+			</apex:pageBlockSection>
+			
+			<br/>
+			<br/>
+			<apex:pageBlockTable value="{!IVs}" var="item" >
+				<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Name.Label}" value="{!item.Name}"/>
+				<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Item__c.Label}" value="{!item.Item__c}"/>
+				<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Warehouse__c.Label}" value="{!item.Warehouse__c}"/>
+				<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.CntInventory2__c.Label}" value="{!item.CntInventory2__c}"/>
+			</apex:pageBlockTable>
+			<apex:pageBlockSection columns="1" collapsible="false" rendered="{!IVs.size<1}" >
+				<apex:outputPanel layout="block">
+					검색된 결과가 없습니다.
+				</apex:outputPanel>
+			</apex:pageBlockSection>
+			
+		</apex:pageblock>
+	</apex:form>
+	<div id="dialog-modal" title="처리중...">
+		<p>처리중입니다.</p>
+	</div>
+</apex:page>

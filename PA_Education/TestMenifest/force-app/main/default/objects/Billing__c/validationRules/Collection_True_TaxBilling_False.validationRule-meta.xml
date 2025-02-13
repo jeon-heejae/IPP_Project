@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Collection_True_TaxBilling_False</fullName>
+    <active>false</active>
+    <description>수령여부 True 이면서 청구여부 False 시 오류발생</description>
+    <errorConditionFormula>IsCollection__c = True  &amp;&amp;  IsBilling__c = False</errorConditionFormula>
+    <errorMessage>대금수령 시 &quot;세금계산서 발행일자&quot; , &quot;청구금액&quot; 필수입력항목.</errorMessage>
+</ValidationRule>

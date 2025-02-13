@@ -1,0 +1,16 @@
+<aura:component implements="force:hasRecordId,flexipage:availableForRecordHome">
+    <aura:attribute name="lightningMessage" type="String"/>
+    <aura:attribute name="isSubscribe" type="Boolean" default="true"/>
+
+    <lightning:card title="Aura LMS">
+        <aura:if isTrue="{!v.isSubscribe}">
+            <!-- LMS Message Channel 구독 -->
+            <lightning:messageChannel type="msgChannel__c" aura:id="messageChannel" onMessage="{!c.fnInit}" scope="APPLICATION"/>
+        </aura:if>
+        
+        <lightning:textarea value="{!v.lightningMessage}" />
+        <lightning:button onclick="{!c.publishMC}" label="전송"></lightning:button>
+        <lightning:button onclick="{!c.unsubscribe}" label="구독해제"></lightning:button>
+        
+    </lightning:card>
+</aura:component>

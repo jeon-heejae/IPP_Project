@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PriorExpenseApplication__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>경비사전승인</label>
+    <lookupFilter>
+        <active>false</active>
+        <errorMessage>이미 경비신청이 존재하는 사전승인입니다.</errorMessage>
+        <filterItems>
+            <field>PriorExpenseApplication__c.ApprovalStatus__c</field>
+            <operation>equals</operation>
+            <value>승인완료</value>
+        </filterItems>
+        <filterItems>
+            <field>PriorExpenseApplication__c.fm_ExpenseApplicatedYn__c</field>
+            <operation>equals</operation>
+            <value>False</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>PriorExpenseApplication__c</referenceTo>
+    <relationshipLabel>Expense Detail</relationshipLabel>
+    <relationshipName>PriorExpenseApplication</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

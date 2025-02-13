@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Quote_LicenseRemark__c</fullName>
+    <defaultValue>&quot;- 라이선스는 년 단위 계약 갱신이 필요합니다.&quot; &amp;  BR()  &amp;
+&quot;- 결제조건: 현금 결제 조건이고 통화는 USD입니다.&quot; &amp;  BR()  &amp;
+&quot;- 사용자 라이선스 수량은 RFP를 기초로 작성되었고 사용자의 증가에 따라 변경될 수 있습니다.&quot;</defaultValue>
+    <description>Default Value : &quot;- 라이선스는 년 단위 계약 갱신이 필요합니다.&quot; &amp; &quot;\r\n&quot; &amp;
+&quot;- 결제조건: 현금 결제 조건이고 통화는 USD입니다.&quot; &amp; &quot;\r\n&quot; &amp;
+&quot;- 사용자 라이선스 수량은 RFP를 기초로 작성되었고 사용자의 증가에 따라 변경될 수 있습니다.&quot;</description>
+    <label>비고(라이센스)</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>TextArea</type>
+</CustomField>

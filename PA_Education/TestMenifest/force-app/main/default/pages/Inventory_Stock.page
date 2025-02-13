@@ -1,0 +1,423 @@
+<!--
+
+-->
+<apex:page controller="InventoryManage" tabstyle="TabInventoryManage__tab">
+	<head>
+		<apex:stylesheet value="{!URLFOR($Resource.CssMenu, '/menu_source/styles.css')}" />
+		<apex:stylesheet value="{!URLFOR($Resource.jquery_ui, 'themes/base/jquery-ui.css')}"/>
+		<style>
+		input#InputBarcode {
+			ime-mode: inactive;
+		}
+		</style>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'jquery-1.10.2.js')}"/>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'ui/jquery-ui.js')}"/>
+
+		<script type="text/javascript">
+			var $j = jQuery.noConflict();
+			$j(function() {
+				$j( "#dialog-modal" ).dialog({
+					autoOpen: true, 
+					height: 140,
+					modal: true,
+					open: function(event, ui) { $j(".ui-dialog-titlebar-close").hide(); 
+					}
+				});
+			});
+		</script>
+		<script type="text/javascript">
+			function barcode_select(){
+				var text_input = document.getElementById ('InputBarcode');
+				text_input.focus();
+				text_input.select();
+			}
+			function showDialog(){
+				$j("#dialog-modal").dialog( "open" );
+				return false;
+			}
+			
+			function hideDialog(){
+				$j("#dialog-modal").dialog( "close" );				
+				var gar = document.getElementById('garbege_check').value				
+				if(gar=='Y'){
+					doGC2(1);
+				}
+				document.getElementById('InputBarcode').focus();				
+                barcode_select();
+				return false;
+			}
+			function formInit() {
+				hideDialog();
+				Warehouse();
+			}
+			
+			function focus(targetId){
+				document.getElementById(targetId).focus();
+			}
+			//바코드 출력창
+			function popupBarcode(form, ItemId, AccountId, DateManufacture, CntImportInspection, Seq, barcode) {
+			    window.open('', 'formBarcode','width=325,height=200,resizeable,scrollbars');
+			    form.ItemId.value = ItemId;
+			    form.AccountId.value = AccountId;
+			    form.DateManufacture.value = DateManufacture;
+			    form.CntImportInspection.value = CntImportInspection;
+			    form.Seq.value = Seq;
+			    form.barcode.value = barcode;
+			    form.target = 'formBarcode';
+			}
+			
+			function submitFormBarocde(ItemId, AccountId, DateManufacture, CntImportInspection, Seq, barcode){
+				popupBarcode(document.frmBarcode, ItemId, AccountId, DateManufacture, CntImportInspection, Seq, barcode);
+				document.frmBarcode.submit();
+			}
+			try {
+				window.addEventListener('load',formInit,false);
+			}catch(e){
+				window.attachEvent('onload',formInit);
+			}
+		</script>
+		<script type="text/javascript">
+			function KeyPressIvName(e, strSeq, targetId){
+				var keynum;
+				if(window.event){		// IE
+					keynum = e.keyCode;
+				}
+				if(keynum == 13){
+					InputBarcodeForPage(document.getElementById('InputBarcode').value, strSeq);
+					return false;
+				}
+			}
+			// 폐기처리
+			function invokeGC(seq, code){
+				transferToGarbege(seq, code);
+			}
+			function doGC(seq, code){
+				//alert(code);
+				//alert(typeof(code));
+				
+				$j('<div></div>').appendTo('body')
+				  .html('<div><h6>폐기 처리하시겠습니까?</h6></div>')
+				  .dialog({
+				      modal: true, title: '폐기처리 확인창', zIndex: 10000, autoOpen: true,
+				      width: 'auto', resizable: false,
+				      buttons: {
+				          '확인': function () {
+				              //alert('test');
+				              invokeGC(seq, code);
+				              $j(".dummy_class_" + seq).remove()
+				              //str += '<tr class="dummy_class_' + i + '">';
+				              console.debug(document.getElementById('garbege_list').value);		
+				              $j(this).dialog("close");
+				          }, 
+				          '취소': function () {
+				              $j(this).dialog("close");
+				          }
+				      },
+				      close: function (event, ui) {
+				      	  //console.log($(this).before());
+				      	  //doGC2(seq);
+				      	  //top.opener.location.reload(true);
+				          $j(this).remove();
+				      }
+				});
+			} 
+			
+			function doGC2(seq){	
+				var list = document.getElementById('garbege_list').value;
+				//alert(list);
+				
+				list = list.substring(0, list.length-1);
+				
+				list = list.replace("[","");
+				
+				
+				//alert(list);
+								
+				var recode = list.split(",");
+				var parent_barcode = recode[0];
+				
+				var str = '';
+				str += '<style>';
+				str += 'th{ background: #f2f3f3;';
+				str += 'border-width: 0 0 1px 1px;';
+				str += 'border-color: #e0e3e5;';
+				str += 'color: #000;';
+				str += 'font-size: smaller;';
+				str += 'font-weight: bold;';
+				str += 'padding: 5px 25px 4px 5px;}';
+				str += 'table{ border: 1px solid #e0e3e5;';
+				str += 'border-spacing: 0px;';
+				str += 'display: table;';
+  				str += 'border-collapse: separate;}';
+  				str += '.tdd{font-family: Arial,Helvetica,sans-serif;font-size: 12px !important;}';
+  				str += '.btn{ color: #333 !important;';
+			    str += 'margin: 1px !important;';
+			    str += 'border: 1px solid #b5b5b5 !important;';
+			    str += 'border-bottom-color: #7f7f7f !important;';
+			    str += 'font-weight: bold !important;';
+			    str += 'font-size: 11px !important;';
+			    str += 'border-radius: 3px !important;}';  				
+				str += '</style>';
+				str += '<div id="test12">'; 				
+				str += '<table border="1" cellpadding="5" style="border-collapse:collapse;">';
+				str += '<tr>';
+				str += '<th>Seq</th>';
+				str += '<th>재고코드</th>';
+				str += '<th>품목</th>';
+				str += '<th>제조사</th>';
+				str += '<th>제조일</th>';
+				str += '<th>입고일</th>';
+				str += '<th>수입검사수량</th>';
+				str += '<th>입고수량</th>';
+				str += '<th>사용수량</th>';
+				str += '<th>출하수량</th>';
+				str += '<th>재고수량</th>';
+				str += '<th>창고</th>';
+				str += '<th>기능</th>';				
+				str += '</tr>';
+				for(var i=1;i<recode.length;i++){
+					str += '<tr class="dummy_class_' + i + '">';
+					str += '<td class="tdd">'+i+'</td>';	
+					var recodedetail = recode[i].split("|");
+					var code = trim(recodedetail[0]);
+					
+					for(var j=0;j<recodedetail.length;j++){
+						str += '<td class="tdd">'+recodedetail[j]+'</td>';						
+					} 
+					str += '<td class="tdd"><input type="button" class="btn" value="폐기처리" onclick="doGC('+i+',\'' + trim(recodedetail[0]) + '\');return false;"/></td>';
+					
+					str += '</tr>';
+				}
+		    	str += '</table>';
+		    	str += '</div>';
+				console.debug(str);						
+				$j('<div></div>').appendTo('body').html(str)				  				  
+				  				
+				  .dialog({
+				      modal: true, title: '선입재고 폐기처리 확인창', zIndex: 10000, autoOpen: true,
+				      width: 'auto', resizable: false,
+				      buttons: {
+				          '확인': function () {
+				              $j(this).dialog("close");
+				          }
+				      },
+				      close: function (event, ui) {
+				      	  var g_list = document.getElementById('garbege_list').value;	
+						  //alert(g_list);
+				      	  if(g_list.length>25){					      	  
+					      	  //var barcode = document.getElementById('InputBarcode').value;
+					      	  alert('"'+parent_barcode+'"의 선입재고가 존재합니다.\n선입재고를 폐기처분 하지 않으면 생산라인에 투입 할 수 없습니다.');
+					      	  //alert(g_list.length);
+				      	  }
+				      	  
+				      	  garbege_list_clear();
+				          $j(this).remove();
+				      }
+				});
+			}
+		</script>
+	</head>
+	<apex:form id="mainFrm">
+		<!--
+		{!warehouse_category}
+		<br/>
+		{!garbege_list}
+		<br/>
+		ZA00000010100ZZ14D0101, ZA00000010a00ZZ14D0101
+		-->		
+		<input type="hidden" id="garbege_check" value="{!garbege_check}" />
+		<input type="hidden" id="garbege_list" value="{!garbege_list}" /> 
+		<apex:actionStatus onstart="showDialog();" onstop="hideDialog();"  id="IngStatus"/>
+		
+		<apex:actionFunction action="{!garbege_list_clear}" name="garbege_list_clear" rerender="mainFrm" status="IngStatus"/>
+		
+		<!-- StockProcess -->
+        <apex:actionFunction action="{!Warehouse}" name="Warehouse" rerender="mainFrm" status="IngStatus">
+			<apex:param name="test" assignTo="{!warehouse_category}" value="공정" />
+        </apex:actionFunction>
+		<!-- 바코드 등록 -->
+        <apex:actionFunction action="{!InputBarcodeForPage}" name="InputBarcodeForPage" rerender="mainFrm" status="IngStatus">
+			<apex:param name="getVal" assignTo="{!InputBarcodeGetVal}" value="" />
+            <apex:param name="seq" assignTo="{!InputBarcodeSeq}" value="" />
+        </apex:actionFunction>
+
+		<apex:actionFunction action="{!transferToGarbege}" name="transferToGarbege" rerender="mainFrm" status="IngStatus">
+			<apex:param name="gcSeq" assignTo="{!gcSeq}" value="" />
+			<apex:param name="gcRecode" assignTo="{!gcRecode}" value="" />
+        </apex:actionFunction>
+		<!-- 수동등록 -->
+		<apex:actionFunction action="{!InputCustom}" name="InputCustom"
+			rerender="mainFrm" status="IngStatus">
+			<apex:param name="seq" assignTo="{!InputBarcodeSeq}" value="" />
+		</apex:actionFunction>
+
+		<!-- 등록 -->
+		<apex:actionFunction action="{!InputForError}" name="InputForError"
+			rerender="mainFrm" status="IngStatus">
+			<apex:param name="seq" assignTo="{!InputBarcodeSeq}" value="" />
+		</apex:actionFunction>
+ 
+		<!-- 행 삭제 -->
+		<apex:actionFunction action="{!DeleteRow}" name="DeleteRow"
+			rerender="mainFrm" status="IngStatus">
+			<apex:param name="seq" assignTo="{!InputBarcodeSeq}" value="" />
+		</apex:actionFunction>
+
+		<!-- 취소 -->
+		<apex:actionFunction action="{!RowCancel}" name="RowCancel"
+			rerender="mainFrm" status="IngStatus">
+			<apex:param name="seq" assignTo="{!InputBarcodeSeq}" value="" />
+		</apex:actionFunction>
+		
+		<apex:sectionHeader title="자재관리" />
+		<apex:pageMessages escape="false" />
+		<div id='cssmenu'> 
+			<ul>
+			   <li ><a href='/apex/Inventory_Search'><span>부품 조회</span></a></li>
+			   <li class='active'><a href='/apex/Inventory_Stock'><span>생산현장 출고</span></a></li>
+			   <li ><a href='/apex/Inventory_Line'><span>생산현장 재고</span></a></li>
+			   <li ><a href='/apex/Inventory_Delivery'><span>자재창고 반납</span></a></li>
+			   <li class='last'><a href='/apex/Inventory_PrintBarcodeOnly'><span>일반바코드출력</span></a></li>
+			</ul>
+		</div>
+		<apex:pageBlock title="생산라인 투입" id="pgBlock">
+			* 투입할 생산라인을 선택하시고, 투입할 재고 바코드를 입력하세요.
+			<br/>
+			<br/>
+			<b>생산라인</b>&nbsp;&nbsp;&nbsp; 
+			<!-- <apex:inputField value="{!SearchIV.Warehouse__c}" /> --> 
+			<apex:selectlist value="{!sel_warehouse}" size="1">
+            	<apex:selectOptions value="{!Warehouse}" />
+            </apex:selectlist>
+			<br/>
+			<br/>
+			
+		    <apex:pageBlockTable value="{!cIVs}" var="item" id="pgBlockTable">
+		    	<apex:column headerValue="Seq" value="{!item.Seq}"/>
+		    	<!--
+		    	<apex:column headerValue="State(system)" value="{!item.State}"/>
+		    	<apex:column headerValue="Id(system)" value="{!item.IV.Id}"/>
+		    	-->
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Name.Label}" id="clBar">
+		    		<apex:outputField id="IV_Name" value="{!item.IV.Name}" rendered="{!item.state<>1}" />
+		    		<apex:outputPanel rendered="{!item.state==1}">
+			    		<input type="text" id="InputBarcode" 
+			    			value="{!InputBarcodeGetVal}"
+			    			onkeypress="return KeyPressIvName(event, '{!item.Seq}', '{!$Component.IV_Name}');" 
+			    		/>
+		    		</apex:outputPanel>
+		    	</apex:column>
+		    	 <apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Item__c.Label}">
+					<apex:outputField value="{!item.IV.Item__c}"
+						rendered="{!item.state<>3 && item.state<>4}" />
+					<apex:inputField required="false" value="{!item.IV.Item__c}"
+						rendered="{!item.state==3 || item.state==4}" />
+				</apex:column>
+				<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Account__c.Label}">
+					<!-- <apex:outputField value="{!item.IV.Account__c}" rendered="true"/> -->
+					<apex:outputField value="{!item.IV.Account__c}"
+						rendered="{!item.state<>3 && item.state<>4}" />
+					<apex:inputField required="false" value="{!item.IV.Account__c}"
+						rendered="{!item.state==3 || item.state==4}" />
+				</apex:column>
+				<apex:column headervalue="{!$ObjectType.Inventory__c.Fields.DateManufacture__c.Label}">
+					<apex:outputField value="{!item.IV.DateManufacture__c}"
+						rendered="{!item.state<>3 && item.state<>4}" />
+					<apex:inputField required="false"
+						value="{!item.IV.DateManufacture__c}"
+						rendered="{!item.state==3 || item.state==4}" />
+				</apex:column>
+				<apex:column headervalue="입고일">
+					<apex:outputField value="{!item.IV.DateImportInspection__c}"/>
+				</apex:column>
+				<apex:column headervalue="{!$ObjectType.Inventory__c.Fields.CntImportInspection__c.Label}">
+					<apex:outputField value="{!item.IV.CntImportInspection__c}"
+						rendered="{!item.state<>3 && item.state<>4}" />
+					<apex:inputField required="false"
+						value="{!item.IV.CntImportInspection__c}"
+						rendered="{!item.state==3 || item.state==4}" />
+				</apex:column>
+				<apex:column headervalue="{!$ObjectType.Inventory__c.Fields.Seq__c.Label}">
+					<apex:outputField value="{!item.IV.Seq__c}"
+						rendered="{!item.state<>3 && item.state<>4}" />
+					<apex:inputField required="false" value="{!item.IV.Seq__c}"
+						rendered="{!item.state==3 || item.state==4}" />
+				</apex:column>
+				<apex:column headervalue="{!$ObjectType.Inventory__c.Fields.CntImport__c.Label}">
+					<apex:outputField value="{!item.IV.CntImport__c}"
+						rendered="{!item.state<>3 && item.state<>4}" />
+					<apex:inputField required="false" value="{!item.IV.CntImport__c}"
+						rendered="{!item.state==3 || item.state==4}" />
+				</apex:column>
+				<apex:column headervalue="{!$ObjectType.Inventory__c.Fields.CntUsed2__c.Label}">
+					<apex:outputField value="{!item.IV.CntUsed2__c}"
+						rendered="{!item.state<>3 && item.state<>4}" />
+					<apex:inputField required="false" value="{!item.IV.CntUsed2__c}"
+						rendered="{!item.state==3 || item.state==4}" />
+				</apex:column>
+				<apex:column headervalue="{!$ObjectType.Inventory__c.Fields.CntShipment__c.Label}">
+					<apex:outputField value="{!item.IV.CntShipment__c}"
+						rendered="{!item.state<>3 && item.state<>4}" />
+					<apex:inputField required="false" value="{!item.IV.CntShipment__c}"
+						rendered="{!item.state==3 || item.state==4}" />
+				</apex:column>
+				<apex:column headervalue="{!$ObjectType.Inventory__c.Fields.CntInventory2__c.Label}">
+					<apex:outputField value="{!item.IV.CntInventory2__c}"
+						rendered="{!item.state<>3 && item.state<>4}" />
+					<apex:inputField required="false" value="{!item.IV.CntInventory2__c}"
+						rendered="{!item.state==3 || item.state==4}" />
+				</apex:column>
+				<apex:column headervalue="{!$ObjectType.Inventory__c.Fields.Warehouse__c.Label}">
+					<apex:outputField value="{!item.IV.Warehouse__c}"
+						rendered="{!item.state<>3 && item.state<>4}" />
+					<apex:selectlist value="{!sel_warehouse}" size="1" rendered="{!item.state==3 || item.state==4}">
+		            	<apex:selectOptions value="{!Warehouse}" />
+		            </apex:selectlist>
+				</apex:column>
+		    	<apex:column headerValue="기능">
+					<apex:commandButton value="바코드등록"
+						onclick="InputBarcodeForPage(document.getElementById('InputBarcode').value, '{!item.Seq}'); return false;"
+						rendered="{!item.state==1}" />
+					<apex:commandButton value="바코드출력"
+						onclick="submitFormBarocde('{!item.IV.Item__c}', '{!item.IV.Account__c}', '{!item.IV.DateManufacture__c}', '{!item.IV.CntImportInspection__c}', '{!item.IV.Seq__c}', '{!item.IV.Name}');return false;"
+						rendered="{!item.state==2 || item.state==5}" />
+					<!--
+					<apex:commandButton value="수동입력"
+						onclick="InputCustom('{!item.seq}');return false;"
+						rendered="{!item.state==1}" />
+					-->
+					<apex:commandButton value="등록"
+						onclick="InputForError('{!item.seq}');return false;"
+						rendered="{!item.state==4 || item.state==3}" />
+					<apex:commandButton value="제외"
+						onclick="DeleteRow('{!item.seq}');return false;"
+						rendered="{!item.state==2 || item.state==3 || item.state==5}" />
+					<apex:commandButton value="취소"
+						onclick="RowCancel('{!item.seq}');return false;"
+						rendered="{!item.state==4}" />
+					<apex:commandButton value="폐기처리"
+						onclick="doGC('{!item.seq}', '');return false;"
+						rendered="{!item.state==9}" />
+				</apex:column>
+		    </apex:pageBlockTable>
+
+			<apex:pageBlockButtons location="bottom">
+				<apex:commandButton value="생산라인 투입" action="{!GoProductLine}" rendered="{! !IsAllSaved}" status="IngStatus"/>
+			</apex:pageBlockButtons>
+		</apex:pageBlock>
+		<!-- {!garbege_list} -->
+	</apex:form>
+
+	<form name="frmBarcode" action="PrintBarcode" method="post">
+		<input type="hidden" name="ItemId" value="" /> <input type="hidden"
+			name="AccountId" value="" /> <input type="hidden"
+			name="DateManufacture" value="" /> <input type="hidden"
+			name="CntImportInspection" value="" /> <input type="hidden"
+			name="Seq" value="" /> <input type="hidden" name="barcode" value="" />
+	</form>
+
+	<div id="dialog-modal" title="처리중...">
+		<p>처리중입니다.</p>
+	</div>
+
+</apex:page>

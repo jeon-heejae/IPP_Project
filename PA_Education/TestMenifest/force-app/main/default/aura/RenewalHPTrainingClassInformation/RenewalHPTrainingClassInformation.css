@@ -1,0 +1,347 @@
+.THIS {
+	width: 100%;
+    height: auto;
+    background: #ffffff;
+}
+
+.THIS .contents {
+    width: 1280px;
+    height: auto;
+    margin: 0 auto;
+    padding: 120px 0;
+}
+
+.THIS .pageTitle {
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 67.2px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.85);
+}
+
+.THIS .pageSubTitle{
+    margin-top: 60px;
+    margin-bottom: 45px;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 33.6px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.85);
+}
+
+.THIS .classInformations {
+    display: grid;
+    grid-auto-rows: minmax(371px, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    margin-top: 80px;
+}
+
+.THIS .classInformations > div {
+    box-shadow: 0px 2px 12px 2px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 24px;
+    position: relative;
+    padding-bottom: 60px;
+}
+
+.THIS .classInformations > div .title {
+    font-size: 24px;
+    line-height: 28px;
+    color: rgba(0, 0, 0, 0.85);
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.THIS .classInformations > div footer {
+    padding: 17px 0;
+    width: 100%;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.THIS .classInformations > div footer a {
+    display: block;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 400;
+    color: #179FE0;
+    text-decoration: none;
+}
+
+.THIS .classInformations > div footer button {
+    width: 100%;
+    display: block;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 400;
+    color: #179FE0;
+    text-decoration: none;
+    border: none;
+}
+
+.THIS .endRequest {
+    color: rgba(0, 0, 0, 0.4) !important;
+    pointer-events: none;
+}
+
+.THIS .infoItem {
+    width: 50%;
+    display: inline-block;
+    margin-bottom: 24px;
+}
+
+.THIS .infoItem .itemTitle {
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.4);
+    margin-bottom: 6px;
+}
+
+.THIS .infoItem .itemContent {
+    font-size: 15px;
+    line-height: 21px;
+    color: rgba(0, 0, 0, 0.85);
+}
+
+.THIS .infoItem .subItem {
+    display: flex;
+    flex-direction: row;
+}
+
+.THIS .infoItem .subItem > div {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.THIS .infoItem .subItem .subItemTitle {
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.4);
+    margin-right: 12px;
+}
+
+.THIS .loadMore {
+    padding: 17.5px 96px;
+    background: none;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 32px;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.8);
+    text-decoration: none;
+}
+
+.THIS .infoItem .subItem .subItemContent {
+    font-size: 15px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.85);
+    flex: 1;
+}
+
+.THIS hr {
+    width: 100%;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.05);
+    margin-top: 0;
+    margin-bottom: 24px;
+}
+
+.THIS .modal-background {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 99;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.THIS .modal-background.active {
+    display: flex;
+}
+
+.THIS .modal {
+    width: 900px;
+    height: auto;
+    padding: 24px 40px;
+    background: #ffffff;
+}
+
+.THIS .modal header {
+    height: auto;
+    position: relative;
+}
+
+.THIS .modal header h1 {
+    font-size: 32px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.85);
+    text-align: center;
+}
+
+.THIS .modal section h1 {
+    font-size: 20px;
+    line-height: 36px;
+    color: rgba(0, 0, 0, 0.85);
+    margin-top: 24px;
+    font-weight: 700;
+    text-align: left;
+}
+
+.THIS .modal section p {
+    font-size: 20px;
+    line-height: 36px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.85);
+}
+
+.THIS .modal .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: none;
+    border: none;
+    font-size: 48px;
+    line-height: 0.6;
+    font-weight: 300;
+}
+
+.THIS .modal label {
+    display: block;
+    width: 100%;
+    font-size: 15px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.85);
+    float: none;
+    max-width: inherit;
+    flex-basis: inherit;
+    padding-top: 0;
+}
+
+.THIS .modal .slds-form-element {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.THIS .modal .slds-form-element__control {
+    padding-left: 0;
+    margin-top: 12px;
+}
+
+.THIS .modal textarea {
+    background: rgba(0, 0, 0, 0.05);
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 14px 16px;
+}
+
+.THIS .modal input {
+    background: rgba(0, 0, 0, 0.05);
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 14px 16px;
+}
+
+.THIS .modal input[type="file"] {
+    background: none;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+}
+
+.THIS .modal input[type="checkbox"] {
+    margin: 12px 0;
+}
+
+.THIS .modal .submitBtn {
+    display: block;
+    width: 136px;
+    height: 56px;
+    background: #179FE0;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0 auto;
+    margin-top: 40px;
+    border: 0;
+    border-radius: 4px;
+}
+
+@media (min-width: 769px) {
+    .THIS .is_mobile {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .THIS .is_pc {
+        display: none;
+    }
+    
+    .THIS .contents {
+        width: calc(100% - 40px);
+        height: auto;
+        margin: 0 20px;
+        padding: 56px 0;
+    }
+    
+    .THIS .pageTitle {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .THIS .pageSubTitle{
+        margin-top: 15px;
+        font-size: 8px;
+        line-height: 12px;
+    }
+    
+    .THIS h1 {
+        font-size: 28px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 39.2px;
+        letter-spacing: -2px;
+        text-align: left;
+        color: rgba(0, 0, 0, 0.85);
+        margin-top: 56px;
+        word-break: break-word;
+    }
+    
+    .THIS h2 {
+        font-size: 20px;
+        line-height: 36px;
+        text-align: left;
+        word-break: break-word;
+    }
+    
+    .THIS .classInformations {
+        display: grid;
+        grid-auto-rows: 371px;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 40px;
+        margin-top: 56px;
+    }
+
+    .THIS .modal {
+        width: calc(100% - 40px) !important;
+        padding: 20px 40px !important;
+    }
+}

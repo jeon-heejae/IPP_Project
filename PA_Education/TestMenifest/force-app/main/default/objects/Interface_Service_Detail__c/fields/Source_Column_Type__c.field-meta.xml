@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Source_Column_Type__c</fullName>
+    <description>요청/응답 파라메터 필드의 데이터 타입을 기재(인터페이스 정의서 참고)
+- 항목구분이 IN 또는 OUT인 경우에는 정의서에 기재된 타입을 기재
+  &gt; LIST, MAP, MAP.STRING
+- 항목구분이 TABLE인 경우에는 상위 소스필드명을 기재
+  (미기재 시 상위항목ID에 해당하는 소스필드가 자동으로 적용됨)</description>
+    <externalId>false</externalId>
+    <inlineHelpText>요청/응답 파라메터 필드의 데이터 타입을 기재(인터페이스 정의서 참고)
+- 항목구분이 IN 또는 OUT인 경우에는 정의서에 기재된 타입을 기재
+  &gt; LIST, MAP, MAP.STRING
+- 항목구분이 TABLE인 경우에는 상위 소스필드명을 기재
+  (미기재 시 상위항목ID에 해당하는 소스필드가 자동으로 적용됨)</inlineHelpText>
+    <label>소스필드타입</label>
+    <length>100</length>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

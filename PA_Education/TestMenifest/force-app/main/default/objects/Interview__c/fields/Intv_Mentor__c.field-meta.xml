@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Intv_Mentor__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>면담을 진행하고 레코드를 작성한 멘토</description>
+    <inlineHelpText>빈 값일 때 현재 사용자가 자동으로 등록됩니다.</inlineHelpText>
+    <label>담당 멘토</label>
+    <referenceTo>Employee__c</referenceTo>
+    <relationshipLabel>면담일지</relationshipLabel>
+    <relationshipName>Intv_Mentor</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

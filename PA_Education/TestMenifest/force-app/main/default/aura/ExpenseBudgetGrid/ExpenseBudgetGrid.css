@@ -1,0 +1,77 @@
+/*.THIS.custom_div{
+	height: 100%;
+}*/
+.THIS .custom-first_columns {
+	padding-left: 5%;
+	width: 15
+}
+
+.THIS .custom-table_width {
+	width: 20%;
+}
+
+.THIS .slds-col {
+    width: 20%;
+}
+
+.THIS .custom_No {
+	width: 5%;
+}
+
+.THIS .text-left {
+	text-align: left;
+}
+
+.THIS .custom-tenper {
+	width: 10%;
+}
+
+/* .THIS .slds-scrollable_y {
+	height: 170px;
+	height: 250px;
+	overflow: hidden;
+    overflow-y: auto;
+    width:100%;
+} */
+
+.THIS .slds-modal__container.customDSize{
+    max-width:60% !important;
+    min-width:60% !important;
+    /*max-height: 60% !important;*/
+    /*min-height: 60% !important;*/
+}
+
+.THIS .rightAlign input { 
+    text-align: right;
+}
+
+.THIS .cellBorder{
+    border:1px solid #ddd;
+}
+
+.THIS .cellBorder-bottom{
+    border-bottom : 1px solid #ddd;
+}
+
+.THIS .cellPadding{
+    padding : 10px 5px 10px 5px;
+}
+
+.THIS .th_color{
+    color: white;
+    background-color: #1D3863;
+}
+
+.THIS th{
+    text-align : center;
+}
+
+.THIS .font-red{
+    color : red;
+    font-weight : bold;
+}
+
+.THIS .font-blue {
+    color : blue;
+    font-weight : bold;
+}

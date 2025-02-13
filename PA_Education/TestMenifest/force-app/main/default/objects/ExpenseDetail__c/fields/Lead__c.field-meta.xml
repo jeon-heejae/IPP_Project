@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lead__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>잠재고객</label>
+    <referenceTo>Lead__c</referenceTo>
+    <relationshipLabel>Expense Detail</relationshipLabel>
+    <relationshipName>Expense_Detail</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

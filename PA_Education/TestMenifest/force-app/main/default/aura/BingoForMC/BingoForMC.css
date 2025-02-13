@@ -1,0 +1,313 @@
+/**
+ * Created by skdus on 2023-11-07.
+ */
+
+@font-face {
+  font-family: 'BingoFont2';
+  src: url('/resource/BingoFont2') format('woff');
+}
+
+.THIS {
+    width: 100%;
+    height: 100%;
+
+    text-align: center;
+
+    background-color: #1E2A1C;
+}
+
+.THIS .titleImg {
+    width: 1200px;
+    height: 100%;
+}
+
+.THIS .title1 {
+    text-align: center;
+
+    font-family: 'BingoFont2';
+    font-size: 50px;
+    font-weight: bolder;
+    background-color: #EEEAD1;
+}
+
+/*테이블 디자인*/
+.THIS table {
+    background-color: #1E2A1C;
+    font-family: 'BingoFont2';
+
+    text-align: center;
+}
+
+.THIS th {
+    height: 80px;
+
+    background-color: #1E2A1C;
+    text-align: center;
+}
+
+.THIS tr {
+    font-family: 'BingoFont2';
+
+    background-color: #1E2A1C;
+    text-align: center;
+}
+
+.THIS .tr1 {
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.THIS .td1 {
+    width: 400px;
+    height: 50px;
+    text-align: center;
+}
+
+.THIS .td3 {
+    width: 400px;
+    height: 50px;
+    text-align: center;
+}
+
+/*순위 디자인*/
+.THIS .award {
+    position: absolute;
+
+    top: 5%;
+    left: 5%;
+
+    width: 22%;
+    height: 90%;
+
+
+    font-family: 'BingoFont2';
+    font-size: 40px;
+    text-align: center;
+
+    border: 10px solid #EEEAD1;
+    border-radius: 10px;
+
+    background-color: white;
+}
+
+.THIS .awardContent{
+    border-radius: 20px;
+
+    overflow-y: scroll;
+    max-height : 80%;
+    margin : 30px 20px;
+}
+
+.THIS .awardContent::-webkit-scrollbar  {
+    display: none;
+}
+
+.THIS .spanAward {
+    text-align: center;
+    font-size: 60px;
+    color: brown;
+}
+
+.THIS .spanAward:hover {
+  font-size: 70px;
+}
+
+/*빙고 디자인*/
+.THIS .title {
+    margin-left: 100px;
+}
+
+.THIS .call {
+    height: 90%;
+
+    text-align: center;
+    font-family: 'BingoFont2';
+    font-size: 100px;
+    font-weight: bolder;
+    border-radius: 30px;
+
+    background-color: #1E2A1C;
+}
+
+.THIS .button1 {
+  display: inline-block;
+
+  position: absolute;
+  top: 8%;
+  left: 31%;
+
+  width: 900px;
+  height: 500px;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  color: #fff;
+  background-color: #1E2A1C;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  overflow: hidden;
+}
+
+.THIS .button1:hover {
+  transform: scale(1.05);
+}
+
+.THIS .button1::before {
+  content: "";
+  position: absolute;
+
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.3s ease;
+  pointer-events: none;
+}
+
+.THIS .button1:hover::before {
+  transform: translate(-50%, -50%) scale(2);
+}
+
+.THIS .modalTitle {
+    font-size: 55px;
+    font-weight: bolder;
+
+    color: black;
+}
+
+.THIS .modalContent {
+    font-size: 100px;
+    color: black;
+}
+
+.THIS .modalFooter {
+    font-size: 20px;
+}
+
+.THIS .slds-backdrop_open {
+    background-color: rgba(0, 0, 0, 1);
+}
+
+.THIS .slds-modal__container {
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-40px);
+    }
+
+    5% {
+        opacity: 0;
+        transform: translateY(-20%);
+    }
+
+    50% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/*호명 디자인*/
+.THIS .bingoCall {
+    position: absolute;
+
+    text-align: center;
+    font-family: 'BingoFont2';
+    font-size: 35px;
+
+    top: 60%;
+    left: 30%;
+
+    width: 38%;
+    height: 35%;
+
+    border: 10px solid #EEEAD1;
+    border-radius: 10px;
+
+    background-color: white;
+}
+
+.THIS .bingoCallContent{
+    border-radius: 20px;
+
+    font-size: 30px;
+
+    overflow-y: scroll;
+    max-height : 60%;
+    margin : 30px 20px;
+}
+
+.THIS .bingoCallContent::-webkit-scrollbar  {
+    display: none;
+}
+
+/*당첨자 디자인*/
+.THIS .bingo {
+    position: absolute;
+    top: 5%;
+    left: 71%;
+    width: 25%;
+    height: 28%;
+
+    border: 10px solid #EEEAD1;
+    border-radius: 10px;
+
+    background-color: white;
+
+}
+
+.THIS .bingoContent {
+    border-radius: 20px;
+
+    font-size: 40px;
+    overflow-y: scroll;
+    max-height : 50%;
+    margin : 30px 20px;
+}
+
+.THIS .bingoContent::-webkit-scrollbar  {
+    display: none;
+}
+
+/*빙고라인 디자인*/
+.THIS .bingoLine {
+    position: absolute;
+
+    text-align: center;
+    font-family: 'BingoFont2';
+    font-size: 20px;
+
+    top: 36%;
+    left: 71%;
+
+    width: 25%;
+    height: 59%;
+
+    border: 10px solid #EEEAD1;
+    border-radius: 10px;
+
+    background-color: white;
+}
+
+.THIS .bingoLineContent{
+    border-radius: 20px;
+
+    font-size: 25px;
+
+    overflow-y: scroll;
+    max-height : 73%;
+    margin : 30px 20px;
+}
+
+.THIS .bingoLineContent::-webkit-scrollbar  {
+    display: none;
+}

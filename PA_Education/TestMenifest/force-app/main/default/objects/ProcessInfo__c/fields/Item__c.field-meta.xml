@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Item__c</fullName>
+    <deleteConstraint>Restrict</deleteConstraint>
+    <description>모든 공정 후 생산되는 품목</description>
+    <inlineHelpText>모든 공정 후 생산되는 품목</inlineHelpText>
+    <label>최종품목</label>
+    <referenceTo>Item__c</referenceTo>
+    <relationshipName>ProcessInfo</relationshipName>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

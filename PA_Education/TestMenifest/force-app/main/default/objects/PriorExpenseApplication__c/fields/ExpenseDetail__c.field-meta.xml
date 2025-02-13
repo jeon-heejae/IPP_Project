@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ExpenseDetail__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Expense Detail</label>
+    <referenceTo>ExpenseDetail__c</referenceTo>
+    <relationshipLabel>경비사전승인</relationshipLabel>
+    <relationshipName>PriorExpenseApplication_ExpenseDetail</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

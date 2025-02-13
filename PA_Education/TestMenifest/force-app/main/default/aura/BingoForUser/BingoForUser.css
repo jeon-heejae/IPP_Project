@@ -1,0 +1,236 @@
+@font-face {
+  font-family: 'BingoFont1';
+  src: url('/resource/BingoFont1') format('woff');
+}
+@font-face {
+  font-family: 'BingoFont2';
+  src: url('/resource/BingoFont2') format('woff');
+}
+
+.THIS {
+    font-family: 'Nanum Gothic', sans-serif;
+    font-size: 30px;
+    position : relative;
+    margin-left : 20%;
+    font-family: 'BingoFont2';
+}
+.THIS.mainTable {
+    width : 40%;
+}
+.THIS.mainTable tr, .THIS.mainTable td {
+    border: 5px solid #1A95CE;
+    padding: 10px;
+
+}
+
+/*mainTable height*/
+.THIS.mainTable .titlePart {
+    height : 40%;
+}
+.THIS.mainTable .buttonPart {
+    height : 10%;
+}
+.THIS.mainTable .bingoPart {
+    height : 60%;
+}
+
+/*titlePart*/
+.THIS.mainTable .titlePart .explain {
+    text-align:center;
+    background-color:#1A95CE;
+}
+.THIS.mainTable .titlePart .explain .titleImg {
+    width:90%;
+}
+
+/*buttonPart*/
+.THIS.mainTable .buttonPart .buttonTd {
+    text-align: right;
+    background-color : white;
+}
+.THIS.mainTable .buttonPart .buttonTd button {
+      display: inline-block;
+      width : 120px;
+
+      padding: 12px 24px;
+      border: none;
+      border-radius: 5px;
+      font-size: 20px;
+      font-weight: 600;
+      text-decoration: none;
+      color: #fff;
+      background-color: #1A95CE;
+      cursor: pointer;
+      margin-right: 20px;
+}
+
+/*bingoPart*/
+.THIS .subTable {
+    font-size:15px;
+    background-color:white;
+    height: 100%;
+    table-layout: fixed; /* 테이블 레이아웃을 고정으로 설정 */
+    width: 100%;
+
+
+}
+.THIS .subTable tr, .THIS .subTable td {
+    border : 5px solid  #1A95CE;
+}
+
+.THIS .subTable td {
+    padding : 4px;
+}
+
+.THIS .subTable .isChecked {
+    background-color: pink; /* isChecked일 때의 배경색 */
+}
+.THIS .subTable .inputContent {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-weight : bold;
+    overflow: hidden;
+    flex-direction: column;
+}
+.THIS .subTable .inputContent .bingoText {
+    font-size : 1.1vw;
+    font-weight : bold;
+    font-family : 'BingoFont1', sans-serif;
+    text-align : center;
+    white-space: wrap; /* 텍스트 줄 바꿈 방지 */
+    text-overflow: ellipsis; /* 생략 부호 추가 */
+    margin-top : 10%;
+    line-height : 1;
+    letter-spacing : 1px;
+
+}
+.THIS .slds-icon_container.slds-combobox__input-entity-icon.slds-icon-custom-custom22{
+    display: none;
+    width:0;
+}
+
+
+.THIS .subTable .inputContent .slds-form-element__label{
+    display: none;
+}
+
+
+.THIS .slds-grid {
+    width : 100%;
+}
+
+.THIS .slds-input-has-icon_left .slds-combobox__input[value], .THIS .slds-input-has-icon_left .slds-combobox__input.slds-combobox__input-value, .THIS .slds-input-has-icon_left-right .slds-combobox__input[value], .THIS .slds-input-has-icon_left-right .slds-combobox__input.slds-combobox__input-value, .THIS .slds-input-has-icon--left .slds-combobox__input[value], .THIS .slds-input-has-icon--left .slds-combobox__input.slds-combobox__input-value, .THIS .slds-input-has-icon--left-right .slds-combobox__input[value], .THIS .slds-input-has-icon--left-right .slds-combobox__input.slds-combobox__input-value {
+    padding-left : 0.4rem;
+}
+
+
+
+/*Bingo Img*/
+.THIS .subTable .inputContent .bingoImg {
+    width: 45%;
+    height: 60%;
+}
+.THIS .subTable .inputContent .bingoImg .bingoImage {
+    width : 100%;
+    height : 100%;
+    border-radius: 5px;
+
+}
+
+
+
+/*titlePart_daeuMemberList*/
+.THIS.daeuMemberList {
+    position : fixed;
+    top : 200px;
+    right : 5%;
+    width : 20%;
+    height : 60%;
+    text-align : center;
+    vertical-align : top;
+    color : #1A95CE;
+    font-size : 20px;
+    padding-top: 30px;
+    font-size: 20px;
+    font-weight: 600;
+    border: 5px solid #1A95CE;
+}
+.THIS.daeuMemberList span{
+    font-size : 25px;
+}
+.THIS.daeuMemberList .showList{
+    overflow-y: scroll;
+    max-height : 70%;
+    margin : 30px 20px;
+    border : 2px solid #1A95CE;
+}
+.THIS.daeuMemberList .showList::-webkit-scrollbar {
+    width: 8px;
+}
+.THIS.daeuMemberList .showList::-webkit-scrollbar-thumb {
+    background-color: #1A95CE;
+    border-radius: 4px;
+}
+.THIS.daeuMemberList .showList::-webkit-scrollbar-track {
+    background-color: #FFFFFF;
+}
+
+/*화면 크기 조절*/
+@media only screen and (max-width: 1100px) {
+    .THIS.daeuMemberList {
+        display : none;
+    }
+    .THIS {
+        margin : auto;
+    }
+    .THIS.mainTable {
+        width : 100%;
+    }
+    .THIS .subTable {
+        font-size : 3.2vw;
+    }
+    .THIS .subTable .inputContent .bingoText {
+        font-size : 2.8vw;
+        line-height : 1;
+    }
+}
+@media only screen and (max-width: 300px) {
+    .THIS .subTable .inputContent .bingoText {
+        font-size : 2vw;
+    }
+}
+@media only screen and (max-height: 600px) {
+    .THIS.daeuMemberList {
+        display : none;
+    }
+    .THIS {
+        margin : auto;
+    }
+}
+
+
+/*행사용 텍스트 필드 수정*/
+
+/*행사전에 주석*/
+
+
+.THIS .subTable .inputContent .bingoInput, .THIS.mainTable .buttonPart, .THIS.daeuMemberList{
+    display : none;
+}
+.THIS {
+    margin : auto;
+}
+
+
+/*행사시에 주석*/
+/*
+.THIS .subTable .inputContent .bingoText {
+    display : none;
+}
+.THIS .subTable .inputContent .bingoImg {
+    display : none;
+}
+*/

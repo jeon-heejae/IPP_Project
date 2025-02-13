@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ThisMonth</fullName>
+    <columns>NAME</columns>
+    <columns>RoomType__c</columns>
+    <columns>UseType__c</columns>
+    <columns>Date1__c</columns>
+    <columns>Date2__c</columns>
+    <columns>Status__c</columns>
+    <columns>OWNER.ALIAS</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Date1__c</field>
+        <operation>equals</operation>
+        <value>NEXT_MONTH</value>
+    </filters>
+    <label>다음 달 수련원 신청내역 (전체)</label>
+    <sharedTo>
+        <group>TCActiveMgmt</group>
+    </sharedTo>
+</ListView>

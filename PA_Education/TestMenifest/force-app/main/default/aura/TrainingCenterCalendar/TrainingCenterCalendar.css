@@ -1,0 +1,21 @@
+/**
+ * Created by Kwanwoo.Jeon on 2024-02-16.
+ */
+
+.THIS .searchBtn {
+    background-color:#06a3e1;
+    border-color:#06a3e1;
+    margin-top: 12px;
+    width: 100%;
+    font-weight: 600;
+}
+
+
+
+.THIS label.slds-form-element__label{
+    display:none;
+}
+
+.THIS span.slds-form-element__label{
+    font-weight: 600;
+}

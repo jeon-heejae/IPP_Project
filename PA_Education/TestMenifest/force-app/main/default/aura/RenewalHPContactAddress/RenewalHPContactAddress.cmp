@@ -1,0 +1,76 @@
+<!--
+ - @description       : Address of Homepage Renewal Project
+ - @author            : Chan Kang
+ - @group             : Boundary
+ - Modifications Log
+ - Ver   Date         Author           Modification
+ - 1.0   2021.12.24   Chan Kang        Initial Version
+   1.1   2022.04.17   Gunwoo Kim       Load english data conditionally
+                                       Add event handler to load english data
+                                       Add isEnglish parameter to APEX callout
+   1.2   2022.06.02   jinwoo.jang      주소정보 커스텀 라벨로 관리
+-->
+
+<aura:component
+    implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes"
+    access="global">
+    <aura:attribute name="isEnglish" type="Boolean" access="global" default="false" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:handler event="c:i18nEvent" action="{!c.init}" />
+    <section>
+        <div class="contents" id="address">
+            <p class="pageTitle">
+                Address
+            </p>
+            <img src="{!$Resource.RenewalHPAddress}" />
+            <div class="additionalContents">
+                <div>
+                    <div class="contentsArea">
+                        <div>
+                            <img class="icon" src="{!$Resource.RenewalHPAddressIcon}" />
+                            <p>
+                                <aura:if isTrue="{!v.isEnglish}">
+                                    <aura:unescapedHtml value="{!$Label.c.AddressHeadquarterEng}" />
+                                    <aura:set attribute="else">
+                                        <aura:unescapedHtml value="{!$Label.c.AddressHeadquarterKor}" />
+                                    </aura:set>
+                                </aura:if>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="contentsArea">
+                        <div>
+                            <img class="icon" src="{!$Resource.RenewalHPCallIcon}" />
+                            <p>
+                                <i>Tel</i> 02-553-9981<br />
+                                <i>Fax</i> 02-553-9967
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="additionalContents">
+                <div>
+                    <img src="{!$Resource.addressHanoi}" />
+                    <div class="contentsArea">
+                        <div>
+                            <img class="icon" src="{!$Resource.RenewalHPAddressIcon}" />
+                            <p><aura:unescapedHtml value="{!$Label.c.OverseasCorporation1}" /></p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <img src="{!$Resource.addressHo}" />
+                    <div class="contentsArea">
+                        <div>
+                            <img class="icon" src="{!$Resource.RenewalHPAddressIcon}" />
+                            <p><aura:unescapedHtml value="{!$Label.c.OverseasCorporation2}" /></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</aura:component>

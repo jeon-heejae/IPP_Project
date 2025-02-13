@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>EngAddress__c</fullName>
+    <externalId>false</externalId>
+    <inlineHelpText>영문 재직 및 경력 증명서 발급 시, 영문으로 주소를 입력해주세요.</inlineHelpText>
+    <label>영문 주소</label>
+    <length>255</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

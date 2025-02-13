@@ -1,0 +1,175 @@
+<aura:component controller="ViewHRInfoController" >
+	
+	<!-- Parameter -->
+	<!-- 연결 -->
+	<aura:attribute name="idEmployee" type="String" />
+	<aura:attribute name="pFromDt"    type="String" />
+	<aura:attribute name="pToDt"  	  type="String" />
+
+	
+	<!-- Attribute -->
+	<aura:attribute name="mapMainHeader" type="Map" />
+
+	<aura:attribute name="listProject" type="List" description="프로젝트 리스트"/>
+	<aura:attribute name="listHoliday" type="List" description="휴가 리스트"/>
+	<aura:attribute name="emUser"      type="Employee__c" />
+
+	<!-- 모달닫을 때 필요 modal close-->
+	<aura:attribute name="holidayModalView" type="boolean" default="true"/>
+
+
+	<!-- Handler --> <!-- 뷰를 보여주는 순간 할 것 -->
+	<aura:handler name="init" value="{!this}" action="{!c.fnInit}" />
+
+
+	<!-- Contents -->
+	<div class="custom_modal demo-only" style="height: 640px;" aura:id="divModal">
+		<!-- <section aura:id="exampleModal" role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open hideDiv" aria-hidden="false"> --> <!-- hideDiv 부터 뒷부분 추가 -->
+		  <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" > 
+			<div class="slds-modal__container">
+				<!-- Header -->
+				<header class="slds-modal__header">
+					<lightning:buttonIcon iconName="utility:close" variant="bare" onclick="{! c.close }" alternativeText="close" 
+										  class="slds-modal__close slds-button_icon-inverse" />
+					<h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">		
+						인력현황 상세 - {!v.emUser.Name}
+					</h2>
+				</header>
+				<!-- Contents -->
+				<div class="slds-modal__content slds-p-around_large" id="modal-content-id-1">
+					<!-- 프로젝트 table class=-->
+					<strong>수행 프로젝트</strong>
+					<table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
+						<thead>
+							<tr  class="slds-line-height_reset slds-table_fixed-layout">
+								<th class="" scope="col" width="25%">
+									<div class="slds-truncate">프로젝트명</div>
+								</th>
+								<th class="" scope="col" width="15%">
+									<div class="slds-truncate">담당업무</div>
+								</th>
+								<th class="" scope="col" width="45%">
+									<div class="slds-truncate">수행기간</div>
+								</th>
+								<th class="" scope="col" width="15%">
+									<div class="slds-truncate">투입비율</div>
+								</th>
+							</tr>
+						</thead>
+
+						<tbody>
+
+
+							<!-- 데이터가 없으면 No Data 띄우기 -->
+							<aura:if isTrue="{!v.listProject.length == 0}">
+								<tr><td colspan="4" style="text-align : center">No data.</td></tr>
+								<aura:set attribute="else">
+									<!-- 클릭한 사람의 프로젝트, 업무, 기간, 비율 가져오기 / title은 마우스오버시 값 보여주는거-->
+									<aura:iteration items="{!v.listProject}" var="objProject">
+										<tr class="slds-hint-parent">
+											<td scope="row" title="">
+												<div class="slds-truncate" title="{!objProject.Project__r.Name}">
+													{!objProject.Project__r.Name}
+												</div>
+											</td>
+											<td class="" scope="col">
+												<div class="slds-truncate" title="{!objProject.Employee__r.MainRole__c}">
+													{!objProject.Employee__r.MainRole__c}
+												</div>
+											</td> 
+											<td class="" scope="col">
+												<div class="slds-truncate" title="{!objProject.fm_Term__c}">
+													{!objProject.fm_Term__c}
+												</div>
+											</td>
+											<!-- <aura:if isTrue="{!objProject.Ratio__c/100 == 1}"> -->
+											<td class="" scope="col">
+												<div class="slds-truncate">
+													<!-- 값을 소수점 형태로 받고 싶을경우 -->
+													
+													<aura:if isTrue="{!objProject.Ratio__c == '' || objProject.Ratio__c == null}">
+														<ui:outputNumber value="0" format="0.0" />
+														<aura:set attribute="else">
+															<ui:outputNumber value="{!objProject.Ratio__c / 100}" format="0.0" />
+														</aura:set>
+													</aura:if>
+												</div>
+											</td>
+										</tr>
+									</aura:iteration>
+								</aura:set>
+							</aura:if>
+						</tbody>
+					</table>
+
+					
+			<!-- 		휴가
+			slds-table_cell-buffer:맨 오른쪽,왼쪽 패딩
+			slds-table_bordered   :표에 세로 테두리 추가
+			slds-table_fixed-layout : 표크기 고정 => 내용이 길어지면 ...으로 표시
+			 -->
+			 		<br/><br/>
+			 		<!-- null이면 아무것도 안띄울경우 -->
+					<!-- <aura:if isTrue="{!v.listHoliday.length == 0}">
+					<aura:set attribute="else"> -->
+
+					<strong>휴가현황</strong>
+					<table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout" width="100%">
+						<thead>
+							<tr  class="slds-line-height_reset slds-table_fixed-layout">
+								<th class="" scope="col" width="25%">
+									<div class="slds-truncate">신청명</div>
+								</th>
+								<th class="" scope="col" width="15%">
+									<div class="slds-truncate">일수</div>
+								</th>
+								<th class="" scope="col" width="45%">
+									<div class="slds-truncate">일자</div>
+								</th>
+								<th class="" scope="col" width="15%">
+									<div class="slds-truncate">유형</div>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<aura:if isTrue="{!v.listHoliday.length == 0}">
+								<tr><td colspan="4" style="text-align : center">No data.</td></tr>
+								<aura:set attribute="else">	
+									<aura:iteration items="{!v.listHoliday}" var="objHoliday">
+										<tr class="slds-hint-parent slds-table_fixed-layout">
+											<th data-label="Opportunity Name" scope="row">
+												<div class="slds-truncate" title="{!objHoliday.Name}">{!objHoliday.Name}</div>
+											</th>
+											<th class="" scope="col">
+												<div class="slds-truncate">{!objHoliday.HolidayAction_Days__c}</div>
+											</th>
+											<th class="" scope="col">
+												<div class="slds-truncate"  title="{!objHoliday.Holiday_Date_Detail__c}">
+													{!objHoliday.Holiday_Date_Detail__c}
+												</div>
+											</th>
+											<th class="" scope="col">
+												<div class="slds-truncate" title="{!objHoliday.HolidayAction_Type__c }">
+													{!objHoliday.HolidayAction_Type__c }
+												</div>
+											</th>
+										</tr>
+									</aura:iteration>
+								</aura:set>
+							</aura:if>
+						</tbody>
+					</table>
+					<!-- </aura:set>
+					</aura:if> -->
+					<br/>
+				</div>
+
+				<!-- Footer -->
+				<footer class="slds-modal__footer">
+	                <lightning:button class="slds-button slds-button_neutral" onclick="{!c.close}">취소</lightning:button>
+				</footer>
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open"></div>
+	</div>
+</aura:component>

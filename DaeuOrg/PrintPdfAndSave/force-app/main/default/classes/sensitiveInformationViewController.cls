@@ -22,7 +22,7 @@ public with sharing class sensitiveInformationViewController {
         return employee;
     }
  
-    @AuraEnabled
+    @AuraEnabled(cacheable=true)
     public static Boolean isCheck(Id recordId) {
         Id userId = UserInfo.getUserId(); // 현재 로그인한 사용자 ID
         // Id userId = '0052v00000jUvMzAAK'; // 현재 로그인한 사용자 ID

@@ -1,0 +1,85 @@
+<!--
+ - @description       : Footer of Homepage Renewal Project
+ - @author            : Chan Kang
+ - @group             : Boundary
+ - Modifications Log
+ - Ver   Date         Author           Modification
+ - 1.0   2021.12.24   Chan Kang        Initial Version
+   1.1   2022.04.15   Myeonghwan Kim   Add SNS channel links
+                                       Add english variant of address
+   1.2   2022.07.07   yechan Park      Update Blog URL (/daeunextier -> /daeu_nextier)
+-->
+
+<aura:component
+    implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes"
+    access="global" description="RenewalHPFooter">
+    <aura:attribute name="isEnglish" type="boolean" access="global" default="false" />
+    <aura:handler event="c:i18nEvent" action="{!c.init}" />
+    <footer>
+        <div class="inner">
+            <img class="footerLogo" src="{!$Resource.renewalFooterLogo }"></img>
+            <ul>
+                <li>
+                    <p class="title">DAEU nextier</p>
+                    <a href="./daeu-nextier">Company Profile</a>
+                    <a href="./daeu-nextier#competency">Competency</a>
+                    <a href="./daeu-nextier#record">Track Record</a>
+                </li>
+                <li>
+                    <p class="title">Vaule Proposition</p>
+                    <a href="./value-proposition#offering">Service Offering</a>
+                    <a href="./value-proposition#solution">Solution Delivery</a>
+                </li>
+                <!--   <li>
+                    <p class="title">Training Service</p>
+                    <a href="./training-service#curriculum">Curriculum</a>
+                    <a href="./training-service#class">Class Information</a>
+                </li>-->
+                <li>
+                    <p class="title">Careers</p>
+                    <a href="./recruiting#description">Job Description</a>
+                    <a href="./recruiting#positions">Open Positions</a>
+                </li>
+                <li style="margin-right:200px;">
+                    <p class="title">Contact us</p>
+                    <a href="./contact#address">Address</a>
+                    <a href="./contact#form">Contact</a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+            <div class="copyrightArea">
+                <div class="linkArea">
+                    <a href="https://www.linkedin.com/company/daeunextier" target="_blank">
+                        <img src="{!$Resource.linkedInLogo}" />
+                    </a>
+                    <a href="https://www.facebook.com/daeunextier/" target="_blank">
+                        <img src="{!$Resource.facebookIcon}" />
+                    </a>
+                    <a href="https://www.youtube.com/channel/UC92LypaZMn2rAScZ7Ptd0nQ" target="_blank">
+                        <img src="{!$Resource.youtubeLogo}" />
+                    </a>
+                    <a href="https://www.instagram.com/daeunextier/?hl=ko" target="_blank">
+                        <img src="{!$Resource.instagramLogo}" />
+                    </a>
+                    <a href="https://blog.naver.com/daeu_nextier" target="_blank">
+                        <img src="{!$Resource.blogIcon}" />
+                    </a>
+                </div>
+                <p class="copyright">
+                    <aura:if isTrue="{!v.isEnglish}">
+                        Inc. DaeU nextier 15F Seoulforest A1center 34, Sangwon 12-gil, Seongdong-gu, Seoul, Republic of
+                        Korea<br />
+                        <aura:set attribute="else">
+                            04790 서울시 성동구 상원12길 34 서울숲에이원지식산업센터 15층 <br />(주)대유넥스티어<br />
+                        </aura:set>
+                    </aura:if>
+                    Tel : 02-553-9981 Fax : 02-553-9967<br /><br />
+                    © 2021 Daeunextier.com ALL RIGHTS RESERVED
+                </p>
+                <div class="salesforceArea">
+                    <img src="{!$Resource.salesforceLogo}" />
+                </div>
+            </div>
+        </div>
+    </footer>
+</aura:component>

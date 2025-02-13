@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CellUniqueValidation</fullName>
+    <active>false</active>
+    <description>BingoBoard__c 값이 같으면서 CellX__c와 CellY__c가 동일한 레코드 생성 불가</description>
+    <errorConditionFormula>ISNEW() || 
+AND(
+  BingoBoard__c != PRIORVALUE(BingoBoard__c),
+  CellX__c != PRIORVALUE(CellX__c),
+  CellY__c != PRIORVALUE(CellY__c)
+)</errorConditionFormula>
+    <errorMessage>BingoBoard__c 값이 같으면서 CellX__c와 CellY__c가 동일한 레코드 생성 불가</errorMessage>
+</ValidationRule>

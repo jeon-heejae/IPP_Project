@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Interceptor_Code__c</fullName>
+    <description>고객의 요구사항에 의해 특정 조회 조건에 대해 인터셉터 해서 개발자가 개발한 소스를 반영하기 위한 업무예외 구분 코드
+(업무처리를 위해선 개발자가 InterfaceInterceptor 클래스에 소스 구현이 필요함)</description>
+    <inlineHelpText>고객의 요구사항에 의해 특정 조회 조건에 대해 인터셉터 해서 개발자가 개발한 소스를 반영하기 위한 업무예외 구분 코드
+(업무처리를 위해선 개발자가 InterfaceInterceptor 클래스에 소스 구현이 필요함)</inlineHelpText>
+    <label>인터셉터 코드</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>WHERE</fullName>
+                <default>false</default>
+                <label>WHERE</label>
+            </value>
+            <value>
+                <fullName>HAVING</fullName>
+                <default>false</default>
+                <label>HAVING</label>
+            </value>
+            <value>
+                <fullName>ORDER_BY</fullName>
+                <default>false</default>
+                <label>ORDER BY</label>
+            </value>
+            <value>
+                <fullName>LIMIT</fullName>
+                <default>false</default>
+                <label>LIMIT</label>
+            </value>
+            <value>
+                <fullName>AFTER</fullName>
+                <default>false</default>
+                <label>AFTER</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

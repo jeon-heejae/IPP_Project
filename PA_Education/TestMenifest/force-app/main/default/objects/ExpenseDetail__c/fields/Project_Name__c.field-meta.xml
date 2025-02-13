@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Project_Name__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>2024.1. 기준 사용 X (Expense__c에서 프로젝트 입력)</description>
+    <inlineHelpText>내부 경비 처리는 
+&apos;본사공통&apos; 프로젝트를 선택하시고 
+프로젝트 관련 비용은 해당 프로젝트를 선택하세요.</inlineHelpText>
+    <label>프로젝트 (사용X)</label>
+    <referenceTo>Project__c</referenceTo>
+    <relationshipLabel>Expense Detail</relationshipLabel>
+    <relationshipName>ExpenseDetail_Project</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

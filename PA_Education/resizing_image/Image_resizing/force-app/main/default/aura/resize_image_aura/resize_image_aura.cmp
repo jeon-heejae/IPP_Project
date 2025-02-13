@@ -1,0 +1,16 @@
+<aura:component implements="force:hasRecordId,flexipage:availableForRecordHome" controller="imageUploadController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="objPhoto" type="List"/>
+    <aura:attribute name="isResizeComplete" type="Boolean"/>
+    <aura:attribute name="recordId" type="String"/>
+    <lightning:card>
+        <lightning:input 
+            name="file1" 
+            type="file" 
+            label="Attachment" 
+            onchange="{!c.handleFilesChange}"
+            accept="image/*"/>
+        <img src="{!v.objPhoto.tempUrl}"/>
+    </lightning:card>
+    
+</aura:component>

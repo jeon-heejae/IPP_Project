@@ -1,0 +1,129 @@
+<!--
+*****************************************************************************************
+ * File Name    : ApprovalRealedList
+ * Author       : mh.Kwak
+ * controller   : ApprovalrelatedListController
+ * Description  : 
+ * ======================================================================================
+ * Ver  Date        Author     	Modification
+ * ======================================================================================
+ * 1.0	2019.07.10	mh.kwak	     파일생성
+ ****************************************************************************************
+ -->
+
+ <aura:component controller ="ApprovalRelatedListController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="recordId" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:attribute name="listWrapObject" type="List"/>
+        
+    <!--Expnese 화면-->
+    <aura:iteration items="{!v.listWrapObject}" var="item" indexVar="index">
+        <aura:if isTrue ="{!or(item.targetObj =='', item.targetObj =='Expense__c')}">
+            <lightning:card class="slds-p-around_small">
+                    <aura:set attribute="title">
+                        <div class="slds-text-font">
+                            <lightning:icon class="slds_icon" iconName="standard:insights" size="small"/>
+                                경비신청 상세
+                        </div>
+                    </aura:set>
+                    <aura:set attribute="footer">
+                    </aura:set>
+                        <!--Card Body-->
+                        <lightning:datatable
+                                    keyField="id"
+                                    data="{!item.mapListObject}"
+                                    columns="{!item.mapListColumn}"
+                                    hideCheckboxColumn="true"/>
+            </lightning:card>
+        </aura:if>
+    </aura:iteration>
+
+     <!--Project Expense Detail 화면-->
+     <aura:iteration items="{!v.listWrapObject}" var="item" indexVar="index">
+        <aura:if isTrue ="{!or(item.targetObj =='', item.targetObj =='Project_Name__c')}">
+            <lightning:card class="slds-p-around_small">
+                    <aura:set attribute="title">
+                        <div class="slds-text-font">
+                            <lightning:icon class="slds_icon" iconName="custom:custom40" size="small"/>
+                                프로젝트 경비 상세
+                        </div>
+                    </aura:set>
+                    <aura:set attribute="footer">
+                    </aura:set>
+                    <!--Card Body-->
+                  <lightning:datatable
+                             keyField="id"
+                             data="{!item.mapListObject}"
+                             columns="{!item.mapListColumn}"
+                             hideCheckboxColumn="true"/>
+            </lightning:card>
+        </aura:if>
+     </aura:iteration>
+
+     <!--Projec Team 화면-->
+     <aura:iteration items="{!v.listWrapObject}" var="item" indexVar="index">
+         <aura:if isTrue ="{!or(item.targetObj =='', item.targetObj =='Project__c')}">
+             <lightning:card class="slds-p-around_small">
+                 <aura:set attribute="title">
+                     <div class="slds-text-font">
+                         <lightning:icon class="slds_icon" iconName="custom:custom84" size="small"/>
+                            프로젝트 수행팀
+                     </div>
+                 </aura:set>
+                 <aura:set attribute="footer">
+                 </aura:set>
+                 <!--Card Body-->
+                 <lightning:datatable
+                         keyField="id"
+                         data="{!item.mapListObject}"
+                         columns="{!item.mapListColumn}"
+                         hideCheckboxColumn="true"/>
+             </lightning:card>
+         </aura:if>
+     </aura:iteration>
+
+     <!--Project 비용 상세 화면-->
+     <aura:iteration items="{!v.listWrapObject}" var="item" indexVar="index">
+         <aura:if isTrue ="{!or(item.targetObj =='', item.targetObj =='ProjectBudget__c')}">
+             <lightning:card class="slds-p-around_small">
+                 <aura:set attribute="title">
+                     <div class="slds-text-font">
+                         <lightning:icon class="slds_icon" iconName="custom:custom43" size="small"/>
+                            프로젝트 비용 예산 상세
+                     </div>
+                 </aura:set>
+                 <aura:set attribute="footer">
+                 </aura:set>
+                 <!--Card Body-->
+                 <lightning:datatable
+                         keyField="id"
+                         data="{!item.mapListObject}"
+                         columns="{!item.mapListColumn}"
+                         hideCheckboxColumn="true"/>
+                 </lightning:card>
+         </aura:if>
+     </aura:iteration>
+
+     <!--Quote 화면-->
+     <aura:iteration items="{!v.listWrapObject}" var="item" indexVar="index">
+         <aura:if isTrue ="{!or(item.targetObj =='', item.targetObj =='QuoteItem_Quote__c')}">
+             <lightning:card class="slds-p-around_small">
+                 <aura:set attribute="title">
+                     <div class="slds-text-font">
+                         <lightning:icon class="slds_icon" iconName="custom:custom45" size="small"/>
+                         견적 상세
+                     </div>
+                 </aura:set>
+                 <aura:set attribute="footer">
+                 </aura:set>
+                 <!--Card Body-->
+                 <lightning:datatable
+                         keyField="id"
+                         data="{!item.mapListColumn}"
+                         columns="{!item.mapListColumn}"
+                         hideCheckboxColumn="false"/>
+             </lightning:card>
+         </aura:if>
+     </aura:iteration>
+
+ </aura:component>

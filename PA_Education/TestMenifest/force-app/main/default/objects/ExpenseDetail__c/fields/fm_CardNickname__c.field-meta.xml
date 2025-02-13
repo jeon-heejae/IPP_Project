@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>fm_CardNickname__c</fullName>
+    <externalId>false</externalId>
+    <formula>CorporateCardBilling__r.fm_CardNickname__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>해당 청구내역의 법인카드의 카드별칭 정보</inlineHelpText>
+    <label>카드별칭</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

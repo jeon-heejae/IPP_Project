@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>Hierarchy</customSettingsType>
+    <description>휴일관리 기준 설정</description>
+    <enableFeeds>false</enableFeeds>
+    <label>HolidaySetting</label>
+    <visibility>Public</visibility>
+</CustomObject>

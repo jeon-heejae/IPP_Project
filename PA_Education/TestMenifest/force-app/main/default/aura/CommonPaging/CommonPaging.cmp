@@ -1,0 +1,28 @@
+<!--
+  * ===============================================================
+  * File Name   : CommonPaging.cmp
+  * Author      : Soyoung.Jung
+  * Date        : 2019.01.24
+  * Description : 공통 페이징 컴포넌트
+  * Modification Log
+  * ===============================================================
+  * Ver     Date        Author          Modification
+  * ===============================================================
+  * 1.0     2019.01.24  Soyoung.Jung    Create
+  * ===============================================================
+-->
+
+<aura:component access="global">
+
+    <aura:attribute name="currentPageNumber" type="Integer" required="true" default="1" />
+    <aura:attribute name="maxPageNumber" type="Integer" required="true" default="1" />
+    
+    <lightning:buttonGroup>
+        <lightning:button label="First" onclick="{!c.fnFirstPage}"  />
+        <lightning:button label="Prev" onclick="{!c.fnPrevPage}" />
+        <lightning:button label="{!v.currentPageNumber + ' / ' + v.maxPageNumber}" onclick="{!c.fnFirstPage}" />
+        <lightning:button label="Next" onclick="{!c.fnNextPage}" />
+        <lightning:button label="Last" onclick="{!c.fnLastPage}" />
+    </lightning:buttonGroup>
+
+</aura:component>

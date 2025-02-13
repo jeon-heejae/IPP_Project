@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>JoinDateRule__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>True일경우 입사일 기준으로 연차 생성 및 사용연차를 갱신한다.
+False일경우 특정일 기준으로 연차 생성 및 사용연차를 갱신한다.</description>
+    <label>입사일 기준여부</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>UsedAmount__c</fullName>
+    <defaultValue>0</defaultValue>
+    <description>해당 예산으로 신청된 경비 중 승인된 경비금액의 합 표시</description>
+    <inlineHelpText>해당 예산으로 신청된 경비 중 승인된 경비금액의 합이 표시됩니다.</inlineHelpText>
+    <label>예산사용금액</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

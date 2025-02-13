@@ -1,0 +1,25 @@
+.THIS {
+}
+
+.THIS .toggleIn {
+	transition: opacity 2s ease-in;
+}
+
+.THIS .toggleOut {
+	transition: opacity 1s ease-out;
+}
+
+.THIS .slds-section__content {
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+}
+
+.THIS .smallbutton {
+	width : 20px;
+	height : 20px;
+	font-size: 20px;
+}
+
+.THIS .slds-form-element__icon {
+	padding-top: 0 !important;
+}

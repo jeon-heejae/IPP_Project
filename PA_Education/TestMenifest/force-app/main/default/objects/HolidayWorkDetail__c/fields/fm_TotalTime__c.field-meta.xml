@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>fm_TotalTime__c</fullName>
+    <description>2023.1까지 사용하던 필드</description>
+    <externalId>false</externalId>
+    <formula>LPAD( TEXT( FLOOR( (EndTime__c-StartTime__c)*24 ) ), 2, &quot;0&quot; ) &amp;&quot;:&quot; &amp; LPAD( TEXT( MOD( (EndTime__c- StartTime__c)*1440 ,60 ) ), 2, &quot;0&quot;)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>2023.1까지 사용하던 필드</inlineHelpText>
+    <label>근무시간(계산) (사용X)</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MethodType__c</fullName>
+    <label>처리 방향</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>유지보수개발팀</fullName>
+                <default>false</default>
+                <label>유지보수개발팀</label>
+            </value>
+            <value>
+                <fullName>시스템관리자</fullName>
+                <default>false</default>
+                <label>시스템관리자</label>
+            </value>
+            <value>
+                <fullName>장기미결</fullName>
+                <default>false</default>
+                <label>장기미결</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

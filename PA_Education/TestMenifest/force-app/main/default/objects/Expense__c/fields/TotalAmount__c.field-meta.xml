@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>TotalAmount__c</fullName>
+    <label>상신금액합계</label>
+    <summarizedField>ExpenseDetail__c.Amount__c</summarizedField>
+    <summaryForeignKey>ExpenseDetail__c.Expense__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

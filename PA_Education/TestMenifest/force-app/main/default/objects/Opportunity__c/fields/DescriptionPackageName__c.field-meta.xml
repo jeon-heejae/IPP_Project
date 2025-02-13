@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DescriptionPackageName__c</fullName>
+    <externalId>false</externalId>
+    <inlineHelpText>기존 사용 시스템이 있을 경우만 입력하세요.</inlineHelpText>
+    <label>7-2. Package일 경우 패키지명</label>
+    <length>100</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

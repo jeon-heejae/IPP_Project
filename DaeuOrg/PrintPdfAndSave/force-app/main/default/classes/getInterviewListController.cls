@@ -1,6 +1,5 @@
 public with sharing class getInterviewListController {
     public List<Map<String, Object>> listMapInterviews { get; set; }
-    public static final String RecordTypeId='012F7000000RJcbIAG';  //IPP RecordTypeId
 
     public getInterviewListController() {
         String recordIds = ApexPages.currentPage().GetParameters().get('recordId');
@@ -75,13 +74,13 @@ public with sharing class getInterviewListController {
 
             List<Interview__c> listInterviews=new List<Interview__c>();
             listInterviews=[
-                SELECT RecordTypeId
+                SELECT RecordType.Name
                 FROM Interview__c
                 WHERE Id IN :listRecordsId
             ];
 
             for(Interview__c objInterview:listInterviews){
-                if(objInterview.RecordTypeId!=RecordTypeId){
+                if(objInterview.RecordType.Name!='IPP'){
                     return false;
                 }
             }

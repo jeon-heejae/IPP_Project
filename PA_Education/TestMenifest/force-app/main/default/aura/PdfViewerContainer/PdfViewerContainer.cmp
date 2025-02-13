@@ -1,0 +1,30 @@
+<!--
+ - Created by smyan on 2021-01-29.
+ -->
+
+<aura:component controller="VideoViewController"
+                implements="flexipage:availableForAllPageTypes"
+                access="GLOBAL" description="PdfViewerContainer">
+    <ltng:require scripts="{!$Resource.jQuery}" afterScriptsLoaded="{!c.fnInit}" />
+
+    <aura:attribute name="contentDocumentId" type="String"/>
+    <aura:attribute name="manualRecordId" type="String"/>
+    <aura:attribute name="pdfData" type="String"/>
+    <aura:attribute name="pageType" type="String"/>
+    <aura:attribute name="status" type="String" default="NONE"/>
+
+    <!--<aura:handler name="destroy" value="{!this}" action="{!c.handleDestroy}"/>-->
+    <!--<aura:handler event="aura:locationChange" action="{!c.locChange}"/>-->
+
+    <aura:attribute name="pdfContainer" type="Aura.Component[]"/>
+
+    <aura:attribute name="toggleSpinner" type="boolean" default="true" />
+
+
+    <div id="drawPdf" class="slds-grid slds-is-relative" style="height:76vh;">
+        <aura:if isTrue="{!v.toggleSpinner}">
+            <lightning:spinner aura:id="spinner" alternativeText="Loading" size="large" variant="brand"/>
+        </aura:if>
+        {!v.pdfContainer}
+    </div>
+</aura:component>

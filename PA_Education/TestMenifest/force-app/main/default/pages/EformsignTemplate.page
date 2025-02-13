@@ -1,0 +1,572 @@
+<!--
+ - Created by hs.jung on 2024-05-22.
+ -->
+<apex:page extensions="EformsignTemplatePageCtrl"
+           standardController="EformsignTemplate__c"
+           recordSetVar="sobjects"
+           action="{!init}"
+           standardStylesheets="false" sidebar="false" applyBodyTag="false"
+           docType="html-5.0">
+
+
+
+    <apex:includeLightning />
+    <!-- jQuery -->
+    <apex:includeScript value="https://www.eformsign.com/plugins/jquery/jquery.min.js" />
+    <!-- EformSignTemplate 객체 -->
+    <apex:includeScript value="https://www.eformsign.com/lib/js/efs_embedded_form.js" />
+
+    <style>
+        #loading {
+            display:none;
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,0.5);
+            z-index:9999;
+            align-items: center;
+            justify-content: center;
+        }
+        .loader {
+            border: 5px solid #f3f3f3; /* Light grey */
+            border-top: 5px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+        }
+
+        #objectSelectForm{
+            display: flex;
+            justify-content: center;
+            margin-top: 100px;
+        }
+        #footer {
+            margin-top: 30px;
+        }
+
+        #template{
+            display: flex;
+            align-items: center;
+        }
+
+        .template-box {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+            background-color: gray;
+        }
+
+        .footerButton{
+            border-radius: 4px;
+            border: 1px solid gray;
+        }
+
+        #objectSelectDiv{
+            display: flex;
+            width: 200px;
+            align-items: center;
+            flex-direction: column;
+        }
+
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <!-- 로딩 화면 -->
+    <div id="loading">
+        <div class="loader"></div>
+    </div>
+
+    <iframe style="width: 98vw;height: 96vh;display: none;margin: auto;" id="eformsign_iframe"></iframe>
+    <div>
+        <form id="objectSelectForm">
+            <div id="objectSelectDiv">
+                <div>
+                    <div id="template">
+                        <div class="template-box"></div>
+                        <h3>템플릿 생성</h3>
+                    </div>
+                    <p><label style="color:#0176d3">*</label>Salesforce Object</p>
+                    <select id="objectSelect">
+<!--                        <option value="" selected="selected">Object 선택 (대상 객체명 선택)</option>-->
+                        <option value="Account">Account</option>
+                        <option value="Contact">Contact</option>
+                        <!--            <option value="Opportunity">Opportunity</option>-->
+                        <option value="Contract__c">Contract</option>
+                        <option value="Project__c">프로젝트</option>
+                        <option value="Lead">Lead</option>
+                    </select>
+                </div>
+                <div id="footer">
+<!--                    <button type="button" class="footerButton" onclick="" style="background-color: white; color:#0176d3; margin-right:5px">취소</button>-->
+                    <button type="button" class="footerButton"  onclick="fnCancel()" style="background-color: white; color:#0176d3; margin-right:5px">취소</button>
+                    <button type="button" class="footerButton" onclick="selectSObject()" style="background-color: #0176d3; color:white;">확인</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        // 화면 초기 로직
+        const params = new URLSearchParams(window.location.search);
+        const typeParam = params.get('type');
+        const templateParam = params.get('template');
+        const objectParam = params.get('object');
+
+        let type = '01';
+        let templateId = '';
+        let object = '';
+
+        window.onload = function() {
+            if (typeParam === '02' || typeParam === '03') {
+                type = typeParam;
+                templateId = templateParam;
+                object = objectParam;
+                document.getElementById('objectSelect').value = object;
+                selectSObject();
+            }
+        }
+    </script>
+
+    <script>
+        console.log('type', type);
+        console.log('templateId', templateId);
+        const START_ID = '{!startFieldId}';
+
+        function fnCancel(){
+                window.history.back();
+        }
+
+        function showLoading() {
+            document.getElementById('loading').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function selectSObject() {
+            showLoading();
+            document.getElementById('objectSelectForm').style.display = 'none';
+
+            const objectApiName = document.getElementById('objectSelect').value;
+            console.log('objectApiName >>>> ' , objectApiName );
+            const sObjectInfo = getSObjectInfoFromApex(objectApiName);
+
+            getSObjectInfoFromApex(objectApiName)
+                .then(sObjectInfo => {
+                    const fieldOptions = createFieldOptios(objectApiName, sObjectInfo);
+                    showEformsignTemplate(objectApiName, fieldOptions);
+                })
+                .catch(error => {
+                    alert('Error: ' + error);
+                })
+                .finally(() => {
+                });
+        }
+
+        function getSObjectInfoFromApex(objectApiName) {
+            return new Promise((resolve, reject) => {
+                Visualforce.remoting.Manager.invokeAction(
+                    '{!$RemoteAction.EformsignTemplatePageCtrl.getSObjectInfo}',
+                    objectApiName,
+                    function (resultFromApex, event) {
+                        if (event.status) {
+                            resolve(resultFromApex);
+                        } else {
+                            reject(event.message);
+                        }
+                    },
+                    { escape: true }
+                );
+            });
+        }
+
+        function showEformsignTemplate(objectApiName, fieldOptions) {
+            document.getElementById('eformsign_iframe').style.display = 'block';
+
+            var accessTokenJson = '{!accessTokenJson}';
+            var accessTokenObj = JSON.parse(accessTokenJson);
+            var accessToken = accessTokenObj.AccessToken__c;
+            var refreshToken = accessTokenObj.RefreshToken__c;
+
+            const tokenUserEmail = '{!tokenUserEmail}';
+            console.log('tokenUserEmail', tokenUserEmail);
+
+            var envInfoJson = '{!envInfoJson}';
+            var envInfoObj = JSON.parse(envInfoJson);
+            const companyId = envInfoObj.companyId
+            const countryCode = envInfoObj.countryCode
+            const languageCode = envInfoObj.languageCode
+
+            console.log('fieldOptions.getSalesforceFields()', JSON.stringify(fieldOptions.getSalesforceFields(), null, 2))
+            var template_option = {
+                // company 필수
+                "company": {
+                    "id": companyId, // enter the company id
+                    "country_code": countryCode, // enter the country code (ex: kr)
+                    // "user_key": userKey // enter the unique key in the customer's system (the unique key of the user who logged in to the customer's system) - optional
+                },
+                // user 비필수
+                "user": {
+                    "id": tokenUserEmail,  // ID 가 로그인 화면에 미리 입력
+                    "access_token": accessToken, // refer to openAPI accessToken for information on entering access tokens
+                    "refresh_token": refreshToken, // refer to openAPI accessToken for information on entering refresh tokens
+                },
+                // mode 필수
+                "mode": {
+                    "type": type, // 01 : 생성 , 02 : 수정, 03 : 복제
+                    "template_id": templateId, // type이 02, 03일 경우 필수 입력
+                    "template_type": "form" // form : 템플릿 관리, unstructured_form: 내 파일로 문서 작성
+                },
+                // layout 비필수
+                "layout": {
+                    "lang_code": languageCode, // 이폼사인 언어. ko, en, ja
+                    "header": true, // 상단바 (푸른색) 표시 여부. 미표시 시 액션 버튼을 통해 전송 등 동작 가능
+                    "footer": false // 하단바 (이폼사인 로고, 언어 설정 등) 표시 여부.
+                },
+                // prefill 비필수
+                "prefill": {
+                    /*
+                        // "template_name": templateName,
+                        // "step_settings": [
+                        //     {
+                        //         "step_type": "05", // 05: 참여자, 06: 검토자
+                        //         "step_name": "참여자 2",
+                        //         "use_mail": true,
+                        //         "use_sms": true,
+                        //         "use_alimtalk": true,
+                        //         // "recipients": [
+                        //         //     {
+                        //         //         "id": "test2@forcs.com",
+                        //         //         "name": 'John Doe'
+                        //         //     },
+                        //         //     {
+                        //         //         "id": "5a3e47a2f5a04909836ddf4189d10fc4",
+                        //         //         "name": '그룹 3'
+                        //         //     }
+                        //         // ],
+                        //         "auth": {
+                        //             "valid": {
+                        //                 "day": '7',
+                        //                 "hour": '0'
+                        //             }
+                        //         }
+                        //     }
+                        // ],
+                    */
+                    "custom_sidebar_items" : {
+                        "basicFields": {
+                            "expanded": true,
+                            "items": fieldOptions.getBasicFields()
+                        },
+                        "infoFields": {
+                            "expanded": true,
+                            "items": fieldOptions.getInfoFields()
+                        },
+                        "Salesforce": {
+                            "expanded": true,
+                            "items": fieldOptions.getSalesforceFields()
+                        },
+                    },
+                    "quick_processing": false
+                },
+                "return_fields" : {
+                    "input_fields": ["id", "type"],
+                    "dataset_fields": ["id", "type", "required"]
+                },
+                "disabled_form_id_numbering_list" : fieldOptions.getDisabledSalesforceFields(),
+                "disabled_form_id_list" : fieldOptions.getDisabledSalesforceFields(),
+                // template_file 비필수
+                // "template_file": {
+                //     "name": "첨부테스트.pdf",
+                //     "mime": "@file/octet-stream",
+                //     "data": "JVBERi0xLjUNCiW1tbW1DQoxIDAg...(중략)"
+                // }
+            };
+
+            var error_callback = function (response) {
+                console.log('error_callback');
+                alert("템플릿 생성에 실패하였습니다.\n" + "- code : " + response.code + "\n- message : " + response.message);
+                console.log(response.code);
+                console.log(response.message);
+                window.close();
+            };
+
+            var action_callback = function (response) {
+                hideLoading();
+                console.log('action_callback');
+                console.table(response.data);
+            };
+
+            //callback option
+            var success_callback = function (response) {
+                console.log('success_callback');
+                console.log(JSON.stringify(response, null, 2));
+                /*
+                    [배포]
+                    {
+                        "type": "template",
+                        "fn": "saveSuccess",
+                        "code": "-1",
+                        "message": "Completed.",
+                        "template_id": "4f4d441616614190b870f90bb03618b7",
+                        "template_version": "8",
+                        "template_name": "템플릿2",
+                        "step_settings": [
+                            {
+                            "step_type": "00",
+                            "step_name": "Start"
+                            },
+                            {
+                            "step_type": "05",
+                            "step_name": "Participant 1"
+                            },
+                            {
+                            "step_type": "01",
+                            "step_name": "Complete"
+                            }
+                        ]
+                    }
+
+                    [미배포]
+                    {
+                        "type": "template",
+                        "fn": "saveSuccess",
+                        "code": "-1",
+                        "message": "Completed.",
+                        "template_id": "451f9eeab39f4bf0b690d932c72019b0",
+                        "template_version": "1",
+                        "template_name": "ttt",
+                        "step_settings": [
+                            {
+                            "step_type": "00",
+                            "step_name": "Start"
+                            },
+                            {
+                            "step_type": "05",
+                            "step_name": "Signer 1"
+                            },
+                            {
+                            "step_type": "01",
+                            "step_name": "Complete"
+                            }
+                        ],
+                        "fields": {
+                            "input_fields": [
+                            {
+                                "id": "Salesforce/Account/ShippingStreet",
+                                "type": "string"
+                            }
+                            ],
+                            "dataset_fields": []
+                        }
+                        }
+                */
+                if (response.type === 'template') {
+                    console.log(response.template_id);
+                    if ("-1" == response.code) {
+                        saveTemplate(objectApiName, response);
+                    } else {
+                        alert(
+                            "템플릿 생성에 실패하였습니다.\n"
+                            + "- code : " + response.code
+                            + "\n- message : " + response.message
+                        );
+                    }
+                }
+            };
+
+            var eformsign = new EformSignTemplate();
+            eformsign.template(template_option, "eformsign_iframe", success_callback, error_callback, action_callback);
+            eformsign.open();
+        }
+
+        function saveTemplate(objectApiName, response) {
+            const isDeployed = getIsDeployed(response);
+            console.log('isDeployed:', isDeployed);
+
+            const tamplateMap = {
+                objectApiName : objectApiName,
+                templateId : response.template_id,
+                templateVersion : response.template_version,
+                templateName : response.template_name,
+            };
+
+            let fieldInfos = [];
+            if (isDeployed) {
+                fieldInfos = filterSalesforceFieldIds(objectApiName, response);
+            }
+
+            console.log('fieldApis>> ', fieldInfos);
+
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.EformsignTemplatePageCtrl.upsertTemplate}',
+                isDeployed,
+                tamplateMap,
+                fieldInfos,
+                function (result, event) {
+                    console.log('inserted template:', result);
+                    console.log('event:', event);
+                    if (event.status) {
+                        alert(
+                            "템플릿 생성되었습니다."
+                            + "\n- Id : " + result.Id
+                            + "\n- template_id : " + response.template_id
+                            + "\n- title : " + response.template_name
+                        );
+                        closeWindow(result.Id);
+                    } else {
+                        alert('Error: ' + event.message);
+                    }
+                },
+                { escape: true }
+            );
+        }
+
+        function getIsDeployed(response) {
+            return ('fields' in response) && ('input_fields' in response.fields);
+        }
+
+        function filterSalesforceFieldIds(objectApiName, response) {
+            const fields = response.fields.input_fields;
+            console.log('efsfields', fields);
+
+            const salesforceFields = fields.filter((field) => (!!field.id && field.id.startsWith(START_ID)));
+            const fieldApis = salesforceFields.map((field) => {
+                let fieldId = field.id.split(START_ID)[1];
+                return {
+                    id: fieldId,
+                    type: field.type,
+                };
+            });
+
+            return fieldApis;
+        }
+
+        function closeWindow(recordId) {
+            const baseUrl = '{!$Site.BaseUrl}';
+//            window.location.href = baseUrl + '/' + recordId;
+            this.parent.location.href = baseUrl + '/' + recordId;
+
+        }
+
+        function createFieldOptios(inputObjectApiName, inputSObjectInfo) {
+            const objectApiName = inputObjectApiName;
+            const sObjectInfo = inputSObjectInfo;
+
+            function getFieldId(fieldApi) {
+                return START_ID + fieldApi;
+            }
+
+            return {
+                getBasicFields: function() {
+                    return [
+                        {
+                            "type": "DOCUMENTID",
+                            "title": "문서 ID"
+                        },
+                        {
+                            "type": "DOCUMENTNO",
+                            "title": "문서 번호"
+                        }
+                    ];
+                },
+
+                getInfoFields: function() {
+                    return [
+                        {
+                            "type": "SIGNPAD",
+                            "title": "서명"
+                        },
+                        {
+                            "type": "STAMP",
+                            "title": "회사 도장"
+                        },
+                        {
+                            "type": "TEXTBOX",
+                            "title": "텍스트"
+                        },
+                        {
+                            "type": "HANDWRITING",
+                            "title": "손글씨"
+                        },
+                        {
+                            "type": "NUMBER",
+                            "title": "숫자"
+                        },
+                        {
+                            "type": "MULTILINE",
+                            "title": "멀티라인"
+                        },
+                        {
+                            "type": "CHECKBOX",
+                            "title": "체크"
+                        },
+                        {
+                            "type": "RADIOBUTTON",
+                            "title": "라디오"
+                        },
+                        {
+                            "type": "LISTBOX",
+                            "title": "콤보"
+                        },
+                        {
+                            "type": "TOGGLEBUTTON",
+                            "title": "토글"
+                        },
+                        {
+                            "type": "DATEPICKER",
+                            "title": "날짜"
+                        },
+                        {
+                            "type": "NUMERIC",
+                            "title": "증감"
+                        },
+                        {
+                            "type": "LABEL",
+                            "title": "레이블"
+                        },
+                        {
+                            "type": "HYPERLINK",
+                            "title": "하이퍼링크"
+                        },
+                        {
+                            "type": "CAMERA",
+                            "title": "카메라"
+                        },
+                        {
+                            "type": "VOICERECORDER",
+                            "title": "녹음"
+                        },
+                        {
+                            "type": "ATTACHMENT",
+                            "title": "첨부"
+                        }
+                    ]
+                },
+
+                getSalesforceFields: function() {
+                    const result = (sObjectInfo.object.efsFields).map((field) => {
+                        return {
+                            title: getFieldId(field.api),
+                            type: field.type,
+                            icon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yIDNIMTlWMTFIMjBWM1YySDE5SDJIMVYzVjIwVjIxSDJIMTNWMjBIMlYzWiIgZmlsbD0iIzgwODA4MCIvPgo8cGF0aCBkPSJNMjMgMTcuNUMyMyAxOC4zOSAyMi43MzYxIDE5LjI2IDIyLjI0MTYgMjAuMDAwMUMyMS43NDcyIDIwLjc0MDEgMjEuMDQ0MyAyMS4zMTY5IDIwLjIyMjEgMjEuNjU3NUMxOS4zOTk4IDIxLjk5ODEgMTguNDk1IDIyLjA4NzIgMTcuNjIyMSAyMS45MTM1QzE2Ljc0OTIgMjEuNzM5OSAxNS45NDc0IDIxLjMxMTMgMTUuMzE4IDIwLjY4MkMxNC42ODg3IDIwLjA1MjYgMTQuMjYwMSAxOS4yNTA4IDE0LjA4NjUgMTguMzc3OUMxMy45MTI4IDE3LjUwNSAxNC4wMDE5IDE2LjYwMDIgMTQuMzQyNSAxNS43Nzc5QzE0LjY4MzEgMTQuOTU1NyAxNS4yNTk5IDE0LjI1MjggMTUuOTk5OSAxMy43NTg0QzE2Ljc0IDEzLjI2MzkgMTcuNjEgMTMgMTguNSAxM0MxOS42OTI0IDEzLjAwMzUgMjAuODM1IDEzLjQ3ODcgMjEuNjc4MSAxNC4zMjE5QzIyLjUyMTMgMTUuMTY1IDIyLjk5NjUgMTYuMzA3NiAyMyAxNy41VjE3LjVaIiBzdHJva2U9IiMwRTczQzMiIHN0cm9rZS13aWR0aD0iMS4wMzM0OSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8cGF0aCBkPSJNMTggMTdIMTlWMjBIMThWMTdaIiBmaWxsPSIjMEU3M0MzIi8+CjxwYXRoIGQ9Ik0xOC4wMDEzIDE1LjUwMDZDMTcuOTk2MiAxNS40MzM4IDE4LjAwNiAxNS4zNjY3IDE4LjAyOTkgMTUuMzAzOEMxOC4wNTM5IDE1LjI0MSAxOC4wOTE1IDE1LjE4MzkgMTguMTQwMSAxNS4xMzY1QzE4LjE4ODggMTUuMDg5MSAxOC4yNDc0IDE1LjA1MjUgMTguMzExOSAxNS4wMjkyQzE4LjM3NjQgMTUuMDA1OCAxOC40NDUzIDE0Ljk5NjMgMTguNTE0IDE1LjAwMTNDMTguNTgwNiAxNC45OTkzIDE4LjY0NjkgMTUuMDExIDE4LjcwODUgMTUuMDM1OEMxOC43NzAxIDE1LjA2MDYgMTguODI1NiAxNS4wOTc4IDE4Ljg3MTMgMTUuMTQ0OUMxOC45MTcxIDE1LjE5MjEgMTguOTUyIDE1LjI0ODIgMTguOTczOSAxNS4zMDk1QzE4Ljk5NTggMTUuMzcwOSAxOS4wMDQgMTUuNDM2IDE4Ljk5ODIgMTUuNTAwNkMxOS4wMDE2IDE1LjU2NDggMTguOTkxNyAxNS42Mjg5IDE4Ljk2OSAxNS42ODkyQzE4Ljk0NjIgMTUuNzQ5NSAxOC45MTEyIDE1LjgwNDYgMTguODY1OSAxNS44NTEzQzE4LjgyMDYgMTUuODk4IDE4Ljc2NjEgMTUuOTM1MyAxOC43MDU2IDE1Ljk2MDhDMTguNjQ1MSAxNS45ODY0IDE4LjU3OTkgMTUuOTk5NyAxOC41MTQgMTZDMTguNDQ2NiAxNi4wMDAzIDE4LjM3OTggMTUuOTg3NSAxOC4zMTc1IDE1Ljk2MjVDMTguMjU1MiAxNS45Mzc1IDE4LjE5ODUgMTUuOTAwNyAxOC4xNTA5IDE1Ljg1NDNDMTguMTAzMiAxNS44MDc5IDE4LjA2NTUgMTUuNzUyNyAxOC4wMzk4IDE1LjY5MkMxOC4wMTQxIDE1LjYzMTMgMTguMDAxMSAxNS41NjYzIDE4LjAwMTMgMTUuNTAwNloiIGZpbGw9IiMwRTczQzMiLz4KPHBhdGggZD0iTTcuMTIgMTQuNjRDNi4xMyAxNC42NCA1LjE0IDE0LjI1IDQuNDIgMTMuNTZMNS4yNyAxMi41NEM1LjggMTMuMDMgNi41IDEzLjM2IDcuMTUgMTMuMzZDNy45MiAxMy4zNiA4LjMzIDEzLjAzIDguMzMgMTIuNTFDOC4zMyAxMS45NiA3Ljg4IDExLjc5IDcuMjIgMTEuNTFMNi4yMyAxMS4wOUM1LjQ4IDEwLjc4IDQuNzMgMTAuMTggNC43MyA5LjFDNC43MyA3Ljg5IDUuNzkgNi45NiA3LjI5IDYuOTZDOC4xNSA2Ljk2IDkuMDEgNy4zIDkuNjEgNy45MUw4Ljg2IDguODRDOC4zOSA4LjQ1IDcuOSA4LjIzIDcuMjkgOC4yM0M2LjY0IDguMjMgNi4yMiA4LjUyIDYuMjIgOS4wMUM2LjIyIDkuNTQgNi43NSA5LjczIDcuMzggOS45OEw4LjM1IDEwLjM5QzkuMjUgMTAuNzYgOS44NCAxMS4zMyA5Ljg0IDEyLjRDOS44NCAxMy42MSA4LjgzIDE0LjY0IDcuMTIgMTQuNjRaTTExLjE1MDIgMTQuNVY3LjFIMTUuNzEwMlY4LjMzSDEyLjYzMDJWMTAuMjZIMTUuMjYwMlYxMS41SDEyLjYzMDJWMTQuNUgxMS4xNTAyWiIgZmlsbD0iIzBFNzNDMyIvPgo8L3N2Zz4K",
+                            style : "text;fillColor=#FFFFFF;opacity=100;fontSize=12;fontStyle=0;verticalAlign=middle;align=left;rotatable=0;connectable=0;strokeColor=none;fontColor=#000000;shadow=1;"
+                        };
+                    });
+                    return result;
+                },
+
+                getDisabledSalesforceFields: function() {
+                    return (sObjectInfo.object.efsFields).map((field) => getFieldId(field.api));
+                },
+            };
+        }
+    </script>
+</apex:page>

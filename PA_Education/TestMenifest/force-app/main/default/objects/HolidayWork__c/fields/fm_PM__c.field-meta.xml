@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>fm_PM__c</fullName>
+    <description>프로젝트가 있을 경우 프로젝트 관리자 표시</description>
+    <externalId>false</externalId>
+    <formula>Project__r.PM__r.LastName</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>프로젝트가 있을 경우 프로젝트 관리자 표시</inlineHelpText>
+    <label>프로젝트 관리자</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

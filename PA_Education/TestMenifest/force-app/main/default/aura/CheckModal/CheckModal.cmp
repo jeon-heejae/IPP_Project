@@ -1,0 +1,35 @@
+<!--
+ - Created by Kwanwoo.Jeon on 2024-01-08.
+ -->
+
+<aura:component description="CheckModal"
+                implements="force:hasRecordId,flexipage:availableForRecordHome,force:appHostable,forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes,force:lightningQuickActionWithoutHeader,force:hasSObjectName,lightning:actionOverride">
+    <!-- Parameter -->
+    <aura:attribute name="showModal"            type="Boolean"      default="false"/>
+    <aura:attribute name="strMessage"           type="String"/>
+    <aura:attribute name="isConfirm"            type="String"/>
+
+    <div aura:id="CardBillingModal" class="slds-show">
+
+        <div role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open " onclick="{!c.fnClose}">
+            <div class = "slds-modal__container" onclick="{!c.stopPropagation}">
+                <!--Body-->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <b>{!v.strMessage}</b>
+
+                </div>
+
+                <!--Footer-->
+                <footer class="slds-modal__footer">
+                    <lightning:button label="취소"       onclick="{!c.fnClose}"   variant="neutral"/>
+                    <lightning:button label="확인"       onclick="{!c.fnSave}"    type="submit"    variant="brand"/>
+                </footer>
+            </div>
+            <aura:if isTrue="{!v.showSpinner}">
+                <lightning:spinner variant="brand" size="medium" />
+            </aura:if>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open" id="backdrop"/>
+
+    </div>
+</aura:component>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>fm_BelongTo__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( TEXT(Employee__r.Type__c) = &apos;내부직원&apos;,TEXT(Employee__r.Type__c), Employee__r.O_Company__r.Name )</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>소속</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

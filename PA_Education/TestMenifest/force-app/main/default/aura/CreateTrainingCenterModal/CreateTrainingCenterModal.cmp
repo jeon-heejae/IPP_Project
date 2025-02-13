@@ -1,0 +1,111 @@
+<!--
+ - Created by Kwanwoo.Jeon on 2024-02-20.
+ -->
+
+<aura:component description ="CreateTrainingCenterModal"
+                implements  ="force:hasRecordId,flexipage:availableForRecordHome,force:appHostable,forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes,force:lightningQuickActionWithoutHeader,force:hasSObjectName,lightning:actionOverride"
+                access      ="global"
+                controller  ="TrainingCenterCalendarController">
+    <!-- Parameter -->
+    <aura:attribute name="showModal"            type="Boolean"      default="false"/>
+    <aura:attribute name="showSpinner"          type="boolean"      default="false"/>
+
+    <!-- 수련원 신청 데이터 -->
+    <aura:attribute name="mapTrainingCenter"    type="Map"          default="{RoomType__c:'', UseType__c:'', Date1__c:'', Date2__c: '', Bigo__c: '', MemberNumber__c: ''}"/>
+
+    <aura:html tag="style">
+        .slds-modal__container {
+        max-width: 50rem !important;
+        width: auto !important;
+        }
+
+        button.slds-button.slds-button_icon.slds-modal__close.closeIcon.slds-button_icon-bare.slds-button_icon-inverse{
+        display: none;
+        }
+        /*        .slds-modal__content.slds-p-around--medium{*/
+        /*        min-height: 10rem !important;*/
+        /*        max-height: 50rem !important;*/
+        /*        height: auto !important;*/
+        /*        }*/
+    </aura:html>
+
+
+    <div aura:id="CardBillingModal" class="slds-show">
+
+        <div role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open " onclick="{!c.fnClose}">
+            <div class = "slds-modal__container" onclick="{!c.stopPropagation}">
+                <!--Header-->
+                <header class="slds-modal__header">
+                    <!--                    <lightning:buttonIcon iconName="utility:close" size="small" alternativeText="Close" variant="bare-inverse" class="slds-modal__close"-->
+                    <!--                                          onclick="{!c.fnClose}" />-->
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                        수련원 신청
+                    </h2>
+                </header>
+
+
+                <!--Body-->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning:recordEditForm objectApiName="ApplicationTrainingCenter__c" >
+                        <div class="slds-grid">
+                            <div class="slds-col slds-size_1-of-2" style="padding-left:5px">
+                                <lightning:inputField fieldName="UseType__c" value="{!v.mapTrainingCenter.UseType__c}"/>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2" style="padding-left:5px">
+                                <lightning:inputField fieldName="RoomType__c" value="{!v.mapTrainingCenter.RoomType__c}"/>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid">
+                            <div class="slds-col slds-size_1-of-2" style="padding-left:5px">
+                                <lightning:inputField fieldName="Date1__c" value="{!v.mapTrainingCenter.Date1__c}" />
+                            </div>
+                            <div class="slds-col slds-size_1-of-2" style="padding-left:5px">
+                                <lightning:inputField fieldName="MemberNumber__c" value="{!v.mapTrainingCenter.MemberNumber__c}"/>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid">
+
+                            <div class="slds-col slds-size_1-of-2" style="padding-left:5px">
+                                <aura:if isTrue="{!v.mapTrainingCenter.UseType__c == '2박'}">
+                                    <lightning:inputField fieldName="Date2__c" value="{!v.mapTrainingCenter.Date2__c}"/>
+                                </aura:if>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid">
+                            <div class="slds-col slds-size_1-of-6 slds-form-element__label" style="padding-left:10px">
+                                비고
+                            </div>
+                            <div class="slds-col slds-size_5-of-6" style="padding-left:5px">
+                                <lightning:textarea  name="Bigo__c" label="" value="{!v.mapTrainingCenter.Bigo__c}"/>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+
+                    </lightning:recordEditForm>
+
+                </div>
+
+                <!--Footer-->
+                <footer class="slds-modal__footer">
+                    <lightning:button label="Cancel"       onclick="{!c.fnClose}"   variant="neutral"/>
+                    <lightning:button label="Submit"       onclick="{!c.fnSave}"    type="submit"    variant="brand"/>
+                </footer>
+            </div>
+            <aura:if isTrue="{!v.showSpinner}">
+                <lightning:spinner variant="brand" size="medium" />
+            </aura:if>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open" id="backdrop"/>
+
+    </div>
+</aura:component>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>QuoteItem_ConsultType__c</fullName>
+    <description>투입인력의 구분</description>
+    <inlineHelpText>투입인력이 여러 역할을 담당한 경우 다중 선택하십시요.</inlineHelpText>
+    <label>인력구분</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Business Leader</fullName>
+                <default>false</default>
+                <label>Business Leader</label>
+            </value>
+            <value>
+                <fullName>Project Manager</fullName>
+                <default>false</default>
+                <label>Project Manager</label>
+            </value>
+            <value>
+                <fullName>Project Leader</fullName>
+                <default>false</default>
+                <label>Project Leader</label>
+            </value>
+            <value>
+                <fullName>Business Analyst</fullName>
+                <default>false</default>
+                <label>Business Analyst</label>
+            </value>
+            <value>
+                <fullName>SFDC Administrator</fullName>
+                <default>false</default>
+                <label>SFDC Administrator</label>
+            </value>
+            <value>
+                <fullName>SFDC Platform Developer</fullName>
+                <default>false</default>
+                <label>SFDC Platform Developer</label>
+            </value>
+            <value>
+                <fullName>SFDC Consultant</fullName>
+                <default>false</default>
+                <label>SFDC Consultant</label>
+            </value>
+            <value>
+                <fullName>SFDC Pardot Consultant</fullName>
+                <default>false</default>
+                <label>SFDC Pardot Consultant</label>
+            </value>
+            <value>
+                <fullName>SFDC Sales Cloud Consultant</fullName>
+                <default>false</default>
+                <label>SFDC Sales Cloud Consultant</label>
+            </value>
+            <value>
+                <fullName>SFDC Service Cloud Consultant</fullName>
+                <default>false</default>
+                <label>SFDC Service Cloud Consultant</label>
+            </value>
+            <value>
+                <fullName>SFDC Marketing Cloud Consultant</fullName>
+                <default>false</default>
+                <label>SFDC Marketing Cloud Consultant</label>
+            </value>
+            <value>
+                <fullName>SFDC Field Service Lightning Consultant</fullName>
+                <default>false</default>
+                <label>SFDC Field Service Lightning Consultant</label>
+            </value>
+            <value>
+                <fullName>SFDC System Architect</fullName>
+                <default>false</default>
+                <label>SFDC System Architect</label>
+            </value>
+            <value>
+                <fullName>SFDC Technical Architect</fullName>
+                <default>false</default>
+                <label>SFDC Technical Architect</label>
+            </value>
+            <value>
+                <fullName>SFDC Application Architect</fullName>
+                <default>false</default>
+                <label>SFDC Application Architect</label>
+            </value>
+            <value>
+                <fullName>I/F Specialist</fullName>
+                <default>false</default>
+                <label>I/F Specialist</label>
+            </value>
+            <value>
+                <fullName>Migration Expert</fullName>
+                <default>false</default>
+                <label>Migration Expert</label>
+            </value>
+            <value>
+                <fullName>Front-end Developer</fullName>
+                <default>false</default>
+                <label>Front-end Developer</label>
+            </value>
+            <value>
+                <fullName>Mobile Developer</fullName>
+                <default>false</default>
+                <label>Mobile Developer</label>
+            </value>
+            <value>
+                <fullName>App Developer</fullName>
+                <default>false</default>
+                <label>App Developer</label>
+            </value>
+            <value>
+                <fullName>Web Publisher</fullName>
+                <default>false</default>
+                <label>Web Publisher</label>
+            </value>
+            <value>
+                <fullName>Web Designer</fullName>
+                <default>false</default>
+                <label>Web Designer</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>6</visibleLines>
+</CustomField>

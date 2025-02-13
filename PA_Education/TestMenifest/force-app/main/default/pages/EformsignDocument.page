@@ -1,0 +1,217 @@
+<!--
+ - Created by hs.jung on 2024-05-22.
+ -->
+
+
+<apex:page id="EformsignDocument" controller="EformsignDocumentPageCtrl" action="{!init}">
+    <apex:includeScript value="https://www.eformsign.com/plugins/jquery/jquery.min.js"/>
+    <!-- EformSignDocument 객체 -->
+    <apex:includeScript value="https://www.eformsign.com/lib/js/efs_embedded_v2.js"/>
+    <apex:includeLightning />
+    <style>
+        #loading {
+            display:flex;
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,0.5);
+            z-index:9999;
+            align-items: center;
+            justify-content: center;
+        }
+        .loader {
+            border: 5px solid #f3f3f3; /* Light grey */
+            border-top: 5px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <!-- 로딩 화면 -->
+    <div id="loading">
+        <div class="loader"></div>
+    </div>
+    <script>
+        function showLoading() {
+            document.getElementById('loading').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+    </script>
+
+    <iframe style="width: 99vw;height: 99vh;display: block;" id="eformsign_iframe"></iframe>
+    <script>
+        var eformsign = new EformSignDocument();
+        // 토큰 정보
+        const accessTokenJson = '{!accessTokenJson}';
+        const accessTokenObj = JSON.parse(accessTokenJson);
+        const accessToken = accessTokenObj.AccessToken__c;
+        const refreshToken = accessTokenObj.RefreshToken__c;
+        const tokenUserEmail = '{!tokenUserEmail}';
+        console.log('tokenUserEmail', tokenUserEmail);
+        console.log('accessTokenObj', accessTokenObj);
+
+        // 환경 정보
+        const envInfoJson = '{!envInfoJson}';
+        const envInfoObj = JSON.parse(envInfoJson);
+        const companyId = envInfoObj.companyId;
+        const countryCode = envInfoObj.countryCode;
+        const languageCode = envInfoObj.languageCode
+
+        // 생성 문서 데이터
+        const TEMPLATE_ID = '{!$CurrentPage.parameters.templateId}';
+        const TEMPLATE_RECORD_ID = '{!$CurrentPage.parameters.templateRecordId}';
+        const RECORD_ID = '{!$CurrentPage.parameters.recordId}';
+        const OBJECT_API_NAME = '{!$CurrentPage.parameters.objectApiName}';
+        const DOCUMENT_ID = '{!$CurrentPage.parameters.documentId}';
+        let documentOptionType = '01';
+        let fields;
+        let documentName = '';
+        console.log("TEMPLATE_ID:", TEMPLATE_ID);
+        console.log("DOCUMENT_ID:", DOCUMENT_ID);
+
+        //DOCUMENT_ID 존재 시, 문서 미리보기
+        if (!!DOCUMENT_ID) {
+            documentOptionType = '03';
+        } else {
+            // 문서 작성
+            // prefill.fields 데이터 생성: eformsign 템플릿 필드와 세일즈포스 필드를 매핑
+            fields = JSON.parse('{!serializedSObjList}');
+            // documentName = "문서 명: " + '{!TODAY()}';
+            // console.log(documentName);
+        }
+        console.log('도큐옵션타입: ' + documentOptionType);
+        const accessTokenTest = '';
+        var document_option = {
+            "company": {
+                "id": companyId, // enter the company id
+                "country_code": countryCode, // enter the country code (ex: kr)
+            },
+            "user": {
+                "type": "01",
+                "id": tokenUserEmail,  // user Email
+                "access_token": accessToken,
+                "refresh_token": refreshToken,
+            },
+            "mode": {
+                "type": documentOptionType,
+                "template_id": TEMPLATE_ID,
+                "document_id": DOCUMENT_ID,
+            },
+            "layout": {
+                "lang_code": languageCode, // 이폼사인 언어. ko, en, ja
+                "header": true, // 상단바 (푸른색) 표시 여부. 미표시 시 액션 버튼을 통해 전송 등 동작 가능
+                "footer": false // 하단바 (이폼사인 로고, 언어 설정 등) 표시 여부.
+            },
+             "prefill": {
+                "document_name": documentName, // enter the document title
+                "fields": fields
+             },
+            "return_fields": ['customer name']
+        };
+
+        // if(!DOCUMENT_ID){
+        //     console.log(documentName);
+        //     document_option.prefill.document_name = documentName;
+        //     document_option.prefill.fields = fields;
+        // }
+        //document_option.mode.document_id = DOCUMENT_ID;
+        console.log('document_option:::');
+        console.log(document_option);
+
+        //callback option
+        var success_callback = function(response){
+            console.log('===   success_callback');
+            console.log(response.code);
+            if (response.code == "-1") {
+                console.log('성공>>');
+                //문서 작성 성공
+                console.log(JSON.stringify(response, null, 2));
+                /*
+                    {
+                        "type": "document",
+                        "fn": "saveSuccess",
+                        "code": "-1",
+                        "message": "성공하였습니다.",
+                        "document_id": "370a724cd56747d1adcc078f9a432a22",
+                        "title": "test docu",
+                        "values": {
+                            "customer name": ""
+                        },
+                        "recipients": [
+                            {
+                                "step_idx": 2,
+                                "step_type": "05",
+                                "recipient_type": "02",
+                                "use_mail": true,
+                                "use_sms": false,
+                                "id": "chois940713@gmail.com",
+                                "name": "테스트 발송2",
+                                "auth": {
+                                    "password": "",
+                                    "passwrod_hint": "",
+                                    "valid": {
+                                        "day": 7,
+                                        "hour": 0
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                */
+                console.log("document_id::::", response.document_id);
+                saveDocumentId(response);
+            }
+        };
+
+        var error_callback = function(response){
+            console.log('error_callback');
+            console.log(response.code);
+            //문서 작성 실패
+            alert(response.message);
+        };
+
+        var action_callback = function (response) {
+            hideLoading();
+            console.log('action_callback');
+            console.table(response.data);
+        };
+
+        eformsign.document(document_option, "eformsign_iframe", success_callback, error_callback, action_callback);
+        eformsign.open();
+
+        function saveDocumentId(response) {
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.EformsignDocumentPageCtrl.insertDocumentId}',
+                // Gim: 글로벌 변수 아닌 다른 방식으로 데이터 취득 방법 고민 필요.
+                JSON.stringify(response), TEMPLATE_RECORD_ID, RECORD_ID, OBJECT_API_NAME,
+                function(result, event) {
+                    console.log('result:', result);
+                    console.log('event:', event);
+                    if (event.status) {
+                        //결과에 따라 state 혹은 기타 처리 로직 - actionCallback 사용 가능 시 핸들링 가능한지?
+                        const message = {
+                            state: 'close',
+                            result: result,
+                            description: '임시 Description'
+                        };
+                        window.parent.postMessage(message, '*'); // '*'는 도메인 필터
+                    } else {
+                        alert('Error: ' + event.message);
+                    }
+                },
+                {escape: true}
+            );
+        }
+    </script>
+</apex:page>

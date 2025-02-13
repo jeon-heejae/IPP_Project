@@ -1,0 +1,83 @@
+<aura:component access="global" controller="GoogleContactController">
+	<ltng:require scripts="/resource/agf__jquery2_1_4" afterScriptsLoaded="{!c.fnInit}" />
+    <aura:attribute name="gapi" type="Object" />
+	<aura:attribute name="clientId" type="String" default="" />
+	<aura:attribute name="apiKey" type="String" default="" />
+	<aura:attribute name="accessToken" type="String" default="" />
+	<aura:attribute name="scopes" type="String" default="https://www.googleapis.com/auth/contacts.readonly" />
+    <aura:attribute name="isAuthenticationFail" type="boolean" default="false" />
+	<aura:attribute name="bSpinner" type="boolean" default="false" />
+	
+	<aura:attribute name="rememberFolderId" type="String" />
+	<aura:attribute name="userEmail" type="String" default="je.lee@daeunextier.com"/>
+    
+    <aura:attribute name="searchDate" type="Date" />
+    <aura:attribute name="listContactData"  type="List" />
+	<!-- DataTable Attribute -->
+    <aura:attribute name="listColumns"      type="List" />
+    <aura:attribute name="listData"         type="List" />
+    <aura:attribute name="listSelectedRows" type="List" />
+    <aura:attribute name="listActivity"     type="List" />
+
+    <!-- Sorting Attribute -->
+    <aura:attribute name="sSortBy"              type="String" />
+    <aura:attribute name="sSortDirection"       type="String" />
+    <aura:attribute name="defaultSortDirection" type="String" />
+    
+    <div class="slds-is-relative">
+        <aura:if isTrue="{!v.bSpinner}">
+            <lightning:spinner variant="base"  size="large" />
+        </aura:if>
+	    <!-- Header -->
+	    <lightning:layout>
+	        <lightning:layoutItem size="12">
+	            <div class="slds-page-header">
+	                <div class="slds-media">
+	                    <div class="slds-media__figure">
+	                        <lightning:icon iconName="custom:custom71" />
+	                    </div>
+	                    <div class="slds-media__body">
+	                        <!-- Header Media Body -->
+	                        <lightning:layout>
+	                            <lightning:layoutItem size="6">
+	                                <h1 class="slds-page-header__title slds-truncate slds-m-top_xx-small" title="Remember">Remember</h1>
+	                            </lightning:layoutItem>
+	                            <lightning:layoutItem size="6">
+	                            	<div class="slds-grid slds-float_right">
+                                        <span onkeypress="{!c.handlerKeyPress}">
+											<lightning:input type="date" name="input2" aura:id="searchDate" label="조회일자" value="{!v.searchDate}" variant="label-hidden"/>
+										</span>
+										<lightning:button class="slds-theme_neutral" iconPosition="right" variant="neutral" disabled="{!v.isAuthenticationFail}" label="Search" iconName="utility:search"  onclick="{!c.fnHandleSearch}"/>
+	                                </div>
+	                            </lightning:layoutItem>
+	                        </lightning:layout>
+	                    </div>
+	                </div>
+	            </div>    
+	        </lightning:layoutItem>
+	    </lightning:layout>
+	    <!-- Search Condition -->
+	    
+
+	    <!-- Contents -->
+	    <lightning:layout> 
+	        <lightning:layoutItem size="12" class="custom_datatable">
+	            <lightning:datatable class="slds-table_bordered"
+	                aura:id="datatable"
+	                columns="{!v.listColumns}"
+	                data="{!v.listData}"
+	                keyField="sId"
+	                showRowNumberColumn="true"
+	                sortedBy="{!v.sSortBy}"
+	                sortedDirection="{!v.sSortDirection}"
+	                defaultSortDirection="{!v.defaultSortDirection}"
+	                onsort="{!c.fnColumnSorting}"
+	                minColumnWidth="150"
+	                onrowselection="{! c.fnSelectCheckbox }"
+	                onrowaction="{! c.fnHandleRowAction }"
+	            />
+	        </lightning:layoutItem>
+	    </lightning:layout>
+	</div>
+    
+</aura:component>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DescriptionPlan__c</fullName>
+    <inlineHelpText>02. Identified &amp; Customer Interviewed - 추정 사업 예산
+03. Demo &amp; Value Proposal - 확인된 사업 예산</inlineHelpText>
+    <label>사업 예산</label>
+    <length>1000</length>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>LongTextArea</type>
+    <visibleLines>4</visibleLines>
+</CustomField>

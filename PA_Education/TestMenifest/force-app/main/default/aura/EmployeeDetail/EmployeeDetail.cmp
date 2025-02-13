@@ -1,0 +1,17 @@
+<!--
+ - Created by hg.kim on 2020-11-11.
+ -->
+
+<aura:component controller="EmployeeDetailController" description="EmployeeDetail" implements="force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.fnInit}"/>
+    <aura:attribute name="flag" type="Boolean" default="true" />
+    <aura:attribute name="reason" type="String" default="" />
+    <aura:attribute name="clear" type="String" default="" />
+    <div>
+        Downloading...
+<!--        <lightning:input type="text" value="{!v.reason}" label="사유" />
+        <lightning:input type="text" value="{!v.clear}" label="금품청산 등" /> <br/>
+        <lightning:button variant="Neutral" label="취소" title="cancel" onclick="{!c.fnCancel}"/>
+        <lightning:button variant="brand" label="저장" title="save" onclick="{!c.fnSave}"/>-->
+    </div>
+</aura:component>

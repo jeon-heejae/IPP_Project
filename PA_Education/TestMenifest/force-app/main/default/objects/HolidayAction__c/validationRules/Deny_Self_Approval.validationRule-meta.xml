@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Deny_Self_Approval</fullName>
+    <active>true</active>
+    <description>셀프승인 금지</description>
+    <errorConditionFormula>HolidayAction_Approver__c  = OwnerId</errorConditionFormula>
+    <errorMessage>승인자가 요청자 본인입니다.
+파견지 PM 또는 본사 매니저를 선택하세요.</errorMessage>
+</ValidationRule>

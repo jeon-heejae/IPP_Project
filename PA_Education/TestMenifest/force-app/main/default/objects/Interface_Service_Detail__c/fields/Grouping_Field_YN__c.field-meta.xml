@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Grouping_Field_YN__c</fullName>
+    <description>그룹핑 필드에 포함할지 여부를 선택
+1. 대상필드에 값이 있고, &quot;COUNT&quot; 필드가 아닌 경우에 추가됨
+2. 1번을 제외한 Group by 쿼리는 다음과 같은 조건으로 추가됨
+- Y인 경우 select와 group byd에 추가됨
+- N인 경우 select와 group by 절에서 빠짐
+- NULL인 경우, select에는 추가되고, group by 절에선 빠짐</description>
+    <inlineHelpText>그룹핑 필드에 포함할지 여부를 선택
+1. 대상필드에 값이 있고, &quot;COUNT&quot; 필드가 아닌 경우에 추가됨
+2. 1번을 제외한 Group by 쿼리는 다음과 같은 조건으로 추가됨
+- Y인 경우 select와 group byd에 추가됨
+- N인 경우 select와 group by 절에서 빠짐
+- NULL인 경우, select에는 추가되고, group by 절에선 빠짐</inlineHelpText>
+    <label>그룹핑 포함여부</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Y</fullName>
+                <default>false</default>
+                <label>Y</label>
+            </value>
+            <value>
+                <fullName>N</fullName>
+                <default>false</default>
+                <label>N</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

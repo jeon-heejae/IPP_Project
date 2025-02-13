@@ -1,0 +1,13 @@
+<template>
+    <lightning-card>
+        <lightning-input
+        type="file"
+        label="Attachment"
+        onchange={handleFilesChange}
+        name="file1"
+        accept="image/png">
+        </lightning-input>
+        <img src={objPhoto.tempUrl}/>
+    </lightning-card>
+    
+</template>

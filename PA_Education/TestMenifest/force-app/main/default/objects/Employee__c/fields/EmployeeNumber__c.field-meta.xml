@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>EmployeeNumber__c</fullName>
+    <description>DU+입사연도+일련번호3자리</description>
+    <displayFormat>DU{YY}{000}</displayFormat>
+    <externalId>false</externalId>
+    <inlineHelpText>자동부여(DU+입사연도+일변번호3자리)</inlineHelpText>
+    <label>사번(Internal)</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>AutoNumber</type>
+</CustomField>

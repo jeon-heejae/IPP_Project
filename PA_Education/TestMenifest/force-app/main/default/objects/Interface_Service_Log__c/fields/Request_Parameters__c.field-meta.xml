@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Request_Parameters__c</fullName>
+    <description>외부에서 요청시 등록한 파라메터 정보</description>
+    <inlineHelpText>외부에서 요청시 등록한 파라메터 정보</inlineHelpText>
+    <label>요청내용</label>
+    <length>131072</length>
+    <trackTrending>false</trackTrending>
+    <type>LongTextArea</type>
+    <visibleLines>20</visibleLines>
+</CustomField>

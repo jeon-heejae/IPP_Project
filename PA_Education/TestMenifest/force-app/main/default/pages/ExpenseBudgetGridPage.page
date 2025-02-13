@@ -1,0 +1,29 @@
+<apex:page showHeader="false" sidebar="false" standardController="Expense__c" extensions="ExpenseBudgetGridController" lightningStylesheets="true">
+    <div style="heigth : 100%">
+        <apex:dataTable value="{!expenseBudgetList}" var="expenseBudget" width="100%" rendered="{!expenseBudgetList.size > 0}" >
+            
+<!--            <apex:column width="25%">-->
+<!--                <apex:facet name="header">지출구분</apex:facet>-->
+<!--                <apex:outputText value="{!expenseBudget.paymentType}"/>-->
+<!--            </apex:column> -->
+            <apex:column width="30%">
+                <apex:facet name="header">비용구분</apex:facet>
+                <apex:outputText value="{!expenseBudget.Category2}"/>
+            </apex:column>
+            <apex:column width="30%">
+                <apex:facet name="header">상신건수</apex:facet>
+                <apex:outputText value="{!expenseBudget.cnt}"/>
+            </apex:column>
+            <!-- 합계 주석 -->
+            <!-- <apex:column width="25%" style="{!if(expenseBudget.cnt == null,'font-weight: bold', '')}"> -->
+            <apex:column width="40%" style="display: {!if(expenseBudget.cnt == null,'none', '')}">
+                <apex:facet name="header">상신금액</apex:facet>
+                <apex:outputText value="{0, number, ￦###,##0}">
+                    <apex:param value="{!expenseBudget.amount}" />
+                </apex:outputText>
+            </apex:column>
+        </apex:dataTable>
+
+
+    </div>
+</apex:page>

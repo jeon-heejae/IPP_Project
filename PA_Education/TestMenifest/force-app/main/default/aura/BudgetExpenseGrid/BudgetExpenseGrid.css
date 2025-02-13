@@ -1,0 +1,13 @@
+/**
+ * Created by Kwanwoo.Jeon on 2024-01-15.
+ */
+
+.THIS #myDIV table.slds-table.slds-table_bordered.slds-table--fixed-layout{
+    border: 0px;
+}
+.THIS .tbRight{
+    text-align: right;
+}
+.THIS .tbCenter{
+    text-align: center;
+}

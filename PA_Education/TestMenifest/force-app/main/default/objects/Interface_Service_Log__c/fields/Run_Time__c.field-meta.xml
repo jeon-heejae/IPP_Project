@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Run_Time__c</fullName>
+    <description>요청을 받아 응답하는데 걸린 시간(밀리초)</description>
+    <externalId>false</externalId>
+    <inlineHelpText>요청을 받아 응답하는데 걸린 시간(밀리초)</inlineHelpText>
+    <label>수행시간(ms)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

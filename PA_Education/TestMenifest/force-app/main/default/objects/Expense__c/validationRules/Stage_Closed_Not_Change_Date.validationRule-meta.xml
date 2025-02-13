@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Stage_Closed_Not_Change_Date</fullName>
+    <active>true</active>
+    <errorConditionFormula>ISPICKVAL(ApprovalStatus__c, &apos;승인완료&apos;) 
+&amp;&amp; 
+ISCHANGED(Submit_Date__c)</errorConditionFormula>
+    <errorMessage>승인완료 후 기안일자 변경불가</errorMessage>
+</ValidationRule>

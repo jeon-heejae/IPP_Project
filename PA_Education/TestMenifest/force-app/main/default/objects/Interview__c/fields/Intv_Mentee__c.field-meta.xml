@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Intv_Mentee__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>면담 대상자인 멘티</description>
+    <label>사원</label>
+    <referenceTo>Employee__c</referenceTo>
+    <relationshipLabel>면담일지 (피면담자 명)</relationshipLabel>
+    <relationshipName>Intv_Mentee</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

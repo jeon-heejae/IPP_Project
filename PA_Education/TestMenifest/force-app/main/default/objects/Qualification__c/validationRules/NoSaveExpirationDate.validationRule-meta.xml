@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NoSaveExpirationDate</fullName>
+    <active>false</active>
+    <description>L4 등급의 자격증은 만료일자 필드가 Null이 아닐 경우, 오류메시지 표출</description>
+    <errorConditionFormula>AND(OR(
+TEXT(CertificationName__c) = &apos;Application Architect&apos;,
+TEXT(CertificationName__c) = &apos;B2B Solution Architect&apos;,
+TEXT(CertificationName__c) = &apos;B2C Solution Architect&apos;,
+TEXT(CertificationName__c) = &apos;System Architect&apos;,
+TEXT(CertificationName__c) = &apos;Technical Architect&apos;), NOT(ISBLANK(ExpirationDate__c)))</errorConditionFormula>
+    <errorMessage>해당 자격증은 만료 일자가 없습니다. 만료일자에 값을 제거해주세요.</errorMessage>
+</ValidationRule>

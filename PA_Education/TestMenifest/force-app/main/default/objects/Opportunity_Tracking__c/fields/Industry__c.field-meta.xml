@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Industry__c</fullName>
+    <externalId>false</externalId>
+    <formula>CASE(  Account_Name__r.Industry, 
+&quot;제조업&quot;,&quot;제조업&quot;, 
+&quot;광업&quot;,&quot;광업&quot;, 
+&quot;건설업&quot;,&quot;건설업&quot;, 
+&quot;운수업&quot;,&quot;운수업&quot;, 
+&quot;출판, 영상, 방송통신 및 정보서비스&quot;,&quot;출판, 영상, 방송통신 및 정보서비스&quot;, 
+&quot;사업시설관리 및 사업지원서비스업&quot;,&quot;사업시설관리 및 사업지원서비스업&quot;, 
+&quot;전문, 과학 및 기술 서비스업&quot;,&quot;전문, 과학 및 기술 서비스업&quot;, 
+&quot;보건 및 사회복지사업&quot;,&quot;보건 및 사회복지사업&quot;, 
+&quot;농업, 임업 및 어업&quot;,&quot;농업, 임업 및 어업&quot;, 
+&quot;전기, 가스, 증기 및 수도사업&quot;,&quot;전기, 가스, 증기 및 수도사업&quot;, 
+&quot;도매 및 소매업&quot;,&quot;도매 및 소매업&quot;, 
+&quot;숙박 및 음식점업&quot;,&quot;숙박 및 음식점업&quot;, 
+&quot;금융 및 보험업&quot;,&quot;금융 및 보험업&quot;, 
+&quot;예술, 스포츠 및 여가관련사업&quot;,&quot;예술, 스포츠 및 여가관련사업&quot;,&quot;&quot; 
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Industry</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CompeletCheck__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>고객확인용</description>
+    <inlineHelpText>등록된 Requirement 의 최종 완료여부를 고객의 검토 후 완료 여부를 확정하는 필드 입니다.</inlineHelpText>
+    <label>완료확인</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

@@ -1,0 +1,22 @@
+<!--
+ - @description       : Map의 key에 해당하는 value 표기
+ - @author            : cj.sohn@daeunextier.com
+ - @group             : DaeuNextier
+ - Modifications Log
+ - Ver   Date         Author                    Modification
+ - 1.0   2021-12-28   cj.sohn@daeunextier.com   Initial Version
+-->
+
+
+<aura:component description="DN_MapEntries">
+    <!-- Attributes -->
+    <aura:attribute name="map" type="Map" access="global"/>
+    <aura:attribute name="key" type="String" access="global"/>
+    <aura:attribute name="value" type="String" access="global"/>
+
+    <!-- Handler -->
+    <aura:handler name="init" value="{!this}" action="{!c.fnInit}"/>
+
+    {!v.value}
+
+</aura:component>

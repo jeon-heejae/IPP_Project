@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CumulativeTime__c</fullName>
+    <label>총 작업 시간</label>
+    <summarizedField>ITSM__c.TimeTaken__c</summarizedField>
+    <summaryFilterItems>
+        <field>ITSM__c.fm_RequestType__c</field>
+        <operation>notEqual</operation>
+        <value>하자</value>
+    </summaryFilterItems>
+    <summaryForeignKey>ITSM__c.Project__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

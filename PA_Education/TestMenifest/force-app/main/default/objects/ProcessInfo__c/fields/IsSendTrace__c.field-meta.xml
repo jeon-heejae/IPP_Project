@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>IsSendTrace__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>시스템 필드, Traceability 시스템에 송신여부.
+활성화여부가 체크가 해제가 되면 이 필드는 false로 변경됨.</description>
+    <label>Traceability 송신 여부</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

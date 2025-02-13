@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Holiday_Annual_Calculated__c</fullName>
+    <description>대유넥스티어 연차 계산법 기준이 회계연도로 변경되어 새로운 연차일수 계산 필드 생성 (생성일: 2022-12-27, 생성자: hyunsoo.song@daeunextier.com)
+
+* 필드 설명 
+- 1월 1일에 연차 일괄 부여
+월차만료일 존재 X -&gt; 기존입사자 : 연차일수 15개 + 추가 연차일수
+월차만료일 존재 -&gt; 신규입사자 : 반올림((12.31 - 입사월일)/365*15) 
+
+ex1) 오늘 2023년 1월 1일
+사원A: 입사일 2022-05-16 → 월차만료일 존재 → 입사월일(05.16~12.31)/365*15 → 10개
+사원C: 입사일 2022-01-01 → 월차만료일 존재 X → 15 + 0 → 15개
+사원D: 입사일 2019-09-04 → 월차만료일 존재 X → 15 + 1 → 16개
+
+ex2) 오늘 2022년 12월 27일
+사원A: 입사일 2022-05-16 -&gt; 월차만료일 존재 -&gt; 0개</description>
+    <externalId>false</externalId>
+    <formula>IF(
+    ISNULL(Holiday_Monthly_Period__c),
+    15 + MIN(Holiday_Additionaldays__c, 10),
+    IF(
+        DATE(YEAR(Holiday_JoinDate__c) + 1, 1, 1) &lt;= TODAY(),
+        CEILING((DATE(YEAR(Holiday_JoinDate__c), 12, 31) - Holiday_JoinDate__c + 1 ) / 365 * 15), 0
+    )
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>올해 발생한 연차일수</inlineHelpText>
+    <label>올해 연차일수</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

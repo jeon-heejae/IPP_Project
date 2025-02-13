@@ -1,0 +1,381 @@
+<aura:component controller="BingoForUserController" description="BingoForUser" implements="force:appHostable,flexipage:availableForAllPageTypes">
+    <!--    <aura:attribute name="bingoCellParticipant" type="String[]"-->
+    <!--                    default="['a3MF7000000PVtNMAW', 'a3MF7000000GiFuMAK', 'a3MF7000000GiJLMA0', 'a3MF7000000GiJcMAK', 'a3MF7000000GiJuMAK', 'a3MF7000000PVtIMAW', 'a3MF7000000GiJqMAK', 'a3MF7000000GiFzMAK', 'a3MF7000000GiJHMA0', 'a3MF7000000GiJrMAK', 'a3MF7000000GiJvMAK', 'a3MF7000000GiJaMAK', 'a3MF7000000GiJfMAK', 'a3MF7000000GiG4MAK', 'a3MF7000000GiJQMA0', 'a3MF7000000GiJMMA0', 'a3MF7000000GiJVMA0', 'a3MF7000000GiJbMAK', 'a3MF7000000GiJwMAK', 'a3MF7000000GiG5MAK', 'a3MF7000000GiG9MAK', 'a3MF7000000GiJBMA0', 'a3MF7000000GiJGMA0', 'a3MF7000000GiJkMAK', 'a3MF7000000GiJpMAK']"/>-->
+    <aura:attribute name="bingoCellParticipant" type="String[]"
+                    default="['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']"/>
+    <aura:attribute name="bingoCellParticipantName" type="String[]"
+                    default="['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']"/>
+    <aura:attribute name="bingoCellParticipantImg" type="String[]"
+                    default="['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']"/>
+    <aura:handler name="init" value="{!this}" action="{!c.fnInit}" />
+    <aura:attribute name="daeuMembers" type="List" />
+    <aura:attribute name="draggedMemberId" type="String" />
+    <table class="mainTable">
+        <tr class="titlePart">
+            <td class="explain">
+                <img class ="titleImg" src="{!$Resource.BingoTitle}" />
+            </td>
+        </tr>
+        <tr class="buttonPart">
+            <td class="buttonTd">
+                <!--@@@@@@배포시 삭제@@@@@-->
+<!--                <lightning:button label="빠르게" title="all" onclick="{! c.allBtnClick }"/>-->
+
+                <lightning:button label="랜덤" title="random" onclick="{! c.randomBtnClick }"/>
+                <lightning:button label="저장" title="save" onclick="{! c.saveBtnClick }" />
+            </td>
+        </tr>
+        <tr class="bingoPart">
+            <td>
+                <table class="subTable" aura:id="subTable">
+                    <tr>
+                        <td aura:id="block20">
+                            <div class="inputContent" id="04" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[20]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant04" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[20]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+
+                                <span class="bingoText">{!v.bingoCellParticipantName[20]}</span>
+                            </div>
+                        </td>
+                        <td aura:id="block21">
+                            <div class="inputContent" id="14" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[21]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant14" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[21]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[21]}</span>
+                            </div>
+                        </td>
+                        <td aura:id="block22">
+                            <div class="inputContent" id="24" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[22]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant24" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[22]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[22]}</span>
+                            </div>
+                        </td>
+                        <td aura:id="block23">
+                            <div class="inputContent" id="34" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[23]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant34" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[23]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[23]}</span>
+                            </div>
+                        </td>
+                        <td aura:id="block24">
+                            <div class="inputContent" id="44" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[24]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant44" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[24]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[24]}</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td aura:id="block15">
+                            <div class ="inputContent" id="03" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[15]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant03" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[15]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[15]}</span>
+                            </div>
+                        </td>
+                        <td aura:id="block16">
+                            <div class ="inputContent" id="13" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[16]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant13" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[16]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[16]}</span>
+                            </div>
+                        </td>
+                        <td aura:id="block17">
+                            <div class ="inputContent" id="23" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[17]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant23" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[17]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[17]}</span>
+                            </div>
+                        </td>
+                        <td aura:id="block18">
+                            <div class ="inputContent" id="33" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[18]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant33" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[18]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[18]}</span>
+                            </div>
+                        </td>
+                        <td aura:id="block19">
+                            <div class ="inputContent" id="43" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[19]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant43" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[19]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[19]}</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td aura:id="block10">
+                            <div class="inputContent" id="02" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[10]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant02" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[10]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[10]}</span>
+                            </div>
+                        </td>
+                        <td aura:id="block11">
+                            <div class="inputContent" id="12" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[11]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant12" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[11]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[11]}</span>
+                            </div>
+                        </td>
+                        <td aura:id="block12">
+                            <div class="inputContent" id="22" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[12]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant22" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[12]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[12]}</span>
+                            </div>
+                        </td>
+                        <td aura:id="block13">
+                            <div class="inputContent" id="32" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[13]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant32" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[13]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[13]}</span>
+                            </div>
+                        </td>
+                        <td aura:id="block14">
+                            <div class="inputContent" id="42" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[14]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant42" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[14]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[14]}</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td aura:id="block5">
+                            <div class="inputContent" id="01" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[5]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant01" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[5]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[5]}</span>
+                            </div>
+                        </td>
+                        <td aura:id="block6">
+                            <div class="inputContent" id="11" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[6]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant11" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[6]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[6]}</span>
+                            </div>
+                        </td>
+                        <td aura:id="block7">
+                            <div class="inputContent" id="21" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[7]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant21" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[7]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[7]}</span>
+                            </div>
+                        </td>
+                        <td aura:id="block8">
+                            <div class="inputContent" id="31" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[8]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant31" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[8]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[8]}</span>
+                            </div>
+                        </td>
+                        <td aura:id="block9">
+                            <div class="inputContent" id="41" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[9]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant41" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[9]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[9]}</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td aura:id="block0">
+                            <div class="inputContent" id="00" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[0]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant00" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[0]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[0]}</span>
+                            </div>
+                        </td>
+                        <td aura:id="block1">
+                            <div class="inputContent" id="10" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[1]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant10" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[1]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[1]}</span>
+                            </div>
+                        </td>
+                        <td aura:id="block2">
+                            <div class="inputContent" id="20" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[2]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant20" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[2]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[2]}</span>
+                            </div>
+                        </td>
+                        <td aura:id="block3">
+                            <div class="inputContent" id="30" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[3]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant30" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[3]}"/>
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[3]}</span>
+                            </div>
+                        </td>
+                        <td aura:id="block4">
+                            <div class="inputContent" id="40" ondrop="{!c.handleDrop}" ondragover="{!c.allowDrop}">
+                                <lightning:layout class="bingoImg">
+                                    <img src="{!$Site.Prefix + '/sfc/servlet.shepherd/version/download/'+v.bingoCellParticipantImg[4]}" class="bingoImage" />
+                                </lightning:layout>
+                                <lightning:layout class="bingoInput">
+                                    <lightning:recordEditForm objectApiName="BingoCell__c">
+                                        <lightning:inputField aura:id="bingoCellParticipant40" class="bingoInput" fieldName="BingoMember__c" value="{!v.bingoCellParticipant[4]}" />
+                                    </lightning:recordEditForm>
+                                </lightning:layout>
+                                <span class="bingoText">{!v.bingoCellParticipantName[4]}</span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <div class="daeuMemberList">
+        <span>임직원 정보</span><br/>
+        <div class="showList">
+            <aura:iteration items="{!v.daeuMembers}" var="member" indexVar="index">
+                <div draggable="true" ondragstart="{!c.handleDrag}" data-member="{!index}">
+                    {!member.Name}
+                </div>
+            </aura:iteration>
+        </div>
+    </div>
+</aura:component>

@@ -1,0 +1,996 @@
+<aura:component implements="force:hasRecordId,lightning:actionOverride,force:lightningQuickActionWithoutHeader" access="global" controller="QuoteCreation" >
+	
+	<aura:attribute name="listConsulting" type="List" />
+	<aura:attribute name="listLicense" type="List" />
+	<aura:attribute name="listTraining" type="List" />
+	<!-- <aura:attribute name="listEmployee" type="List" /> -->
+	<aura:attribute name="objOppty" type="Opportunity__c" />
+	<aura:attribute name="objQuote" type="Quote__c" />
+	<!-- <aura:attribute name="objQuoteSubtotal" type="Object" /> -->
+	<aura:attribute name="list" type="List" />
+	<!-- <aura:attribute name="listQuote" type="List" /> -->
+
+	<aura:handler name="init" action="{!c.fnInit}" value="{!this}" />
+    <aura:attribute name="recordId" type="String" />
+    <!-- 초기 레코드 INIT 값 -->
+    <!-- <aura:attribute name="Mode" type="String" /> -->
+    <aura:attribute name="QuoteDate" type="Date"/>
+    <aura:attribute name="qMode" type="String" />
+    <!-- <aura:attribute name="idEmployee" type="String" /> -->
+    <aura:attribute name="idOppty" type="String" />
+    <!-- Accordion EDIT일 경우 활성화 섹션 -->
+    <aura:attribute name="activeSection" type="List" />
+    <!-- 초기 remark 값 -->
+    <aura:attribute name="ConsultingRemark" type="String"/>
+    <aura:attribute name="LicenseRemark" type="String"/>
+    <aura:attribute name="TrainingRemark" type="String"/>
+	<!-- 견적, 견적 상세 Standard 레이블 -->
+    <aura:attribute name="QuoteLabelMap" type="Map" />
+    <aura:attribute name="QuoteItemLabelMap" type="Map" />
+	<!-- picklist Value-->
+	<aura:attribute name="QuoteStatus"   type="List"/>
+	<aura:attribute name="QuoteItemType"   type="List"/>
+	<aura:attribute name="QuoteItemLevel"  type="List"/>
+	<aura:attribute name="QuoteItemLevelTraining"  type="List"/>
+	<!-- common lookup 그리는 변수 -->
+  	<!-- <aura:attribute name="customLookupEmp" type="Aura.component"/>         -->
+  	<aura:attribute name="customLookupAcc" type="Aura.component"/>        
+  	<aura:attribute name="customLookupCon" type="Aura.component"/>
+	<!-- subtotal 소계 컨설팅 -->
+	<aura:attribute name="objSumConsulting" type="Object" />
+	<aura:attribute name="objSumLicense" type="Object" />
+	<aura:attribute name="objSumTraining" type="Object" />
+	<!-- deleted List -->
+	<aura:attribute name="listDeleted" type="List"/>
+	<!-- table sizing -->
+    <aura:attribute name="mouseStart" type="string" />
+    <aura:attribute name="oldWidth" type="string" />
+    <aura:attribute name="currentEle" type="Object" />
+
+    <aura:attribute name="LookupOrText" type="boolean" default="false" />
+	
+	<!-- Spinner Container -->
+	<aura:attribute name="toggleSpinner" type="boolean" default="false"/>
+  	<aura:if isTrue="{!v.toggleSpinner}">
+  		<lightning:spinner aura:id="spinner" alternativeText="Loading" size="large" variant="brand"/>
+  	</aura:if>        
+	<!-- Header  -->
+	<div class="slds-page-header slds-p-around_medium">
+		<div class="slds-page-header__row">
+		   	<div class="slds-page-header__col-title">
+		      	<div class="slds-media">
+		        	<div class="slds-media__figure">
+		            	<span class="slds-icon_container slds-icon-standard-opportunity" title="opportunity">
+                        	<lightning:icon iconName="custom:custom42" />
+			            		<span class="slds-assistive-text">견적</span>
+		          		</span>
+			        </div>
+			        <div class="slds-media__body">
+                        <div class="slds-float_right">
+                        	<lightning:buttonGroup>
+                		    	<!-- <lightning:button class="slds-button" label="복사" onclick="{!c.fnValidityCheck}"  name="save"/> -->
+                		    	<lightning:button class="slds-button" label="저장" onclick="{!c.fnValidityCheck}"  name="save"/>
+                		    	<lightning:button class="slds-button" label="뒤로" onclick="{!c.fnCancel}"  name="cancel"/>
+                			</lightning:buttonGroup>
+                        </div>
+			        	<div class="slds-page-header__name">
+			            	<div class="slds-page-header__name-title">
+			            		<h1>
+			                		<span class="slds-page-header__title slds-truncate" title="Quote Creation">
+			                			<aura:if isTrue="{!v.recordId}">
+				         					견적 수정 : {!v.objQuote.Name} 
+			                   			<aura:set attribute="else">
+			                   				견적 생성			    
+			                			</aura:set>
+			                			</aura:if>
+			                		</span>
+			              		</h1>
+			            	</div>
+			          	</div>
+			          	<p class="slds-page-header__name-meta">견적 일자 : {!v.objQuote.Quote_Date__c}</p>
+		        	</div>
+	      		</div>
+		    </div>
+	  	</div>
+	</div>
+<!-- 	<div class="slds-p-around_medium slds-form_horizontal slds-form slds-grid slds-wrap">
+				<lightning:input  class="slds-size_1-of-2 slds-p-around_medium" type="text" value="{!v.objQuote.Name}" label="{!v.QuoteLabelMap.Name}" disabled="true"/>					
+				<lightning:input  class="slds-size_1-of-2 slds-p-around_medium" type="text" value="{!v.objQuote.Quote_Subject__c}" label="{!v.QuoteLabelMap.Quote_Subject__c}" />	
+	</div>
+ -->
+    <!-- Quote__c -->
+	<lightning:layout  verticalAlign="stretch" multipleRows="true" class="x-large">
+		<lightning:layoutItem flexibility="auto" padding="around-small" size="6">
+				<lightning:input class="slds-p-bottom_small" type="text" value="{!v.objQuote.Name}" label="{!v.QuoteLabelMap.Name}" disabled="true"/>	
+				<lightning:input class="slds-p-bottom_small" type="text" value="{!v.objQuote.Quote_Subject__c}" label="{!v.QuoteLabelMap.Quote_Subject__c}" />	
+				{!v.customLookupAcc}
+				<lightning:select class="slds-hide slds-p-bottom_small" name="" aura:id="" value="{!v.objQuote.Quote_Status__c}" label="{!v.QuoteLabelMap.Quote_Status__c}">
+			        <aura:iteration items="{!v.QuoteStatus}" var="option">
+			            <option text="{!option.label}" value="{!option.value}" selected="{!if(v.objQuote.Quote_Status__c == option.value, true, false)}" />
+			        </aura:iteration>
+			    </lightning:select>
+		</lightning:layoutItem>
+		<lightning:layoutItem flexibility="auto" padding="around-small" size="6">
+				<aura:if isTrue="{!v.objQuote.Id}">
+					<lightning:input class="slds-p-bottom_small" label="{!v.QuoteLabelMap.Quote_Opportunity__c}" value="{!v.objQuote.Quote_Opportunity__r.Name}" disabled="true"/>					
+				<aura:set attribute="else">
+					<lightning:input class="slds-p-bottom_small" label="{!v.QuoteLabelMap.Quote_Opportunity__c}" value="{!v.objOppty.Name}" disabled="true"/>
+				</aura:set>
+				</aura:if>
+				<lightning:input class="slds-p-bottom_small" type="date" aura:id="QuoteDate" value="{!v.objQuote.Quote_Date__c}" label="{!v.QuoteLabelMap.Quote_Date__c}"/>
+				{!v.customLookupCon}	
+		</lightning:layoutItem>
+		<lightning:layoutItem flexibility="auto" padding="around-small" size="6">
+				<lightning:input class="slds-p-bottom_small" type="checkbox" checked="{!v.objQuote.Quote_ShowVAT__c}" label="{!v.QuoteLabelMap.Quote_ShowVAT__c}" />
+		</lightning:layoutItem>
+	</lightning:layout>
+	<div class="slds-card">
+		<lightning:accordion aura:id="accordion" allowMultipleSectionsOpen="true" activeSectionName="{!v.activeSection}">
+	        <lightning:accordionSection name="A" label="Consulting" class="slds-p-around_small">	        	
+	        	<div class="slds-border_top slds-p-top_xx-large">
+					<lightning:buttonGroup class="slds-float_right">
+					    <lightning:button  onclick="{!c.fnAddRow}" label="행추가" name="Consulting"/>
+					    <lightning:button  onclick="{!c.fnDeleteRow}" label="행삭제" name="Consulting"/>
+					    <lightning:button  onclick="{!c.fnMoveUp}" label="위로" name="Consulting"/>
+					    <lightning:button  onclick="{!c.fnMoveDown}" label="아래로" name="Consulting"/>
+					</lightning:buttonGroup>
+				   	<table class="slds-table slds-table_cell-buffer slds-table_bordered">
+						<thead>
+							<tr class="slds-line-height_reset">
+								<th scope="col" style="width:1%;">
+									<lightning:input type="checkbox" name="Consulting" label="" aura:id="chkAllConsulting" onchange="{!c.fnCheckAll}" />
+								</th>
+							    <th class="slds-is-resizable slds-text-title--caps" scope="col" style="width:2%;">
+					                    <div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+					                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-602" tabindex="0" />
+					                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true"  ondrag="{!c.setNewWidth}">
+					                            <span class="slds-resizable__divider"></span>
+			                       			</span>
+		 					        		<div class="slds-truncate" title="No">
+							        			{!v.QuoteItemLabelMap.QuoteItem_SortOrder__c}
+							        		</div>
+					                    </div>
+
+							    </th>
+							    <th class="slds-is-resizable slds-text-title--caps" scope="col" style="text-align:center">
+				                    <div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+				                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-603" tabindex="0" />
+				                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+				                            <span class="slds-resizable__divider"></span>
+		                       			</span>
+								        <div class="slds-truncate" title="Account Name">
+						        			{!v.QuoteItemLabelMap.QuoteItem_ConsultType__c}
+							        	</div>		                       			 
+				                    </div>
+
+							    </th>
+							    <th class="slds-is-resizable slds-text-title--caps" scope="col" style="width:7%; text-align:center;">
+				                    <div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+				                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-604" tabindex="0" />
+				                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+				                            <span class="slds-resizable__divider"></span>
+		                       			</span>
+								       	<div class="slds-truncate" title="Close Date" >
+								       		{!v.QuoteItemLabelMap.QuoteItem_ConsultLevel__c}
+								       	</div>		                       			 
+				                    </div>							    	
+
+							    </th>
+							    <th class="slds-is-resizable slds-text-title--caps" scope="col" style="width:7%; text-align:center;">
+			                   		<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+				                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-605" tabindex="0" />
+				                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+				                            <span class="slds-resizable__divider"></span>
+		                       			 </span>
+				                    </div>
+							      	<div class="slds-truncate" title="Stage">
+							       		{!v.QuoteItemLabelMap.QuoteItem_ConsultName__c} 						       		
+							       	</div>
+							    </th>
+							    <th class="slds-is-resizable slds-text-title--caps slds-size_1-of-14" scope="col" style="width:5%; text-align:center;">
+			                   		<div class="slds-resizable" onmousemove="{!c.calculateWidth}" >
+				                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-606" tabindex="0" />
+				                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true"  ondrag="{!c.setNewWidth}">
+				                            <span class="slds-resizable__divider"></span>
+		                       			 </span>
+				                    </div>							    	
+							       	<div class="slds-truncate" title="Confidence" >
+							       		{!v.QuoteItemLabelMap.QuoteItem_ConsultManMonths__c}
+							       	</div>
+							    </th>
+							    <th class="slds-is-resizable slds-text-title--caps" scope="col" style="text-align:center">
+			                   		<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+				                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-607" tabindex="0" />
+				                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true"  ondrag="{!c.setNewWidth}">
+				                            <span class="slds-resizable__divider"></span>
+		                       			 </span>
+				                    </div>							    	
+							       	<div class="slds-truncate" title="Amount" > 
+							       		{!v.QuoteItemLabelMap.QuoteItem_ConsultListPrice__c} 	
+							       	</div>
+							    </th>
+							    <th class="slds-is-resizable slds-text-title--caps" scope="col"  style="width:6%; text-align:center;">
+			                   		<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+				                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-609" tabindex="0" />
+				                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+				                            <span class="slds-resizable__divider"></span>
+		                       			 </span>
+				                    </div>							    	
+							       	<div class="slds-truncate" title="Contact">
+							       		{!v.QuoteItemLabelMap.QuoteItem_Discount_Percent__c}
+							       	</div>
+							    </th>								    
+				  			    <th class="slds-is-resizable slds-text-title--caps" scope="col" style="text-align:center">
+			                   		<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+				                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-608" tabindex="0" />
+				                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+				                            <span class="slds-resizable__divider"></span>
+		                       			 </span>
+				                    </div>				  			    	
+							       	<div class="slds-truncate" title="Amount" >
+							    		<!-- 할인금액 -->
+					        			{!v.QuoteItemLabelMap.QuoteItem_ConsultDiscountedPrice__c}
+						        	</div>
+							    </th>
+				      
+							    <th class="slds-is-resizable slds-text-title--caps" scope="col" style="text-align:center">
+			                   		<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+				                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-610" tabindex="0" />
+				                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+				                            <span class="slds-resizable__divider"></span>
+		                       			 </span>
+				                    </div>							    	
+							       	<div class="slds-truncate" title="Contact" >
+							       		{!v.QuoteItemLabelMap.QuoteItem_ConsultListAmount__c}
+							       	</div>
+							    </th>
+					  		    <th class="slds-is-resizable slds-text-title--caps" scope="col" style="text-align:center">
+			                   		<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+				                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-611" tabindex="0" />
+				                        <span class="slds-resizable__handle"  draggable="true" ondrag="{!c.setNewWidth}">
+				                            <span class="slds-resizable__divider"></span>
+		                       			 </span>
+				                    </div>					  		    	
+							       	<div class="slds-truncate" title="Contact" >
+							       		{!v.QuoteItemLabelMap.QuoteItem_ConsultAmount__c}
+							       	</div>
+							    </th>
+							    <th class="slds-is-resizable slds-text-title--caps" scope="col" style="text-align:center">
+			                   		<div class="slds-resizable"  onmousemove="{!c.calculateWidth}">
+				                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-612" tabindex="0" />
+				                        <span class="slds-resizable__handle" draggable="true" ondrag="{!c.setNewWidth}">
+				                            <span class="slds-resizable__divider"></span>
+		                       			 </span>
+				                    </div>							    	
+							       	<div class="slds-truncate" title="Contact" >
+							       		{!v.QuoteItemLabelMap.QuoteItem_ConsultDiscountAmount__c}
+							       	</div>
+							    </th>
+							    <th class="slds-is-resizable slds-text-title--caps" scope="col" style="text-align:center">
+			                   		<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+				                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-613" tabindex="0" />
+				                        <span class="slds-resizable__handle" draggable="true" ondrag="{!c.setNewWidth}">
+				                            <span class="slds-resizable__divider"></span>
+		                       			 </span>
+				                    </div>							    	
+							       	<div class="slds-truncate" title="Contact" >
+							       		{!v.QuoteItemLabelMap.QuoteItem_FOC__c}
+							       	</div>
+							    </th>
+							    <th class="slds-is-resizable slds-text-title--caps" scope="col" style="text-align:center">
+			                   		<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+				                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-614" tabindex="0" />
+				                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true"  ondrag="{!c.setNewWidth}">
+				                            <span class="slds-resizable__divider"></span>
+		                       			 </span>
+				                    </div>							    	
+							       	<div class="slds-truncate" title="Contact" >
+							    		{!v.QuoteItemLabelMap.QuoteItem_ConsultRemark__c}
+							       	</div>
+							    </th>
+						    </tr>
+					  	</thead>
+					  	<tbody>
+						  	<aura:iteration items="{!v.listConsulting}" var="objConsulting" indexVar="idx">
+						  		<tr aura:id="targetTR" class="slds-hint-parent nonLabel nonLabel2 nonLabel3">		  	
+				  					<th scope="row">
+				  						<div class="slds-truncate">
+											<lightning:input type="checkbox" name="{!'Consulting-' + idx}" label="" aura:id="chkConsulting" checked="{!objConsulting.isChecked}"/>
+				  						</div>
+				  					</th>			
+						  			<td>
+						  				<div class="slds-truncate">	
+						  					{!objConsulting.objQuoteItem.QuoteItem_SortOrder__c}
+						  					<!-- {!idx+1} -->
+						  				</div>
+						  			</td>
+						  			<td>
+						  				<div class="slds-truncate">	
+						  					<lightning:select aura:id="" 
+						  									  name="{!'Consulting-' + idx}"
+			        										  value="{!objConsulting.objQuoteItem.QuoteItem_ConsultType__c}"
+			        										  onchange="{!c.fnEmpInfo}"
+			        										  >			        										 
+												<aura:iteration items="{!v.QuoteItemType}" var="item">													
+										    		<option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+										    	</aura:iteration>
+											</lightning:select>
+						  				</div>
+						  			</td>					  			
+						  			<td>
+						  				<div class="slds-truncate">
+						  					<lightning:select aura:id="inputField" 
+						  									  name="{!'Consulting-' + idx}"
+			        										  value="{!objConsulting.objQuoteItem.QuoteItem_ConsultLevel__c}"
+			        										  onchange="{!c.fnEmpInfo}"
+			        										  required="true"
+			        										  >
+			        							<option text="--None--"/>			  
+												<aura:iteration items="{!v.QuoteItemLevel}" var="item">
+										    		<option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+										    	</aura:iteration>
+											</lightning:select>
+						  				</div>
+						  			</td>					  				
+						  			<td>
+						  				<!-- <lightning:input type="checkbox" checked="{!objConsulting.LookupOrText}" value="{!objConsulting.LookupOrText}"/> -->
+						  				<!-- <aura:if isTrue="{!objConsulting.LookupOrText}">					  					 -->
+											<!-- <div contenteditable="true"> -->
+	<!-- 											<c:DN_Lookup 	aura:id="lookupEmp"
+																uniqueLookupIdentifier="{!'testEmp/' + idx}"
+																objectName="Employee__c"
+																fieldSet="['Name']"														
+																limit="5"
+																comparisonField="['Name']"
+																primaryDisplayField="Name"
+																alternateDisplayField="['Name']"
+																minimumCharacter="1"
+																lightningIconName="standard:account"
+																selectedId="{!objConsulting.objQuoteItem.QuoteItem_Emp__c}"
+																displayLabel="{!objConsulting.EmpName}"
+																compact="false"
+																readOnly="false"
+																required="false"
+																requiredErrorMessage="Complete this field (test)"
+																multiSelect="false"														
+																openResults="true" />	 -->	
+								           	<!-- </div> -->
+									        <!-- <aura:set attribute="else"> -->
+									        	<lightning:input aura:id="inputField" name="{!'Consulting-' + idx}" type="text" value="{!objConsulting.objQuoteItem.QuoteItem_ConsultName__c}" required="true" messageWhenValueMissing="값을 입력하세요" messageWhenRangeUnderflow="값이 너무 작습니다." />
+									        <!-- </aura:set>							           	 -->
+								        <!-- </aura:if> -->
+
+						  			</td>
+						  			<td>
+						  				<div class="slds-truncate"> 
+						  					<lightning:input aura:id="inputField" class="alignRight" name="{!'Consulting-' + idx}" type="number" min="0.1" required="true" value="{!objConsulting.objQuoteItem.QuoteItem_ConsultManMonths__c}" messageWhenValueMissing="값을 입력하세요" messageWhenRangeUnderflow="값이 너무 작습니다." formatter="decimal" step="0.1" onchange="{!c.fnConManmonth}"/>	  					
+						  				</div>
+						  			</td>
+						  			<td>
+						  				<div class="slds-truncate">					  					
+						  					<lightning:input name="{!'Consulting-' + idx}" aura:id="inputField" class="alignRight" type="number" messageWhenValueMissing="값을 입력하세요" messageWhenRangeUnderflow="값이 너무 작습니다." required="true" min="1" value="{!objConsulting.objQuoteItem.QuoteItem_ConsultListPrice__c}" onchange="{!c.fnConsultListPrice}" formatter="decimal" />		
+						  				</div>
+						  			</td>
+						  			<td>
+						  				<div class="slds-truncate">
+						  					<!-- 할인율	 -->
+						  					<lightning:input type="number" class="alignRight" name="{!'Consulting-' + idx}" aura:id="discountPercentConsult" formatter="percent-fixed" value="{!objConsulting.QuoteItem_Discount_Percent}" onchange="{!c.fnConDiscountPercent}" step="0.1" messageWhenBadInput="값을 확인해 주세요" messageWhenTypeMismatch="형식을 확인해주세요" />		
+						  				</div>
+						  			</td>						  			
+						  			<td>
+						  				<div class="slds-truncate">	
+						  					<!-- 할인가	 -->
+						  					<lightning:input name="{!'Consulting-' + idx}" class="alignRight" type="number" min="1" messageWhenValueMissing="값을 입력하세요" messageWhenRangeUnderflow="값이 너무 작습니다." required="true" value="{!objConsulting.objQuoteItem.QuoteItem_ConsultDiscountedPrice__c}" aura:id="inputField" onchange="{!c.fnConDiscountedPrice}" formatter="decimal" />		
+						  				</div>
+						  			</td>			
+						  			<td>
+						  				<div class="slds-truncate">			
+						  					<!-- 표준금액(컨설팅) -->
+						  					<lightning:input aura:id="consultListPrice" class="alignRight" value="{!objConsulting.QuoteItem_ConsultListAmount}"  type="number" formatter="decimal" disabled="true"/>			  				
+						  				</div>
+						  			</td>
+						  			<td>
+						  				<div class="slds-truncate">	
+						  					<!-- 금액(컨설팅) -->
+						  					<lightning:input aura:id="consultListPrice" class="alignRight" type="number" formatter="decimal"  value="{!objConsulting.QuoteItem_ConsultAmount}"  onchange="{!c.fnConSubtotal}" disabled="true"/>	
+						  				</div>
+						  			</td>
+						  			<td>
+						  				<div class="slds-truncate">	
+						  					<lightning:input aura:id="consultListPrice"  class="alignRight" type="number" formatter="decimal" value="{!objConsulting.QuoteItem_ConsultDiscountAmount}" disabled="true"/>	
+						  				</div>
+						  			</td>
+						  			<td>
+						  				<div class="slds-truncate">	
+						  					<lightning:input name="{!'Consulting-' + idx}" type="checkbox" checked="{!objConsulting.objQuoteItem.QuoteItem_FOC__c}" onchange="{!c.fnConFOC}"/>
+						  				</div>
+						  			</td>
+						  			<td>					  				
+						  				<lightning:input name="{!'Consulting-' + idx}" type="text" value="{!objConsulting.objQuoteItem.QuoteItem_ConsultRemark__c}"/>
+						  			</td>
+					  			</tr>
+						  	</aura:iteration>
+				  			<!-- 할인 계산 후 금액 -->
+				  			<tr class="slds-border_bottom slds-border_top">
+				  				<th scope="col" colspan="2.5">
+									소계
+				  				</th>
+				  				<th scope="col" colspan="2">
+				  					<!-- 컨설팅 자원수 -->
+									{!v.QuoteLabelMap.Quote_ConsultCount__c} : 	{!v.objSumConsulting.subNumber}
+				  				</th>
+				  				<th scope="col" colspan="2" style="text-align:right">
+				  					<!-- 소계(투입공수) -->
+									<!-- {!v.QuoteLabelMap.Quote_TotalManMonths__c} :  -->
+									<ui:outputNumber  value="{!v.objSumConsulting.subManmonth}" format=".0"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;			  					
+				  				</th>
+				  				<th scope="col" colspan="1" style="text-align:center">
+				  					할인(할인전)
+				  				</th>
+				  				<th scope="col" colspan="1" style="text-align:right">
+				  					<!-- 할인율 -->
+									<!-- {!v.QuoteLabelMap.Quote_ConsultDiscountRate__c} :  -->
+									<ui:outputNumber value="{!v.objSumConsulting.subPercent}" format=".0"/>%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				  				</th>
+				  				<th scope="col" colspan="1"/>					  				 	  				  				
+				  				<th scope="col" colspan="1" style="text-align:right">
+				  					<!-- 소계표준단가 -->
+									<!-- {!v.QuoteLabelMap.Quote_ConsultListSubTotal__c} : 				  					 -->
+									<ui:outputNumber value="{!v.objSumConsulting.subStandardPrice}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;				  					
+				  				</th>
+				  				<th scope="col" colspan="1" style="text-align:right">
+				  					<!-- 견적금액 -->
+									<!-- {!v.QuoteLabelMap.Quote_ConsultAmount__c} :  -->
+									<ui:outputNumber value="{!v.objSumConsulting.subQuote}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;			  					
+				  				</th>
+				  				<th scope="col" colspan="1"  style="text-align:right">
+				  					<!-- 할인컨설팅 -->
+									<!-- {!v.QuoteLabelMap.Quote_ConsultDiscount__c} :  -->
+									<ui:outputNumber value="{!v.objSumConsulting.subDiscount}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;			  					
+				  				</th>				  				
+				  				<th scope="col" colspan="2" />
+				  			</tr>
+					  		<!-- 할인 계산 전 금액 -->
+				  			<tr class="">
+				  				<th scope="col" colspan="2.5">
+									<!-- 소계 -->
+				  				</th>
+				  				<th scope="col" colspan="2">
+				  					<!-- 컨설팅 자원수 -->
+									<!-- {!v.QuoteLabelMap.Quote_ConsultCount__c} : 	{!v.objSumConsulting.subNumber} -->
+				  				</th>
+				  				<th scope="col" colspan="2">
+				  					<!-- 소계(투입공수) -->
+									<!-- <ui:outputNumber value="{!v.objSumConsulting.subManmonth}"/>			  					 -->
+				  				</th>
+				  				<th scope="col" colspan="1" style="text-align:center">
+				  					할인(할인후)
+				  				</th>
+				  				<th scope="col" colspan="1">
+				  					<!-- 할인율 -->
+									<!-- {!v.QuoteLabelMap.Quote_ConsultDiscountRate__c} :  -->
+									<!-- <ui:outputNumber value="{!v.objSumConsulting.subPercent}"/>% -->
+				  				</th>
+				  				<th scope="col" colspan="1" style="text-align:right">
+				  					<!--합계 금액-->
+				  					<lightning:input type="number" class="alignRight" formatter="currency" variant="label-hidden" value="{!v.objQuote.Quote_SalesDiscount__c}" onblur="{!c.fnTotalDiscountChange}" />
+				  				</th>					  				 	  				  				
+				  				<th scope="col" colspan="1" style="text-align:right">
+				  					<!-- 소계표준단가 -->
+									<!-- {!v.QuoteLabelMap.Quote_ConsultListSubTotal__c} : 				  					 -->
+									<ui:outputNumber value="{!v.objSumConsulting.subStandardPrice}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;			  					
+				  				</th>
+				  				<th scope="col" colspan="1" style="text-align:right">
+				  					<!-- 견적금액 -->
+									<!-- {!v.QuoteLabelMap.Quote_ConsultAmount__c} :  -->
+									<ui:outputNumber value="{!v.objSumConsulting.disQuote}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;			  					
+				  				</th>
+				  				<th scope="col" colspan="1" style="text-align:right">
+				  					<!-- 할인컨설팅 -->
+									<!-- {!v.QuoteLabelMap.Quote_ConsultDiscount__c} :  -->
+									<ui:outputNumber value="{!v.objSumConsulting.disDisPrice}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;			  					
+				  				</th>				  
+				  				<th scope="col" colspan="1" />					  				
+				  			</tr>					  			
+					  		<tr>
+					  			<th scope="col" colspan="2">
+					  				비고
+					  				 <lightning:helptext content="초기 입력시 그대로 두면 기본 설정 값이 자동 적용됩니다."/>
+					  			</th>
+				  				<th scope="col" colspan="12" class="inputRichTextAdjust">		  					
+				  					<lightning:textarea value="{!v.objQuote.Quote_ConsultRemark__c}" class="topText"/>			
+					  			</th>
+					  		</tr>
+						  </tbody>
+					</table>
+				</div>
+    		</lightning:accordionSection>
+
+		    <lightning:accordionSection name="B" label="License" class="slds-p-around_small">
+		    	<div class="slds-border_top slds-p-top_xx-large">
+			    	<lightning:buttonGroup class="slds-float_right">
+				    	<lightning:button  onclick="{!c.fnAddRow}" label="행추가"  name="License"/>
+				    	<lightning:button  onclick="{!c.fnDeleteRow}" label="행삭제" name="License"/>
+					    <lightning:button  onclick="{!c.fnMoveUp}" label="위로" name="License"/>
+					    <lightning:button  onclick="{!c.fnMoveDown}" label="아래로" name="License"/>
+					</lightning:buttonGroup>
+					<div class="slds-float_left">
+						통화기준 : USD
+					</div>
+				 	<!--라이센스-->
+
+					<table class="slds-table slds-table_cell-buffer slds-table_bordered">
+						<thead>
+							<tr class="slds-line-height_reset">
+								<th width="5%" scope="col">
+									<lightning:input type="checkbox" name="License" label="" aura:id="chkAllLicense" onchange="{!c.fnCheckAll}" />
+								</th>
+						    	<th class="" width="5%" scope="col">
+						    		<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+			                       		<input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-615" tabindex="0" />
+				                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+				                            <span class="slds-resizable__divider"></span>
+		                       			 </span>
+				                    </div>
+						    		<div class="slds-truncate" title="No">{!v.QuoteItemLabelMap.QuoteItem_SortOrder__c}</div>
+						    	</th>
+						    	<th class="" width="10%" scope="col" style="text-align:center">
+						    		<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+			                   	    	<input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-616" tabindex="0" />
+					                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+					                            <span class="slds-resizable__divider"></span>
+			                       			 </span>
+				                    </div>
+						    		<div class="slds-truncate" title="Account Name">{!v.QuoteItemLabelMap.QuoteItem_LicenseType__c}</div>
+						    	</th>
+						    	<th class="" width="10%" scope="col" style="text-align:center">
+						    		<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+				                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-617" tabindex="0" />
+				                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+				                            <span class="slds-resizable__divider"></span>
+		                       			 </span>
+				                    </div>	
+						    		<div class="slds-truncate" title="Close Date">{!v.QuoteItemLabelMap.QuoteItem_LicenseListPrice__c}</div>
+						    	</th>
+						    	<th class="" width="7%" scope="col" style="text-align:center">
+									<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+				                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-619" tabindex="0" />
+				                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+				                            <span class="slds-resizable__divider"></span>
+		                       			 </span>
+				                    </div>				    		
+						    		<div class="slds-truncate" title="Confidence">{!v.QuoteItemLabelMap.QuoteItem_Discount_Percent__c}</div>
+						    	</th>				    	
+						    	<th class="" width="10%" scope="col" style="text-align:center">
+									<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+			                    	    <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-618" tabindex="0" />
+				                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+				                            <span class="slds-resizable__divider"></span>
+		    			      			</span>
+				                    </div>				    		
+						    		<div class="slds-truncate" title="Stage">{!v.QuoteItemLabelMap.QuoteItem_LicenseDiscountedPrice__c}</div>
+						    	</th>
+						    	<th class="" width="5%" scope="col" style="text-align:center">
+									<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+				                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-620" tabindex="0" />
+				                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+				                            <span class="slds-resizable__divider"></span>
+		                   			 	</span>
+				                    </div>						    		
+						    		<div class="slds-truncate" title="Amount">{!v.QuoteItemLabelMap.QuoteItem_LicenseNumberOfUser__c}</div>
+						    	</th>
+						    	<th class="" width="10%" scope="col" style="text-align:center">
+									<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+				                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-621" tabindex="0" />
+				                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+				                            <span class="slds-resizable__divider"></span>
+		                       			 </span>
+				                    </div>						    		
+						    		<!--표준금액(라이센스) 년사용료-->
+						    		<div class="slds-truncate" title="Contact">{!v.QuoteItemLabelMap.QuoteItem_LicenseListAmount__c}</div>
+						    	</th>
+						    	<th class="" width="10%"  scope="col" style="text-align:center">
+									<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+				                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-622" tabindex="0" />
+				                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+				                            <span class="slds-resizable__divider"></span>
+		                       			 </span>
+				                    </div>						    		
+						    		<!--금액(라이센스) 년견적사용료-->
+						    		<div class="slds-truncate" title="Contact">{!v.QuoteItemLabelMap.QuoteItem_LicenseAmount__c}</div>
+						    	</th>
+						    	<th class="" width="10%" scope="col" style="text-align:center">
+									<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+				                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-623" tabindex="0" />
+			    	                    <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+				                            <span class="slds-resizable__divider"></span>
+		                       			 </span>
+				                    </div>						    		
+						    		<div class="slds-truncate" title="Contact">{!v.QuoteItemLabelMap.QuoteItem_LicenseDiscountAmount__c}</div>
+						    	</th>
+				  		    	<th class="" scope="col" style="text-align:center">
+									<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+				                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-624" tabindex="0" />
+				                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+				                            <span class="slds-resizable__divider"></span>
+		                       			 </span>
+				                    </div>				  		    		
+						    		<div class="slds-truncate" title="Contact">{!v.QuoteItemLabelMap.QuoteItem_LicenseRemark__c}</div>
+						    	</th>
+						    </tr>
+						</thead>
+						<tbody>
+							<aura:iteration items="{!v.listLicense}" var="objLicense" indexVar="idx">
+							    	<tr class="slds-hint-parent nonLabel nonLabel2 nonLabel3">
+							    		<th scope="row">
+											<lightning:input type="checkbox" name="License" label="" aura:id="chkLicense" checked="{!objLicense.isChecked}" />
+							    		</th>
+										<td>
+							      			<div class="slds-truncate">			        				        		
+							      				{!objLicense.objQuoteItem.QuoteItem_SortOrder__c}
+							       			</div>
+							    		</td>
+							    		<td>
+							      			<div class="slds-truncate">	
+												<lightning:input aura:id="inputField" type="text" value="{!objLicense.objQuoteItem.QuoteItem_LicenseType__c}" required="true" messageWhenValueMissing="값을 입력하세요" />		
+							     			</div>
+							    		</td>
+							    		<td>
+							      			<div class="slds-truncate">
+							      				<!--사용료 월-->
+												<lightning:input aura:id="inputField" class="alignRight" name="{!'License-' + idx}" value="{!objLicense.objQuoteItem.QuoteItem_LicenseListPrice__c}" type="number" required="true" messageWhenValueMissing="값을 입력하세요" messageWhenRangeUnderflow="값이 너무 작습니다." min="1" onchange="{!c.fnLicenseListPrice}"/>		
+							      			</div>
+							    		</td>
+							    		<td>
+							      			<div class="slds-truncate">
+							      				<!--할인율-->
+												<lightning:input class="alignRight" type="number" formatter="percent-fixed" value="{!objLicense.QuoteItem_Discount_PercentLicense}" name="{!'License-' + idx}" onchange="{!c.fnLicenseDiscountPercent}" step="0.1"/>
+							      			</div>
+							    		</td>						    		
+							    		<td>
+							      			<div class="slds-truncate">
+							      			<!--할인사용료(월)-->
+												<lightning:input class="alignRight" value="{!objLicense.objQuoteItem.QuoteItem_LicenseDiscountedPrice__c}" name="{!'License-' + idx}" onchange="{!c.fnLicenseDiscountedPrice}" type="number" formatter="decimal" />						        	
+							      			</div>
+							    		</td>			      
+				      
+									    <td>
+									    	<div class="slds-truncate">
+												<lightning:input class="alignRight" name="{!'License-' + idx}" value="{!objLicense.objQuoteItem.QuoteItem_LicenseNumberOfUser__c}" onchange="{!c.fnLicenseUser}" />
+											</div>
+									    </td>
+						  			    <td>
+									    	<div class="slds-truncate">
+									      	<!-- 표준금액(라이센스) 년사용료-->
+									      	<!-- QuoteItem_LicenseListPriceYear (표준사용료(년)) * (유저수) QuoteItem_LicenseNumberOfUser__c-->
+												<lightning:input class="alignRight" value="{!objLicense.QuoteItem_LicenseListAmount}" name="{!'License-' + idx}" type="number" disabled="true" formatter="decimal" />	
+									      	</div>
+									    </td>
+						  			    <td>
+									    	<div class="slds-truncate">
+									      	<!--금액(라이센스) 년견적사용료-->
+									      	<!--NULLVALUE(QuoteItem_LicenseDiscountedPriceYear__c, QuoteItem_LicenseListPriceYear__c) * QuoteItem_LicenseNumberOfUser__c-->
+												<lightning:input class="alignRight" value="{!objLicense.QuoteItem_LicenseAmount}" name="{!'License-' + idx}" type="number"  disabled="true" formatter="decimal"/>
+									      	</div>
+									    </td>
+						  			    <td>
+									      <div class="slds-truncate">	
+									      	<!--할인액(라이센스)-->
+									      	<!-- QuoteItem_LicenseListAmount__c - QuoteItem_LicenseAmount__c -->
+												<lightning:input class="alignRight" value="{!objLicense.QuoteItem_LicenseDiscountAmount}" name="{!'License-' + idx}" type="number" disabled="true" formatter="decimal" />
+									      </div>
+									    </td>
+						  			    <td>
+									    	<div class="slds-truncate">			        	
+												<lightning:input type="text" value="{!objLicense.objQuoteItem.QuoteItem_LicenseRemark__c}" />		        	
+									      	</div>
+							    		</td>  			      
+							    	</tr>
+							</aura:iteration>
+				  			<tr class="slds-border_bottom slds-border_top">
+				  				<th scope="col" colspan="2.5">
+									소계
+				  				</th>	
+				  				<th scope="col" colspan="2">
+									{!v.QuoteLabelMap.Quote_LicenseCount__c} : {!v.objSumLicense.subNumber}
+				  				</th>
+				  				<th scope="col" colspan="1.5" style="text-align:right">
+									<!-- {!v.QuoteLabelMap.Quote_LicenseDiscountRate__c} :  -->
+					<!-- 				&nbsp;{!v.objSumLicense.subPercent}% -->
+									<ui:outputNumber value="{!v.objSumLicense.subPercent}" format=".0"/>% &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				  				</th>
+				  				<th scope="col" colspan="1.5"/>			
+				  				<th scope="col" colspan="1.5" style="text-align:right">
+									<!-- {!v.QuoteLabelMap.Quote_NumberOfUsers__c} :  -->
+									<ui:outputNumber value="{!v.objSumLicense.subManmonth}"/>&nbsp;&nbsp;명	
+				  				</th>					  				 	  			
+				<!--   				<th scope="col" colspan="1.5">
+									{!v.QuoteLabelMap.Quote_LicenseListAmount__c} : {!v.objSumLicense.subStandardPrice}
+				  				</th> -->
+				  				<th scope="col" colspan="1.5" style="text-align:right">
+				  					<!-- 표준금액(라이센스) -->
+									<!-- {!v.QuoteLabelMap.Quote_LicenseListAmount__c} :  -->
+									<ui:outputCurrency value="{!v.objSumLicense.subtotalAmount}" currencyCode="$"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				  				</th>					  				
+				  				<th scope="col" colspan="1.5" style="text-align:right">
+				  					<!-- 소계(라이센스) 년-->  					
+									<!-- {!v.QuoteLabelMap.Quote_LicenseSubTotal__c} :  -->
+									<!-- {!v.objSumLicense.subQuote} -->
+									<ui:outputCurrency value="{!v.objSumLicense.subQuote}" currencyCode="$"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				  				</th>
+				  				<th scope="col" colspan="1.5" style="text-align:right">
+									<!-- {!v.QuoteLabelMap.Quote_LicenseDiscount__c} :  -->					
+									<ui:outputCurrency value="{!v.objSumLicense.subDiscount}" currencyCode="$"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				  				</th>
+				  				<th scope="col" colspan="1.5"/>
+							</tr>
+					  		<tr>
+					  			<th scope="col" colspan="2">
+					  				비고
+									<lightning:helptext content="초기 입력시 그대로 두면 기본 설정 값이 자동 적용됩니다."/>
+					  			</th>
+				  				<th scope="col" colspan="12">
+				  					<lightning:textarea value="{!v.objQuote.Quote_LicenseRemark__c}" class="topText"/>
+				  				</th>
+					  		</tr>
+					  	</tbody>
+					</table>
+				</div>
+		    </lightning:accordionSection>
+		    <lightning:accordionSection name="C" label="Training" class="slds-p-around_small">
+		    	<div class="slds-border_top slds-p-top_xx-large">
+			    	<lightning:buttonGroup class="slds-float_right">
+					    <lightning:button  onclick="{!c.fnAddRow}" label="행추가"  name="Training"/>
+					    <lightning:button  onclick="{!c.fnDeleteRow}" label="행삭제"  name="Training"/>
+					    <lightning:button  onclick="{!c.fnMoveUp}" label="위로" name="Training"/>
+					    <lightning:button  onclick="{!c.fnMoveDown}" label="아래로" name="Training"/>		    
+					</lightning:buttonGroup>
+					<!--교육-->
+				    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+						  <thead>
+						    <tr class="slds-line-height_reset">
+							  <th width="5%" scope="col">
+									<lightning:input type="checkbox" name="Training" label="" aura:id="chkAllTraining" onchange="{!c.fnCheckAll}" />
+							  </th>
+						      <th class="" scope="col">
+								<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+			                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-625" tabindex="0" />
+			                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+			                            <span class="slds-resizable__divider"></span>
+		                   			</span>
+			                    </div>						      	
+						        <div class="slds-truncate" title="No">{!v.QuoteItemLabelMap.QuoteItem_SortOrder__c}</div>
+					      	</th>
+					        <th class="" scope="col" style="text-align:center">
+								<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+		                        	<input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-626" tabindex="0" />
+		                        	<span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+		                            	<span class="slds-resizable__divider"></span>
+	                   				</span>
+		                    	</div>								      	
+					        	<div class="slds-truncate" title="Account Name">{!v.QuoteItemLabelMap.QuoteItem_TrainingDescription__c}</div>
+					      	</th>
+	<!-- 				      	<th class="" scope="col" style="text-align:center">
+								<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+		                        	<input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-627" tabindex="0" />
+		                        	<span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+		                            	<span class="slds-resizable__divider"></span>
+	                   				</span>
+		                    	</div>								      	
+					        	<div class="slds-truncate" title="Close Date">{!v.QuoteItemLabelMap.QuoteItem_ConsultLevel__c}</div>
+					      	</th> -->
+					      	<th class="" scope="col" style="text-align:center">
+								<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+		                        	<input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-628" tabindex="0" />
+		                        	<span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+		                            	<span class="slds-resizable__divider"></span>
+	                   				</span>
+		                    	</div>								      	
+					        	<div class="slds-truncate" title="Stage">{!v.QuoteItemLabelMap.QuoteItem_TrainingStandardPrice__c}</div>
+					      	</th>
+					      	<th class="" scope="col" style="text-align:center; width:7%;" >
+								<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+		                        	<input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-630" tabindex="0" />
+		                        	<span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+		                            	<span class="slds-resizable__divider"></span>
+	                   				</span>
+		                    	</div>								      	
+					        	<div class="slds-truncate" title="Amount">{!v.QuoteItemLabelMap.QuoteItem_Discount_Percent__c}</div>
+					      	</th>				      
+					      	<th class="" scope="col" style="text-align:center">
+								<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+		                        	<input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-629" tabindex="0" />
+		                        	<span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+		                            	<span class="slds-resizable__divider"></span>
+	                   				</span>
+		                    	</div>								      	
+					        	<div class="slds-truncate" title="Confidence">{!v.QuoteItemLabelMap.QuoteItem_TrainingSalesPrice__c}</div>
+					      	</th>
+					      	<th class="" scope="col" style="text-align:center; width:7%;">
+								<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+		                        	<input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-631" tabindex="0" />
+		                        	<span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+		                            	<span class="slds-resizable__divider"></span>
+	                   				</span>
+		                    	</div>								      	
+					        	<div class="slds-truncate" title="Amount">{!v.QuoteItemLabelMap.QuoteItem_TrainingCount__c}</div>
+					      	</th>			      
+		  			      	<th class="" scope="col" style="text-align:center">
+								<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+		                        	<input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-632" tabindex="0" />
+		                        	<span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+		                            	<span class="slds-resizable__divider"></span>
+	                   				</span>
+		                    	</div>					  			      	
+					        	<div class="slds-truncate" title="Amount">{!v.QuoteItemLabelMap.QuoteItem_TrainingListAmount__c}</div>
+					      	</th>
+					      	<th class="" scope="col" style="text-align:center">
+								<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+		                        	<input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-633" tabindex="0" />
+		                        	<span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+		                            	<span class="slds-resizable__divider"></span>
+	                   				</span>
+		                    	</div>								      	
+					        	<div class="slds-truncate" title="Contact">{!v.QuoteItemLabelMap.QuoteItem_TrainingSalesAmount__c}</div>
+					      	</th>			      
+			  		      	<th class="" scope="col" style="text-align:center">
+								<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+		                        	<input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-634" tabindex="0" />
+		                        	<span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+		                            	<span class="slds-resizable__divider"></span>
+	                   				</span>
+		                    	</div>						  		      	
+					        	<div class="slds-truncate" title="Contact">{!v.QuoteItemLabelMap.QuoteItem_TrainingDiscountAmount__c}</div>
+					      	</th>			      
+					      	<th class="" scope="col" style="text-align:center">
+								<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+		                        	<input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-635" tabindex="0" />
+	                        		<span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+	                            		<span class="slds-resizable__divider"></span>
+	               					</span>
+		                    	</div>								      	
+					        	<div class="slds-truncate" title="Contact">
+					        		{!v.QuoteItemLabelMap.QuoteItem_FOC__c}
+					        	</div>
+					      	</th>
+			  		      	<th class="" scope="col" style="text-align:center">
+								<div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+		                        	<input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-636" tabindex="0" />
+		                        	<span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true" ondrag="{!c.setNewWidth}">
+		                            	<span class="slds-resizable__divider"></span>
+	                   				</span>
+		                    	</div>						  		      	
+				        		<div class="slds-truncate" title="Contact">{!v.QuoteItemLabelMap.QuoteItem_TrainingRemark__c}</div>
+					      	</th>     
+					    </tr>
+					</thead>
+				  	<tbody>
+		  		  	  	<aura:iteration items="{!v.listTraining}" var="objTraining" indexVar="idx">
+						    <tr class="slds-hint-parent nonLabel nonLabel2 nonLabel3">
+						      	<th scope="row">
+									<lightning:input type="checkbox" name="Training" label="" aura:id="chkTraining" checked="{!objTraining.isChecked}" />
+						      	</th>
+						      	<th data-label="" scope="row">
+						        	<div class="slds-truncate">			        	
+						        		{!objTraining.objQuoteItem.QuoteItem_SortOrder__c}
+						        	</div>
+						      	</th>
+						      	<td>
+						        	<div class="slds-truncate">
+										<lightning:input aura:id="inputField" type="text" value="{!objTraining.objQuoteItem.QuoteItem_TrainingDescription__c}" name="{!'Training-' + idx}" required="true" messageWhenValueMissing="값을 입력하세요" />
+						        	</div>
+						      	</td>
+						        		<!-- 등급 -->
+	<!-- 			  						<lightning:select aura:id="" 
+				  										  name="{!'Training-'+ idx }"
+		    											  value="{!objTraining.objQuoteItem.QuoteItem_ConsultLevel__c}">
+											<aura:iteration items="{!v.QuoteItemLevelTraining}" var="item">
+								    			<option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+								    		</aura:iteration>
+										</lightning:select> -->
+						      	<td>
+						        	<div class="slds-truncate">
+										<lightning:input aura:id="inputField" type="number" formatter="decimal" class="alignRight" value="{!objTraining.objQuoteItem.QuoteItem_TrainingStandardPrice__c}" name="{!'Training-' + idx}" required="true" messageWhenValueMissing="값을 입력하세요" messageWhenRangeUnderflow="값이 너무 작습니다." min="1" onchange="{!c.fnTrainingStandardPrice}"/>				        	
+						        	</div>
+						      	</td>
+						      	<td>
+						        	<div class="slds-truncate">
+						        		<!-- 할인율 -->
+										<lightning:input type="number" class="alignRight" formatter="percent-fixed" value="{!objTraining.QuoteItem_Discount_PercentTraining}" name="{!'Training-' + idx}" onchange="{!c.fnTrainingDiscountPercent}" step="0.1"/>
+						        	</div>
+						      	</td>					      			      
+						      	<td>
+						        	<div class="slds-truncate">
+						        		<!-- 제안단가 -->
+										<lightning:input type="number" formatter="decimal" class="alignRight" value="{!objTraining.objQuoteItem.QuoteItem_TrainingSalesPrice__c}" name="{!'Training-' + idx}" onchange="{!c.fnTrainingDiscountPrice}" />				        	
+						        	</div>
+						      	</td>			      
+			  			      	<td>
+						        	<div class="slds-truncate">
+						        		<!-- 수강인원 -->
+										<lightning:input value="{!objTraining.objQuoteItem.QuoteItem_TrainingCount__c}" class="alignRight" name="{!'Training-' + idx}" onchange="{!c.fnTrainingUser}"/>				        
+						        	</div>
+						      	</td>
+			  			      	<td>
+						        	<div class="slds-truncate">
+						        		<!-- 표준금액(교육) -->
+										<lightning:input disabled="true" type="number" formatter="decimal" class="alignRight" value="{!objTraining.QuoteItem_TrainingListAmount}" name="{!'Training-' + idx}"/>				        					        	
+						        	</div>
+						      	</td>
+			  			      	<td>
+						        	<div class="slds-truncate">
+						        		<!-- 금액(교육) 견적금액-->
+										<lightning:input disabled="true" type="number" formatter="decimal" class="alignRight" value="{!objTraining.QuoteItem_TrainingSalesAmount}" name="{!'Training-' + idx}"/>				        					        	
+						        	</div>
+						      	</td>
+			  			      	<td>
+						        	<div class="slds-truncate">
+						        		<!-- 할인액(교육) 총할인액 -->
+										<lightning:input disabled="true" type="number" formatter="decimal" class="alignRight" value="{!objTraining.QuoteItem_TrainingDiscountAmount}" name="{!'Training-' + idx}"/>				        					        	
+						        	</div>
+						      	</td>
+			  			      	<td>
+						        	<div class="slds-truncate">
+						        		<lightning:input type="checkbox" checked="{!objTraining.QuoteItem.QuoteItem_FOC__c}" name="{!'Training-' + idx}" onchange="{!c.fnTrainingFOC}"/>
+						        	
+						        	</div>
+						      	</td>
+						      	<td>
+						        	<div class="slds-truncate">
+						        		<lightning:input value="{!objTraining.QuoteItem.QuoteItem_ConsultRemark__c}"/>
+						        	</div>
+						      	</td>	
+					    	</tr>
+						</aura:iteration>
+			  			<tr class="slds-border_bottom slds-border_top">
+							<th scope="col" colspan="2.5">
+							소계
+							</th>				
+							<th scope="col" colspan="1.5">
+								교육 종류 수 : {!v.objSumTraining.subNumber}
+							</th>
+							<th scope="col" colspan="1.5" style="text-align:right"/>
+
+							<th scope="col" colspan="1.5" style="text-align:right">
+								<!-- {!v.QuoteLabelMap.Quote_TrainingDiscountRate__c} :  -->
+								<ui:outputNumber value="{!v.objSumTraining.subPercent}" format=".0" />% &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							</th>
+							<th scope="col" colspan="1.5" style="text-align:right"/>						
+							<th scope="col" colspan="1.5" style="text-align:right">
+								<!-- {!v.QuoteLabelMap.Quote_TrainingCount__c} :  -->
+								<ui:outputNumber value="{!v.objSumTraining.subManmonth}" />&nbsp;명	
+							</th>					  				 	  			
+							<th scope="col" colspan="1.5" style="text-align:right">
+								<!-- {!v.QuoteLabelMap.Quote_TrainingListAmount__c} :  -->
+								<!-- {!v.objSumTraining.subStandardPrice} -->
+								<ui:outputNumber value="{!v.objSumTraining.subStandardPrice}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							</th>
+							<!-- <th scope="col" colspan="1.5">
+								{!v.QuoteLabelMap.Quote_TrainingSubTotal__c} : {!v.objSumTraining.subtotalAmount}
+							</th> -->					  				
+							<th scope="col" colspan="1.5" style="text-align:right">
+								<!-- {!v.QuoteLabelMap.Quote_ConsultAmount__c} : {!v.objSumTraining.subQuote} -->
+								<ui:outputNumber value="{!v.objSumTraining.subQuote}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							</th>
+							<th scope="col" colspan="1.5" style="text-align:right">
+								<!-- {!v.QuoteLabelMap.Quote_TrainDiscount__c} : {!v.objSumTraining.subDiscount} -->
+								<ui:outputNumber value="{!v.objSumTraining.subDiscount}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							</th>
+							<th scope="col" colspan="1.5"/>
+						</tr>
+				  		<tr>
+				  			<th scope="col" colspan="2">
+				  				비고
+				  				<lightning:helptext content="초기 입력시 그대로 두면 기본 설정 값이 자동 적용됩니다."/>
+				  			</th>
+			  				<th scope="col" colspan="12">
+			  					<lightning:textarea value="{!v.objQuote.Quote_TrainingRemark__c}" class="topText"/>
+			  				</th>
+				  		</tr>				
+				  	</tbody>
+				</table>
+			</div>
+		</lightning:accordionSection>
+	</lightning:accordion>
+</div>
+</aura:component>

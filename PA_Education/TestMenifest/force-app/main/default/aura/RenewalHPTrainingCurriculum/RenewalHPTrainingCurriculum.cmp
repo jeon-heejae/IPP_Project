@@ -1,0 +1,130 @@
+<!--
+ - @description       : Training Curriculum of Homepage Renewal Project
+ - @author            : Chan Kang
+ - @group             : Boundary
+ - Modifications Log
+ - Ver   Date         Author           Modification
+ - 1.0   2021.12.24   Chan Kang        Initial Version
+   1.1   2022.04.17   Gunwoo Kim       Load english data conditionally
+                                       Add event handler to load english data
+                                       Add isEnglish parameter to APEX callout
+-->
+
+<aura:component
+    implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes"
+    access="global">
+    <aura:attribute name="isEnglish" type="Boolean" access="global" default="false" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:handler event="c:i18nEvent" action="{!c.init}" />
+
+    <section>
+        <div class="contents" id="curriculum">
+            <p class="pageTitle">
+                Curriculum
+            </p>
+            <aura:if isTrue="{!v.isEnglish}">
+                <h1>
+                    Daeu Nextier provides extraordinary education<br /> experience based on Salesforce feature
+                    &amp;<br />
+                    Knowledge through broad projects.
+                </h1>
+                <h2>
+                    As a Salesforce Education Partner, we provide the significant education with proficient<br />
+                    instructors and owned training facility provides comfort.
+                </h2>
+                <div class="curriculumItem administrator">
+                    <section class="header">
+                        <p class="title">Salesforce<br />Administrator</p>
+
+                        <p class="description">
+                            Salesforce Administrators understand customers' requirements based on business process, and
+                            implement process automation with various functions of Salesforce.
+                        </p>
+                        <div class="clearfix" />
+                    </section>
+                    <section class="content">
+                        <p>Administrator Training contains:</p>
+                        <ul>
+                            <li>Utilization of Salesforce Platform</li>
+                            <li>Design &amp; Implement Standard/Custom Object based on Requirements</li>
+                            <li>Knowledge of Process Automation Functions</li>
+                        </ul>
+                    </section>
+                    <div class="clearfix" />
+                </div>
+                <div class="curriculumItem developer">
+                    <section class="header">
+                        <p class="title">Salesforce<br />Developer</p>
+                        <p class="description">
+                            Salesforce Developers satisfy customers by development when requirements have limit to
+                            implement by Salesforce standard functions.
+                        </p>
+                        <div class="clearfix" />
+                    </section>
+                    <section class="content">
+                        <p>Developer Training contains:</p>
+                        <ul>
+                            <li>Development Platform Environment provided by Salesforce Platfortm</li>
+                            <li>Component Development provided by Salesforce</li>
+                            <li>Knowledge of Test Method and Trouble Shooting</li>
+                        </ul>
+                    </section>
+                    <div class="clearfix" />
+                </div>
+                <aura:set attribute="else">
+                    <h1>
+                        우리는<br />
+                        Salesforce <b class="textDeepBlue">교육전문 파트너로서</b><br />
+                        Salesforce <b class="textDeepBlue">솔루션의 기능과 프로젝트 경험을 결합한</b><br />
+                        <b class="textDeepBlue">새로운 교육 경험</b>을 제공합니다. <br />
+                    </h1>
+                    <h2>
+                        Salesforce 교육전문 파트너 대유넥스티어는<br />
+                        프로젝트의 경험 인력 중심의 강사 구성과 자체 보유한 사내교육장 환경으로<br />
+                        차별화된 최고 수준의 교육을 제공 합니다.
+                    </h2>
+                    <div class="curriculumItem administrator">
+                        <section class="header">
+                            <p class="title">Salesforce<br />Administrator</p>
+
+                            <p class="description">
+                                Salesforce Administrator는 고객이 속한 산업의 속성을 이해하고 시스템 구축의 요건을 파악하여 솔루션 Architecture 로 전환하고
+                                다양한 자동화 기능을 활용하여 Process Automation 을 구현합니다.
+                            </p>
+                            <div class="clearfix" />
+                        </section>
+                        <section class="content">
+                            <p>우리의 Administrator 교육은</p>
+                            <ul>
+                                <li>Salesforce Platform을 활용한 사용자 활용 기반 지식</li>
+                                <li>요건분석에 따른 Standard와 Custom Object 설계 및 구현 지식</li>
+                                <li>Process Automation과 관련된 지식 전달로 수행됩니다.</li>
+                            </ul>
+                        </section>
+                        <div class="clearfix" />
+                    </div>
+                    <div class="curriculumItem developer">
+                        <section class="header">
+                            <p class="title">Salesforce<br />Developer</p>
+                            <p class="description">
+                                Salesforce developer는 고객의 요건에 대한 보다 세밀한 이해를 통해 Salesforce 표준기능을 구현하기에는 한계가 있는 기능에 대하여
+                                개발로 구현하는 역할을 수행 합니다.
+                            </p>
+                            <div class="clearfix" />
+                        </section>
+                        <section class="content">
+                            <p>우리의 Developer 교육은</p>
+                            <ul>
+                                <li>Salesforce Platform에서 제공하는 개발 Platform 환경 지식</li>
+                                <li>Salesforce에서 제공하는 Component 개발 지식</li>
+                                <li>개발, Test, Trouble Shooting 등과 지식 전달로 수행됩니다.</li>
+                            </ul>
+                        </section>
+                        <div class="clearfix" />
+                    </div>
+                </aura:set>
+            </aura:if>
+
+        </div>
+    </section>
+</aura:component>

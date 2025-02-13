@@ -1,0 +1,228 @@
+<!--
+ - Created by user on 2024-08-09.
+ -->
+
+<aura:component description="TaxFileUpload"
+                controller="TaxFileUploadController"
+                implements="force:hasRecordId,force:lightningQuickActionWithoutHeader,flexipage:availableForAllPageTypes">
+
+
+    <aura:attribute name="parentId" type="String" />
+    <aura:attribute name="currentURL" type="String" />
+
+    <aura:attribute name="fieldNameValidation" type="List" default="" />
+
+
+    <!--step1 Excel datatable attribute-->
+    <aura:attribute name="data" type="List"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="csv" type="String" default="" />
+
+    <!--step2 date attribute-->
+    <aura:attribute name="months" type="String[]" default="1,2,3,4,5,6,7,8,9,10,11,12"/>
+    <aura:attribute name="currentYear" type="integer" default=""/>
+    <aura:attribute name="selectedMonth" type="String" />
+    <!--step2 datatable attribute-->
+    <aura:attribute name="billingList" type="List" default="[]"/>
+    <aura:attribute name="fieldColumns" type="List" default="[
+        {label: '사업자번호', fieldName: 'StoreBusinessNumber__c', type: 'text'},
+        {label: '법인카드청구내역', fieldName: 'Name', type: 'text'},
+        {label: '결제금액', fieldName: 'BillingAmount__c', type: 'currency'},
+        {label: '결제일시', fieldName: 'BillingDate__c', type: 'date', typeAttributes:{year: 'numeric',month: 'numeric',day: 'numeric', hour: '2-digit',minute: '2-digit',day: '2-digit'}}
+    ]"/>
+    <aura:attribute name="data2" type="List"/>
+
+    <!--step3 datatable attribute-->
+    <aura:attribute name="data3" type="List"/>
+    <aura:attribute name="columns3" type="List" default="[
+        { label: '사업자번호', fieldName: '사업자번호', type: 'text' },
+        { label: '요청건수', fieldName: '요청건수', type: 'button', typeAttributes: { label: { fieldName: '요청건수' }, variant: 'base', name: 'requestCount' }}
+    ]"/>
+    <aura:attribute name="excelBody" type="List" description="액셀데이터의 header를 제거한 부분"/>
+
+    <!--step3 datatable after Link button request attribute-->
+    <aura:attribute name="LinkColumns3" type="List" default="[
+        {label: '사업자번호', fieldName: 'StoreBusinessNumber__c', type: 'text'},
+        {label: '법인카드청구내역', fieldName: 'Name', type: 'text'},
+        {label: '결제금액', fieldName: 'BillingAmount__c', type: 'currency'},
+        {label: '결제일시', fieldName: 'BillingDate__c', type: 'date', typeAttributes:{year: 'numeric',month: 'numeric',day: 'numeric', hour: '2-digit',minute: '2-digit',day: '2-digit'}}
+    ]"/>
+    <aura:attribute name="LinkData3" type="List"/>
+    <aura:attribute name="notIncluded" type="List"/>
+
+    <!--step4 attribute-->
+    <aura:attribute name="mapResults" type="List" default="{}"/>
+
+
+
+    <aura:handler name="init" value="{!this}" action="{!c.Init}"/>
+
+    <lightning:overlayLibrary aura:id="overlayLib" />
+    <aura:attribute name="isModalOpen" type="Boolean" default="true"/>
+    <aura:attribute name="step1" type="Boolean" default="true"/>
+    <aura:attribute name="step2" type="Boolean" default="false"/>
+    <aura:attribute name="step3" type="Boolean" default="false"/>
+    <aura:attribute name="step3Link" type="Boolean" default="false"/>
+    <aura:attribute name="step4" type="Boolean" default="false"/>
+
+
+
+    <aura:if isTrue="{!v.isModalOpen}">
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open slds-modal_small">
+
+            <div class="slds-modal__container">
+
+                <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate" tabindex="-1">국세청 파일 업데이트</h1>
+                </div>
+
+                    <aura:if isTrue="{!v.step1}">
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <div class="all" >
+                                <div class="slds-modal__body1" >
+                                    <lightning:textarea name="inputExcel" aura:id="inputExcel" label=""
+                                                        placeholder="Update 하실 양식 데이터를 복사해서 붙여넣으세요." value="{!v.csv}"></lightning:textarea>
+                                    <div style="text-align: right; padding: 0.3rem;">
+                                        <lightning:button class="slds-button slds-button_neutral" label="지우기" title="Brand action" onclick="{! c.eraseBtn }" />
+                                        <lightning:button variant="brand" label="변환" title="Brand action" onclick="{! c.handleExcelData }" />
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div style="height: 300px">
+                                <lightning:datatable
+                                        aura:id="myDatatable"
+                                        columns="{! v.columns }"
+                                        data="{! v.data }"
+                                        keyField="id"
+                                        hideCheckboxColumn="true"
+                                        onrowaction="{! c.handleRowAction }"/>
+                            </div>
+
+                        </div>
+
+                        <div class="slds-modal__footer">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.closeModal}" aria-label="Cancel and close">닫기</button>
+                            <lightning:button variant="brand" label="적용" title="Brand action" onclick="{! c.headToStep2 }" />
+                        </div>
+
+
+
+                    </aura:if>
+                    <aura:if isTrue="{!v.step2}">
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <div class="all">
+
+                                <div class="date">
+                                    <lightning:input type="text" aura:id="Year" required="true" label="Year" value="{!v.currentYear}"/>
+
+                                    <lightning:select aura:id="selectMonth" label="Month" required="true">
+                                        <aura:iteration items="{!v.months}" var="m">
+                                            <option value="{!m}" text="{!m}"></option>
+                                        </aura:iteration>
+                                    </lightning:select>
+                                    <div style="text-align: right; padding: 0.3rem;">
+                                        <lightning:button variant="brand" label="조회" title="Brand action" onclick="{! c.lookUpBilling }" />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div style="height: 300px">
+                                <lightning:datatable
+                                        columns="{! v.fieldColumns }"
+                                        data="{! v.data2 }"
+                                        keyField="id"
+                                        hideCheckboxColumn="true"
+                                        onrowaction="{! c.handleRowAction }"/>
+                            </div>
+                        </div>
+
+                        <div class="slds-modal__footer">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.closeModal}" aria-label="Cancel and close">닫기</button>
+                            <lightning:button variant="brand" label="적용" title="Brand action" onclick="{! c.headToStep3 }" />
+                        </div>
+
+                    </aura:if>
+                    <aura:if isTrue="{!v.step3}">
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <h1>{!v.currentYear}년 {!v.selectedMonth}월 내역</h1>
+                            <div style="height: 300px;">
+                                <lightning:datatable
+                                        columns="{!v.columns3}"
+                                        data="{!v.data3}"
+                                        keyField="사업자번호"
+                                        hideCheckboxColumn="true"
+                                        onrowaction="{! c.showBillingList }"/>
+                            </div>
+                        </div>
+
+
+                        <div class="slds-modal__footer">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.closeModal}" aria-label="Cancel and close">닫기</button>
+                            <button class="slds-button slds-button_neutral" onclick="{!c.backToStep2}" aria-label="Cancel and close">뒤로</button>
+                            <lightning:button variant="brand" label="업데이트" title="Brand action" onclick="{! c.handleUpload }" />
+                        </div>
+
+                    </aura:if>
+                    <aura:if isTrue="{!v.step3Link}">
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+
+                            <div style="height: 300px">
+                                <lightning:datatable
+                                        columns="{! v.LinkColumns3 }"
+                                        data="{! v.LinkData3 }"
+                                        keyField="id"
+                                        hideCheckboxColumn="true"/>
+                            </div>
+                        </div>
+
+                        <div class="slds-modal__footer">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.closeModal}" aria-label="Cancel and close">닫기</button>
+                            <lightning:button variant="brand" label="뒤로" title="Brand action" onclick="{! c.backToStep3 }" />
+                        </div>
+
+                    </aura:if>
+
+                    <aura:if isTrue="{!v.step4}">
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <div style="height: 300px;">
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered custom-bordered-table">
+                                    <tr>
+                                        <th>
+                                            <p><strong>항목</strong></p>
+                                        </th>
+                                        <th>
+                                            <p><Strong>상태</Strong></p>
+                                        </th>
+                                    </tr>
+
+                                    <aura:iteration items="{!v.mapResults}" var="item">
+                                        <tr>
+                                            <td>
+                                                <p>{!item.key}</p>
+                                            </td>
+                                            <td>
+                                                <p style="color:green"><Strong>{!item.value}</Strong></p>
+                                            </td>
+                                        </tr>
+                                    </aura:iteration>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="slds-modal__footer">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.closeModal}" aria-label="Cancel and close">닫기</button>
+                        </div>
+                    </aura:if>
+            </div>
+
+
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+
+    </aura:if>
+
+    <lightning:navigation aura:id="navService"/>
+
+
+</aura:component>

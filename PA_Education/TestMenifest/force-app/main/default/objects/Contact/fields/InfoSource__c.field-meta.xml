@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>InfoSource__c</fullName>
+    <label>정보 소스</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>직접연락</fullName>
+                <default>false</default>
+                <label>직접연락</label>
+            </value>
+            <value>
+                <fullName>행사/이벤트</fullName>
+                <default>false</default>
+                <label>행사/이벤트</label>
+            </value>
+            <value>
+                <fullName>소개</fullName>
+                <default>false</default>
+                <label>소개</label>
+            </value>
+            <value>
+                <fullName>웹</fullName>
+                <default>false</default>
+                <label>웹</label>
+            </value>
+            <value>
+                <fullName>기타</fullName>
+                <default>false</default>
+                <label>기타</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>OngoingProjects</fullName>
+    <columns>NAME</columns>
+    <columns>PM__c</columns>
+    <columns>StartDate__c</columns>
+    <columns>EndDate__c</columns>
+    <columns>ru_Amount__c</columns>
+    <columns>fmOutsourcingFee__c</columns>
+    <columns>fm_NetAmount__c</columns>
+    <columns>ru_Budget__c</columns>
+    <columns>TotalExpense__c</columns>
+    <columns>fm_RemainingExpense__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Completed__c</field>
+        <operation>equals</operation>
+        <value>0</value>
+    </filters>
+    <filters>
+        <field>NAME</field>
+        <operation>notEqual</operation>
+        <value>본사공통</value>
+    </filters>
+    <filters>
+        <field>NAME</field>
+        <operation>notEqual</operation>
+        <value>마케팅</value>
+    </filters>
+    <label>진행중인 프로젝트</label>
+    <sharedTo>
+        <allInternalUsers></allInternalUsers>
+    </sharedTo>
+</ListView>

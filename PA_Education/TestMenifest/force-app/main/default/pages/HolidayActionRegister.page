@@ -1,0 +1,127 @@
+<apex:page showHeader="false" showQuickActionVfHeader="false" sidebar="false" standardController="HolidayAction__c" extensions="HolidayActionExtension">
+    <apex:sectionHeader title="Holiday manage." subtitle="Add action." description="Add Holiday, Unpaid Holiday, Uncountable leaves."/>
+    <apex:pageMessages id="msg"/>
+    <apex:form >
+        <!--<apex:actionFunction name="changeType" action="{!typeCheck}" rerender="days,dates,msg" />-->
+        <apex:pageBlock mode="edit">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!doSave}"/>
+                <apex:commandButton value="Cancel" action="{!doCancel}" immediate="true"/>
+            </apex:pageBlockButtons>
+            
+            
+            <apex:pageBlockSection title="기본정보" columns="2">
+                
+                <apex:pageblockSectionItem >
+                    <apex:outputLabel >{!$ObjectType.HolidayAction__c.fields.Name.Label}</apex:outputLabel>
+                    <apex:inputField value="{!HolidayAction__c.Name}" />
+                </apex:pageblockSectionItem>
+                <apex:pageblockSectionItem >
+                    <apex:outputLabel >{!$ObjectType.HolidayAction__c.fields.HolidayAction_Type__c.Label}</apex:outputLabel>
+                    <apex:actionRegion >
+                        <apex:inputField required="true" value="{!HolidayAction__c.HolidayAction_Type__c}">
+                            <apex:actionSupport event="onchange" action="{!typeCheck}" rerender="days,dates,msg"/>
+                        </apex:inputField>
+                    </apex:actionRegion>
+                </apex:pageblockSectionItem>
+                
+                <apex:pageblockSectionItem HelpText="{!$ObjectType.HolidayAction__c.fields.HolidayAction_Days__c.inlineHelpText}">
+                    <apex:outputLabel >{!$ObjectType.HolidayAction__c.fields.HolidayAction_Days__c.Label}</apex:outputLabel>
+                    <apex:outputPanel id="days">
+                        <apex:inputfield value="{!HolidayAction__c.HolidayAction_Days__c}" 
+                            rendered="{!
+                                          IF(HolidayAction__c.HolidayAction_Type__c == 'Alternative Holiday Register',
+                                              false,
+                                              IF(HolidayAction__c.HolidayAction_Type__c == 'Women Holiday',
+                                                  false,
+                                                  IF(HolidayAction__c.HolidayAction_Type__c == 'Alternative Holiday',
+                                                      false,
+                                                      IF(HolidayAction__c.HolidayAction_Type__c == 'Half-day Leave',
+                                                          false,
+                                                          true
+                                                      )
+                                                  )
+                                              )
+                                          )
+                                      }" required="true">
+                            <apex:actionSupport event="onchange" action="{!changeDay}"  rerender="dates,msg" immediate="false"/>
+                        </apex:inputfield>
+                        <apex:outputField value="{!HolidayAction__c.HolidayAction_Days__c}" 
+                            rendered="{!
+                                          IF(HolidayAction__c.HolidayAction_Type__c == 'Alternative Holiday Register',
+                                              true,
+                                              IF(HolidayAction__c.HolidayAction_Type__c == 'Women Holiday',
+                                                  true,
+                                                  IF(HolidayAction__c.HolidayAction_Type__c == 'Alternative Holiday',
+                                                      true,
+                                                      false
+                                                  )
+                                              )
+                                          )
+                                      }"/>
+                        <apex:outputLabel rendered="{!IF(HolidayAction__c.HolidayAction_Type__c == 'Half-day Leave',true,false) }">0.5</apex:outputLabel>
+                    </apex:outputPanel>
+                </apex:pageblockSectionItem>            
+                <apex:pageblockSectionItem HelpText="{!$ObjectType.HolidayAction__c.fields.HolidayAction_IsEmergency__c.inlineHelpText}">
+                    <apex:outputLabel >{!$ObjectType.HolidayAction__c.fields.HolidayAction_IsEmergency__c.Label}</apex:outputLabel>
+                    <apex:inputField value="{!HolidayAction__c.HolidayAction_IsEmergency__c}"/>
+                </apex:pageblockSectionItem> 
+                <apex:pageblockSectionItem HelpText="{!$ObjectType.HolidayAction__c.fields.FirstHolidayRequest__c.inlineHelpText}">
+                    <apex:outputLabel >{!$ObjectType.HolidayAction__c.fields.FirstHolidayRequest__c.Label}</apex:outputLabel>
+                    <apex:inputField required="true" value="{!HolidayAction__c.FirstHolidayRequest__c}"/>
+                </apex:pageblockSectionItem>
+                <apex:pageblockSectionItem HelpText="{!$ObjectType.HolidayAction__c.fields.SecondApproverSelection__c.inlineHelpText}">
+                    <apex:outputLabel >{!$ObjectType.HolidayAction__c.fields.SecondApproverSelection__c.Label}</apex:outputLabel>
+                    <apex:inputField value="{!HolidayAction__c.SecondApproverSelection__c}"/>
+                </apex:pageblockSectionItem> 
+                
+                
+                
+                <!-- <apex:pageblockSectionItem HelpText="{!$ObjectType.HolidayAction__c.fields.HolidayAction_Approver__c.inlineHelpText}">
+                        <apex:outputLabel >{!$ObjectType.HolidayAction__c.fields.HolidayAction_Approver__c.Label}</apex:outputLabel>
+                        <apex:inputField required="true" value="{!HolidayAction__c.HolidayAction_Approver__c}"/>
+                    </apex:pageblockSectionItem> -->    
+                <!--        
+                <apex:pageblockSectionItem HelpText="{!$ObjectType.HolidayAction__c.fields.HolidayAction_AlternativeBase__c.inlineHelpText}">
+                    <apex:outputLabel >{!$ObjectType.HolidayAction__c.fields.HolidayAction_AlternativeBase__c.Label}</apex:outputLabel>
+                    <apex:inputField value="{!HolidayAction__c.HolidayAction_AlternativeBase__c}" />
+                </apex:pageblockSectionItem>       
+                -->    
+            </apex:pageBlockSection>
+            
+            
+            <apex:pageBlockSection title="사유" columns="1">             
+                <apex:pageblockSectionItem >
+                    <apex:outputLabel >{!$ObjectType.HolidayAction__c.fields.HolidayAction_Description__c.Label}</apex:outputLabel>
+                    <apex:inputField value="{!HolidayAction__c.HolidayAction_Description__c}" style="width:60%;"/>
+                </apex:pageblockSectionItem>           
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="일자" columns="1" id="dates">  
+                <apex:pageblockSectionItem rendered="{!IF(HolidayAction__c.HolidayAction_Type__c == 'Half-day Leave',true,false)}">
+                    <apex:outputLabel >{!$ObjectType.HolidayAction__c.fields.HolidayAction_HalfdayTime__c.Label}</apex:outputLabel>
+                    <apex:inputField value="{!HolidayAction__c.HolidayAction_HalfdayTime__c}" required="{!IF(HolidayAction__c.HolidayAction_Type__c == 'Half-day Leave',true,false)}" />
+                </apex:pageblockSectionItem>          
+                <apex:pageblockSectionItem rendered="{!IF(HolidayAction__c.HolidayAction_Days__c>0,true,false)}">
+                    <apex:outputLabel >{!$ObjectType.HolidayAction__c.fields.HolidayAction_Date1__c.Label}</apex:outputLabel>
+                    <apex:inputField value="{!HolidayAction__c.HolidayAction_Date1__c}" required="{!IF(HolidayAction__c.HolidayAction_Days__c>0,true,false)}"/>
+                </apex:pageblockSectionItem>          
+                <apex:pageblockSectionItem rendered="{!IF(HolidayAction__c.HolidayAction_Days__c>1,true,false)}">
+                    <apex:outputLabel >{!$ObjectType.HolidayAction__c.fields.HolidayAction_Date2__c.Label}</apex:outputLabel>
+                    <apex:inputField value="{!HolidayAction__c.HolidayAction_Date2__c}" required="{!IF(HolidayAction__c.HolidayAction_Days__c>1,true,false)}"/>
+                </apex:pageblockSectionItem>                      
+                <apex:pageblockSectionItem rendered="{!IF(HolidayAction__c.HolidayAction_Days__c>2,true,false)}">
+                    <apex:outputLabel >{!$ObjectType.HolidayAction__c.fields.HolidayAction_Date3__c.Label}</apex:outputLabel>
+                    <apex:inputField value="{!HolidayAction__c.HolidayAction_Date3__c}" required="{!IF(HolidayAction__c.HolidayAction_Days__c>2,true,false)}"/>
+                </apex:pageblockSectionItem>                      
+                <apex:pageblockSectionItem rendered="{!IF(HolidayAction__c.HolidayAction_Days__c>3,true,false)}">
+                    <apex:outputLabel >{!$ObjectType.HolidayAction__c.fields.HolidayAction_Date4__c.Label}</apex:outputLabel>
+                    <apex:inputField value="{!HolidayAction__c.HolidayAction_Date4__c}" required="{!IF(HolidayAction__c.HolidayAction_Days__c>3,true,false)}"/>
+                </apex:pageblockSectionItem>                      
+                <apex:pageblockSectionItem rendered="{!IF(HolidayAction__c.HolidayAction_Days__c>4,true,false)}">
+                    <apex:outputLabel >{!$ObjectType.HolidayAction__c.fields.HolidayAction_Date5__c.Label}</apex:outputLabel>
+                    <apex:inputField value="{!HolidayAction__c.HolidayAction_Date5__c}" required="{!IF(HolidayAction__c.HolidayAction_Days__c>4,true,false)}"/>
+                </apex:pageblockSectionItem>           
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

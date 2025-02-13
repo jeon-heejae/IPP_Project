@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Holiday_Date_Detail__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( TEXT(HolidayAction_Date1__c) &lt;&gt; &quot;&quot;, TEXT(HolidayAction_Date1__c),&quot;&quot;) + 
+IF( TEXT(HolidayAction_Date2__c) &lt;&gt; &quot;&quot;, &quot;, &quot;+TEXT(HolidayAction_Date2__c),&quot;&quot;) + 
+IF( TEXT(HolidayAction_Date3__c) &lt;&gt; &quot;&quot;, &quot;, &quot;+TEXT(HolidayAction_Date3__c),&quot;&quot;) + 
+IF( TEXT(HolidayAction_Date4__c) &lt;&gt; &quot;&quot;, &quot;, &quot;+TEXT(HolidayAction_Date4__c),&quot;&quot;) + 
+IF( TEXT(HolidayAction_Date5__c) &lt;&gt; &quot;&quot;, &quot;, &quot;+TEXT(HolidayAction_Date5__c),&quot;&quot;) + 
+IF( TEXT(HolidayAction_Date6__c) &lt;&gt; &quot;&quot;, &quot;, &quot;+TEXT(HolidayAction_Date6__c),&quot;&quot;) + 
+IF( TEXT(HolidayAction_Date7__c) &lt;&gt; &quot;&quot;, &quot;, &quot;+TEXT(HolidayAction_Date7__c),&quot;&quot;) + 
+IF( TEXT(HolidayAction_Date8__c) &lt;&gt; &quot;&quot;, &quot;, &quot;+TEXT(HolidayAction_Date8__c),&quot;&quot;) + 
+IF( TEXT(HolidayAction_Date9__c) &lt;&gt; &quot;&quot;, &quot;, &quot;+TEXT(HolidayAction_Date9__c),&quot;&quot;) + 
+IF( TEXT(HolidayAction_Date10__c) &lt;&gt; &quot;&quot;, &quot;, &quot;+TEXT(HolidayAction_Date10__c),&quot;&quot;)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>휴가일자 상세</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

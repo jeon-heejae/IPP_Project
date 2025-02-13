@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Position__c</fullName>
+    <label>Position</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>프로젝트 PM</fullName>
+                <default>false</default>
+                <label>프로젝트 PM</label>
+            </value>
+            <value>
+                <fullName>프로젝트 팀원</fullName>
+                <default>false</default>
+                <label>프로젝트 팀원</label>
+            </value>
+            <value>
+                <fullName>본사근무</fullName>
+                <default>false</default>
+                <label>본사근무</label>
+            </value>
+            <value>
+                <fullName>임원</fullName>
+                <default>false</default>
+                <label>임원</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

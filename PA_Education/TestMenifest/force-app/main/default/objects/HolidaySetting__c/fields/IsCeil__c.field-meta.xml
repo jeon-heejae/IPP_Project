@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>IsCeil__c</fullName>
+    <defaultValue>true</defaultValue>
+    <description>값이 True일 경우 연차 기준일 당시 만근을 하지 않아도 연차를 가산 및 이전 사용일수를 초기화 한다.
+false일 경우 연차 기준일 당신 만근이 아니면 연차를 가산하지 않고 1년 근속 미만일 경우 사용일수를 초기화 하지 않는다
+예) 올림일 경우 전년도 4월 입사자는 연차사용일수가 초기화 되고
+전전년도 4월 입사자는 연차가 16일로 1일 가산 된다.
+내림일 경우 전년도 4월 입사자는 연차일수가 초기화 되지 않고
+전전년도 4월 입사자는 연차가 15일로 1일 가산은 다음해로 넘어간다.</description>
+    <label>갱신일 이전 일수 차감여부</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

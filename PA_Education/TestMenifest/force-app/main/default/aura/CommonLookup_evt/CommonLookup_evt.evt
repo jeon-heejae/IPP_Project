@@ -1,0 +1,5 @@
+<aura:event type="COMPONENT">
+    <aura:attribute name="recordByEvent" type="Object"/>
+    <aura:attribute name="sParentId" type="String"/>
+    <aura:attribute name="sParentField" type="String"/>
+</aura:event>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Detail_Key__c</fullName>
+    <caseSensitive>false</caseSensitive>
+    <description>자신의 고유한 항목ID를 기재(규칙:인터페이스ID_항목유형_상위구분번호-정의서 번호 또는 임의의 추가번호)
+- 임의의 추가번호는 a~z로 지재</description>
+    <externalId>true</externalId>
+    <inlineHelpText>자신의 고유한 항목ID를 기재(규칙:인터페이스ID_항목유형_상위구분번호-정의서 번호 또는 임의의 추가번호)
+- 임의의 추가번호는 a~z로 지재</inlineHelpText>
+    <label>항목ID</label>
+    <length>100</length>
+    <required>true</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>true</unique>
+</CustomField>

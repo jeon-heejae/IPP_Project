@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CellXYValueValidation</fullName>
+    <active>true</active>
+    <description>CellX__c와 CellY__c에 0, 1, 2, 3, 4 외 값 입력 불가</description>
+    <errorConditionFormula>NOT(
+AND(
+OR(CellX__c = 0, CellX__c = 1, CellX__c = 2, CellX__c = 3, CellX__c = 4),
+OR(CellY__c = 0, CellY__c = 1, CellY__c = 2, CellY__c = 3, CellY__c = 4)))</errorConditionFormula>
+    <errorMessage>CellX__c와 CellY__c에 0, 1, 2, 3, 4 외 값 입력 불가</errorMessage>
+</ValidationRule>

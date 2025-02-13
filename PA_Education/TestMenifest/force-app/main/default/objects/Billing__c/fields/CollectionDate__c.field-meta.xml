@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CollectionDate__c</fullName>
+    <inlineHelpText>수령일자 미입력 시 &quot;(세금계산서 발행일자) + (Account의 세금계산서 발행 후 회수일수)&quot;</inlineHelpText>
+    <label>수령일자</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

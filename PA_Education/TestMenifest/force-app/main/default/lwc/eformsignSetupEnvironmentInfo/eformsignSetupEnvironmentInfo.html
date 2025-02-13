@@ -1,0 +1,22 @@
+<!--
+ - Created by hs.jung on 2024-05-28.
+ -->
+<template>
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+    </template>
+    <lightning-layout multiple-rows>
+        <lightning-layout-item size="4">
+            <lightning-input label="Company ID" name="companyId" value={infos.companyId} onchange={handleChange}
+                             disabled={isDisabled}></lightning-input>
+            <lightning-input label="API Key" name="apiKey" value={infos.apiKey} onchange={handleChange}
+                             disabled={isDisabled}></lightning-input>
+            <lightning-input label="Private Key" name="privateKey" value={infos.privateKey} onchange={handleChange}
+                             disabled={isDisabled}></lightning-input>
+            <lightning-input label="대표관리자 이메일" name="adminEmail" value={infos.adminEmail} onchange={handleChange}
+                             disabled={isDisabled}></lightning-input>
+            <lightning-button label="Save" onclick={handleSave} disabled={isDisabled}></lightning-button>
+            <lightning-button label="Check Connention" onclick={checkConnention}></lightning-button>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

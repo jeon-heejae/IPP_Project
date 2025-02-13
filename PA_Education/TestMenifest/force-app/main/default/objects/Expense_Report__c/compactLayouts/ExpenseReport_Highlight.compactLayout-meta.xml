@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CompactLayout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ExpenseReport_Highlight</fullName>
+    <fields>Name</fields>
+    <fields>OwnerId</fields>
+    <fields>Submit_Date__c</fields>
+    <fields>fm_YearMonth__c</fields>
+    <fields>TotalAmount__c</fields>
+    <fields>ApprovalStatus__c</fields>
+    <label>ExpenseReport_Highlight</label>
+</CompactLayout>

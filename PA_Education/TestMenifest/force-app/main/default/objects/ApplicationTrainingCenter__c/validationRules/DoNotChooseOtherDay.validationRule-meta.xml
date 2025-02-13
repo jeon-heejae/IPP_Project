@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DoNotChooseOtherDay</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISBLANK( Date1__c ) = False, 
+    ISBLANK( Date2__c ) = False,
+    ABS( Date1__c - Date2__c ) &gt; 1
+)</errorConditionFormula>
+    <errorDisplayField>Date2__c</errorDisplayField>
+    <errorMessage>2박인 경우 연박만 가능합니다.</errorMessage>
+</ValidationRule>

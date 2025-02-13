@@ -1,0 +1,7 @@
+<design:component>
+
+    <design:attribute name="sComponentName" label="타이틀" description="빈 값으로 입력시 기본 라벨로 보여집니다." />
+    <design:attribute name="sIconName" label="아이콘 이름" description="아이콘 이름을 입력하세요. ex) custom:custom1" />
+    <design:attribute name="bIsShowButton" label="승인 버튼 유무" description="승인 버튼의 출력 유무를 설정하세요." />
+
+</design:component>

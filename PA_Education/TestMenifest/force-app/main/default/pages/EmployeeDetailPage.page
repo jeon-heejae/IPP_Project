@@ -1,0 +1,158 @@
+<!--
+ - Created by attar on 2020-11-17.
+ -->
+<apex:page id="EmployeeDetailPage" standardController="Employee__c" extensions="EmployeeDetailController" contentType="application/msword#DaeuEmployee.doc" applyBodyTag="false">
+    <html>
+    <head>
+        <meta charset="UTF-8"/>
+        <script type="text/javascript">
+            function goBack(){
+                var url = location.href;
+                var baseURL = url.substring(0, url.indexOf('/', 14));
+
+                history.back('baseURL' + '/lightning/r/Employee__c/');
+            }
+
+            var clearNum = 10;
+            var myTimer = setInterval(function(){
+                clearNum--;
+                console.log(clearNum);
+
+                j$("#checker").text(clearNum);
+
+                if(clearNum == 0) {
+                    clearInterval(myTimer);
+                    goBack();
+                }
+            }, 1000);
+        </script>
+        <style type="text/css">
+            table {
+                border-collapse: collapse;
+                width: 100%;
+                height: 100%;
+            }
+
+            td {
+                border: 1px solid #444444;
+            }
+
+            tr {
+                height: 30px;
+            }
+
+        </style>
+    </head>
+    <body>
+    <table>
+        <thead style="border-collapse: collapse; border: 1px solid #444444;">
+            <tr>
+                <td style="text-align: center; " colspan="6" padding="20px">근로자 명부</td>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td colspan="2">①성명</td>
+            <td>{!objEmployees.name}</td>
+            <td colspan="2">②생년월일</td>
+            <td>{!objEmployees.birthday}</td>
+        </tr>
+        <tr>
+            <td colspan="2">③주소</td>
+            <td colspan="4">
+                {!objEmployees.currentAddress}
+                <br/>
+                <div align="right">
+                    (전화 : {!objEmployees.mobilePhone} )
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">④부양가족</td>
+            <td style="text-align: right;">{!objEmployees.dependents}&nbsp;명</td>
+            <td colspan="2">⑤종 사 업 무</td>
+            <td>{!objEmployees.department}</td>
+        </tr>
+        <tr>
+            <td rowspan="4" style="writing-mode:tb-rl; text-align: center;">이<br/>력<br/></td>
+            <td>⑥기능 및 자격</td>
+            <td>
+                <apex:repeat value="{!empLicense}" var="license">
+                    <apex:outputText >
+                        {!license.Name}
+                        <br/>
+                    </apex:outputText>
+                </apex:repeat>
+            </td>
+            <td rowspan="4" style="writing-mode:tb-rl; text-align: center;">퇴<br/>직<br/></td>
+            <td>⑩해고일</td>
+            <td>{!objEmployees.dismissalDate}</td>
+        </tr>
+        <tr>
+            <td>⑦최종 학력</td>
+            <td>{!objEmployees.education}</td>
+            <td>⑪퇴직일</td>
+            <td>{!objEmployees.exitDate}</td>
+        </tr>
+        <tr>
+            <td>⑧경력</td>
+            <td>
+                <apex:repeat value="{!empCareer}" var="career">
+                    <apex:outputText >
+                        {!career.company} ({!career.period} 년)
+                        <br/>
+                    </apex:outputText>
+                </apex:repeat>
+            </td>
+            <td>⑫사 유</td>
+            <td>{!objEmployees.reason}</td>
+        </tr>
+        <tr>
+            <td>⑨병역</td>
+            <td>{!objEmployees.militaryServiceDiv}</td>
+            <td>⑬금품청산 등</td>
+            <td>{!objEmployees.goldClear}</td>
+        </tr>
+        <tr>
+            <td colspan="2">⑭고용일(계약기간)</td>
+            <td>{!objEmployees.joinDate}</td>
+            <td colspan="2">⑮근로계약갱신일</td>
+            <td>{!objEmployees.updateDate}</td>
+        </tr>
+        <tr>
+            <td style="writing-mode:tb-rl; text-align: center;">⑯<br/>근<br/>로<br/>계<br/>약<br/>조<br/>건</td>
+            <td colspan="5" style="padding:15px">
+                <ol>
+                    <li>근무장소 및 업무내용</li>
+                        <ul>근무장소: {!location}</ul>
+                        <ul>업무내용: {!work}</ul>
+                    <li>임금</li>
+                        <ul>회사 규정에 따름</ul>
+                    <li>근무일 및 근무시간</li>
+                        <ul>월-금요일 09:30 - 18:30 (휴게시간 12:00-13:00)</ul>
+                        <ul>단, 근로계약서상 근무형태에 따라 달라질 수 있음</ul>
+                    <li>휴일 및 휴가</li>
+                        <ul>법정휴일 : 주휴일(일요일), 근로자의 날, 관공서의 공휴일에 관한 규정에 따른 공휴일 (일요일 제외), 대체공휴일</ul>
+                        <ul>휴가 : 근로기준법에 따름</ul>
+                </ol>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">⑰특기사항(교육, 건강, 휴직등)</td>
+        </tr>
+        <tr>
+            <td colspan="6" style="height: 70px;">
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    </body>
+    </html>
+</apex:page>

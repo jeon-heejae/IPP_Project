@@ -1,0 +1,38 @@
+.THIS.hideDiv {
+    display: none;
+}
+/*.THIS .slds-modal__header{
+	position: relative;
+    border-top-right-radius: .25rem;
+    border-top-left-radius: .25rem;
+    border-bottom: 0px; 
+    padding: 1rem;
+    padding-bottom: 0;
+    text-align: center;
+} 
+*/
+
+/* 
+.THIS .modal__table_t1{
+
+    width: 20%;
+}
+
+담당업무, 투입비율
+.THIS .modal__table_t2{
+    width: 15%;
+}
+
+.THIS .modal__table_t3{
+    width: 50%
+} */
+
+/*.THIS .slds-modal__footer {
+    border-top: 2px solid rgb(217, 219, 221); 
+    border-bottom-right-radius: .25rem;
+    border-bottom-left-radius: .25rem;
+    padding: .75rem 1rem;
+    background-color: rgb(249, 249, 250);
+    text-align: right;
+    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.16);
+}*/

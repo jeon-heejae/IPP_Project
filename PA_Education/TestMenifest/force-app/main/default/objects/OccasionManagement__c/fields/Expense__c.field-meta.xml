@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Expense__c</fullName>
+    <formula>IF(OR(AND(TEXT(Content__c) = &apos;결혼&apos;, TEXT(Recipient__c) = &apos;본인&apos;),
+      AND(TEXT(Content__c) = &apos;부고&apos;, TEXT(Recipient__c) = &apos;부친&apos;),
+      AND(TEXT(Content__c) = &apos;부고&apos;, TEXT(Recipient__c) = &apos;모친&apos;)),
+   1000000,
+   IF(AND(TEXT(Content__c) = &apos;결혼&apos;, TEXT(Recipient__c) = &apos;자녀&apos;),
+      500000,
+      IF(OR(AND(TEXT(Content__c) = &apos;부고&apos;, TEXT(Recipient__c) = &apos;장인&apos;),
+            AND(TEXT(Content__c) = &apos;부고&apos;, TEXT(Recipient__c) = &apos;장모&apos;)),
+         300000,0)
+      )
+   )</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>경조비</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

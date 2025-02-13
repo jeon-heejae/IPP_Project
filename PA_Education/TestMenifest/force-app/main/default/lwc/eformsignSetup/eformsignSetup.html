@@ -1,0 +1,27 @@
+<!--
+ - Created by hs.jung on 2024-05-21.
+ -->
+
+<template>
+    <lightning-layout multiple-rows="true" horizontal-align="stretch" style="background-color: white;">
+        <lightning-layout-item flexibility="auto" padding="around-small">
+            <lightning-tabset>
+                <template lwc:if={tabManager.connection}>
+                    <lightning-tab label="이폼사인 연결">
+                        <c-eformsign-setup-admin-connection></c-eformsign-setup-admin-connection>
+                    </lightning-tab>
+                </template>
+                <template lwc:if={tabManager.setup}>
+                    <lightning-tab label="설정 관리">
+                        <c-eformsign-setup-environment-info></c-eformsign-setup-environment-info>
+                    </lightning-tab>
+                </template>
+                <template lwc:if={tabManager.member}>
+                    <lightning-tab label="멤버 관리">
+                        <c-eformsign-setup-users></c-eformsign-setup-users>
+                    </lightning-tab>
+                </template>
+            </lightning-tabset>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

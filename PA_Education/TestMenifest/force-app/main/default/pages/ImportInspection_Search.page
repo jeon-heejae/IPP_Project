@@ -1,0 +1,156 @@
+<!--
+
+-->
+<apex:page controller="ImportInspection" tabStyle="TabImportInspection__tab">
+	<head>
+		<apex:stylesheet value="{!URLFOR($Resource.CssMenu, '/menu_source/styles.css')}" />
+		
+		<apex:stylesheet value="{!URLFOR($Resource.jquery_ui, 'themes/base/jquery-ui.css')}"/>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'jquery-1.10.2.js')}"/>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'ui/jquery-ui.js')}"/>
+		
+		<script type="text/javascript">
+			$(function() {
+				$( "#dialog-modal" ).dialog({
+					autoOpen: true,
+					height: 140,
+					modal: true,
+					open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); }
+				});
+			});
+		</script>
+		<script type="text/javascript">
+            //바코드 출력창
+            function popupBarcode(form, ItemId, AccountId, DateManufacture, CntImportInspection, Seq, barcode) {
+                window.open('', 'formBarcode','width=325,height=200,resizeable,scrollbars');
+                form.ItemId.value = ItemId;
+                form.AccountId.value = AccountId;
+                form.DateManufacture.value = DateManufacture;
+                form.CntImportInspection.value = CntImportInspection;
+                form.Seq.value = Seq;
+                form.barcode.value = barcode;
+                form.target = 'formBarcode';
+            }
+            
+            function submitFormBarocde(ItemId, AccountId, DateManufacture, CntImportInspection, Seq, barcode){
+                popupBarcode(document.frmBarcode, ItemId, AccountId, DateManufacture, CntImportInspection, Seq, barcode);
+                document.frmBarcode.submit();
+            }
+
+			function showDialog(){
+				$("#dialog-modal").dialog( "open" );
+				return false;
+			}
+			
+			function hideDialog(){
+				$("#dialog-modal").dialog( "close" );
+				return false;
+			}
+			function formInit() {
+				hideDialog();
+			}
+			try {
+				window.addEventListener('load',formInit,false);
+			}catch(e){
+				window.attachEvent('onload',formInit);
+			}
+
+
+			//삭제 - 입고전
+			function DeleteConfirmBeforeImport(IVID){
+				//alert('IVID : ' + IVID);
+				$('<div></div>').appendTo('body')
+				  .html('<div><h6>삭제 처리하시겠습니까?</h6><br/>삭제 후 복구할 수 없습니다.</div>')
+				  .dialog({
+				      modal: true, title: '삭제처리 확인창', zIndex: 10000, autoOpen: true,
+				      width: 'auto', resizable: false,
+				      buttons: {
+				          '확인': function () {
+				              invokeDeleteRowSearchResult(IVID);
+				              $(this).dialog("close");
+				          }, 
+				          '취소': function () {
+				              $(this).dialog("close");
+				          }
+				      },
+				      close: function (event, ui) {
+				          $(this).remove();
+				      }
+				});
+			}
+			function invokeDeleteRowSearchResult(IVID){
+				DeleteRowSearchResult(IVID);
+			}
+		</script>
+	</head>
+	<apex:form id="mainFrm">
+		<apex:actionStatus onstart="showDialog();" onstop="hideDialog();"  id="IngStatus"/>
+		
+		<apex:actionFunction action="{!DeleteRowSearchResult}" name="DeleteRowSearchResult" rerender="mainFrm" status="IngStatus">
+			<apex:param name="DeleteRowIVID" assignTo="{!DeleteRowIVID}" value="" />
+        </apex:actionFunction>
+
+		<apex:sectionHeader title="수입검사" />
+		<apex:pageMessages escape="false" />
+		<div id='cssmenu'>
+			<ul>
+			   <li ><a href='/apex/ImportInspection_Request'><span>의뢰</span></a></li>
+			   <li class='active'><a href='#'><span>조회</span></a></li>
+			   <li class='last'><a href='/apex/ImportInspection_Result'><span>결과등록</span></a></li>
+			</ul>
+		</div>
+		
+		<apex:pageBlock title="수입검사 조회">
+			<b>{!$ObjectType.Inventory__c.Fields.Account__c.Label}</b> <apex:inputField required="false" value="{!SearchIV.Account__c}" />
+			<b>품목</b> <apex:inputField required="false" value="{!SearchIV.Item_PartEtc__c}" />
+			<b>{!$ObjectType.Inventory__c.Fields.DateRequestImportInspection__c.Label}</b> <apex:inputField value="{!SearchIV.DateRequestImportInspection__c}" />
+			<apex:commandButton value="조회" action="{!Search}" status="IngStatus"/>
+			<br/>
+			<br/>
+			<apex:pageBlockTable value="{!SearchcIVs}" var="item" >
+				<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Name.Label}" value="{!item.Name}"/>
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Item__c.Label}" value="{!item.Item__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Account__c.Label}" value="{!item.Account__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.DateManufacture__c.Label}" value="{!item.DateManufacture__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.CntImportInspection__c.Label}" value="{!item.CntImportInspection__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Seq__c.Label}" value="{!item.Seq__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.DateRequestImportInspection__c.Label}" value="{!item.DateRequestImportInspection__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.StateImportInspection__c.Label}" value="{!item.StateImportInspection__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.CntImport__c.Label}" value="{!item.CntImport__c}" />
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.DateImportInspection__c.Label}" value="{!item.DateImportInspection__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.OwnerImportInspection__c.Label}" value="{!item.OwnerImportInspection__c}"/>
+		    	<apex:column headerValue="기능">
+					<apex:commandButton value="바코드출력"
+						onclick="submitFormBarocde('{!item.Item__c}', '{!item.Account__c}', '{!item.DateManufacture__c}', '{!item.CntImportInspection__c}', '{!item.Seq__c}', '{!item.Name}');return false;"
+					/>
+					
+					<apex:commandButton value="삭제"
+						onclick="DeleteConfirmBeforeImport('{!item.Id}');return false;"
+						rendered="{!item.CntImport__c<1}"
+					/>
+					<!--
+					<input type="button" class="btn" style="display:{!IF(item.CntImport__c<1, '', 'none')};" value="삭제" onclick="DeleteConfirmBeforeImport('{!item.Id}');return false;"/>
+					-->
+		    	</apex:column>
+			</apex:pageBlockTable>
+			<apex:pageBlockSection columns="1" collapsible="false" rendered="{!SearchcIVs.size<1}" >
+				<apex:outputPanel layout="block">
+					검색된 결과가 없습니다.
+				</apex:outputPanel>
+			</apex:pageBlockSection>
+			
+		</apex:pageblock>
+	</apex:form>
+	
+    <form name="frmBarcode" action="PrintBarcode" method="post">
+        <input type="hidden" name="ItemId" value="" /> <input type="hidden"
+            name="AccountId" value="" /> <input type="hidden"
+            name="DateManufacture" value="" /> <input type="hidden"
+            name="CntImportInspection" value="" /> <input type="hidden"
+            name="Seq" value="" /> <input type="hidden" name="barcode" value="" />
+    </form>
+
+	<div id="dialog-modal" title="처리중...">
+		<p>처리중입니다.</p>
+	</div>
+</apex:page>

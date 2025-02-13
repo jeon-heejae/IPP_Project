@@ -1,0 +1,8 @@
+<!--
+ - Created by gyubin on 2022/04/15.
+ -->
+
+<!-- c:i18nEvent -->
+<aura:event type="APPLICATION" description="i18nEvent" access="global">
+    <aura:attribute name="isEnglish" type="Boolean" />
+</aura:event>

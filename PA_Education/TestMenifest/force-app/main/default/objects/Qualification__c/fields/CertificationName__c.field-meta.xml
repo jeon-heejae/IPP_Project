@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CertificationName__c</fullName>
+    <label>자격증</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>IssuingAuthority__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetName>Certificate</valueSetName>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Administrator</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Advanced Administrator</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Application Architect</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>B2B Solution Architect</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>B2C Solution Architect</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Business Analyst</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Industries CPQ Developer</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>OmniStudio Consultant</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>OmniStudio Developer</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>CPQ Specialist</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Data Architect</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Development Lifecycle and Deployment Architect</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Education Cloud Consultant</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Experience Cloud Consultant</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Field Service Consultant</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Heroku Architect</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Identity and Access Management Architect</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Integration Architect</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>JavaScript Developer I</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Marketing Cloud Administrator</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Marketing Cloud Consultant</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Marketing Cloud Developer</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Marketing Cloud Email Specialist</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Developer - Level 1 (Mule 4)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>MuleSoft Certified Developer - Level 2</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Integration Architect - Level 1</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Platform Architect - Level 1</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Developer - Level 1 (Mule 4) DELTA</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Developer - Integration and API Associate (Mule 3)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>(Retired) MuleSoft Certified Developer - Integration Professional (Mule 3)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>(Retired) MuleSoft Certified Developer - API Design Associate (RAML 1.0)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Nonprofit Cloud Consultant</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Pardot Consultant</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Pardot Specialist</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Platform App Builder</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Platform Developer I</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Platform Developer II</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Salesforce Associate</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Sales Cloud Consultant</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Service Cloud Consultant</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Sharing and Visibility Architect</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Slack Certified Admin</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Slack Certified Developer</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Strategy Designer</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>System Architect</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Tableau Certified Data Analyst</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Tableau Certified Server Associate</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Tableau Desktop Specialist</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Tableau CRM &amp; Einstein Discovery Consultant</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>Technical Architect</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce</controllingFieldValue>
+            <valueName>User Experience Designer</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SAP</controllingFieldValue>
+            <valueName>SAP CRM</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Oracle</controllingFieldValue>
+            <valueName>OCJP</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Oracle</controllingFieldValue>
+            <valueName>OCJD</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Oracle</controllingFieldValue>
+            <valueName>OCWCD</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Oracle</controllingFieldValue>
+            <valueName>OCBCD</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Oracle</controllingFieldValue>
+            <valueName>OCEA</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Microsoft</controllingFieldValue>
+            <valueName>MCP</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Microsoft</controllingFieldValue>
+            <valueName>MCSA</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Microsoft</controllingFieldValue>
+            <valueName>MCSE</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Microsoft</controllingFieldValue>
+            <valueName>MOS</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>산업인력관리공단</controllingFieldValue>
+            <valueName>정보처리기술사</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>산업인력관리공단</controllingFieldValue>
+            <valueName>정보처리기사</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>산업인력관리공단</controllingFieldValue>
+            <valueName>정보처리기능사</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>산업인력관리공단</controllingFieldValue>
+            <valueName>정보처리산업기사</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>산업인력관리공단</controllingFieldValue>
+            <valueName>정보기기운용기능사</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>한국정보통신진흥협회</controllingFieldValue>
+            <valueName>리눅스마스터</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>한국데이터산업진흥원</controllingFieldValue>
+            <valueName>데이터분석 준전문가</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>한국데이터산업진흥원</controllingFieldValue>
+            <valueName>빅데이터분석기사</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>한국데이터산업진흥원</controllingFieldValue>
+            <valueName>데이터분석 전문가(ADP)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>한국데이터산업진흥원</controllingFieldValue>
+            <valueName>SQL 전문가(SQLP)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>한국데이터산업진흥원</controllingFieldValue>
+            <valueName>SQL 개발자(SQLD)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>한국데이터산업진흥원</controllingFieldValue>
+            <valueName>데이터아키텍처 전문가(DAP)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>한국데이터산업진흥원</controllingFieldValue>
+            <valueName>데이터아키텍처 준전문가(DAsP)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>기타</controllingFieldValue>
+            <valueName>기타</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

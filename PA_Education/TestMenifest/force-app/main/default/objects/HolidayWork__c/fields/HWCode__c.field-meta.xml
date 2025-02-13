@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>HWCode__c</fullName>
+    <description>이전 Name 필드를 Auto Number로 사용했을 때의 휴일근무 코드 이관용 (ToBe 사용X)</description>
+    <externalId>false</externalId>
+    <label>휴일근무 이전코드</label>
+    <length>20</length>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

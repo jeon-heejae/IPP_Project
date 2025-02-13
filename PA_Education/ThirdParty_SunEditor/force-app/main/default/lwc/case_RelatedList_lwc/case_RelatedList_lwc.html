@@ -1,0 +1,99 @@
+<template>
+    <lightning-card class="my-card slds-card_boundary" title="Interface Log" icon-name="utility:display_text">
+        <div slot="actions">
+            <!-- <div class="slds-grid slds-m-left_xx-small"
+                style="padding-right: .25rem;">
+                <lightning-input type="date" name="input1" label="Creation From"></lightning-input>
+                <lightning-input type="date" name="input2" label="Creation To"></lightning-input>
+                <lightning-combobox 
+                        name="combobox1" 
+                        label="Status" 
+                        value={value} 
+                        onchange={handleChange}
+                        options={options}>
+                </lightning-combobox>
+                <lightning-button-icon
+                        icon-name="utility:search"
+                        alternative-text="Search"
+                        variant="border"
+                        size="medium"
+                        onclick={handleSearch}
+                        style="margin-top: 22px;">
+                </lightning-button-icon>
+            </div> -->
+            <lightning-layout class="slds-grid slds-grid_vertical-align-end">
+                <lightning-layout-item class="slds-p-right_x-small slds-p-left_x-small" >
+                    <lightning-input type="date" name="input1" label="Creation From"></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item class="slds-p-right_x-small">
+                    <lightning-input type="date" name="input2" label="Creation To"></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item class="slds-p-right_x-small">
+                    <lightning-combobox 
+                        name="combobox1" 
+                        label="Status" 
+                        value={value} 
+                        onchange={handleChange}
+                        options={options}>
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item class="slds-p-right_x-small slds-p-bottom_xxx-small">
+                    <lightning-button-icon
+                        class="slds-p-bottom_xxx-small" 
+                        icon-name="utility:search"
+                        alternative-text="Search"
+                        variant="border"
+                        size="medium"
+                        onclick={handleSearch}>
+                    </lightning-button-icon>
+                </lightning-layout-item>  
+            </lightning-layout>
+        </div>
+
+        <div class="slds-p-around_medium">
+            <lightning-datatable
+                key-field="id"
+                data={displayData}
+                columns={columns}
+                onsort={handleSort}
+                sorted-by={sortedBy}
+                sorted-direction={sortDirection}
+                enable-infinite-loading
+                max-row-selection="1"
+                >
+            </lightning-datatable>
+        </div>
+
+        <div slot="footer">
+            <lightning-tabset>
+                <lightning-tab label="Request Body">
+                    <div class="textarea-container">
+                        <!-- 텍스트 영역 -->
+                        <textarea
+                            class="custom-textarea"
+                            disabled=""
+                        ></textarea>
+                
+                        <!-- 버튼 -->
+                        <lightning-button-icon
+                            icon-name="utility:copy"
+                            alternative-text="Copy"
+                            class="copy-button"
+                            variant="bare"
+                            onclick={handleCopy}
+                        ></lightning-button-icon>
+
+                        <lightning-button-icon
+                            icon-name="utility:download"
+                            alternative-text="Download"
+                            class="download-button"
+                            variant="bare"
+                            onclick={handleDownload}
+                        ></lightning-button-icon>
+                    </div>
+                </lightning-tab>
+                <lightning-tab label="Response Body"></lightning-tab>
+            </lightning-tabset>
+        </div>
+    </lightning-card>
+</template>

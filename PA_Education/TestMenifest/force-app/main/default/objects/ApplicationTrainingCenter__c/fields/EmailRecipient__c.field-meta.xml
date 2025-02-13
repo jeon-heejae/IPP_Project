@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>EmailRecipient__c</fullName>
+    <defaultValue>&quot;yubin.hwang@daeunextier.com&quot;</defaultValue>
+    <description>수련원 확정/미확정 시 이메일을 수신받을 외부사용자 (Email Alert을 통해 발송)</description>
+    <externalId>false</externalId>
+    <inlineHelpText>수련원 확정/미확정 시 &apos;이메일 수신자&apos;에게도 이메일이 발송됩니다. (수련원 신청자 및 이메일 수신자에게 이메일 발송됨)</inlineHelpText>
+    <label>이메일 수신자</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Email</type>
+    <unique>false</unique>
+</CustomField>

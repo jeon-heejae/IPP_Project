@@ -1,0 +1,126 @@
+<!--
+
+-->
+<apex:page controller="ProcessProductManage" tabstyle="TabPRocessProductManage__tab">
+	<head>
+		<apex:stylesheet value="{!URLFOR($Resource.CssMenu, '/menu_source/styles.css')}" />
+		<apex:stylesheet value="{!URLFOR($Resource.jquery_ui, 'themes/base/jquery-ui.css')}"/>
+		<style>
+		input#InputBarcode {
+			ime-mode: disabled;
+		}
+		</style>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'jquery-1.10.2.js')}"/>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'ui/jquery-ui.js')}"/>
+		
+		<script type="text/javascript">
+			$(function() {
+				$( "#dialog-modal" ).dialog({
+					autoOpen: true,
+					height: 140,
+					modal: true	,
+					open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); }
+				});
+			});
+		</script>
+		<script type="text/javascript">
+			function showDialog(){
+				$("#dialog-modal").dialog( "open" );
+				return false;
+			}
+			
+			function hideDialog(){
+				$("#dialog-modal").dialog( "close" );
+				document.getElementById('InputBarcode').focus();
+				document.getElementById('InputBarcode').select();
+				
+				return false;
+			}
+			function formInit() {
+				hideDialog();
+			}
+			try {
+				window.addEventListener('load',formInit,false);
+			}catch(e){
+				window.attachEvent('onload',formInit);
+			}
+		</script>
+		<script type="text/javascript">
+			function KeyPressBarcode(e, strSeq, strValue){
+				var keynum;
+				if(window.event){		// IE
+					keynum = e.keyCode;
+				}
+				if(keynum == 13){
+					InputBarcodeForPage(strValue, strSeq);
+					return false;
+				}
+			}
+
+		</script>
+	</head>
+	<apex:form id="mainFrm">
+		<apex:actionStatus onstart="showDialog();" onstop="hideDialog();"  id="IngStatus"/>
+		
+
+		<!-- 바코드 등록 -->
+        <apex:actionFunction action="{!InputBarcodeForPage}" name="InputBarcodeForPage" rerender="mainFrm" status="IngStatus">
+			<apex:param name="getVal" assignTo="{!InputBarcodeGetVal}" value="" />
+            <apex:param name="seq" assignTo="{!InputBarcodeSeq}" value="" />
+        </apex:actionFunction>
+		
+		<apex:sectionHeader title="생산공정 관리" />
+		<apex:pageMessages escape="false" />
+		<div id='cssmenu'>
+			<ul>
+			   <li class='active last'><a href='#'><span>생산공정 등록</span></a></li>	
+			</ul>
+		</div>
+		<apex:pageBlock title="공정 선택" id="pgBlock">
+			<b>{!$ObjectType.ProcessProduct__c.Fields.ProcessInfo__c.Label} 선택</b>
+			<apex:inputField required="false" value="{!SearchPP.ProcessInfo__c}" rendered="{!FlowState<>9}"/>
+			<apex:outputField value="  {!SearchPP.ProcessInfo__c}" rendered="{!FlowState==9}"/>
+			<apex:commandButton value="조회" action="{!Search}" rendered="{!FlowState<>9}" status="IngStatus"/>
+		</apex:pageBlock>
+		<apex:pageBlock title="공정 정보" id="pgBlockPI">
+		    <apex:pageBlockTable value="{!CM}" var="item" id="pgBlockTablePI">
+		    	<apex:column headerValue="{!$ObjectType.ProcessInfo__c.Fields.Name.Label}" value="{!item.PI.Name}"/>
+		    	<apex:column headerValue="{!$ObjectType.ProcessInfo__c.Fields.Item__c.Label}" value="{!item.PI.Item__c}"/>
+		    	
+		    	<apex:column headerValue="{!$ObjectType.ProcessProduct__c.Fields.ProcessMachine__c.Label}">
+		    		<apex:outputField value="{!item.PP.ProcessMachine__c}" rendered="{!FlowState==9}" />
+		    		<apex:inputField value="{!item.PP.ProcessMachine__c}" rendered="{!FlowState<>9}" />
+		    	</apex:column>
+		    	<apex:column headerValue="{!$ObjectType.ProcessProduct__c.Fields.Date__c.Label}" value="{!item.PP.Date__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.ProcessProduct__c.Fields.State__c.Label}" value="{!item.PP.State__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.ProcessProduct__c.Fields.CntProduct__c.Label}" value="{!item.PP.CntProduct__c}"/>
+		    </apex:pageBlockTable>
+		</apex:pageBlock>
+		<apex:pageBlock title="공정상세 정보" id="pgBlockPPDs">
+		    <apex:pageBlockTable value="{!CDs}" var="item2" id="pgBlockTablePPDs">
+		    	<apex:column headerValue="{!$ObjectType.ProcessInfoDetail__c.Fields.Seq__c.Label}" value="{!item2.PID.Seq__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.ProcessInfoDetail__c.Fields.Item__c.Label}" value="{!item2.PID.Item__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.ProcessInfoDetail__c.Fields.Count__c.Label}" value="{!item2.PID.Count__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.ProcessInfoDetail__c.Fields.BarcodeType__c.Label}" value="{!item2.PID.BarcodeType__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.ProcessProductDetail__c.Fields.Inventory__c.Label}" id="clBar">
+		    		<apex:outputText value="{!Item2.barcode}" rendered="{!Item2.state<>1}" />
+		    		<apex:outputPanel rendered="{!item2.state==1}">
+		    			<input type="text" id="InputBarcode" value="{!Item2.barcode}" 
+		    				onkeypress="return KeyPressBarcode(event, '{!item2.Seq}', this.value);" 
+		    			/>
+		    		</apex:outputPanel>
+		    	</apex:column>
+				<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.CntInventory2__c.Label}" value="{!item2.InventoryCnt}"/>
+
+		    </apex:pageBlockTable>
+			<apex:pageBlockButtons location="bottom">
+				<apex:commandButton value="공정준비완료" action="{!ProcessProductStart}" rendered="{! FlowState==2}" status="IngStatus"/>
+			</apex:pageBlockButtons>
+		</apex:pageBlock>
+	</apex:form>
+	
+	<div id="dialog-modal" title="처리중...">
+		<p>처리중입니다.</p>
+	</div>
+
+</apex:page>

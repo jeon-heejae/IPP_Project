@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>FormRequest_Division__c</fullName>
+    <defaultValue>$User.Division &amp; &apos; &apos; &amp; $User.Department</defaultValue>
+    <externalId>false</externalId>
+    <inlineHelpText>부서
+사용자 정보에 있는 부서(Division + Department) 값이 기본 값입니다.
+값이 없거나 다를 경우 입력하세요.</inlineHelpText>
+    <label>부서</label>
+    <length>50</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

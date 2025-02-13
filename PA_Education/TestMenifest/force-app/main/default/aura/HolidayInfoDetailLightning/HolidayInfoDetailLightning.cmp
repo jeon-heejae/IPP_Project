@@ -1,0 +1,311 @@
+<!-- MyHolidayInfoLightning.cmp 페이지에서 Action 을 한후 난뒤에 페이지입니다. --> 
+<aura:component controller="HolidayController" implements="lightning:actionOverride,force:appHostable,flexipage:availableForAllPageTypes" access="global">
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>  
+    <aura:attribute name="fireAppEvent" Type="String"/>
+    <!--action 버튼 클릭 핸들러-->
+    <aura:attribute name="clickType"  Type="Boolean"/>
+    <aura:attribute name="clickType2"  Type="Boolean"/>
+    <aura:attribute name="clickType3"  Type="Boolean"/>
+    <aura:attribute name="clickType4"  Type="Boolean"/>
+
+    <!--expendable tab 각각의 속성값-->
+    <aura:attribute name="viewList" type="list" />
+    <aura:attribute name="holiday" type="Holiday__c" />
+    <aura:attribute name="holidayAction" type="HolidayAction__c"/>
+    <aura:attribute name="holidayHistory" type="list"/>
+    <aura:attribute name="isErrorMsg" type="string"/>
+    <!-- <ui:button label="Action2" press="{!c.goDetail}"/> -->
+    <aura:attribute name="holidayMapLabel" type="Map"/>
+    <aura:attribute name="holidayActionMapLabel" type="Map"/>
+
+    <div class="slds-section slds-is-open slds-p-around_medium slds-card">
+        <h5 class="slds-section__title">
+            <button class="slds-button slds-section__title-action" aria-controls="expando-unique-id" tabindex="0" aria-expanded="true"  onclick="{!c.clickStatus}">
+                <p align="left">
+                    <lightning:icon iconName="custom:custom62" size="small" alternativeText="My Expenses"/>
+                </p>
+
+                <h4 style ="margin-left:1%;"><b>{!$Label.c.Holiday_Title_Info}</b></h4>
+            </button>            
+          <!--   <span class="slds-truncate" title="Section Title">
+                <p align="right">
+                    <ui:button class="slds-button slds-button_brand" label="Action" press="{!c.gotoURL}"/>
+                </p>
+            </span> -->
+        </h5>
+
+
+        <div aria-hidden="false" class="slds-section__content" id="myDIV">
+            <table class="slds-table slds-table_bordered slds-table--fixed-layout">
+      
+                <thead>
+                    <tr class="slds-text-title_caps">
+                        <th scope="col">
+                          <div class="slds-truncate" title="가입날짜">{!v.holidayMapLabel.Holiday_JoinDate__c}</div>
+                        </th>
+                        <th scope="col">
+                          <div class="slds-truncate" title="연차 휴가사용 대상자">{!v.holidayMapLabel.Holiday_IsAnnualleave__c}</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">
+                            <div class="slds-truncate"><b>{!v.holiday.Holiday_JoinDate__c}</b></div>
+                        </th>
+                        <td>
+                            <div class="slds-truncate"><b>
+                                <ui:outputCheckbox value="{!v.Holiday_IsAnnualleave__c}"/></b>   
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <!--Use Days /Reamin Holidays -->
+                <thead>
+                    <th scope="col">
+                        <div class="slds-truncate" title="연차 만료 일">{!v.holidayMapLabel.Holiday_PeriodEnd__c}</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="근속년수">{!v.holidayMapLabel.Holiday_WorkingYears__c}</div>
+                    </th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">
+                            <div class="slds-truncate"><b>{!v.holiday.Holiday_PeriodEnd__c}</b></div>
+                        </th>
+                        <td>
+                            <div class="slds-truncate"><b>{!v.holiday.Holiday_WorkingYears__c}</b></div>
+                        </td>
+                    </tr>
+                </tbody>
+    
+                <!--Unpaid Holidays /Uncountable leaves -->
+                <thead>
+                    <th scope="col">
+                        <div class="slds-truncate" title="휴가 사용 독려 Notice">{!v.holidayMapLabel.Holiday_NoticeLevel__c}</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="최근 생성 이력">{!v.holidayMapLabel.Holiday_LastActivity__c}</div>
+                    </th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">
+                            <div class="slds-truncate"><b>{!v.holiday.Holiday_NoticeLevel__c}</b></div>
+                        </th>
+                        <td data-label="Account Name">
+                            <div class="slds-truncate"><b>{!v.holiday.Holiday_LastActivity__c}</b></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="slds-section slds-is-open slds-p-around_medium slds-card">
+        <h5 class="slds-section__title">
+            <button class="slds-button slds-section__title-action" aria-controls="expando-unique-id" tabindex="1" aria-expanded="true"  onclick="{!c.clickStatus2}">
+
+                <p align="left">
+                    <lightning:icon iconName="custom:custom18" size="small"/>
+                </p>
+
+                <h4 style ="margin-left:1%;"><b>{!$Label.c.Holiday_Title_Days}</b></h4>
+            </button>
+
+        </h5>
+
+  
+        <div aria-hidden="true" class="slds-section__content" id="myDIV2">
+            <!--Calculated Days /  Given Days-->
+            <table class="slds-table slds-table_bordered slds-table--fixed-layout">
+      
+                <thead>
+                    <tr class="slds-text-title_caps">
+                        <th scope="col">
+                            <div class="slds-truncate" title="부여된 연차일 수">{!v.holidayMapLabel.Holiday_Calculated__c}</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="연차휴가로 계산되지 않는 유급휴가">{!v.holidayMapLabel.Holiday_GivenHolidays__c}</div>
+                        </th>
+          
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row" >
+                            <div class="slds-truncate" ><b>{!v.holiday.Holiday_Calculated__c}</b></div>
+                        </th>
+                        <td data-label="Account Name">
+                            <div class="slds-truncate" ><b>{!v.holiday.Holiday_GivenHolidays__c}</b></div>
+                        </td>
+                    </tr>
+                </tbody>
+                <!--Use Days /Reamin Holidays -->
+                <thead>
+                    <th scope="col">
+                        <div class="slds-truncate" title="사용 휴가 일 수">Use days</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="잔여 연차 일 수">Remain Holidays</div>
+                    </th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td scope="row" >
+                            <div class="slds-truncate" ><b>{!v.holiday.Holiday_UseDays__c}</b></div>
+                        </td>
+                        <td scope="row">
+                            <div class="slds-truncate" ><b>{!v.holiday.Holiday_Remain__c}</b></div>
+                        </td>
+                    </tr>
+                </tbody>
+                <!--Unpaid Holidays /Uncountable leaves -->
+                <thead>
+                    <th scope="col">
+                        <div class="slds-truncate" title="무급휴가 일 수">{!v.holidayMapLabel.Holiday_Unpaid__c}</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="연차로 계산 되지 않는 공무상 유급휴가 일 수">{!v.holidayMapLabel.Holiday_Uncountable__c}</div>
+                    </th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td scope="row" >
+                            <div class="slds-truncate" ><b>{!v.holiday.Holiday_Unpaid__c}</b></div>
+                        </td>
+                        <td scope="row" >
+                            <div class="slds-truncate" ><b>{!v.holiday.Holiday_Uncountable__c}</b></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="slds-section slds-is-open slds-p-around_medium slds-card">
+        <h5 class="slds-section__title">
+            <button class="slds-button slds-section__title-action" aria-controls="expando-unique-id" tabindex="2" aria-expanded="true"  onclick="{!c.clickStatus3}">
+
+                <p align="left">
+                    <lightning:icon iconName="custom:custom20" size="small" alternativeText="My Expenses"/>
+                </p>
+                <h4 style ="margin-left:1%;"><b>{!$Label.c.Holiday_Title_InfoHistory}</b></h4>
+            </button>
+        </h5>
+        <div aria-hidden="true" class="slds-section__content" id="myDIV3">
+            <!-- Holiday Info History 세부내용 부분 -->      
+            <table class="slds-table slds-table_bordered slds-table--fixed-layout">
+                <thead>
+                    <tr class="slds-text-title_caps">
+                        <th scope="col">
+                            <div class="slds-truncate">{!$Label.c.Holiday_Date}</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate">{!v.holidayActionMapLabel.HolidayAction_Approver__c}</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate">{!$Label.c.Holiday_Activity}</div>
+                        </th>                     
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.holidayHistory}" var="item2">
+                        <tr>  
+                            <th scope="row" >
+                                <div class="slds-truncate" >
+                                    <lightning:formattedDateTime value="{!item2.CreatedDate}" year="2-digit" month="2-digit" day="2-digit"  hour="2-digit" minute="2-digit" timeZoneName="short"/>
+                                </div>
+                            </th>
+                            <td data-label="Account Name">
+                                <div class="slds-truncate" >{!item2.CreatedBy.Name}</div>
+                            </td>
+                            <!--  Changed Use days</div>  -->
+                            <td data-label="Account Name">
+                                <div class="slds-truncate" >Changed <b>{!item2.OldValue}</b> &nbsp;to&nbsp;<b>{!item2.NewValue}</b></div>
+                            </td>
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>      
+        </div>
+    </div>
+
+    <!-- Action History-->
+    <div class="slds-section slds-is-open slds-p-around_medium slds-card">
+        <h5 class="slds-section__title">
+            <button class="slds-button slds-section__title-action" aria-controls="expando-unique-id" tabindex="3" aria-expanded="true"  onclick="{!c.clickStatus4}">
+
+                <p align="left">
+                    <lightning:icon iconName="custom:custom31" size="small" alternativeText="My Expenses"/>
+                </p>
+                <h4 style ="margin-left:1%;"><b>{!$Label.c.Holiday_Title_ActionHistory}</b></h4>
+            </button>
+        </h5>
+
+        <div aria-hidden="true" class="slds-section__content" id="myDIV4">
+            <table class="slds-table slds-table_bordered slds-table--fixed-layout">
+                <thead>
+                    <tr class="slds-text-title_caps">
+                        <th scope="col">
+                            <div class="slds-truncate" title="휴가신청 제목">{!v.holidayActionMapLabel.Name}</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="휴가신청 일 수">{!v.holidayActionMapLabel.HolidayAction_Days__c}</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="휴가신청 종류">{!v.holidayActionMapLabel.HolidayAction_Type__c}</div>
+                        </th>                
+                        <th scope="col">
+                            <div class="slds-truncate" title="휴가신청 승인여부">{!v.holidayActionMapLabel.HolidayAction_IsConfirm__c}</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="1차승인">{!v.holidayActionMapLabel.FirstHolidayRequest__c}</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="2차승인">{!v.holidayActionMapLabel.SecondApproverSelection__c}</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="휴가신청 일자/시간">{!v.holidayActionMapLabel.CreatedDate}</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.holidayAction}" var="item">
+                        <tr> 
+                            <th scope="row" >
+                                 <div class="slds-truncate" ><a href="{!'/one/one.app?#/sObject/'+ item.Id + '/view'}" target="_blank">{!item.Name}</a></div>
+                            </th>
+                            <td data-label="Account Name">
+                                <div class="slds-truncate" >{!item.HolidayAction_Days__c}</div>
+                            </td>
+                            <td data-label="Account Name">
+                                <div class="slds-truncate" >{!item.HolidayAction_Type__c}</div>
+                            </td>
+                            <td data-label="Account Name">
+                                <div class="slds-truncate" >
+                                    <ui:outputCheckbox value="{!item.HolidayAction_IsConfirm__c}"/>     
+                                </div>
+                            </td>
+                            <td data-label="Account Name">
+                                <div class="slds-truncate" >{!item.FirstHolidayRequest__r.Name}</div>
+                            </td>
+                            <td data-label="Account Name">
+                              <div class="slds-truncate" >
+                                  <ui:outputCheckbox value="{!item.SecondApproverSelection__c}"/></div>
+                            </td>
+                            <td data-label="Account Name">
+                                <div  class="slds-truncate" >
+                                      <lightning:formattedDateTime value="{!item.CreatedDate}" year="2-digit" month="2-digit" day="2-digit"  hour="2-digit" minute="2-digit" timeZoneName="short"/>
+                                </div>
+                            </td>
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>      
+        </div>
+    </div>
+{!v.body}    
+</aura:component>

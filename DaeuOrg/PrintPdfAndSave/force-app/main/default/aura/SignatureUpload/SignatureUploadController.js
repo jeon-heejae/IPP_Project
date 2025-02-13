@@ -1,25 +1,49 @@
 ({
     
-    onInit: function(component) {
-        var action = component.get("c.getSignaturePicture");
+    onInit: function(component,event,helper) {
+        var action = component.get("c.checkId");
         action.setParams({
-            parentId: component.get("v.recordId")
+            recordId: component.get("v.recordId")
         });
 
         action.setCallback(this, function(response) {
             var state = response.getState();
             if (state === "SUCCESS") {
-                var contentDocument = response.getReturnValue();
-                if (contentDocument) {
+                var flag = response.getReturnValue();
+                console.log('DEBUG: flag value = ' + flag); 
+                
+                component.set("v.isLookSig",flag);
+                if (flag) {
+                    console.log('helper start');
                     
-                    console.log('Id: '+contentDocument.Id);
-                    component.set(
-                        "v.pictureSrc",
-                        "/sfc/servlet.shepherd/version/download/" + contentDocument.Id
-                    );
+                    var action2 = component.get("c.getSignaturePicture");
+                    action2.setParams({
+                        parentId: component.get("v.recordId")
+                    });
+
+                    action2.setCallback(this, function(response) {
+                        var state = response.getState();
+                        if (state === "SUCCESS") {
+                            var contentDocument = response.getReturnValue();
+                            if (contentDocument) {
+                                console.log('Id: '+contentDocument.Id);
+                                component.set(
+                                    "v.pictureSrc",
+                                    "/sfc/servlet.shepherd/version/download/" + contentDocument.Id
+                                );
+                            }
+                        } else {
+                            console.error("Error fetching file:", response.getError());
+                        }
+                    });
+                    $A.enqueueAction(action2);
+                }
+                else{
+                    console.log('서명 권한 없음');
+
                 }
             } else {
-                console.error("Error fetching file:", response.getError());
+                console.error("Error:", response.getError());
             }
         });
         $A.enqueueAction(action);

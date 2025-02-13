@@ -1,0 +1,102 @@
+<!--
+ - Created by Kwanwoo.Jeon on 2024-01-15.
+ -->
+
+<aura:component description="BudgetExpenseGrid"
+                controller="BudgetExpenseGridController"
+                implements="force:lightningQuickAction,force:lightningQuickAction,force:appHostable,lightning:actionOverride,flexipage:availableForAllPageTypes,force:hasRecordId">
+
+    <aura:attribute name="objBudget"        type="Budget__c"/>
+    <aura:attribute name="listExp"          type="List"/>
+    <aura:attribute name="clickType"        type="Boolean" default="true"/>
+
+
+    <aura:handler name="init" value="{!this}" action="{!c.fnInit}" />
+
+
+    <div class="slds-section slds-is-open slds-p-around_medium slds-card">
+        <h5 class="slds-section__title">
+            <button class="slds-button slds-section__title-action" aria-controls="expando-unique-id" tabindex="0" aria-expanded="true"  onclick="{!c.clickStatus}">
+                <span class="test" style="margin-left: 1%; margin-right: 1%">
+                    <lightning:icon iconName="{!v.clickType != false ? 'utility:chevrondown' : 'utility:chevronright'}" size="x-small" class="slds-button__icon slds-button__icon_hint slds-button__icon_edit"/>
+                </span>
+                <h4>예산 / 비용 요약</h4>
+            </button>
+        </h5>
+
+        <div aria-hidden="false" class="slds-section__content" id="myDIV" style="margin: 1rem; margin-top: 0.5rem">
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_header-hidden">
+                <thead>
+                    <tr class="slds-text-title_caps">
+                        <th scope="col" class="tbCenter" style="width: 33%">
+                            <div class="slds-truncate" title="예산">예산금액</div>
+                        </th>
+                        <th scope="col" class="tbCenter" style="width: 33%">
+                            <div class="slds-truncate" title="예산">예산사용금액</div>
+                        </th>
+                        <th scope="col" class="tbCenter" style="width: 33%">
+                            <div class="slds-truncate" title="예산">예산잔여금액</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <!-- 예산 -->
+                        <th scope="row">
+                            <div class="slds-truncate tbRight">
+                                <lightning:formattedNumber  value="{!v.objBudget.fm_BudgetAmount__c}" style="currency" currencyCode="KRW"/>
+                            </div>
+                        </th>
+                        <!-- 실적 -->
+                        <th scope="row">
+                            <div class="slds-truncate tbRight">
+                                <lightning:formattedNumber  value="{!v.objBudget.UsedAmount__c}" style="currency" currencyCode="KRW"/>
+                            </div>
+                        </th>
+                        <!-- 잔액 -->
+                        <th scope="row">
+                            <div class="slds-truncate tbRight">
+                                <lightning:formattedNumber  value="{!v.objBudget.fm_RemainingAmount__c}" style="currency" currencyCode="KRW"/>
+                            </div>
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_header-hidden" style="margin-top: 3rem">
+                <thead>
+                <tr class="slds-text-title_caps">
+                    <th scope="col" class="tbCenter"  style="width: 33%">
+                        <div class="slds-truncate" title="구분">구분</div>
+                    </th>
+                    <th scope="col" class="tbCenter"  style="width: 33%">
+                        <div class="slds-truncate" title="비용 신청 건수">비용 신청 건수</div>
+                    </th>
+                    <th scope="col" class="tbCenter"  style="width: 33%">
+                        <div class="slds-truncate" title="실적">예산사용금액</div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.listExp}" var="exp">
+                        <tr>
+                            <td>
+                                <div class="slds-truncate tbCenter">{!exp.Category2__c}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate tbCenter">{!exp.cnt} 건</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate tbRight">
+                                    <lightning:formattedNumber  value="{!exp.amount}" style="currency" currencyCode="KRW"/>
+                                </div>
+                            </td>
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+</aura:component>

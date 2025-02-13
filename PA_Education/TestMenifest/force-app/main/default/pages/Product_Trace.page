@@ -1,0 +1,284 @@
+<!--
+
+-->
+<apex:page controller="ProcessProductManage" tabstyle="TabProductTrace__tab">
+	<head>
+		<apex:stylesheet value="{!URLFOR($Resource.CssMenu, '/menu_source/styles.css')}" />
+		<apex:stylesheet value="{!URLFOR($Resource.jquery_ui, 'themes/base/jquery-ui.css')}"/>
+		<style>
+		input#InputBarcode {
+			ime-mode: disabled;
+		}
+		</style>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'jquery-1.10.2.js')}"/>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'ui/jquery-ui.js')}"/>
+		
+		<script type="text/javascript">
+			$(function() {
+				$( "#dialog-modal" ).dialog({
+					autoOpen: true,
+					height: 140,
+					modal: true	,
+					open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); }
+				});
+			});
+		</script>
+		<script type="text/javascript">
+			function barcode_select(){
+				var text_input = document.getElementById ('InputBarcode');
+				text_input.focus();
+				text_input.select();
+			}
+			function showDialog(){
+				$("#dialog-modal").dialog( "open" );
+				return false;
+			}
+			
+			function hideDialog(){
+				$("#dialog-modal").dialog( "close" );
+				document.getElementById('InputBarcode').focus();
+				barcode_select();
+				return false;
+			}
+			function formInit() {
+				hideDialog();
+			}
+			try {
+				window.addEventListener('load',formInit,false);
+			}catch(e){
+				window.attachEvent('onload',formInit);
+			}
+		</script>
+		<script type="text/javascript">
+			function KeyPressBarcode(e, strValue){
+				var keynum;
+				if(window.event){		// IE
+					keynum = e.keyCode;
+				}
+				if(keynum == 13){
+					ProductSearch(strValue);
+					return false;
+				}
+			}
+			function ClickPlus(i, pcbtrayno){
+				var url = '/apex/Product_Trace?item_id='+i+'&pcbtrayno=' + pcbtrayno;
+				window.open(url,'','');
+			}
+		</script>
+	</head>
+	<apex:form id="mainFrm">
+		<apex:actionStatus onstart="showDialog();" onstop="hideDialog();"  id="IngStatus"/>		
+		
+		<!-- 바코드 등록 -->
+        <apex:actionFunction action="{!ProductSearch}" name="ProductSearch" rerender="mainFrm" status="IngStatus">
+			<apex:param name="getVal" assignTo="{!InputBarcodeGetVal}" value="" />
+        </apex:actionFunction>
+        
+        <!-- BOM Plus -->
+		<!-- 		
+		<apex:actionFunction name="ClickPlus" action="{!ClickPlus}"  rerender="mainFrm" status="IngStatus">
+		    <apex:param name="ClickSeq" value="" assignTo="{!ClickSeq}"/>
+		    <apex:param name="ClickInventoryName" value="" assignTo="{!ClickInventoryName}"/>
+		    <apex:param name="ClickLevel" value="" assignTo="{!ClickLevel}"/>
+		</apex:actionFunction>
+		-->
+		 
+		<!-- BOM Minus -->
+		<apex:actionFunction name="ClickMinus" action="{!ClickMinus}"  rerender="mainFrm" status="IngStatus">
+		    <apex:param name="ClickSeq" value="" assignTo="{!ClickSeq}"/>
+		</apex:actionFunction>
+		
+		<apex:sectionHeader title="제품 추적" />
+		<apex:pageMessages escape="false" />
+		<div id='cssmenu'>
+			<ul>
+			   <li class='active last'><a href='#'><span>제품 검색</span></a></li>	
+			</ul>
+		</div>
+		<apex:pageBlock title="제품 검색" id="pgBlock">
+			<b>제품 바코드 번호 : </b><apex:outputPanel >
+				<input type="text" id="InputBarcode" value="{!InputBarcodeGetVal}"
+					onkeypress="return KeyPressBarcode(event, this.value);"
+				/>
+		    </apex:outputPanel>
+			<apex:commandButton value="조회" onclick="ProductSearch(document.getElementById('InputBarcode').value);return false;" status="IngStatus" rendered="{!PcbTrayNo=0}"/>
+			
+			<!-- 품목결과 -->
+			<table cellspacing="0" cellpadding="0" border="0" class="list">
+					<tr class="headerRow">
+						<th class="headerRow">
+							<apex:outputText value="{!$ObjectType.Item__c.fields.Name.label}"/>
+						</th>
+						<th class="headerRow">
+							<apex:outputText value="{!$ObjectType.Item__c.fields.Code__c.label}"/>
+						</th>
+						<th class="headerRow">
+							<apex:outputText value="{!$ObjectType.Item__c.fields.Standard__c.label}"/>
+						</th>
+						<!--
+						<th class="headerRow">
+							<apex:outputText value="링타입"/>
+						</th>
+						<th class="headerRow">
+							<apex:outputText value="감도"/>
+						</th>
+						-->
+					</tr>
+				<apex:repeat value="{!ViewI}" var="item2">
+					<tr >
+						<td>
+							<apex:outputText value="{!item2.ItemName}"/>
+						</td>
+						<td>
+							<apex:outputText value="{!item2.ItemCode}"/>
+						</td>
+						<td>
+							<apex:outputText value="{!item2.ItemStandard}"/>
+						</td>
+						<!--
+						<td>
+							<apex:outputText value="{!item2.CheckResult1}"/>
+						</td>
+						<td>
+							<apex:outputText value="{!item2.CheckResult2}"/>
+						</td>
+						-->
+					</tr>
+				</apex:repeat>
+				
+			</table>
+			<br/>
+			<!-- <apex:commandButton value="조회 결과 출력" onclick="javascript:window.open('/apex/Product_Trace_Print?item_id={!InputBarcodeGetVal}').print();return false;"/>  -->							
+			<apex:commandButton value="조회 결과 출력" onclick="openLookup('/apex/Product_Trace_Print?item_id={!InputBarcodeGetVal}&pcbtrayno={!PcbTrayNo}');return false;"/>
+			<br/><br/>
+			<table cellspacing="0" cellpadding="0" border="0" class="list">
+				<apex:repeat value="{!Sums}" var="item">
+					<!--
+					<tr>
+						<td>
+							{!item.title} ::: {!item.strSeq}
+						</td>
+					</tr>
+					-->
+					<tr class="headerRow" style="display:{!IF(item.title<>'','','none')};">
+						<!--
+						<th class="headerRow">
+							<apex:outputText value="{!item.SubInfo}"/>|
+							<apex:outputText value="{!item.Level.size}"/>|
+							<apex:outputText value="{!item.strSeq}"/>|
+						</th>
+						-->
+						<th class="headerRow">
+							<apex:repeat value="{!item.Level}" var="item3">
+								<apex:outputPanel styleClass="ui-icon ui-icon-blank" style="float:left;"/>
+							</apex:repeat>
+							<apex:outputText value="{!item.Title}"/>
+						</th>
+						<th class="headerRow">
+							<apex:outputText value="{!$ObjectType.Inventory__c.fields.ItemCode__c.label}" rendered="{!item.title=='BOM'}"/>
+						</th>
+						<th class="headerRow">
+							<apex:outputText value="{!$ObjectType.Inventory__c.fields.Name.label}" rendered="{!item.title=='BOM'}"/>
+						</th>
+						<th class="headerRow">
+							<apex:outputText value="{!$ObjectType.Inventory__c.fields.Account__c.label}" rendered="{!item.title=='BOM'}"/>
+						</th>
+						<th class="headerRow">
+							<apex:outputText value="{!$ObjectType.Inventory__c.fields.DateManufacture__c.label}" rendered="{!item.title=='BOM'}"/>
+						</th>
+					</tr>
+				
+					<tr id="row{!item.strSeq}" style="display:{!IF(item.title<>'','none','')};">
+						<!--
+						<td>
+							<apex:outputText value="{!item.SubInfo}"/>|
+							<apex:outputText value="{!item.Level.size}"/>|
+							<apex:outputText value="{!item.strSeq}"/>|
+						</td>
+						-->
+						<td>
+							<apex:repeat value="{!item.Level}" var="item3">
+								<apex:outputPanel styleClass="ui-icon ui-icon-blank" style="float:left;"/>
+							</apex:repeat>
+							<apex:outputPanel styleClass="ui-icon ui-icon-carat-1-sw" style="float:left;"/>
+
+							<apex:outputPanel styleClass="ui-icon ui-icon-blank" rendered="{!item.SubInfo==0}" style="float:left;"/>
+							<!-- 
+							<apex:outputPanel styleClass="ui-icon ui-icon-circle-plus"
+								onclick="ClickPlus('{!item.strSeq}','{!item.IV.Name}','{!item.Level.size}');return false;" 
+								rendered="{!item.SubInfo==1}" style="float:left;"  
+
+								onclick="ClickPlus('{!item.IV.Name}', '{!ResultIV.Product_Pba_No__c}');return false;" 
+							/>	
+							-->
+							<apex:outputPanel styleClass="ui-icon ui-icon-circle-plus"
+								onclick="ClickPlus('{!item.IV.Name}', '{!ResultIV.Product_Pba_No__c}');return false;" 
+								rendered="{!item.SubInfo==1}" style="float:left;"								
+							/>
+
+							<apex:outputPanel styleClass="ui-icon ui-icon-circle-minus" 
+								onclick="ClickMinus('{!item.strSeq}');return false;"
+								rendered="{!item.SubInfo==2}" style="float:left;"
+							/>
+							<apex:outputText value="{!item.IV.Item__r.Name}"  rendered="{!item.CheckResult==''}"/>
+							<apex:outputText value="{!item.CheckResult}"  rendered="{!item.CheckResult<>''}"/>
+						</td>
+						<td>
+							<apex:outputField value="{!item.IV.ItemCode__c}"/>
+						</td>
+						<td>
+							<apex:outputField value="{!item.IV.Name}"/>
+						</td>
+						<td>
+							<apex:outputField value="{!item.IV.Account__c}"/>
+						</td>
+						<td>
+							<apex:outputField value="{!item.IV.DateManufacture__c}"/>
+						</td>					
+					</tr>
+				</apex:repeat>
+				<!-- 공정값 검사결과값 -->	
+				<apex:repeat value="{!wrap_result_list}" var="item">		
+					<tr>
+						<td colspan ="5">
+							<apex:outputPanel styleClass="ui-icon ui-icon-carat-1-sw" style="float:left;"/>
+							<apex:outputPanel styleClass="ui-icon ui-icon-blank" style="float:left;"/>
+							<apex:outputtext value="{!item.headerItem}"/>
+							<p/>	
+							<apex:outputPanel styleClass="ui-icon ui-icon-blank" style="float:left;"/>													
+							<apex:outputPanel styleClass="ui-icon ui-icon-blank" style="float:left;"/>
+							<apex:outputtext value="{!item.result}"/>
+						</td>
+					</tr>
+				</apex:repeat>
+				<apex:repeat value="{!box_inven}" var="item">		
+					<tr>
+						<td>	
+							<apex:outputPanel styleClass="ui-icon ui-icon-circle-plus"
+								onclick="ClickPlus('{!item.Name}', '{!ResultIV.Product_Pba_No__c}');return false;" 
+								style="float:left;"								
+							/>						
+							<apex:outputtext value="{!item.Item__r.Name}"/>							
+						</td>
+						<td>							
+							<apex:outputtext value="{!item.ItemCode__c}"/>							
+						</td>
+						<td>							
+							<apex:outputtext value="{!item.Name}"/>
+						</td>
+						<td>							
+							<apex:outputtext value="{!item.Account__c}"/>							
+						</td>
+						<td>							
+							<apex:outputtext value="{!item.DateManufacture__c}"/>							
+						</td>						
+					</tr>
+				</apex:repeat>					
+			</table>
+		</apex:pageBlock>
+	</apex:form>
+	<div id="dialog-modal" title="처리중...">
+		<p>처리중입니다.</p>
+	</div>
+
+</apex:page>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Holiday_Remain__c</fullName>
+    <description>4월1일 이전인 경우, 잔여일수=연차일수-사용일수+전년도 연차 잔여일수
+3월31일 이후인 경우, 잔여일수=연차일수-사용일수
+
+22.03.31
+임시로 기준일을 12월 31일로 변경
+변경전: TODAY() &lt;  DATE(YEAR(TODAY()), 4, 1)
+변경후: TODAY() &lt;=  DATE(YEAR(TODAY()), 12, 31)</description>
+    <externalId>false</externalId>
+    <formula>IF(
+    TODAY() &lt;  DATE(YEAR(TODAY()), 4, 1),
+    NULLVALUE( Holiday_Calculated__c , 0) -  NULLVALUE(Holiday_UseDays__c  , 0) +  Holiday_GivenHolidays__c + RemainOfLastYear__c ,
+    NULLVALUE( Holiday_Calculated__c , 0) -  NULLVALUE(Holiday_UseDays__c  , 0) +  Holiday_GivenHolidays__c
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>전년도 잔여연차 사용을 임시로 올해 12월 31일까지 사용 가능하도록 변경되었습니다.</inlineHelpText>
+    <label>잔여일수</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>1</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

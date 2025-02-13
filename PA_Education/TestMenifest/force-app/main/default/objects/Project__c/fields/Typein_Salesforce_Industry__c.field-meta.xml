@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Typein_Salesforce_Industry__c</fullName>
+    <description>Salesforce 산업분류 값중 직접입력을 선택 했을시 입력하는 필드</description>
+    <externalId>false</externalId>
+    <label>직접입력(SF산업분류)</label>
+    <length>255</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

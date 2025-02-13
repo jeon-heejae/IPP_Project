@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>TotalWorkerCount__c</fullName>
+    <defaultValue>0</defaultValue>
+    <description>2023.12 휴일근무 프로세스 고도화 이전 휴일근무를 월별로 신청하고 휴일근무상세에 일자별 휴일근무자를 등록할 때, 휴일근무자 중복 제거 후 휴일근무자 인원수를 보여주던 필드임 (2023.1 이후 로직 변경으로 사용X)</description>
+    <externalId>false</externalId>
+    <inlineHelpText>2023.12 휴일근무 프로세스 고도화 이전 휴일근무를 월별로 신청하고 휴일근무상세에 일자별 휴일근무자를 등록할 때, 휴일근무자 중복 제거 후 휴일근무자 인원수를 보여주던 필드임 (2023.1 이후 로직 변경으로 사용X)</inlineHelpText>
+    <label>휴일근무 인원수 (사용X)</label>
+    <precision>2</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

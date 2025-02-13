@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BizRegNumberValidation</fullName>
+    <active>true</active>
+    <errorConditionFormula>MOD(
+    10-
+    MOD(
+        (VALUE(MID(BizRegNumber__c, 1,  1)) * 1) + 
+        (VALUE(MID(BizRegNumber__c, 2,  1)) * 3) + 
+        (VALUE(MID(BizRegNumber__c, 3,  1)) * 7) + 
+
+        (VALUE(MID(BizRegNumber__c, 5,  1)) * 1) + 
+        (VALUE(MID(BizRegNumber__c, 6,  1)) * 3) + 
+
+        (VALUE(MID(BizRegNumber__c, 8,  1)) * 7) + 
+        (VALUE(MID(BizRegNumber__c, 9,  1)) * 1) + 
+        (VALUE(MID(BizRegNumber__c, 10, 1)) * 3) + 
+        (VALUE(MID(BizRegNumber__c, 11, 1)) * 5) + 
+        FLOOR(
+            (VALUE(MID(BizRegNumber__c, 11, 1)) * 5) / 10
+        ), 10
+    ), 10
+)
+!=   VALUE(MID(BizRegNumber__c, 12, 1))</errorConditionFormula>
+    <errorDisplayField>BizRegNumber__c</errorDisplayField>
+    <errorMessage>잘못된 사업자등록번호입니다. 
+번호를 확인하세요.</errorMessage>
+</ValidationRule>

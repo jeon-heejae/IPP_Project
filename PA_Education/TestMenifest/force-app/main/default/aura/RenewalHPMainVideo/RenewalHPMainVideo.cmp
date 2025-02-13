@@ -1,0 +1,153 @@
+<!--
+ - @description       : Home of Homepage Renewal Project
+ - @author            : Chan Kang
+ - @group             : Boundary
+ - Modifications Log
+ - Ver   Date         Author           Modification
+ - 1.0   2021.01.04   Chan Kang        Initial Version
+   1.1   2022.04.17   Gunwoo Kim       Load English data conditionally
+   1.2   2022.04.18   Gyubin Lee       Add i18n event listener
+                                       Add isEnglish parameter in APEX callout
+                                       Match video size to current viewport
+-->
+
+<aura:component
+    implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes"
+    access="global" controller="RenewalHPNotice">
+    <aura:attribute name="listNoticeItem" type="List" access="global" />
+    <aura:attribute name="noticeItem" type="UrgentNotice__c" access="global" />
+    <aura:attribute name="noticeShow" type="boolean" default="false" access="global" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:attribute name="isEnglish" type="boolean" access="global" default="false" />
+    <aura:handler event="c:i18nEvent" action="{!c.init}" />
+    <section>
+        <div class="contents">
+            <div class="video-container">
+                <article>
+                    <aura:if isTrue="{!v.isEnglish}">
+                        <p class="main_text">We are strong supporter of<br />our customers' innovative challenge.</p>
+                        <aura:set attribute="else">
+                            <p class="main_text">우리는 고객의 새로운 도전을<br />함께하는 비즈니스 여정의 동반자 입니다.</p>
+                        </aura:set>
+                    </aura:if>
+
+                    <img class="logo" src="{!$Resource.renewalHPMainLogo}" />
+                </article>
+                <video aura:id="video" id="renewalHPmainVideo" src="{!$Resource.renewalHPVideo}" autoplay="true"
+                    loop="10" muted="true"></video>
+                <img aura:id="iOSVideo" id="renewalHPmainVideoiOS" src="{!$Resource.renewalHPVideoiOS}" />
+            </div>
+            <div class="images">
+                <div>
+                    <img src="{!$Resource.daeuOffice}" />
+                    <aura:if isTrue="{!v.isEnglish}">
+                        <p><b>Great Place</b> to work<br />with <b>creative idea</b></p>
+                        <aura:set attribute="else">
+                            <p>모든 구성원이<br /><b>창의적인 업무</b>를 수행할 수 있는 <b>공간</b></p>
+                        </aura:set>
+                    </aura:if>
+                </div>
+                <div>
+                    <img src="{!$Resource.daeuCEO}" />
+                    <aura:if isTrue="{!v.isEnglish}">
+                        <p>System<br />with <b>impartial estimation</b></p>
+                        <aura:set attribute="else">
+                            <p>모든 구성원이<br /><b>공정한 평가</b>를 받을 수 있는 <b>체계</b></p>
+                        </aura:set>
+                    </aura:if>
+                </div>
+                <div>
+                    <img src="{!$Resource.daeuCommunity}" />
+                    <aura:if isTrue="{!v.isEnglish}">
+                        <p><b>Environment</b><br />to cultivate <b>teamwork</b></p>
+                        <aura:set attribute="else">
+                            <p>모든 구성원이<br /><b>공동체 의식</b>을 함양 할 수 있는 <b>문화</b></p>
+                        </aura:set>
+                    </aura:if>
+                </div>
+            </div>
+            <h1 class="bpo_title">BPO Service</h1>
+
+            <aura:if isTrue="{!v.isEnglish}">
+                <p class="bpo_description">Are you in struggle about:</p>
+                <ul class="bpo_description">
+                    <li class="list-style">Manage Operation Resource &amp; Expense</li>
+                    <li class="list-style">Develop Application based on Cloud</li>
+                </ul>
+                <p class="bpo_description">Our global service team is ready to support with suitable development &amp;
+                    stability service!</p>
+
+                <aura:set attribute="else">
+                    <p class="bpo_description">
+                        Cloud 기반의 App 개발, 운영 Resource 관리 및 비용으로 어려움을 느끼십니까?<br />
+                        국내 및 해외 전문인력으로 구성된 서비스 팀이<br />
+                        귀사에 적합한 개발 및 서비스 운영비용으로, 안정적인 서비스를 대행하여 드립니다.
+                    </p>
+                </aura:set>
+            </aura:if>
+
+            <div style="text-align: center;">
+                <aura:if isTrue="{!v.isEnglish}">
+                    <h1 class="bpo_subtitle">Operation Global Development Center</h1>
+                    <aura:set attribute="else">
+                        <h1 class="bpo_subtitle">Global Development Center 운영</h1>
+                    </aura:set>
+                </aura:if>
+
+                <div class="bpo_image_section">
+                    <img src="{!$Resource.daeu_bpo_1}" />
+                    <img src="{!$Resource.daeu_bpo_2}" />
+                </div>
+
+                <aura:if isTrue="{!v.isEnglish}">
+                    <p class="bpo_city_name">Hanoi</p>
+                    <aura:set attribute="else">
+                        <p class="bpo_city_name">하노이</p>
+                    </aura:set>
+                </aura:if>
+
+                <p class="bpo_city_address">
+                    Room11 39th Floor, G tower, C2 Building D'Capitale, 119 Tran Duy Hung<br />
+                    Street Trung Hoa Ward, Cau Giay District Ha Noi City
+                </p>
+
+                <aura:if isTrue="{!v.isEnglish}">
+                    <p class="bpo_city_name">Ho Chi Minh City</p>
+                    <aura:set attribute="else">
+                        <p class="bpo_city_name">호치민</p>
+                    </aura:set>
+                </aura:if>
+
+                <p class="bpo_city_address">
+                    The Sentry Connect,<br />
+                    15B8 Le Thanh Ton street, Ben Nghe Ward, District 1 Ho Chi Minh
+                </p>
+            </div>
+        </div>
+        <aura:renderIf isTrue="{!not(empty(v.listNoticeItem))}">
+            <div class="urgent_notice">
+                <aura:iteration items="{!v.listNoticeItem}" var="noticeItem" indexVar="idx">
+                    <div id="{!'modal-' + idx}" onclick="{!c.showNoticeModal}" style="cursor: pointer;">
+                        <img src="{!$Resource.urgentNoticeIcon}" />
+                        <span id="{!'subject-' + idx}" onclick="{!c.showNoticeModal}">{!noticeItem.Subject__c}</span>
+                    </div>
+                </aura:iteration>
+            </div>
+        </aura:renderIf>
+        <aura:renderIf isTrue="{!v.noticeShow}">
+            <div class="notice-modal-background" aura:id="notice-modal" onclick="{!c.hideNoticeModal}">
+                <div class="notice-modal">
+                    <header>
+                        <h2>{!v.noticeItem.Subject__c}</h2>
+                        <button class="close is_pc" onclick="{!c.hideNoticeModal}">
+                            &times;
+                        </button>
+                    </header>
+                    <section>
+                        <lightning:formattedRichText class="richText" value="{!v.noticeItem.Description__c}" />
+                    </section>
+                </div>
+            </div>
+        </aura:renderIf>
+    </section>
+</aura:component>

@@ -1,0 +1,20 @@
+.THIS .full-width-button {
+    width: 100%;         
+    height: 78px;              
+    padding: 0;              
+    box-sizing: border-box;  
+    text-align: center;      
+    font-size: 30px;        
+    border: 1px solid #cccccc;
+    color: rgb(255, 255, 255);
+    font-weight: bold; 
+    background-color: #3296ED;  
+    border-color: #3296ED;      
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2), 0 2px 2px #C9C9C9;
+}
+
+
+.THIS .full-width-button:hover {
+    background-color: #005FB2;       
+ 
+}

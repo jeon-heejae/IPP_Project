@@ -1,0 +1,6 @@
+<design:component>
+
+    <design:attribute name="sComponentName" label="타이틀" description="타이틀을 입력하세요." />
+    <design:attribute name="sIconName" label="아이콘 이름" description="아이콘 이름을 입력하세요. ex) custom:custom1" />
+
+</design:component>

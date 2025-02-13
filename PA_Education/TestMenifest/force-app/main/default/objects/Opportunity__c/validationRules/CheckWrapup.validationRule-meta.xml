@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CheckWrapup</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(ISCHANGED(StageDetail__c), 
+  OR(
+    ISPICKVAL(StageDetail__c, &apos;06-2. Close Lost&apos;), 
+    ISPICKVAL(StageDetail__c, &apos;06-3. Drop&apos;), 
+    ISPICKVAL(StageDetail__c, &apos;06-4. Holding&apos;) 
+  ),
+  ISBLANK( Wrapup__c )
+)</errorConditionFormula>
+    <errorDisplayField>StageDetail__c</errorDisplayField>
+    <errorMessage>Close Lost, Drop, Holding의 경우 Wrapup(경쟁상황 등)을 작성해야 합니다.</errorMessage>
+</ValidationRule>

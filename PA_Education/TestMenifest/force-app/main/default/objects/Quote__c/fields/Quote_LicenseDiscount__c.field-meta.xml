@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Quote_LicenseDiscount__c</fullName>
+    <description>Sum() QuoteItem_LicenseDiscountAmount__c RecordType = License</description>
+    <inlineHelpText>단위: USD, VAT 별도</inlineHelpText>
+    <label>할인(라이센스)</label>
+    <summarizedField>QuoteItem__c.QuoteItem_LicenseDiscountAmount__c</summarizedField>
+    <summaryFilterItems>
+        <field>QuoteItem__c.RecordTypeId</field>
+        <operation>equals</operation>
+        <value>라이센스</value>
+    </summaryFilterItems>
+    <summaryForeignKey>QuoteItem__c.QuoteItem_Quote__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

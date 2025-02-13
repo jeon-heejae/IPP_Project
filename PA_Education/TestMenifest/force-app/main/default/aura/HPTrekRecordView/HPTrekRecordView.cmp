@@ -1,0 +1,119 @@
+<!--
+ -   File Name          : HPTrekRecordView
+ -   Author             : Changjoo.Sohn
+ -   Group              : Daeu Nextier
+ -   Date               : 2021-10-26
+ -   Description        : 회사 실적 레코드를 List로 보기 위한 Component (Community에서 사용)
+ -   Modifications Log
+ -   Ver   Date         Author                    Modification
+ -   1.0   2022-01-18  Changjoo.Sohn             Initial Version
+-->
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes"
+                access="global"
+                controller="HPTrekRecordsViewController"
+                description="HPTrekRecordView">
+
+    <!-- Record -->
+    <aura:attribute name="tableHeaders" type="List" />
+    <aura:attribute name="trekRecordItem" type="TrekRecord__c" />
+
+    <!-- Paging Attribute -->
+    <aura:attribute name="pageRecords" type="List" />
+    <aura:attribute name="countPerPage" type="Integer" default="50" />
+    <aura:attribute name="pageNumber" type="Integer" default="1" />
+    <aura:attribute name="maxPage" type="Integer"/>
+
+    <!-- Handle Event -->
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <section>
+        <!-- Main Modal -->
+        <div class="contents">
+            <h2 id="element-with-table-label" class="slds-text-heading_medium slds-m-bottom_xx-small">실적 리스트</h2>
+            <!-- Record Table -->
+            <table id="main_table" class="slds-table slds-table_bordered slds-table_col-bordered">
+                <colgroup>
+                </colgroup>
+                <thead>
+                <tr class="slds-line-height_reset">
+                    <aura:iteration items="{!v.tableHeaders}" var="header">
+                        <th class="" scope="col">{!header.label}</th>
+                    </aura:iteration>
+                </tr>
+                </thead>
+                <tbody>
+                <aura:iteration items="{!v.pageRecords}" var="body" indexVar="body_idx">
+                    <tr class="slds-line-height_reset">
+                        <!-- 엑셀 데이터 -->
+                        <td style="width: 5%;">
+                            <div class="recordsItem slds-truncate">
+                                {!body.IndexNumber}
+                            </div>
+                        </td>
+                        <td style="width: 15%;">
+                            <div class="recordsItem slds-truncate">
+                                {!body.AccountName}
+                            </div>
+                        </td>
+                        <td style="width: 15%;">
+                            <div class="recordsItem slds-truncate" id="{!body.Id}" onclick="{!c.showRecordModal}">
+                                <a>{!body.ProjectName}</a>
+                            </div>
+                        </td>
+                        <td style="width: 10%;">
+                            <div class="recordsItem slds-truncate">
+                                {!body.StartYear}
+                            </div>
+                        </td>
+                        <td style="width: 15%;">
+                            <div class="recordsItem slds-truncate">
+                                {!body.ApproachSolution}
+                            </div>
+                        </td>
+                        <td style="width: 20%; max-width: 250px !important;">
+                            <div class="recordsItem slds-truncate">
+                                <aura:unescapedHtml value="{!body.Challenge}" />
+                                <!--{!body.Challenge}-->
+                            </div>
+                        </td>
+                        <td style="width: 20%; max-width: 250px !important;">
+                            <div class="recordsItem slds-truncate">
+                                <aura:unescapedHtml value="{!body.OurApproach}" />
+                                <!--{!body.OurApproach}-->
+                            </div>
+                        </td>
+                    </tr>
+                </aura:iteration>
+                </tbody>
+            </table>
+
+            <!-- Paging -->
+            <div class="slds-col slds-align_absolute-center" style="margin-top: 50px;">
+                <c:DN_Paging currentPageNumber="{!v.pageNumber}" maxPageNumber="{!v.maxPage}" />
+            </div>
+        </div>
+        <!-- Background Modal -->
+        <div class="modal-background" aura:id="modal" onclick="{!c.hideRecordModal}">
+            <div class="modal">
+                <aura:renderIf isTrue="{!not(empty(v.trekRecordItem))}">
+                    <header>
+                        <h2>{!v.trekRecordItem.Account__r.Name}</h2>
+                        <button class="close" onclick="{!c.hideRecordModal}">
+                            &times;
+                        </button>
+                        <div class="titleArea">
+                            <h1>{!v.trekRecordItem.ProjectName__c}</h1>
+                            <h2>{!v.trekRecordItem.StartYear__c}</h2>
+                        </div>
+                    </header>
+                    <section>
+                        <h1>Project Challenge</h1>
+                        <lightning:formattedRichText value="{!v.trekRecordItem.Challenge__c}"/>
+                        <h1>Our Approach</h1>
+                        <lightning:formattedRichText value="{!v.trekRecordItem.OurApproach__c}"/>
+                    </section>
+                </aura:renderIf>
+            </div>
+        </div>
+    </section>
+</aura:component>

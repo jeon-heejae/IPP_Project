@@ -1,0 +1,821 @@
+<!--
+ - @description       : Recruiting of Homepage Renewal Project
+ - @author            : Chan Kang
+ - @group             : Boundary
+ - Modifications Log
+ - Ver   Date          Author          Modification
+ - 1.0   2021.12.24   Chan Kang        Initial Version
+ - 1.?      ...                        배포 후 담당자 추가 요청사항 반영
+ - 1.1   2022.02.15   Chan Kang        모바일 화면에서 진행중인 채용의 경우, 주요 업무 텍스트가 짤리는 현상 해결
+ - 1.2   2022.02.15   CJ.Sohn          주요 업무, 자격 요건, 우대사항은 TextArea 유형이므로, p태그가 아닌 pre태그로 변경 및 관련 style 수정
+-->
+
+<aura:component
+    implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes"
+    access="global" controller="RenewalHPJobPositions">
+    <aura:attribute name="isEnglish" type="Boolean" access="global" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    <aura:handler event="c:i18nEvent" action="{!c.init}"/>
+    <aura:attribute name="positions" type="List" />
+    <aura:attribute name="JobPositionObj" type="Object" />
+    <aura:attribute name="contentsItem" type="Object" />
+    <aura:attribute name="contentsModalOpen" type="Boolean" default="false" />
+<!--    <aura:handler name="init" value="{!this}" action="{!c.init}" />-->
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="isOpen" type="boolean" default="false" description="applyto 모달창 여는 IF" />
+    <aura:attribute name="Applicant" type="String" description="applyTo 지원자" />
+    <aura:attribute name="Mobile" type="String" description="applyTo Mobile" />
+    <aura:attribute name="Email" type="String" description="applyTo Email" />
+    <aura:attribute name="BirthDate" type="Date" description="applyTo Birthdatee" />
+    <aura:attribute name="checkTerms" type="Boolean" />
+    <aura:attribute name="title" type="String" description="파일 이름" default="파일 이름" />
+    <aura:attribute name="mapFile" type="Map" description="Parameter" />
+    <aura:attribute name="type" type="String" default="Files" />
+    <aura:attribute name="objWrapFile" type="Object" />
+    <aura:attribute name="isReversal" type="Boolean" default="false" description="Parameter, 파일버튼과 파일명 위치 좌우 반전" />
+    <aura:attribute name="listDeleteId" type="List" />
+    <aura:attribute name="fileToBeUploaded" type="Object[]" />
+    <aura:attribute name="fileName" type="String" />
+    <aura:attribute name="base64Data" type="String" />
+    <aura:attribute name="contentType" type="String" />
+    <aura:attribute name="myVal" type="String" />
+    <aura:attribute name="hasMore" type="Boolean" />
+    <aura:attribute name="emailSelf" type="Boolean" default="false" />
+    <aura:attribute name="termsOpen" type="Boolean" default="false" />
+    <aura:attribute name="isLoading" type="Boolean" default="false" />
+
+
+    <section>
+        <div class="contents" id="positions">
+            <p class="pageTitle">
+                Open Positions
+            </p>
+            <div class="jobPositionInformations">
+                <aura:iteration items="{!v.positions}" var="position">
+                    <div onclick="{!c.showContentsModal}">
+                        <aura:if isTrue="{!v.isEnglish}">
+                            <aura:renderIf isTrue="{!position.StatusEng__c != 'Closed'}">
+                                <div class="clickArea withFooter">
+                                    <input type="hidden" class="positionId" value="{!position.Id}" />
+                                    <input type="hidden" class="positionSubject" value="{!position.fm_subjectEng__c}" />
+                                    <input type="hidden" class="positionCategory"
+                                        value="{!position.RecruitmentCategoryEng__c}" />
+                                    <input type="hidden" class="positionWorkType" value="{!position.WorkTypeEng__c}" />
+                                    <input type="hidden" class="positionCareer" value="{!position.CareerEng__c}" />
+                                    <input type="hidden" class="positionName" value="{!position.PositionEng__c}" />
+                                    <input type="hidden" class="positionEducation"
+                                        value="{!position.EducationEng__c}" />
+                                    <input type="hidden" class="positionBusiness"
+                                        value="{!position.MainBusinessEng__c}" />
+                                    <input type="hidden" class="positionQualifications"
+                                        value="{!position.QualificationsEng__c}" />
+                                    <input type="hidden" class="positionPreferentialTreatment"
+                                        value="{!position.preferentialTreatmentEng__c}" />
+                                    <input type="hidden" class="positionLocation"
+                                        value="{!position.WorkingPlaceEng__c}" />
+                                    <input type="hidden" class="status" value="{!position.StatusEng__c}" />
+                                </div>
+                            </aura:renderIf>
+                            <aura:renderIf isTrue="{!position.StatusEng__c == 'Closed'}">
+                                <div class="clickArea">
+                                    <input type="hidden" class="positionId" value="{!position.Id}" />
+                                    <input type="hidden" class="positionSubject" value="{!position.fm_subjectEng__c}" />
+                                    <input type="hidden" class="positionCategory"
+                                        value="{!position.RecruitmentCategoryEng__c}" />
+                                    <input type="hidden" class="positionWorkType" value="{!position.WorkTypeEng__c}" />
+                                    <input type="hidden" class="positionCareer" value="{!position.CareerEng__c}" />
+                                    <input type="hidden" class="positionName" value="{!position.PositionEng__c}" />
+                                    <input type="hidden" class="positionEducation"
+                                        value="{!position.EducationEng__c}" />
+                                    <input type="hidden" class="positionBusiness"
+                                        value="{!position.MainBusinessEng__c}" />
+                                    <input type="hidden" class="positionQualifications"
+                                        value="{!position.QualificationsEng__c}" />
+                                    <input type="hidden" class="positionPreferentialTreatment"
+                                        value="{!position.preferentialTreatmentEng__c}" />
+                                    <input type="hidden" class="positionLocation"
+                                        value="{!position.WorkingPlaceEng__c}" />
+                                    <input type="hidden" class="status" value="{!position.StatusEng__c}" />
+                                </div>
+                            </aura:renderIf>
+                            <aura:set attribute="else">
+                                <aura:renderIf isTrue="{!position.Status__c != '마감'}">
+                                    <aura:if isTrue="{!v.isEnglish}">
+                                        <div class="clickArea withFooter">
+                                            <input type="hidden" class="positionId" value="{!position.Id}" />
+                                            <input type="hidden" class="positionSubject"
+                                                   value="{!position.fm_subjectEng__c}" />
+                                            <input type="hidden" class="positionCategory"
+                                                   value="{!position.RecruitmentCategoryEng__c}" />
+                                            <input type="hidden" class="positionWorkType"
+                                                   value="{!position.WorkTypeEng__c}" />
+                                            <input type="hidden" class="positionCareer"
+                                                   value="{!position.CareerEng__c}" />
+                                            <input type="hidden" class="positionName"
+                                                   value="{!position.PositionEng__c}" />
+                                            <input type="hidden" class="positionEducation"
+                                                   value="{!position.EducationEng__c}" />
+                                            <input type="hidden" class="positionBusiness"
+                                                   value="{!position.MainBusinessEng__c}" />
+                                            <input type="hidden" class="positionQualifications"
+                                                   value="{!position.QualificationsEng__c}" />
+                                            <input type="hidden" class="positionPreferentialTreatment"
+                                                   value="{!position.preferentialTreatmentEng__c}" />
+                                            <input type="hidden" class="positionLocation"
+                                                   value="{!position.WorkingPlaceEng__c}" />
+                                            <input type="hidden" class="status"
+                                                   value="{!position.StatusEng__c}" />
+                                        </div>
+                                        <aura:set attribute="else">
+                                            <div class="clickArea withFooter">
+                                                <input type="hidden" class="positionId" value="{!position.Id}" />
+                                                <input type="hidden" class="positionSubject"
+                                                       value="{!position.fm_subject__c}" />
+                                                <input type="hidden" class="positionCategory"
+                                                       value="{!position.RecruitmentCategory__c}" />
+                                                <input type="hidden" class="positionWorkType"
+                                                       value="{!position.WorkType__c}" />
+                                                <input type="hidden" class="positionCareer"
+                                                       value="{!position.Career__c}" />
+                                                <input type="hidden" class="positionName"
+                                                       value="{!position.Position__c}" />
+                                                <input type="hidden" class="positionEducation"
+                                                       value="{!position.Education__c}" />
+                                                <input type="hidden" class="positionBusiness"
+                                                       value="{!position.MainBusiness__c}" />
+                                                <input type="hidden" class="positionQualifications"
+                                                       value="{!position.Qualifications__c}" />
+                                                <input type="hidden" class="positionPreferentialTreatment"
+                                                       value="{!position.preferentialTreatment__c}" />
+                                                <input type="hidden" class="positionLocation"
+                                                       value="{!position.WorkingPlace__c}" />
+                                                <input type="hidden" class="status"
+                                                       value="{!position.Status__c}" />
+                                            </div>
+                                        </aura:set>
+                                    </aura:if>
+
+                                </aura:renderIf>
+                                <aura:renderIf isTrue="{!position.Status__c == '마감'}">
+
+                                    <aura:if isTrue="{!v.isEnglish}">
+                                        <div class="clickArea">
+                                            <input type="hidden" class="positionId" value="{!position.Id}" />
+                                            <input type="hidden" class="positionSubject"
+                                                   value="{!position.fm_subjectEng__c}" />
+                                            <input type="hidden" class="positionCategory"
+                                                   value="{!position.RecruitmentCategoryEng__c}" />
+                                            <input type="hidden" class="positionWorkType"
+                                                   value="{!position.WorkTypeEng__c}" />
+                                            <input type="hidden" class="positionCareer"
+                                                   value="{!position.CareerEng__c}" />
+                                            <input type="hidden" class="positionName"
+                                                   value="{!position.PositionEng__c}" />
+                                            <input type="hidden" class="positionEducation"
+                                                   value="{!position.EducationEng__c}" />
+                                            <input type="hidden" class="positionBusiness"
+                                                   value="{!position.MainBusinessEng__c}" />
+                                            <input type="hidden" class="positionQualifications"
+                                                   value="{!position.QualificationsEng__c}" />
+                                            <input type="hidden" class="positionPreferentialTreatment"
+                                                   value="{!position.preferentialTreatmentEng__c}" />
+                                            <input type="hidden" class="positionLocation"
+                                                   value="{!position.WorkingPlaceEng__c}" />
+                                            <input type="hidden" class="status"
+                                                   value="{!position.StatusEng__c}" />
+                                        </div>
+                                        <aura:set attribute="else">
+                                            <div class="clickArea">
+                                                <input type="hidden" class="positionId" value="{!position.Id}" />
+                                                <input type="hidden" class="positionSubject"
+                                                       value="{!position.fm_subject__c}" />
+                                                <input type="hidden" class="positionCategory"
+                                                       value="{!position.RecruitmentCategory__c}" />
+                                                <input type="hidden" class="positionWorkType"
+                                                       value="{!position.WorkType__c}" />
+                                                <input type="hidden" class="positionCareer"
+                                                       value="{!position.Career__c}" />
+                                                <input type="hidden" class="positionName"
+                                                       value="{!position.Position__c}" />
+                                                <input type="hidden" class="positionEducation"
+                                                       value="{!position.Education__c}" />
+                                                <input type="hidden" class="positionBusiness"
+                                                       value="{!position.MainBusiness__c}" />
+                                                <input type="hidden" class="positionQualifications"
+                                                       value="{!position.Qualifications__c}" />
+                                                <input type="hidden" class="positionPreferentialTreatment"
+                                                       value="{!position.preferentialTreatment__c}" />
+                                                <input type="hidden" class="positionLocation"
+                                                       value="{!position.WorkingPlace__c}" />
+                                                <input type="hidden" class="status"
+                                                       value="{!position.Status__c}" />
+                                            </div>
+                                        </aura:set>
+                                    </aura:if>
+                                </aura:renderIf>
+
+                            </aura:set>
+                        </aura:if>
+
+
+                        <div class="titleArea">
+                            <aura:if isTrue="{!v.isEnglish}">
+                                <p onmouseover="{!c.renderTitle}" onload="{!c.renderTitle}" class="title jobPositionTitle">
+                                    {!position.fm_subjectEng__c}</p>
+                                <aura:renderIf isTrue="{!position.StatusEng__c != 'Closed'}">
+                                    <p class="status">{!position.StatusEng__c}</p>
+                                </aura:renderIf>
+                                <aura:renderIf isTrue="{!position.StatusEng__c == 'Closed'}">
+                                    <p class="status disabled">{!position.StatusEng__c}</p>
+                                </aura:renderIf>
+
+
+                                <aura:set attribute="else">
+                                    <p onmouseover="{!c.renderTitle}" onload="{!c.renderTitle}" class="title jobPositionTitle">
+                                        {!position.fm_subject__c}</p>
+                                    <aura:renderIf isTrue="{!position.Status__c != '마감'}">
+                                        <p class="status">{!position.Status__c}</p>
+                                    </aura:renderIf>
+                                    <aura:renderIf isTrue="{!position.Status__c == '마감'}">
+                                        <p class="status disabled">{!position.Status__c}</p>
+                                    </aura:renderIf>
+
+
+                                </aura:set>
+                            </aura:if>
+                        </div>
+
+                        <aura:if isTrue="{!v.isEnglish}">
+                            <div class="infoItem">
+                                <p class="itemTitle">Employee Type</p>
+                                <p class="itemContent">{!position.WorkTypeEng__c}</p>
+                            </div>
+                            <div class="infoItem">
+                                <p class="itemTitle">Apply Type</p>
+                                <p class="itemContent">{!position.CareerEng__c}</p>
+                            </div>
+                            <div class="infoItem">
+                                <p class="itemTitle">Job Position</p>
+                                <p class="itemContent">{!position.Position__c}</p>
+                            </div>
+                            <div class="infoItem">
+                                <p class="itemTitle">Educational Background</p>
+                                <p class="itemContent">{!position.EducationEng__c}</p>
+                            </div>
+                            <hr />
+                            <div class="infoItem" style="width: 100%;">
+                                <p class="itemTitle">Job Description</p>
+                                <p class="itemContent">{!position.MainBusinessEng__c}</p>
+                            </div>
+                            <aura:set attribute="else">
+                                <div class="infoItem">
+                                    <p class="itemTitle">근무 형태</p>
+                                    <p class="itemContent">{!position.WorkType__c}</p>
+                                </div>
+                                <div class="infoItem">
+                                    <p class="itemTitle">지원 구분</p>
+                                    <p class="itemContent">{!position.Career__c}</p>
+                                </div>
+                                <div class="infoItem">
+                                    <p class="itemTitle">Job Position</p>
+                                    <p class="itemContent">{!position.Position__c}</p>
+                                </div>
+                                <div class="infoItem">
+                                    <p class="itemTitle">Educational Background</p>
+                                    <p class="itemContent">{!position.Education__c}</p>
+                                </div>
+                                <hr />
+                                <div class="infoItem" style="width: 100%;">
+                                    <p class="itemTitle">Job Description</p>
+                                    <p class="itemContent">{!position.MainBusiness__c}</p>
+                                </div>
+                            </aura:set>
+                        </aura:if>
+
+                        <aura:if isTrue="{!v.isEnglish}">
+                            <aura:renderIf isTrue="{!position.StatusEng__c != 'Closed'}">
+                                <footer>
+                                    <lightning:button label="Apply" value="{!position}" type="submit"
+                                        onclick="{!c.showModal}" />
+                                </footer>
+                            </aura:renderIf>
+                            <aura:set attribute="else">
+                                <aura:renderIf isTrue="{!position.Status__c != '마감'}">
+                                    <footer>
+                                        <lightning:button label="지원하기" value="{!position}" type="submit"
+                                            onclick="{!c.showModal}" />
+                                    </footer>
+                                </aura:renderIf>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </aura:iteration>
+            </div>
+            <aura:renderIf isTrue="{!v.hasMore}">
+                <!--                <button class="loadMore" onclick="{!c.loadMore}">더 보기</button>-->
+            </aura:renderIf>
+        </div>
+        <div class="modal-background" aura:id="modal" onclick="{!c.hideModal}">
+            <div class="modal">
+                <aura:renderIf isTrue="{!v.isOpen}">
+                    <aura:if isTrue="{!v.isLoading}">
+                        <div class="custom_spinner" style="z-index: 999">
+                            <lightning:spinner aura:id="spinner" alternativeText="Loading" size="medium"
+                                variant="brand" />
+                            <div class="slds-backdrop slds-backdrop_open"></div>
+                        </div>
+                    </aura:if>
+                    <header>
+                        <h1>Apply to</h1>
+                        <button class="close" onclick="{!c.hideModal}">
+                            &times;
+                        </button>
+                    </header>
+                    <section>
+
+                        <aura:if isTrue="{!v.isEnglish}">
+                            <lightning:recordEditForm aura:id="recordEditForm" objectApiName="Applyto__c">
+                                <lightning:messages />
+                                <lightning:inputField fieldName="JobPosition__c" value="{!v.JobPositionObj.Id}"
+                                                      disabled="true" style="display: none;" />
+                                <lightning:textarea label="Subject"
+                                                    value="{!v.JobPositionObj.fm_subjectEng__c}" variant="label-inline" readonly="true"
+                                                    tabindex="-1" />
+                                <label for="applyApplicant">
+                                    <abbr lightning-input_input="" title="required" class="slds-required">*</abbr>
+                                    Name</label>
+                                <lightning:inputField aura:id="applyApplicant" fieldName="Applicant__c"
+                                                      value="{!v.Applicant}" variant="label-hidden" />
+                                <label for="applyBirthday">
+                                    <abbr lightning-input_input="" title="required" class="slds-required">*</abbr>
+                                    Date of Birth</label>
+                                <lightning:inputField aura:id="applyBirthday" fieldName="Birthday__c" value="{!v.BirthDate}"
+                                                      variant="label-hidden" />
+                                <label for="applyMobile">
+                                    <abbr lightning-input_input="" title="required" class="slds-required">*</abbr>
+                                    Mobile</label>
+                                <lightning:inputField aura:id="applyMobile" fieldName="Mobile__c" value="{!v.Mobile}"
+                                                      onchange="{!c.phoneMasking}" variant="label-hidden" />
+                                <lightning:inputField fieldName="Email__c" value="{!v.Email}" style="display: none;" />
+                                <label>
+                                    <abbr lightning-input_input="" title="required" class="slds-required">*</abbr>
+                                    Email
+                                </label>
+                                <div style="display: flex; flex-direction: row; margin-top: 12px; align-items: center">
+                                    <input style="width: 50%; margin-right: 8px;" type="text" id="email"
+                                           onchange="{!c.onChangeEmail}" />
+                                    @
+                                    <aura:renderIf isTrue="{!v.emailSelf == false}">
+                                        <select style="width: 46%; padding: 14px 16px; margin-left: 8px;"
+                                                onchange="{!c.onChangeEmailProvider}">
+                                            <option value="naver.com">naver.com</option>
+                                            <option value="gmail.com">gmail.com</option>
+                                            <option value="daum.net">daum.net</option>
+                                            <option value="kakao.com">kakao.com</option>
+                                            <option value="nate.com">nate.com</option>
+                                            <option value="self">Input Domain</option>
+                                        </select>
+                                    </aura:renderIf>
+                                    <aura:renderIf isTrue="{!v.emailSelf}">
+                                        <input style="width: 46%; margin-left: 8px;" type="text" id="provider"
+                                               onchange="{!c.onChangeEmailProvider}" />
+                                    </aura:renderIf>
+                                </div>
+                                <div class="slds-form-element slds-form-element_horizontal">
+                                    <label class="slds-form-element__label"><span class="slds-required">*</span>
+                                        Personal Statement (Less Than 4MB)
+                                    </label>
+                                    <!--                                    <lightning:helptext content="자기소개서 및 이력서 중 택1" />-->
+                                    <div class="slds-form-element__control">
+                                        <!--        <label class="clipImageInput"> -->
+                                        <input type="file" id="fileInput" aura:id="fileInput" value="{!v.file}"
+                                               onchange="{!c.fnFileUpload}"
+                                               label="File Upload" />
+                                        <!--                                    </label>-->
+                                    </div>
+                                </div>
+                            </lightning:recordEditForm>
+
+                            <aura:set attribute="else">
+                                <lightning:recordEditForm aura:id="recordEditForm" objectApiName="Applyto__c">
+                                    <lightning:messages />
+                                    <lightning:inputField fieldName="JobPosition__c" value="{!v.JobPositionObj.Id}"
+                                                          disabled="true" style="display: none;" />
+                                    <lightning:textarea label="항목명"
+                                                        value="{!v.JobPositionObj.fm_subject__c}" variant="label-inline" readonly="true"
+                                                        tabindex="-1" />
+                                    <label for="applyApplicant">
+                                        <abbr lightning-input_input="" title="required" class="slds-required">*</abbr>
+                                        지원자 이름</label>
+                                    <lightning:inputField aura:id="applyApplicant" fieldName="Applicant__c"
+                                                          value="{!v.Applicant}" variant="label-hidden" />
+                                    <label for="applyBirthday">
+                                        <abbr lightning-input_input="" title="required" class="slds-required">*</abbr>
+                                        생년월일</label>
+                                    <lightning:inputField aura:id="applyBirthday" fieldName="Birthday__c" value="{!v.BirthDate}"
+                                                          variant="label-hidden" />
+                                    <label for="applyMobile">
+                                        <abbr lightning-input_input="" title="required" class="slds-required">*</abbr>
+                                        휴대폰</label>
+                                    <lightning:inputField aura:id="applyMobile" fieldName="Mobile__c" value="{!v.Mobile}"
+                                                          onchange="{!c.phoneMasking}" variant="label-hidden" />
+                                    <lightning:inputField fieldName="Email__c" value="{!v.Email}" style="display: none;" />
+                                    <label>
+                                        <abbr lightning-input_input="" title="required" class="slds-required">*</abbr>
+                                        이메일
+                                    </label>
+                                    <div style="display: flex; flex-direction: row; margin-top: 12px; align-items: center">
+                                        <input style="width: 50%; margin-right: 8px;" type="text" id="email"
+                                               onchange="{!c.onChangeEmail}" />
+                                        @
+                                        <aura:renderIf isTrue="{!v.emailSelf == false}">
+                                            <select style="width: 46%; padding: 14px 16px; margin-left: 8px;"
+                                                    onchange="{!c.onChangeEmailProvider}">
+                                                <option value="naver.com">naver.com</option>
+                                                <option value="gmail.com">gmail.com</option>
+                                                <option value="daum.net">daum.net</option>
+                                                <option value="kakao.com">kakao.com</option>
+                                                <option value="nate.com">nate.com</option>
+                                                <option value="self">직접 입력</option>
+                                            </select>
+                                        </aura:renderIf>
+                                        <aura:renderIf isTrue="{!v.emailSelf}">
+                                            <input style="width: 46%; margin-left: 8px;" type="text" id="provider"
+                                                   onchange="{!c.onChangeEmailProvider}" />
+                                        </aura:renderIf>
+                                    </div>
+                                    <div class="slds-form-element slds-form-element_horizontal">
+                                        <label class="slds-form-element__label"><span class="slds-required">*</span>
+                                            자기소개서(4MB 이하)
+                                        </label>
+                                        <!--                                    <lightning:helptext content="자기소개서 및 이력서 중 택1" />-->
+                                        <div class="slds-form-element__control">
+                                            <!--        <label class="clipImageInput"> -->
+                                            <input type="file" id="fileInput" aura:id="fileInput" value="{!v.file}"
+                                                   onchange="{!c.fnFileUpload}"
+                                                   label="파일 등록" />
+                                            <!--                                    </label>-->
+                                        </div>
+                                    </div>
+                                </lightning:recordEditForm>
+
+                            </aura:set>
+                        </aura:if>
+
+                        <input type="checkbox" id="terms" name="terms" value="{!v.checkTerms}"
+                            onchange="{!c.termsChanged}" />
+                        <label for="terms" style="display: inline; width: 90%; margin-left: 16px;">
+                            <aura:if isTrue="{!v.isEnglish}">
+                                Agree to <a onclick="{!c.termsOpen}">Consent to Collect &amp; Utilize Personal
+                                    Information</a>
+                                <aura:set attribute="else">
+                                    <a onclick="{!c.termsOpen}">개인정보 수집 및 활용</a> 동의
+                                </aura:set>
+                            </aura:if>
+                        </label>
+                        <button class="submitBtn" type="button" onclick="{!c.fnSave}">Submit</button>
+                    </section>
+                </aura:renderIf>
+            </div>
+        </div>
+        <aura:renderIf isTrue="{!v.contentsModalOpen}">
+            <div class="modal-background active" onclick="{!c.hideContentsModal}">
+                <div class="modal slds-scrollable_y">
+                    <header>
+                        <!--                        <aura:if isTrue="{!v.isEnglish}">-->
+                        <!--                            <h1>{!v.contentsItem.fm_subjectEng__c}</h1>-->
+                        <!--                            <aura:set attribute="else">-->
+                        <!--                                <h1>{!v.contentsItem.fm_subject__c}</h1>-->
+                        <!--                            </aura:set>-->
+                        <!--                        </aura:if>-->
+                        <h1>{!v.contentsItem.fm_subject__c}</h1>
+                        <button class="close" onclick="{!c.hideContentsModal}">
+                            &times;
+                        </button>
+                    </header>
+                    <aura:if isTrue="{!v.isEnglish}">
+                        <section>
+                            <div class="row">
+                                <div>
+                                    <h1>Recruitment Category</h1>
+                                    <p>{!v.contentsItem.RecruitmentCategory__c}</p>
+                                </div>
+                                <div>
+                                    <h1>Work type</h1>
+                                    <p>{!v.contentsItem.WorkType__c}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div>
+                                    <h1>Career</h1>
+                                    <p>{!v.contentsItem.Career__c}</p>
+                                </div>
+                                <div>
+                                    <h1>Position</h1>
+                                    <p>{!v.contentsItem.Position__c}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div>
+                                    <h1>Education</h1>
+                                    <p>{!v.contentsItem.Education__c}</p>
+                                </div>
+                                <div>
+                                    <h1>Working Place</h1>
+                                    <p>{!v.contentsItem.WorkingPlace__c}</p>
+                                </div>
+                            </div>
+                            <hr style="margin-top: 24px;" />
+                            <h1>Main Business</h1>
+                            <pre style="white-space: pre-wrap;">{!v.contentsItem.MainBusiness__c}</pre>
+                            <hr />
+                            <h1>Qualifications</h1>
+                            <pre style="white-space: pre-wrap;">{!v.contentsItem.Qualifications__c}</pre>
+                            <hr />
+                            <h1>Preferential Treatment</h1>
+                            <pre style="white-space: pre-wrap;">{!v.contentsItem.preferentialTreatment__c}</pre>
+                        </section>
+
+                        <aura:set attribute="else">
+                            <section>
+                                <div class="row">
+                                    <div>
+                                        <h1>모집 구분</h1>
+                                        <p>{!v.contentsItem.RecruitmentCategory__c}</p>
+                                    </div>
+                                    <div>
+                                        <h1>근무 형태</h1>
+                                        <p>{!v.contentsItem.WorkType__c}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div>
+                                        <h1>지원 구분</h1>
+                                        <p>{!v.contentsItem.Career__c}</p>
+                                    </div>
+                                    <div>
+                                        <h1>포지션</h1>
+                                        <p>{!v.contentsItem.Position__c}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div>
+                                        <h1>학력</h1>
+                                        <p>{!v.contentsItem.Education__c}</p>
+                                    </div>
+                                    <div>
+                                        <h1>근무 지역</h1>
+                                        <p>{!v.contentsItem.WorkingPlace__c}</p>
+                                    </div>
+                                </div>
+                                <hr style="margin-top: 24px;" />
+                                <h1>주요 업무</h1>
+                                <pre style="white-space: pre-wrap;">{!v.contentsItem.MainBusiness__c}</pre>
+                                <hr />
+                                <h1>자격 요건</h1>
+                                <pre style="white-space: pre-wrap;">{!v.contentsItem.Qualifications__c}</pre>
+                                <hr />
+                                <h1>우대 사항</h1>
+                                <pre style="white-space: pre-wrap;">{!v.contentsItem.preferentialTreatment__c}</pre>
+                            </section>
+
+                        </aura:set>
+                    </aura:if>
+
+                    <aura:if isTrue="{!v.isEnglish}">
+                        <aura:renderIf isTrue="{! v.contentsItem.StatusEng__c != 'Closed'}">
+                            <footer>
+                                <lightning:button label="Apply" value="{!v.contentsItem}" type="submit"
+                                    onclick="{!c.showModal}" />
+                            </footer>
+                        </aura:renderIf>
+                        <aura:set attribute="else">
+                            <aura:renderIf isTrue="{! v.contentsItem.Status__c != '마감'}">
+                                <footer>
+                                    <lightning:button label="지원하기" value="{!v.contentsItem}" type="submit"
+                                        onclick="{!c.showModal}" />
+                                </footer>
+                            </aura:renderIf>
+                        </aura:set>
+                    </aura:if>
+                    <!--<footer>
+                        <lightning:button label="지원하기" value="{!v.contentsItem}" type="submit" onclick="{!c.showModal}"/>
+                    </footer>-->
+                </div>
+            </div>
+        </aura:renderIf>
+        <aura:renderIf isTrue="{!v.termsOpen}">
+            <div class="modal-background active" onclick="{!c.termsClose}">
+                <div class="modal" style="height: 80vh; overflow: scroll;">
+                    <aura:if isTrue="{!v.isEnglish}">
+                        <header>
+                            <h1>Consent to Collect &amp; Utilize Personal Information
+                            </h1>
+                            <button class="close" onclick="{!c.termsClose}">
+                                &times;
+                            </button>
+                        </header>
+                        <aura:set attribute="else">
+                            <header>
+                                <h1>개인정보 수집 및 활용동의
+                                </h1>
+                                <button class="close" onclick="{!c.termsClose}">
+                                    &times;
+                                </button>
+                            </header>
+                        </aura:set>
+                    </aura:if>
+
+
+                    <aura:if isTrue="{!v.isEnglish}">
+                        <section>
+                            <p>
+                                According to the Personal Information Protection Act. and related statutory, Daeu
+                                Nextier Inc. collects personal information of applicants for the purpose of personnel
+                                management after employment.
+                            </p>
+                            <p>
+                                Please read the following information regarding the collection &amp; use of your
+                                personal
+                                information and make decision of agreement.
+                            </p>
+                            <h1>1. Purpose of collect and use personal information</h1>
+                            <table style="border: 1px solid #212123;">
+                                <tr style="border: 1px solid #212123;">
+                                    <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">
+                                        Personal Information Item
+                                    </th>
+                                    <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">
+                                        Purpose of Collection &amp; Use
+                                    </th>
+                                    <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">
+                                        Retention Period</th>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #212123;">
+                                        Collection Item: Name, Date of Birth, Email, Phone, Address, Rewarding
+                                        Patriotism or Disability, Educational Background, Major &amp; Grade(GPA), Apply
+                                        Company, Apply Position, Apply Region, Foreign Language Certification, Abroad
+                                        Stay Experience or Training, Language Availability or Awards, Personal Statement
+                                    </td>
+                                    <td style="border: 1px solid #212123;">
+                                        Identify Applicant for: Apply Information, Apply Status, Resource Management,
+                                        Pay, Benefits
+                                    </td>
+                                    <td style="border: 1px solid #212123;">
+                                        1. When the purpose of collection and use about personal information is
+                                        complete<br />
+                                        2. When applicants withdraw their personal information
+                                    </td>
+                                </tr>
+                            </table>
+                            <h1>2. Purpose of collect and use sensitive information</h1>
+                            <table style="border: 1px solid #212123;">
+                                <tr style="border: 1px solid #212123;">
+                                    <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">
+                                        Sensitive Information Item
+                                    </th>
+                                    <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">
+                                        Purpose of Collection &amp; Use
+                                    </th>
+                                    <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">
+                                        Retention Period</th>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #212123;">
+                                        Disability<br />
+                                        Medical History<br />
+                                        Criminal History
+                                    </td>
+                                    <td style="border: 1px solid #212123;">
+                                        Recruitment Procedure, Work Department after Join, Task Arrange, Resource
+                                        Management
+                                    </td>
+                                    <td style="border: 1px solid #212123;">
+                                        1. When the purpose of collection and use about personal information is
+                                        complete<br />
+                                        2. When applicants withdraw their personal information
+                                    </td>
+                                </tr>
+                            </table>
+                            <h1>3. Consent to provide information to Third parties</h1>
+                            <p>
+                                In Principle, company does not provide applicant's personal information to other
+                                companies or institutions without applicant's consent.<br />
+                                However, personal information might be provided without consent in following case:<br />
+                                - Request from institutions with prescribed procedure and method for purpose of
+                                investigation.
+
+                            </p>
+                            <p>
+                                4. Company uses collected personal information for proper purpose, and does not use for
+                                other. Applicant who provided personal information can withdraw their information any
+                                time.
+                            </p>
+                            <p>
+                                5. Applicant may refuse to consent about the above content of collection, use, provision
+                                and entrustment.
+                            </p>
+                            <p>
+                                However, it might be effected on applicant's recruitment screening due to following
+                                contents are mandatory.
+                            </p>
+                            <p>
+                                I agree with all of the above:<br />
+                                Purpose of collect and use personal information<br />
+                                Purpose of collect and use sensitive information<br />
+                                Consent to provide information to Third parties
+                            </p>
+                        </section>
+                        <aura:set attribute="else">
+                            <section>
+                                <p>
+                                    (주)대유넥스티어(이하’회사’)는 개인정보보호법 등 관련 법령에 따라 입사전형 및 채용 후 인사관리 등의 목적으로 입사지원자의 개인정보를 수집하고
+                                    있습니다.<br />
+                                    귀하의 개인정보 수집 및 이용과 관련하여 아래의 안내 내용을 자세히 읽어 보시고, 모든 내용을 숙지하신 후에 개인정보의 수집 및 이용에 관한 동의
+                                    여부를 결정해
+                                    주시기 바랍니다.
+                                </p>
+                                <h1>1. 개인정보의 수집 및 이용 목적</h1>
+                                <table style="border: 1px solid #212123;">
+                                    <tr style="border: 1px solid #212123;">
+                                        <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">
+                                            개인정보항목
+                                        </th>
+                                        <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">
+                                            수집·이용 목적
+                                        </th>
+                                        <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">
+                                            보유기간</th>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: 1px solid #212123;">
+                                            입사지원시 수집항목 : 성명, 생년월일, 이메일, 전화번호, 주소, 보훈 및 장애인 대상여부, 학력, 이수 학과 및 성적, 지원회사,
+                                            지원직무,
+                                            지원지역, 외국어자격사항, 기타자격, 병역, 해외 체류경험 및 연수활동, 사회활동, 어학 및 수상경력, 자기소개 등
+                                        </td>
+                                        <td style="border: 1px solid #212123;">
+                                            채용진행에 따른 입사지원•선발전형•채용진행사항 관련 안내, 향후 채용 가능 자원의 관리, 급여지급 및 복리후생 제공 시 본인 식별
+                                        </td>
+                                        <td style="border: 1px solid #212123;">
+                                            개인정보의 수집 및 이용 목적이 달성된 때 또는 지원자께서 개인정보제공 동의를 철회 하셨을 경우에는 지체 없이 지원자의 개인정보 파기함
+                                        </td>
+                                    </tr>
+                                </table>
+                                <h1>2. 민감정보의 수집 및 이용 목적</h1>
+                                <table style="border: 1px solid #212123;">
+                                    <tr style="border: 1px solid #212123;">
+                                        <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">
+                                            민감정보의 항목
+                                        </th>
+                                        <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">
+                                            수집·이용 목적
+                                        </th>
+                                        <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">
+                                            보유기간</th>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: 1px solid #212123;">
+                                            가. 신체장애<br />
+                                            나. 병력<br />
+                                            다. 범죄정보
+                                        </td>
+                                        <td style="border: 1px solid #212123;">
+                                            채용과정 진행, 입사 후 근무 부서, 업무 배치 및 향후 채용 가능 자원의 관리 등
+                                        </td>
+                                        <td style="border: 1px solid #212123;">
+                                            개인정보의 수집 및 이용 목적이 달성된 때 또는 지원자께서 개인정보제공 동의를 철회 하셨을 경우에는 지체 없이 지원자의 개인정보 파기함
+                                        </td>
+                                    </tr>
+                                </table>
+                                <h1>3. 제3자 정보제공 동의</h1>
+                                <p>
+                                    회사는 원칙적으로 지원자의 개인정보를 지원자의 동의 없이 타 기업 또는 기관에 제공하지 않습니다. 다만, 다음의 경우에는 예외적으로 동의 없이
+                                    개인정보를 제공할 수
+                                    있습니다.<br />
+                                    - 법령의 규정에 의하거나 수사 목적으로 법령에 정해진 절차와 방법에 따라 수사기관의 요구가 있는 경우
+                                </p>
+                                <p>
+                                    4. 당사는 취득한 개인정보를 수집한 목적에 필요한 범위에서 적합하게 처리하고 그 목적 외의 용도로 사용하지 않으며 개인정보를 제공한 계약당사자는
+                                    언제나 자신이
+                                    입력한 개인정보를 열람·수정 및 정보제공에 대한 철회할 수 있습니다.
+                                </p>
+                                <p>
+                                    5. 지원자는 본 안내에 따른 개인정보의 수집, 이용, 제공 및 위탁 등과 관련한 위 사항에 대하여 원하지 않는 경우 동의를 거부할 수 있습니다.
+                                </p>
+                                <p>
+                                    다만, 본 안내에 따른 개인정보의 수집, 이용등과 관련한 위 사항은 회사의 공정한 채용전형에 있어 필수적인 항목으로 이에 대하여 동의하지 않는 경우
+                                    채용전형에 제한이
+                                    있을 수 있는 점을 안내드립니다.
+                                </p>
+                                <p>
+                                    개인정보 수집 및 이용안내, 민감정보 처리에 대한 안내, 제3자 정보제공 동의를 모두 읽었으며, 아래 내용에 모두 동의합니다.
+                                </p>
+                            </section>
+                        </aura:set>
+                    </aura:if>
+                </div>
+            </div>
+        </aura:renderIf>
+    </section>
+</aura:component>

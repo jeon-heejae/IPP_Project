@@ -1,0 +1,1 @@
+alert('StaticResource JS');

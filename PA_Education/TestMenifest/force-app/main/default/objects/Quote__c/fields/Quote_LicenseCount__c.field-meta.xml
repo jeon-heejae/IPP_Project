@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Quote_LicenseCount__c</fullName>
+    <description>&quot;Count(), Only records meeting certain criteria should be included in the calculation.
+RecordType = License&quot;</description>
+    <label>라이센스 타입 수</label>
+    <summaryFilterItems>
+        <field>QuoteItem__c.RecordTypeId</field>
+        <operation>equals</operation>
+        <value>라이센스</value>
+    </summaryFilterItems>
+    <summaryForeignKey>QuoteItem__c.QuoteItem_Quote__c</summaryForeignKey>
+    <summaryOperation>count</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

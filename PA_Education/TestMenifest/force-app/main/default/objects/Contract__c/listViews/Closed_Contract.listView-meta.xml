@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Closed_Contract</fullName>
+    <columns>NAME</columns>
+    <columns>SignDate__c</columns>
+    <columns>ContractPeriod__c</columns>
+    <columns>ru_Amount__c</columns>
+    <columns>fm_NetAmount__c</columns>
+    <columns>CollectionAmount_Summary__c</columns>
+    <columns>ru_UnpaidAmount__c</columns>
+    <columns>ru_OutstandingFee__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>ContractClosed__c</field>
+        <operation>equals</operation>
+        <value>1</value>
+    </filters>
+    <label>종료된 계약건</label>
+</ListView>

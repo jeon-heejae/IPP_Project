@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Quote_SalesDiscount__c</fullName>
+    <externalId>false</externalId>
+    <inlineHelpText>개별단가가 아닌 계약가를 할인할 경우 입력하세요.
+양수로 입력하세요.
+단위:원, VAT 별도</inlineHelpText>
+    <label>할인(총액)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

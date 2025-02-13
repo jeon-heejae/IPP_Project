@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Holiday_RuleWorkingYears__c</fullName>
+    <description>연차 기준일 당시 연차 추가일수를 계산하기 위한
+연차 기준일 당시 근속연수</description>
+    <externalId>false</externalId>
+    <formula>FLOOR((DATE(YEAR(TODAY()), 1, 1) - Holiday_JoinDate__c) / 365 + IF(MONTH(Holiday_JoinDate__c) == 1, 1, 0))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>추가일수 계산용 근속 연수</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>1</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

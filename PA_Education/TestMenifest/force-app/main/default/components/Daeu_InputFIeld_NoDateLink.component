@@ -1,0 +1,12 @@
+<apex:component access="global">
+	<apex:attribute name="id" type="String" description="block id" access="global" required="true"/>
+
+	<style>
+		div#{!id} span.dateInput span.dateFormat{
+			display:none;
+		}
+	</style>
+	<div id="{!id}">
+		<apex:componentBody />
+	</div>
+</apex:component>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Master_Table__c</fullName>
+    <description>조회 쿼리에서 from절에 포함될 메인 테이블명을 기재</description>
+    <externalId>false</externalId>
+    <inlineHelpText>조회 쿼리에서 from절에 포함될 메인 테이블명을 기재</inlineHelpText>
+    <label>테이블명</label>
+    <length>100</length>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>FormRequest_Type__c</fullName>
+    <description>신청문서</description>
+    <inlineHelpText>신청하는 문서의 종류를 선택하세요.
+(재직증명서 외 필요한 문서가 있을 경우 개발의뢰 요청하세요.)</inlineHelpText>
+    <label>신청문서</label>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>재직증명서</fullName>
+                <default>true</default>
+                <label>재직증명서</label>
+            </value>
+            <value>
+                <fullName>경력증명서</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>경력증명서</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

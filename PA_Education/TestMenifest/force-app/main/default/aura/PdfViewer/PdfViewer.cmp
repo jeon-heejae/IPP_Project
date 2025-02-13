@@ -1,0 +1,8 @@
+<!--
+ - Created by smyan on 2021-01-29.
+ -->
+
+<aura:component description="PdfViewer">
+    <aura:attribute access="GLOBAL" name="pdfData" type="String" description="PDF data in base64 encoded format"/>
+    <iframe aura:id="pdfFrame" src="/resource/PdfViewer/web/viewer.html" class="pdfFrame" onload="{!c.fnLoadpdf}"></iframe>
+</aura:component>

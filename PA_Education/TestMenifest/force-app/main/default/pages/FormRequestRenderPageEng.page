@@ -1,0 +1,149 @@
+<!--
+ - Created by choiyuna on 2022-11-11.
+ -->
+
+<apex:page standardController="FormRequest__c" extensions="FormRequestController" showHeader="false" sidebar="false">
+    <script>
+        var status = '{!FormRequest__c.FormRequest_Status__c}';
+        if(status != '승인완료'){
+            if(status == '출력기한 만료')
+                alert('출력기한이 만료되었습니다.');
+            else
+                alert('승인된 요청만 출력 가능합니다.');
+
+            window.history.back();
+            window.close();
+        }
+    </script>
+    <style>
+        table td{text-align:center;padding : 15px;font-size : 13px;}
+        * {
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+        }
+        .container {
+            position: relative;
+            text-align: center;
+        }
+        .bottom-right {
+            position: absolute;
+            bottom: -20px;
+            right:166px;
+        }
+
+        .page {
+            width: 21cm;
+            min-height: 29cm;
+            padding: 2cm;
+            margin: 0 auto;
+        }
+        .subpage {
+            background:#fff;
+            height: 250mm;
+        }
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        @media print {
+            body {
+            width: 210mm;
+            height: 295mm;
+            }
+            .page {
+                margin: 0;
+                border: initial;
+                width: initial;
+                min-height: initial;
+                box-shadow: initial;
+                background: initial;
+            }
+        }
+    </style>
+
+    <div class="page">
+        <div class="subpage">
+            <table class = "tableClass" width="100%;">
+                <tr>
+                    <td style="text-align:left;vertical-align: top;">
+                        {!FormRequest__c.Name}
+                    </td>
+                    <td style="text-align:right;"><apex:image value="{!$Resource.newlogo3}" width="205px" height="50px" /></td>
+                </tr>
+                <tr><td colspan="3" style="font-size : 25px;text-align:center;"><u><b>{!IF(FormRequest__c.FormRequest_Type__c=='재직증명서','Employment Certificate','Certificate of Career')}</b></u></td></tr>
+            </table>
+            <br/>
+            <br/>
+            <table border="2" cellpadding="0" cellspacing="0" width="100%;" >
+                <tr border="1">
+                    <td style="width:19%;">Name</td>
+                    <td style="width:31%;">{!FormRequest__c.EngName__c}</td>
+                    <td style="width:19%; padding:0px">Resident ID Number</td>
+                    <td style="width:31%;">{!FormRequest__c.FormRequest_PsnlNoFormula__c}</td>
+                </tr>
+                <tr>
+                    <td>Department</td>
+                    <td>{!FormRequest__c.FormRequest_Division__c}</td>
+                    <td>Position</td>
+                    <td>{!title_Eng}</td>
+                </tr>
+
+                <apex:variable var="type" rendered="{!FormRequest__c.FormRequest_Type__c='재직증명서'}"  value="{!FormRequest__c.FormRequest_Type__c}">
+                    <tr>
+                        <td>Address</td>
+                        <td colspan="3">{!FormRequest__c.EngAddress__c}</td>
+                    </tr>
+                </apex:variable>
+                <tr>
+                    <td style="padding:0px">Period of Employment</td>
+                    <td colspan="3"><apex:outputField value="{!FormRequest__c.FormRequest_JoinDate__c}"/> ~ Present</td>
+                </tr>
+                <tr>
+                    <td style="padding:0px">Use of<br/>Certificate</td>
+                    <td>{!FormRequest__c.FormRequest_Purpose__c}</td>
+                    <td>Submit To</td>
+                    <td>{!FormRequest__c.FormRequest_ToSubmit__c}</td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <br/><br/><br/><br/>
+                        This is to certify that the above mentioned fact is true and correct.
+                        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                        <apex:outputField value="{!FormRequest__c.FormRequest_Date__c}"/>
+                        <br/><br/><br/><br/><br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <br/>
+                        1504, 1505, 1506, 1507, 1508, 1509, 1510, 34 Sangwon 12-gil, Seongdong-gu, Seoul<br/>
+                        <b style="font-size : 18px;">Inc . DaeU nextier</b><br/>
+
+                        <div  class="container">
+                            <b style="font-size : 14px;">CEO LEE EUNGDO</b><apex:image styleClass="bottom-right" value="{!$Resource.ComSeal}" width="64px" height="64px" />
+                        </div>
+                        <br/>
+                        220-88-53899
+                        <br/><br/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <script>
+    var delay = ( function() {
+        var timer = 0;
+        return function(callback, ms) {
+            clearTimeout (timer);
+            timer = setTimeout(callback, ms);
+        };
+    })();
+    if(status == '승인완료'){
+        delay(function(){
+            window.print();window.history.back();window.close();
+        }, 200 );
+
+    }
+    </script>
+</apex:page>

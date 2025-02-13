@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ShortName__c</fullName>
+    <externalId>false</externalId>
+    <inlineHelpText>거래처를 식별할 수 있는 10자 이내의 짧은 명칭을 입력하세요.
+계정 이름(Account.Name)은 사업자 등록증 상의 정식 명칭입니다.</inlineHelpText>
+    <label>계정 이름(약어)</label>
+    <length>20</length>
+    <required>true</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

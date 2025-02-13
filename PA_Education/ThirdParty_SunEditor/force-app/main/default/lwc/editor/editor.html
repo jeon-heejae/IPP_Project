@@ -1,0 +1,11 @@
+<template>
+    <lightning-card title="SunEditor Example" icon-name="utility:edit">
+        <div>
+            <div class="editor-container" lwc:dom="manual"></div>
+        </div>
+        <lightning-button-group>
+            <lightning-button label="Save Content" variant="brand" onclick={handleSave}></lightning-button>
+            <lightning-button label="Load Content" variant="neutral" onclick={handleLoad}></lightning-button>
+        </lightning-button-group>
+    </lightning-card>
+</template>

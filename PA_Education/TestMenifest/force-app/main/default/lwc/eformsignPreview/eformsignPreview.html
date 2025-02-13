@@ -1,0 +1,22 @@
+<!--
+ - Created by hs.jung on 2024-05-31.
+ -->
+<!-- Eformsign Preview -->
+<template>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+             aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open" >
+        <div class="slds-modal__container" style="width: 88vw; height: 100%; max-width: 88.3%">
+            <div class="custom-modal-wrap" style=height:100%>
+                <div class="button">
+                    <button class="slds-button slds-modal__close" onclick={closeModalButton}>
+                        <lightning-icon variant="inverse" icon-name="utility:close" size="medium"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                </div>
+                <div class="modal-body" style=height:100%>
+                    <iframe class="eformsign-modal" src={iframeSrc} style="height:85vh;width: 80vw;"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+</template>

@@ -1,0 +1,300 @@
+<!--
+* ==================================================================================
+*   File Name   : EmployeeEvaluation.cmp
+*   Author      : yj.kim
+*   Date        : 2023.07.04
+*   Description : 프로젝트 투입인력 평가서 화면
+* ==================================================================================
+*   Ver     Date            Author          Modification
+* ==================================================================================
+*   1.0     2023.07.04      yj.kim    Create
+* ==================================================================================
+-->
+
+<aura:component description="EmployeeEvaluation" controller="EmployeeEvaluationBtnController" implements="force:hasRecordId,force:lightningQuickActionWithoutHeader">
+
+    <!-- attribute -->
+    <aura:attribute name="recordId"        type="String"/>
+    <aura:attribute name="isShowSpinner"   type="Boolean"   default="false"/>
+
+    <aura:attribute name="projectName"     type="String"    description="프로젝트 이름"/>
+    <aura:attribute name="inList"          type="List"      default="[]" description="내부직원 리스트"/>
+    <aura:attribute name="exList"          type="List"      default="[]" description="외부직원 리스트"/>
+    <aura:attribute name="comboBox"        type="List"      default="[  {'label': 'S', 'value': 'S'},
+                                                                       {'label': 'A', 'value': 'A'},
+                                                                       {'label': 'B', 'value': 'B'},
+                                                                       {'label': 'C', 'value': 'C'}]"/>
+
+    <aura:attribute name="firstEvaluation" type="Boolean" default="false" description="1차평가여부"/>
+    <aura:attribute name="isIn"            type="Boolean" default="false" description="내부직원 리스트 유무"/>
+    <aura:attribute name="isEx"            type="Boolean" default="false" description="외부직원 리스트 유무"/>
+
+    <!-- handler -->
+    <aura:handler name="init" value="{!this}" action="{!c.fnInit}"/>
+
+    <section>
+        <aura:if isTrue="{!v.isShowSpinner}">
+            <lightning:spinner alternativeText="Loading" size="large" variant="brand"/>
+        </aura:if>
+        <div class="slds-page-header slds-page-header_record-home" style="padding-top:5px; padding-bottom:12px; margin-bottom:10px;">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media" style="margin-top: 6px;">
+                        <div class="slds-media__figure">
+                      <span class="slds-icon_container slds-icon-standard-product" style="margin-top:3.5px;">
+                          <lightning:icon iconName="standard:order_item" alternativeText="order_item" title="order_item" size="small"/>
+                      </span>
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <span class="slds-page-header__title slds-truncate" style="font-size:20px; margin-top:3.5px; font-weight:bold;">
+                                        프로젝트 투입인력 평가서
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-page-header__col-actions">
+                    <div class="slds-page-header__controls">
+                        <div class="slds-page-header__control">
+                        </div>
+                        <div class="slds-page-header__control">
+                            <ul class="slds-button-group-list">
+                                <li style="margin-top:5.5px;">
+                                    <lightning:button variant="Neutral" label="저장" title="Save" onclick="{!c.fnSave}"/>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div style="padding-right:30px; padding-left:30px; padding-bottom:150px;">
+            <div style="margin-bottom:10px;">
+                <div style="width:10%; float:left; font-weight:bold; text-align:center; border:1px solid black; font-size:16px;">
+                    프로젝트 명
+                </div>
+                <div style="width:90%; float:left; font-weight:bold; padding-left:30px; font-size:16px;">
+                    {!v.projectName}
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+
+            <div style="margin-bottom:10px;">
+                <table style="border-collapse:collapse; border:1px solid black; table-layout:fixed;">
+                    <tr style="border:1px solid black;">
+                        <th style="border:1px solid black; text-align:center;">구분</th>
+                        <th style="border:1px solid black; text-align:center;">S</th>
+                        <th style="border:1px solid black; text-align:center;">A</th>
+                        <th style="border:1px solid black; text-align:center;">B</th>
+                        <th style="border:1px solid black; text-align:center;">C</th>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid black; text-align:center;">Competency</td>
+                        <td style="border:1px solid black;">프로그래밍 능력등 수행능력이 탁월하여<br/>추후 당사 직원으로도 영입을 추천하고 싶은 인재</td>
+                        <td style="border:1px solid black;">수행능력이 우수하여 프로젝트 종료후에<br/> 차기 프로젝트 투입을 적극 추전함</td>
+                        <td style="border:1px solid black;">금번 수행 프로젝트 진행에 무리가 없으나<br/> 프로젝트 종료후 철수를 희망함</td>
+                        <td style="border:1px solid black;">수행능력이 미흡하여 중도 철수가 필요함</td>
+                    </tr>
+                    <tr style="border:1px solid black;">
+                        <td style="border:1px solid black; text-align:center;">Communication Skill<br/>(소통능력)</td>
+                        <td style="border:1px solid black;" rowspan="4">적극적인 업무태도,고객과의 원활한 소통, 팀화합, 출근시간 준수등이 매우 우수함</td>
+                        <td style="border:1px solid black;" rowspan="4">좌기 첫 항의 항목에 대해 우수함</td>
+                        <td style="border:1px solid black;" rowspan="4">좌기 첫 항의 항목에 대해 보통임</td>
+                        <td style="border:1px solid black;" rowspan="4">좌기 첫 항의 항목에 대해 미흡함</td>
+                    </tr>
+                    <tr style="border:1px solid black;">
+                        <td style="border:1px solid black; text-align:center;">Cooperation<br/>(협업)</td>
+                    </tr>
+                    <tr style="border:1px solid black;">
+                        <td style="border:1px solid black; text-align:center;">Passion<br/>(열정,적극성)</td>
+                    </tr>
+                    <tr style="border:1px solid black;">
+                        <td style="border:1px solid black; text-align:center;">Attitude<br/>(업무수행 태도,자세)</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- 내부직원 -->
+            <aura:if isTrue="{!v.isIn == true}">
+            <div style="padding-bottom:15px;">
+                <h3 class="slds-section__title slds-theme_shade slds-clearfix">
+                    <span class="slds-truncate slds-p-left_x-small" style="box-sizing:border-box;">내부직원</span>
+                </h3>
+            </div>
+            <div class="borderBox">
+                ■ 개요(목적) <br/>
+                ㅇ프로젝트별 투입인력 (외주직원 포함)에 대한 평가를 통해 내부직원은 승진, 인센티브 지급 등의 자료로 활용하고 외주직원은 프로젝트 종료후 후속프로젝트 지속 투입여부를 판단하는 기초자료로 활용코자 함. <br/>
+                ㅇ평가자는 부장급 이상 PM으로 하고, 필요시 직급에 상관없이 평가를 요청, 참고자료로 활용 <br/>
+                ㅇ평가시기는 프로젝트 종료후 2주 내에 실시하는 것을 원칙으로 함  (※ 평가대상은 정직원으로 한하며 수습사원, IPP등은 제외)
+            </div>
+            <div align="right" style="padding-bottom:5px;">
+                ※ 평가 기준 /  S : 탁월,  A : 우수,  B : 보통,  C : 미흡 <br/>
+                <span style="font-weight:bold;">- 프로젝트 팀 구성 시 팀원에 포함하고 싶다(S, A), 배제하고 싶다(C)</span>
+            </div>
+
+            <div style="margin-bottom:15px;">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered" style="table-layout:fixed">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th scope="col" style="width:5%;">
+                                <div class="slds-truncate textCenter">이름</div>
+                            </th>
+                            <th scope="col" style="width:5%;">
+                                <div class="slds-truncate textCenter">역할</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate textCenter">참여기간</div>
+                            </th>
+                            <th scope="col" style="width:10%;">
+                                <div class="slds-truncate textCenter"><span style="color:red;">* </span>Competency<br/>(프로젝트 수행능력)</div>
+                            </th>
+                            <th scope="col" style="width:10%;">
+                                <div class="slds-truncate textCenter"><span style="color:red;">* </span>Communication Skill<br/>(소통능력)</div>
+                            </th>
+                            <th scope="col" style="width:10%;">
+                                <div class="slds-truncate textCenter"><span style="color:red;">* </span>Cooperation<br/>(협업)</div>
+                            </th>
+                            <th scope="col" style="width:10%;">
+                                <div class="slds-truncate textCenter"><span style="color:red;">* </span>Passion<br/>(열정,적극성)</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate textCenter"><span style="color:red;">* </span>Attitude<br/>(업무수행 태도,자세)</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate textCenter">기타 수행업무</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate textCenter">
+                                    <span style="color:red;">*</span>평가자의견
+                                    <lightning:helptext content="피평가자의 장점 및 단점, 업무수행능력을 구체적으로 작성 부탁드립니다."></lightning:helptext>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.inList}" var="item" indexVar="index">
+                            <tr class="slds-line-height_reset">
+                                <td>{!item.employeeName}</td>
+                                <td>{!item.mainRole}</td>
+                                <td class="textCenter">{!item.fromDate} ~ {!item.toDate}</td>
+                                <td>
+                                    <lightning:combobox options="{!v.comboBox}" value="{!item.competency}" class="label-hidden"/>
+                                </td>
+                                <td>
+                                    <lightning:combobox options="{!v.comboBox}" value="{!item.communication}" class="label-hidden"/>
+                                </td>
+                                <td>
+                                    <lightning:combobox options="{!v.comboBox}" value="{!item.cooperation}" class="label-hidden"/>
+                                </td>
+                                <td>
+                                    <lightning:combobox options="{!v.comboBox}" value="{!item.passion}" class="label-hidden"/>
+                                </td>
+                                <td>
+                                    <lightning:combobox options="{!v.comboBox}" value="{!item.attitude}" class="label-hidden"/>
+                                </td>
+                                <td>
+                                    <lightning:input type="text" maxlength="255" value="{!item.addWork}" variant="label-hidden"/>
+                                </td>
+                                <td>
+                                    <lightning:input type="text" maxlength="255" value="{!item.addComment}" variant="label-hidden"/>
+                                </td>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </div>
+            </aura:if>
+
+            <!-- 외부직원 -->
+            <aura:if isTrue="{!v.isEx == true}">
+            <div style="padding-bottom:15px;">
+                <h3 class="slds-section__title slds-theme_shade slds-clearfix">
+                    <span class="slds-truncate slds-p-left_x-small" style="box-sizing:border-box;">외부직원</span>
+                </h3>
+            </div>
+
+            <div style="padding-bottom:10px;">
+                ★ 당사 프로젝트에 투입된 외주직원에 대해 프로젝트 투입 2~3주 경과시 (1차) 및 프로젝트 종료시(2차) 본 평가를 통해 계약해지 또는 차기프로젝트 지속 투입여부를 판단하기 위함. (평가자 : PM 또는 담당팀장) <br/>
+                ★ Competency 가 B 또는 C등급의 경우에 Attitude가 S등급인 인력은 인터뷰를 통해 당사 직원으로 영입을 고려하는 것도 바람직하다고 판단됨.
+            </div>
+
+            <div style="margin-bottom:15px;">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                    <thead>
+                    <tr class="slds-line-height_reset">
+                        <th scope="col" style="width:5%;">
+                            <div class="slds-truncate textCenter">이름</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate textCenter">소속사</div>
+                        </th>
+                        <th scope="col" style="width:15%;">
+                            <div class="slds-truncate textCenter">참여기간</div>
+                        </th>
+                        <th scope="col" style="width:10%;">
+                            <div class="slds-truncate textCenter"><span style="color:red;">* </span>Competency<br/>(프로젝트 수행능력)</div>
+                        </th>
+                        <th scope="col" style="width:10%;">
+                            <div class="slds-truncate textCenter"><span style="color:red;">* </span>Communication Skill<br/>(소통능력)</div>
+                        </th>
+                        <th scope="col" style="width:10%;">
+                            <div class="slds-truncate textCenter"><span style="color:red;">* </span>Cooperation<br/>(협업)</div>
+                        </th>
+                        <th scope="col" style="width:10%;">
+                            <div class="slds-truncate textCenter"><span style="color:red;">* </span>Passion<br/>(열정,적극성)</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate textCenter"><span style="color:red;">* </span>Attitude<br/>(업무수행 태도,자세)</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate textCenter">기타 수행업무</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate textCenter">
+                                <span style="color:red;">*</span>평가자의견
+                                <lightning:helptext content="피평가자의 장점 및 단점, 업무수행능력을 구체적으로 작성 부탁드립니다."></lightning:helptext>
+                            </div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.exList}" var="item" indexVar="index">
+                            <tr class="slds-line-height_reset">
+                                <td>{!item.employeeName}</td>
+                                <td style="text-align:center;">{!item.mainRole}</td>
+                                <td style="text-align:center;">{!item.fromDate} ~ {!item.toDate}</td>
+                                <td>
+                                    <lightning:combobox options="{!v.comboBox}" value="{!item.competency}" class="label-hidden"/>
+                                </td>
+                                <td>
+                                    <lightning:combobox options="{!v.comboBox}" value="{!item.communication}" class="label-hidden"/>
+                                </td>
+                                <td>
+                                    <lightning:combobox options="{!v.comboBox}" value="{!item.cooperation}" class="label-hidden"/>
+                                </td>
+                                <td>
+                                    <lightning:combobox options="{!v.comboBox}" value="{!item.passion}" class="label-hidden"/>
+                                </td>
+                                <td>
+                                    <lightning:combobox options="{!v.comboBox}" value="{!item.attitude}" class="label-hidden"/>
+                                </td>
+                                <td>
+                                    <lightning:input type="text" maxlength="255" value="{!item.addWork}" variant="label-hidden"/>
+                                </td>
+                                <td>
+                                    <lightning:input type="text" maxlength="255" value="{!item.addComment}" variant="label-hidden"/>
+                                </td>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </div>
+            </aura:if>
+    </div>
+    </section>
+</aura:component>

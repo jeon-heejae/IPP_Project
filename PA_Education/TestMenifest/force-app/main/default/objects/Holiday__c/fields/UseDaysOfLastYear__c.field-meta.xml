@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>UseDaysOfLastYear__c</fullName>
+    <defaultValue>0</defaultValue>
+    <description>대유넥스티어 연차 계산법 기준이 회계연도로 변경되어 필드 생성 (생성일: 2022-12-27, 생성자: hyunsoo.song@daeunextier.com)
+
+* 필드 설명
+이 필드는 매년 12월 31일 23시 00분에 &apos;HolidayLastYearUpdate 매년 12월 31일 업데이트&apos; 스케줄러로 업데이트됨.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>전년도에 발생한 연월차 사용일수 - 전년도 추가부여일수</inlineHelpText>
+    <label>전년도 연월차 사용일수</label>
+    <precision>3</precision>
+    <required>false</required>
+    <scale>1</scale>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

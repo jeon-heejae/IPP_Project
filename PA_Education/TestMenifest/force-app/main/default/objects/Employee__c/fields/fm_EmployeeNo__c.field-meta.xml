@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>fm_EmployeeNo__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( TEXT(Type__c) = &apos;내부직원&apos;, 
+&quot;D&quot;&amp;&quot;U&quot;&amp;MID(TEXT(JoinDate__c),3,2)&amp;RIGHT(Auto__c,3),
+&quot;O&quot;&amp;&quot;S&quot;&amp;MID(TEXT(YEAR(DATEVALUE(CreatedDate))),3,2)&amp;RIGHT(Auto__c,3)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>사번(사용X)</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

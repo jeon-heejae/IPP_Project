@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ParentInventory__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>현재 재고가 Tray나 Box로 보관중일 경우 어떤 Tray 또는 Box 인지?</description>
+    <inlineHelpText>현재 재고가 Tray나 Box로 보관중일 경우 어떤 Tray 또는 Box 인지?</inlineHelpText>
+    <label>상위재고</label>
+    <referenceTo>Inventory__c</referenceTo>
+    <relationshipLabel>재고</relationshipLabel>
+    <relationshipName>ChildInventory</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

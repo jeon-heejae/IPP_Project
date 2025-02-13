@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DoNotChange_StatusToCancel</fullName>
+    <active>true</active>
+    <errorConditionFormula>IF( AND(ISCHANGED( Status__c ), 
+								OR( TEXT(PRIORVALUE(Status__c)) = &apos;신청&apos;,
+												TEXT(PRIORVALUE(Status__c)) = &apos;실패&apos;)
+							),
+			 TEXT(Status__c) = &apos;취소&apos;,
+			FALSE
+			)</errorConditionFormula>
+    <errorDisplayField>Status__c</errorDisplayField>
+    <errorMessage>상태가 &apos;신청&apos; 혹은 &apos;실패&apos;일 경우 &apos;취소&apos;로 변경할 수 없습니다.</errorMessage>
+</ValidationRule>

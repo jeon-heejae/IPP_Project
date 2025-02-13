@@ -1,0 +1,66 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes">
+	
+	<aura:attribute name="listApprover"     type="List"    />
+	<aura:attribute name="listAppName"		type="List"    />
+	<aura:attribute name="sPendingUser"     type="String"  />
+	<aura:attribute name="bIsCreatePath"    type="Boolean" />
+
+
+	<aura:attribute name="iPending"			type="Integer" description="리스트에서 pending 갖고 있는 사람의 인덱스"/>
+	<aura:attribute name="listObj"			type="List" />
+	
+	<aura:handler  event="c:ApprovalHistory_evt" action="{!c.fnInit}"/>
+	<aura:handler  name="change" value="bIsCreatePath" action="{!c.fnInit}" />
+
+	<aura:dependency resource="markup://force:refreshView" type="EVENT" />
+	<aura:handler event="force:refreshView" action="{!c.fnInit}" />
+	<!-- contents -->
+	<article class="slds-card">
+		<div class="slds-card__body slds-card__body_inner">
+			<div class="slds-path">
+				<div class="slds-grid slds-path__track">
+					<div class="slds-grid slds-path__scroller-container">
+						<div class="slds-path__scroller" role="application">
+							<div class="slds-path__scroller_inner">
+								<ul class="slds-path__nav" role="listbox" aria-orientation="horizontal">
+									<span class="slds-path__link">{!$Label.c.Approval_Progress} </span> &nbsp;&nbsp;
+									<aura:iteration items="{!v.listObj}" var="approver" indexVar="idx" end="{!v.iPending+1}">
+										<aura:if isTrue="{!v.sPendingUser != approver.Id}" >
+											<li class="slds-path__item slds-is-complete" role="presentation">
+												<a aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-6" role="option" tabindex="-1">
+													<span class="slds-path__stage">
+														<!-- 아이콘 넣기v -->
+														<lightning:icon iconName="utility:check" size="x-small" class="custom_check" />
+													</span>
+													<span class="slds-path__title">{!approver.Name}</span>
+												</a>
+											</li>
+											<aura:set attribute="else">
+												<li class="slds-path__item slds-is-current slds-is-active" role="presentation">
+													<a aria-selected="true" class="slds-path__link" href="javascript:void(0);" id="path-9" role="option" tabindex="0">
+														<span class="slds-path__stage">
+															<span class="slds-assistive-text">Current Stage:</span>
+														</span>
+														<span class="slds-path__title">{!approver.Name}</span>
+													</a>
+												</li>
+											</aura:set> 
+										</aura:if>
+									</aura:iteration>
+
+									<aura:iteration items="{!v.listObj}" var="approver" start="{!v.iPending+1}">
+											<li class="slds-path__item slds-is-incomplete" role="presentation">
+												<a aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-10" role="option" tabindex="-1">
+												<span class="slds-path__title">{!approver.Name}</span>
+											</a>
+										</li>
+									</aura:iteration>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</article>
+</aura:component>

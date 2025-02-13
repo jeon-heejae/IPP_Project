@@ -1,0 +1,30 @@
+/**
+ * Created by mnjk3 on 2024-06-05.
+ */
+.content_wrap {
+  position: relative;
+  width: 100%;
+  margin-top: 220px;
+}
+
+.page_main .content_inner {
+  text-align: center;
+}
+
+.page_main .btn_common {
+  display: inline-block;
+  min-width: 320px;
+  height: 50px;
+  padding: 0;
+  line-height: 50px;
+}
+.content_inner {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.page_main .content_inner {
+  text-align: center;
+}

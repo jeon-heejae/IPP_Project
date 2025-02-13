@@ -1,0 +1,25 @@
+<!--
+ - Created by hs.jung on 2024-05-31.
+ -->
+<template>
+    <lightning-card title="삭제 확인" icon-name="action:delete" if:false={isLoading}>
+        <template if:false={isLoading}>
+            <div class="slds-m-around_medium"  style="text-align:center;">
+                <p>이 문서({recordId})를 정말 삭제하시겠습니까? </p>
+
+                <div class="slds-m-top_medium">
+                    <lightning-button label="예" variant="destructive" onclick={deleteRecord}></lightning-button>
+                    <lightning-button label="아니오" variant="neutral" onclick={closeComponent} class="slds-m-left_small"></lightning-button>
+                </div>
+            </div>
+        </template>
+    </lightning-card>
+
+    <lightning-card title="삭제 중" icon-name="action:delete" if:true={isLoading}>
+        <template if:true={isLoading}>
+            <div class="slds-m-around_medium">
+                <lightning-spinner alternative-text="처리 중..." size="medium"></lightning-spinner>
+            </div>
+        </template>
+    </lightning-card>
+</template>

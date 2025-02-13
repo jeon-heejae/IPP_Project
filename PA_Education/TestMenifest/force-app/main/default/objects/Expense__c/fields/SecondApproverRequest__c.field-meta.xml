@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SecondApproverRequest__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <inlineHelpText>1차 승인자에 따라 자동으로 할당</inlineHelpText>
+    <label>2차 승인자 지정</label>
+    <referenceTo>User</referenceTo>
+    <relationshipName>SecondApproverRequest</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

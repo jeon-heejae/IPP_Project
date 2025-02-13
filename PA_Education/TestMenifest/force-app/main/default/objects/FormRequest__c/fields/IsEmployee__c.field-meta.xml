@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>IsEmployee__c</fullName>
+    <defaultValue>false</defaultValue>
+    <inlineHelpText>증명서 발급 시 사원정보와 동일하게 출력</inlineHelpText>
+    <label>사원정보 동일</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>fm_Holiday_rewardRemainDays__c</fullName>
+    <description>2023-12-14 Holiday_rewardRemainDays__c 사용하지 않고 해당 formula 필드로 사용 예정</description>
+    <externalId>false</externalId>
+    <formula>Holiday_reward_Total_Count__c - Holiday_rewardDays__c - Holiday_BenefitPaymentDays__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>총 대체휴가일수 - 대체휴가 사용일수 - 대체휴가 수당 지급일수</inlineHelpText>
+    <label>대체휴가 잔여일수</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,40 @@
+.THIS.alignCenter[readonly] input {
+	text-align:center;
+
+}
+
+.THIS .nonLabel > td > div > div > label{
+	display: none;
+}
+
+.THIS .nonLabel2 > td > div > lightning-input> label{
+	display: none;
+}
+.THIS .nonLabel3 > td > lightning-input> label{
+	display: none;
+}
+.THIS.inputRichTextAdjust > div > div> div > div .slds-rich-text-editor__toolbar.slds-shrink-none{
+	display: none;
+}
+
+.THIS textarea  {
+    height:100px !important;
+}
+
+.THIS .alignRight input{
+	text-align: right;
+}
+
+.THIS .alignRightOutput span{
+	text-align: right;
+}
+
+.THIS.themeShade > section > div > h2 > button {
+	background-color: rgb(243, 242, 242);
+} 
+/*.THIS.labelNone > label.slds-form-element__label.slds-no-flex{
+	display:none;
+}*/
+.THIS.slds-button.slds-button_reset.slds-accordion__summary-action {
+	background-color: rgb(243, 242, 242);
+}

@@ -1,0 +1,84 @@
+.THIS .slds-form-element__label {
+	display: none;
+}
+/* Div Table CSS */
+/* .THIS .divTableDeleteCheckBox { text-align: right; vertical-align: middle !important; }
+.THIS .divTableCheckBox { text-align: center; vertical-align: middle !important; }
+.THIS .divTable { display: table; width: 100%; }
+.THIS .divTableTR { display: table-row; }
+.THIS .divTableCell { display: table-cell; padding: 7px 15px 5px 8px; border-bottom: 1px solid rgb(221, 219, 219); vertical-align: top; }
+.THIS .divTableCellInfo { display: table-cell; padding: 0px 15px 5px 0; border-bottom: 1px solid rgb(221, 219, 219); vertical-align: top; }
+.THIS .divTableTDCol1 { width: 2%; padding: 12px 0 0 20px;}
+.THIS .divTableTDCol2 { width: 10%; }
+.THIS .divTableTDCol3 { width: 10%; }
+.THIS .divTableTDCol4 { width: 5%; }
+.THIS .divTableTDCol5 { width: 10%; }
+.THIS .divTableTDCol6 { width: 10%; }
+.THIS .divTableTDCol7 { width: 10%; }
+.THIS .divTableTDCol8 { width: 20%; } */
+
+ /*.THIS .slds-datepicker .slds-day {
+	display : contents;
+	position: absolute;
+	z-index: 3000;
+	left: -0.71875px;    
+}
+.THIS .slds-datepicker .slds-dropdown .slds-dropdown_left{
+	display : contents;
+	position: absolute;
+	z-index: 4500;
+	left: -0.71875px;    
+} */
+
+.THIS .slds-datepicker td {
+    padding: .25rem !important;
+}
+
+.THIS .slds-datepicker .slds-datepicker__month tr>th:first-child {
+    padding-left: unset;
+}
+
+.THIS .slds-datepicker .slds-datepicker__month tr>th:last-child {
+    padding-right: unset;
+}
+
+.THIS .rightAlign input { 
+    text-align: right;
+}
+.THIS .slds-modal__container.customDSize{
+    max-width:60% !important;
+    min-width:60% !important;
+    /*max-height: 60% !important;*/
+    /*min-height: 60% !important;*/
+}
+
+.THIS .cellBorder{
+    border:1px solid #ddd;
+}
+
+.THIS .cellBorder-bottom{
+    border-bottom : 1px solid #ddd;
+}
+
+.THIS .cellPadding{
+    padding : 10px 5px 10px 5px;
+}
+
+.THIS .th_color{
+    color: white;
+    background-color: #1D3863;
+}
+
+.THIS th{
+    text-align : center;
+}
+
+.THIS .font-red{
+    color : red;
+    font-weight : bold;
+}
+
+.THIS .font-blue {
+    color : blue;
+    font-weight : bold;
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>fm_IsPayment__c</fullName>
+    <formula>IF(
+(fm_Level__c) = &apos;L4&apos;,true,
+if((fm_Level__c ) = &apos;L3&apos; &amp;&amp; Addmonths( fm_CertificatedDate__c ,25)&gt;= today(),true , 
+if((fm_Level__c ) = &apos;L2&apos; &amp;&amp; Addmonths(fm_CertificatedDate__c ,13)&gt;= today(), true,  
+if((fm_Level__c ) = &apos;L1&apos; &amp;&amp; Addmonths(fm_CertificatedDate__c ,7)&gt;= today(),true,
+false
+)
+)
+)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>수당 지급</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

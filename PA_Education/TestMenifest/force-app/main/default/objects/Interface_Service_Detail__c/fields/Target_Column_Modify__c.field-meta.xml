@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Target_Column_Modify__c</fullName>
+    <description>대상필드값을 조정하기 위한 함수수식을 기재(사용안함)</description>
+    <externalId>false</externalId>
+    <inlineHelpText>대상필드값을 조정하기 위한 함수수식을 기재(사용안함)</inlineHelpText>
+    <label>대상필드조정함수</label>
+    <length>100</length>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

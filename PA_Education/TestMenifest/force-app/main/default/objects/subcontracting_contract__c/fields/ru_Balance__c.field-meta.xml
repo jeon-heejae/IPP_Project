@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ru_Balance__c</fullName>
+    <label>잔금</label>
+    <summarizedField>Payment_Schedule__c.Payment_due__c</summarizedField>
+    <summaryFilterItems>
+        <field>Payment_Schedule__c.Type__c</field>
+        <operation>equals</operation>
+        <value>잔금</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Payment_Schedule__c.subcontracting_contract__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

@@ -1,0 +1,32 @@
+.THIS .nonLabel > td > lightning-input  > span {
+	display: none;
+}
+.THIS .nonLabel1 > td > label {
+	display: none;
+}
+
+.THIS .nonLabel2 > td > lightning-input > lightning-datepicker > div > label {
+	display: none;
+}
+.THIS .nonLabel3 > td > lightning-input > label {
+	display: none;
+}
+.THIS .cutPadding .slds-accordion__section {
+	padding: .25rem;
+}
+.THIS  .cutLabel > td > div > div > lightning-input {
+	margin-top: 0.25rem;
+}
+
+.THIS .centerAlign input{
+	text-align: center;
+}
+
+.THIS .slds-th__action{ justify-content: center !important; }
+
+.THIS .container-fluid {
+   position: relative;
+   overflow: auto;
+   max-height: 60vh;
+   height: 60vh;
+}

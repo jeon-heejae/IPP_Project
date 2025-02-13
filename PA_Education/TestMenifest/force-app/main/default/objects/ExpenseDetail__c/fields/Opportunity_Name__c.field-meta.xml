@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_Name__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <inlineHelpText>영업 관련 비용은 해당 영업기회를 선택하세요.</inlineHelpText>
+    <label>영업기회</label>
+    <referenceTo>Opportunity__c</referenceTo>
+    <relationshipName>ExpenseDetail_Oppty</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

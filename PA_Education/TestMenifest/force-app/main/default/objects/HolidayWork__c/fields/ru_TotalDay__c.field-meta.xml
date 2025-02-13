@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ru_TotalDay__c</fullName>
+    <description>계획취소 승인프로세스 실행 조건에 넣기 위해 근무시간 입력한 휴일근무 상세 Count</description>
+    <label>근무시간 입력한 휴일근무 상세 Count</label>
+    <summaryFilterItems>
+        <field>HolidayWorkDetail__c.WorkingTime__c</field>
+        <operation>notEqual</operation>
+        <value></value>
+    </summaryFilterItems>
+    <summaryForeignKey>HolidayWorkDetail__c.HolidayWork__c</summaryForeignKey>
+    <summaryOperation>count</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ThisMonth_Expense</fullName>
+    <columns>UseYear__c</columns>
+    <columns>UseMonth__c</columns>
+    <columns>NAME</columns>
+    <columns>CREATEDBY_USER</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>TotalAmount__c</columns>
+    <columns>ApprovalStatus__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>UseYear__c</field>
+        <operation>equals</operation>
+        <value>2020</value>
+    </filters>
+    <filters>
+        <field>CREATED_DATE</field>
+        <operation>equals</operation>
+        <value>THIS_MONTH</value>
+    </filters>
+    <label>관리자용_이번달 경비신청 현황</label>
+    <sharedTo>
+        <role>CEO</role>
+    </sharedTo>
+</ListView>

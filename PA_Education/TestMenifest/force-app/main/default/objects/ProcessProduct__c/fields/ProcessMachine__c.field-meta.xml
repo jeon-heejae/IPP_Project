@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ProcessMachine__c</fullName>
+    <label>공정기계 정보</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>001공정기계1</fullName>
+                <default>true</default>
+                <label>001공정기계1</label>
+            </value>
+            <value>
+                <fullName>002공정기계2</fullName>
+                <default>false</default>
+                <label>002공정기계2</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

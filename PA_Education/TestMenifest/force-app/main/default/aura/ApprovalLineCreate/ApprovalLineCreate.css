@@ -1,0 +1,26 @@
+.THIS .custom-approvalline-wide {
+	width: 100%;
+}
+
+.THIS .slds-form-element_horizontal .slds-form-element__control{
+	padding-left: 0;
+} 
+.THIS .slds-form_horizontal .slds-form-element .slds-form-element__control{
+	padding-left: 0;
+} 
+.THIS .slds-form_stacked .slds-form-element_horizontal .slds-form-element__control{
+	padding-left: 0;
+}
+.THIS .custom-icon-center {
+	margin-top: 1.8%;
+	/*padding: 10px;*/
+}
+
+.THIS .slds-section__title {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    line-height: 1.875rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}

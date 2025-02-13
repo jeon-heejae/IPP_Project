@@ -1,0 +1,14 @@
+.THIS .custom_reassignArea {
+    margin-bottom: 10px;
+}
+
+.THIS #dataTable td {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+    overflow: hidden;    
+}
+
+.THIS .custom_spinner .slds-spinner_container {
+    background-color: transparent;
+}

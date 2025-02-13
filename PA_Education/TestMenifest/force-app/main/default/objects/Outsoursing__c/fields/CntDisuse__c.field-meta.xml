@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CntDisuse__c</fullName>
+    <label>폐기수량</label>
+    <summarizedField>OutsoursingResult__c.CntDisuse__c</summarizedField>
+    <summaryForeignKey>OutsoursingResult__c.Outsoursing__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

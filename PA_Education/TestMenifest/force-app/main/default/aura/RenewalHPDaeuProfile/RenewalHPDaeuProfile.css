@@ -1,0 +1,215 @@
+.THIS {
+	width: 100%;
+    height: auto;
+    background: #ffffff;
+}
+
+.THIS .contents {
+    width: 1000px;
+    height: auto;
+    margin: 0 auto;
+    padding: 120px 0;
+}
+
+.THIS .pageTitle {
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 30px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.THIS h1 {
+    font-size: 44px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 62px;
+    letter-spacing: -2px;
+    text-align: center;
+    /*color: rgba(0, 0, 0, 0.85);*/
+    margin-top: 80px;
+}
+
+.THIS .textDeepBlue {
+    color: #179FE0;
+}
+
+.THIS .textLightBlue {
+    color: #179FE0;
+}
+
+.THIS h1 b {
+    font-weight: 400;
+}
+
+.THIS h2 {
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 43px;
+    letter-spacing: -1px;
+    text-align: center;
+    margin-top: 32px;
+}
+
+.THIS .history {
+    width: 100%;
+    margin-top: 40px;
+}
+
+.THIS .history .historyItem {
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.THIS .history .historyItem .historyYear {
+    width: 50%;
+    float: left;
+    text-align: center;
+    font-size: 120px;
+    font-weight: 200;
+    color: rgba(0, 0, 0, 0.2);
+}
+
+.THIS .historyYear.thisYear {
+    color: rgba(23, 159, 224, 0.4) !important;
+}
+
+.THIS .clearfix {
+    clear: both;
+}
+
+.THIS .historyItems {
+    width: 50%;
+    height: 100%;
+    min-height: 180px;
+    float: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.THIS .historyItems li {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24.52px;
+    color: #179FE0;
+    padding-left: 40.5px;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.THIS .historyItems li::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 20px;
+    border: 6px solid #58C3F5;
+    position: absolute;
+    left: 0;
+    top: 35%;
+}
+
+.THIS .profileTitle {
+    font-size: 32px;
+    font-weight: 400;
+    width: 700px;
+    margin: 200px auto 30px auto;
+    color: #179FE0;
+    text-align: center;
+}
+
+.THIS .profileTitle b {
+    font-weight: 400;
+}
+
+.THIS .profileTitle hr {
+    width: 100%;
+    height: 2px;
+    border: none;
+    background: linear-gradient(90deg, rgba(23, 159, 224, 0) 0%, #179FE0 48.44%, rgba(23, 159, 224, 0) 100%);
+}
+
+@media (min-width: 769px) {
+    .THIS .is_mobile {
+        display: none !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .THIS .is_pc {
+        display: none !important;
+    }
+    
+    .THIS .contents {
+        width: calc(100% - 40px);
+        height: auto;
+        margin: 0 20px;
+        padding: 56px 0;
+    }
+    
+    .THIS .pageTitle {
+        font-size: 16px;
+        line-height: 24px;
+    }
+    
+    .THIS h1 {
+        font-size: 28px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 39.2px;
+        letter-spacing: -2px;
+        text-align: left;
+        color: rgba(0, 0, 0, 0.85);
+        margin-top: 56px;
+        word-break: break-word;
+    }
+    
+    .THIS h2 {
+        font-size: 20px;
+        line-height: 36px;
+        text-align: left;
+        word-break: break-word;
+    }
+    
+    .THIS .history {
+        margin-top: 56px;
+    }
+    
+    .THIS .historyItem {
+        margin-bottom: 16px;
+    }
+    
+    .THIS .history .historyItem .historyYear {
+        width: 100%;
+        float: none;
+        text-align: left;
+        font-size: 24px;
+        font-weight: 30;
+        color: rgba(23, 159, 224, 0.4);
+        margin-bottom: 20px;
+    }
+    
+    .THIS .historyItems {
+        width: 100%;
+        height: auto;
+        min-height: initial;
+        float: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .THIS .profileTitle {
+        font-size: 24px !important;
+        font-weight: 400;
+        width: 100% !important;
+        margin: 56px auto !important;
+        color: #179FE0;
+        text-align: left !important;
+        word-break: keep-all !important;
+    }
+}

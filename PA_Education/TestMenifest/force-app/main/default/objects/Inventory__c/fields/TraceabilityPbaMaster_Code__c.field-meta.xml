@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>TraceabilityPbaMaster_Code__c</fullName>
+    <description>TRA_PBA.PBAMASTER_CODE
+연계에서 Item과 연결하기 위하여 사용함</description>
+    <externalId>false</externalId>
+    <label>TraceabilityPbaMaster_Code</label>
+    <length>100</length>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Target__c</fullName>
+    <description>과정 수강자 대상</description>
+    <label>과정 대상</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Administrator</fullName>
+                <default>true</default>
+                <label>Administrator</label>
+            </value>
+            <value>
+                <fullName>Developer</fullName>
+                <default>false</default>
+                <label>Developer</label>
+            </value>
+            <value>
+                <fullName>시스템 관리자</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>시스템 관리자</label>
+            </value>
+            <value>
+                <fullName>컨설턴트</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>컨설턴트</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

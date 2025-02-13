@@ -1,0 +1,13 @@
+<design:component label="Two Column AppPage ( 6 : 4 )">
+    <flexipage:template>
+        <flexipage:region name="top" defaultWidth="MEDIUM">
+			<flexipage:formfactor type="MEDIUM" width="SMALL" />
+		</flexipage:region>
+		<flexipage:region name="left" defaultWidth="MEDIUM">
+			<flexipage:formfactor type="MEDIUM" width="SMALL" />
+		</flexipage:region>
+		<flexipage:region name="right" defaultWidth="MEDIUM" >
+			<flexipage:formfactor type="MEDIUM" width="SMALL" />
+		</flexipage:region>
+	</flexipage:template>
+</design:component>

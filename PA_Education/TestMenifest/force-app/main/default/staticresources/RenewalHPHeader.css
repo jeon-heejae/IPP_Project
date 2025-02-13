@@ -1,0 +1,11 @@
+header {
+    width: 100%;
+    height: 88px;
+    background: #ffffff;
+}
+
+header .inner {
+    width: 1440px;
+    height: 88px;
+    margin: 0 auto;
+}

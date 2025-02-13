@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>View201405</fullName>
+    <columns>NAME</columns>
+    <columns>OWNER.ALIAS</columns>
+    <columns>ApprovalStatus__c</columns>
+    <columns>UseYear__c</columns>
+    <columns>UseMonth__c</columns>
+    <columns>TotalAmount__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>UseMonth__c</field>
+        <operation>equals</operation>
+        <value>5</value>
+    </filters>
+    <label>2014.05</label>
+</ListView>

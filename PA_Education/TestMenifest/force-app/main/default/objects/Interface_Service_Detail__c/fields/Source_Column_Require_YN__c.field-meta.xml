@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Source_Column_Require_YN__c</fullName>
+    <description>소스필드의 필수여부를 기재
+- 만약, Y인 경우에 값이 없으면 응답시 오류를 리턴함</description>
+    <inlineHelpText>소스필드의 필수여부를 기재
+- 만약, Y인 경우에 값이 없으면 응답시 오류를 리턴함</inlineHelpText>
+    <label>소스필드 필수여부</label>
+    <required>true</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>N</fullName>
+                <default>true</default>
+                <label>N</label>
+            </value>
+            <value>
+                <fullName>Y</fullName>
+                <default>false</default>
+                <label>Y</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

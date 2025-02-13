@@ -1,0 +1,618 @@
+<!--
+ - Created by Kwanwoo.Jeon on 2024-01-04.
+ -->
+
+<aura:component description="ExpenseCreationCorporateCard"
+                implements="force:hasRecordId,lightning:actionOverride,force:lightningQuickActionWithoutHeader"
+                access="global"
+                controller="ExpenseCreationCorporateCardController">
+        <aura:handler name="init"       value="{!this}"                     action="{!c.fnInit}"/>
+        <aura:handler name="change"     value="{!v.typeChangeConfirm}"      action="{!c.fnChangeTypeConfirm}" />
+
+        <aura:attribute name="recordId" type="String"/>
+
+        <!-- Spinner Container -->
+        <aura:attribute name="toggleSpinner" type="boolean" default="false"/>
+        <aura:if isTrue="{!v.toggleSpinner}">
+            <lightning:spinner aura:id="spinner" alternativeText="Loading" size="large" variant="brand"/>
+        </aura:if>
+
+        <!-- Lookup -->
+        <!-- <aura:attribute name="customLookupUser1st" type="Aura.component"/>         -->
+        <aura:attribute name="sValue" type="String"/>
+        <aura:attribute name="sLabel" type="String"/>
+
+        <!-- Field Label -->
+        <aura:attribute name="ExpLabel"         type="map"/>
+        <aura:attribute name="ExpDetailLabel"   type="map" />
+        <!-- Data -->
+        <aura:attribute name="listExpDetail"    type="List"        default="[]"/>
+        <aura:attribute name="listCardBilling"  type="List"        default="[]"/>
+        <aura:attribute name="objExp"           type="Expense__c"/>
+        <aura:attribute name="ProjectName"      type="String"/>
+        <aura:attribute name="listDel"          type="list"/>
+        <aura:attribute name="selectedYear"     type="String"/>
+        <aura:attribute name="selectedMonth"    type="String"/>
+        <aura:attribute name="BudgetType"       type="String"       default="임원 및 감사님"/>
+
+        <!--프로젝트 투입기간 -->
+        <aura:attribute name="inputDate"        type="String"/>
+        <aura:attribute name="withdrawDate"     type="String"/>
+
+        <!-- Picklist -->
+        <aura:attribute name="BudgetTypeList"   type="list"/>
+        <aura:attribute name="SalesTypeList"    type="list"/>
+        <aura:attribute name="category1"        type="list"/>
+        <aura:attribute name="category2"        type="list"/>
+        <aura:attribute name="paymentType"      type="list"/>
+        <aura:attribute name="year"             type="list"/>
+        <aura:attribute name="month"            type="list"/>
+        <!--    <aura:attribute name="pickFlag" type="String" default="본사행정"/>-->
+        <!-- table sizing -->
+        <aura:attribute name="mouseStart"       type="string"/>
+        <aura:attribute name="oldWidth"         type="string"/>
+        <aura:attribute name="currentEle"       type="Object"/>
+        <aura:attribute name="tableWidth"       type="String"       default="100%"/>
+
+        <!-- 경비신청 정보		 -->
+        <aura:attribute name="mouseOver"        type="boolean"/>
+        <!-- expendable tab -->
+        <aura:attribute name="isExp"            type="boolean"      default="true"/>
+        <aura:attribute name="isExpDetail"      type="boolean"      default="true"/>
+
+
+        <!-- 법인카드 청구내역 -->
+        <aura:attribute name="showModal"        type="boolean"      default="false"/>
+
+        <!-- 변경 확인 모달 -->
+        <aura:attribute name="showCheckModal"   type="boolean"      default="false"/>
+        <aura:attribute name="typeChangeConfirm" type="String"      default="0"     description="0:기본값 1:확인클릭 시 2: 취소 클릭 시"/>
+        <aura:attribute name="strMessage"       type="String"/>
+
+
+
+        <!-- Header  -->
+        <div class="slds-page-header slds-p-around_medium">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+		            	<span class="slds-icon_container slds-icon-standard-opportunity" title="Expense Application">
+                        	<lightning:icon iconName="custom:custom40"/>
+			            		<span class="slds-assistive-text">경비신청</span>
+		          		</span>
+                        </div>
+                        <div class="slds-media__body" >
+                            <div class="slds-float_right">
+                                <lightning:buttonGroup>
+                                    <!-- 경비규정 팁 모달 메뉴 -->
+                                    <div onmouseover="{!c.fnMouseOver}" class="slds-m-right_x-large">
+                                        <lightning:icon iconName="utility:info" size="x-small"/>
+                                        <aura:if isTrue="{!v.mouseOver}">
+                                            <c:ExpenseCreationInfo mouseOver="{!v.mouseOver}"/>
+                                        </aura:if>
+                                    </div>
+                                    <lightning:button class="slds-button" label="저장" onclick="{!c.fnSave}" name="save"/>
+                                    <lightning:button class="slds-button" label="뒤로" onclick="{!c.fnCancel}" name="cancel"/>
+                                </lightning:buttonGroup>
+                            </div>
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+		                		<span class="slds-page-header__title slds-truncate" title="Quote Creation">
+		                			<aura:if isTrue="{!v.recordId}">
+			         						경비신청 수정({!v.objExp.UseYear__c}.{!v.objExp.UseMonth__c} 경비)
+		                   				<aura:set attribute="else">
+		                   					경비신청 생성({!v.objExp.UseYear__c}.{!v.objExp.UseMonth__c} 경비)
+		                				</aura:set>
+		                			</aura:if>
+		                		</span>
+                                </div>
+                            </div>
+                            <p class="slds-page-header__name-meta">{!v.objExp.Name}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 경비신청 -->
+        <div>
+            <div class="{! 'slds-section' + (v.isExp ? ' slds-is-open' : '')}">
+                <h3 class="slds-section__title slds-theme_shade">
+                    <button aria-controls="divContent" aria-expanded="{!v.isExp}" onclick="{!c.fnChangeState1}"
+                            class="slds-button slds-section__title-action">
+                        <lightning:icon aura:id="articleOne"
+                                        iconName="{!(v.isExp ? 'utility:chevrondown' : 'utility:chevronright')}"
+                                        size="xx-small" alternativeText="switch"/>
+                        <span class="slds-truncate slds-p-left_x-small" title="Section Title">경비신청</span>
+                    </button>
+                </h3>
+                <div class="slds-section__content" aria-hidden="{!v.isExp}" id="divContent">
+                    <!-- 본문 -->
+                    <lightning:layout multipleRows="true" class="x-large">
+                        <lightning:layoutItem padding="around-small">
+                            <!-- 사용목적 -->
+                            <div class="slds-form--inline">
+                                <div class="slds-form">
+                                    <aura:if isTrue="{!v.recordId}">
+                                        <lightning:input type="text" value="{!v.objExp.BudgetType__c}" label="사용목적" required="true" disabled="true"/>
+                                        <aura:set attribute="else">
+                                            <lightning:select aura:id=""
+                                                              onchange="{!c.fnChangeBudgetType}"
+                                                              label="{!v.ExpLabel.BudgetType__c}"
+                                                              value="{!v.objExp.BudgetType__c}"
+                                                              required="true"
+                                            >
+                                                <aura:iteration items="{!v.BudgetTypeList}" var="item">
+                                                    <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                                                </aura:iteration>
+                                            </lightning:select>
+                                        </aura:set>
+                                    </aura:if>
+                                </div>
+                            </div>
+                        </lightning:layoutItem>
+
+                        <aura:if isTrue="{!v.objExp.BudgetType__c == '프로젝트'}">
+                            <lightning:layoutItem padding="around-small">
+                                <div class="slds-form--inline">
+                                    <div class="slds-form">
+                                    <aura:if isTrue="{!v.recordId}">
+                                        <lightning:input type="text" value="{!v.objExp.Project__r.Name}" label="프로젝트" required="true" disabled="true"/>
+                                        <aura:set attribute="else">
+                                                        <abbr class="slds-required" title="required">* </abbr>
+                                                        프로젝트
+                                                        <c:DN_Lookup    aura:id="project"
+                                                                        objectName="Project__c"
+                                                                        fieldSet="['Name', 'fm_PM__c']"
+                                                                        orderByField = 'CreatedDate DESC'
+                                                                        comparisonField="['Name']"
+                                                                        primaryDisplayField="Name"
+                                                                        alternateDisplayField="['fm_PM__c']"
+                                                                        lightningIconName="custom:custom43"
+                                                                        selectedId="{!v.objExp.Project__c}"
+                                                                        selectedLabel="{!v.ProjectName}"
+                                                                        compact="false"
+                                                                        minimumCharacter="1"
+                                                                        uniqueLookupIdentifier="" />
+                                        </aura:set>
+                                    </aura:if>
+                                    </div>
+                                </div>
+                            </lightning:layoutItem>
+                        </aura:if>
+                        <aura:if isTrue="{!v.objExp.BudgetType__c == '자격증'}">
+                            <lightning:layoutItem padding="around-small">
+                                <div class="slds-form--inline">
+                                    <div class="slds-form">
+                                        <lightning:select aura:id=""
+                                                          label="{!v.ExpLabel.UseYear__c}"
+                                                          value="{!v.selectedYear}"
+                                                          required="true"
+                                        >
+                                            <aura:iteration items="{!v.year}" var="item">
+                                                <option text="{!item.label}" value="{!item.value}"
+                                                        selected="{!if(v.selectedYear == item.value, true, false)}"/>
+                                            </aura:iteration>
+                                        </lightning:select>
+                                    </div>
+                                </div>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem padding="around-small">
+                                <div class="slds-form--inline">
+                                    <div class="slds-form">
+                                        <lightning:select aura:id=""
+                                                          label="{!v.ExpLabel.UseMonth__c}"
+                                                          value="{!v.selectedMonth}"
+                                                          required="true"
+                                        >
+                                            <aura:iteration items="{!v.month}" var="item">
+                                                <option text="{!item.label}" value="{!item.value}"
+                                                        selected="{!if(v.selectedMonth == item.value, true, false)}"/>
+                                            </aura:iteration>
+                                        </lightning:select>
+                                    </div>
+                                </div>
+                            </lightning:layoutItem>
+                        </aura:if>
+                        <lightning:layoutItem padding="around-small">
+                            <div class="slds-form--inline">
+                                <div class="slds-form">
+                                    <lightning:button onclick="{!c.fnShowModal}"
+                                                      label="청구내역 조회"
+                                                      name="OpenModalBtn"
+                                                      variant="brand"/>
+                                </div>
+                            </div>
+                        </lightning:layoutItem>
+
+                    </lightning:layout>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 경비신청 상세 -->
+        <div>
+            <div class="{! 'slds-section' + (v.isExpDetail ? ' slds-is-open' : '')}">
+                <h3 class="slds-section__title slds-theme_shade">
+                    <button aria-controls="divContent" aria-expanded="{!v.isExpDetail}" onclick="{!c.fnChangeState2}"
+                            class="slds-button slds-section__title-action">
+                        <lightning:icon aura:id="articleOne"
+                                        iconName="{!(v.isExpDetail ? 'utility:chevrondown' : 'utility:chevronright')}"
+                                        size="xx-small" alternativeText="switch"/>
+                        <span class="slds-truncate slds-p-left_x-small" title="Section Title">경비신청 상세</span>
+                    </button>
+                </h3>
+                <div class="slds-section__content slds-scrollable_x" aria-hidden="{!v.isExpDetail}" id="divContent">
+                    <div class="slds-scrollable_x" style="width: 100%; min-height: 42vh">
+                        <!-- 본문 -->
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer" style="width:98vw">
+                            <thead>
+                            <tr class="slds-line-height_reset slds-scrollable">
+                                <!-- No -->
+                                <th class="slds-is-resizable slds-text-title--caps" scope="col" style="width:3vw; padding:unset">
+                                    <div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+                                        <input type="range" min="2" max="1000" class="slds-resizable__input slds-assistive-text"
+                                               id="cell-resize-handle-602" tabindex="0"/>
+                                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true"
+                                              ondrag="{!c.setNewWidth}">
+			                            <span class="slds-resizable__divider"></span>
+	                       			</span>
+                                        No
+                                    </div>
+                                </th>
+                                <!-- 사용일자 -->
+                                <th class="slds-is-resizable slds-text-title--caps" scope="col" style="width:11.7vw">
+                                    <div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+                                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text"
+                                               id="cell-resize-handle-603" tabindex="0"/>
+                                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true"
+                                              ondrag="{!c.setNewWidth}">
+			                            <span class="slds-resizable__divider"></span>
+	                       			</span>
+                                        {!v.ExpDetailLabel.Date__c}
+                                    </div>
+                                </th>
+                                <!-- 카드사 -->
+                                <th class="slds-is-resizable slds-text-title--caps" scope="col">
+                                    <div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+                                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text"
+                                               id="cell-resize-handle-604" tabindex="0"/>
+                                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true"
+                                              ondrag="{!c.setNewWidth}">
+			                            <span class="slds-resizable__divider"></span>
+	                       			</span>
+                                        {!v.ExpDetailLabel.CardCompany__c}
+                                    </div>
+                                </th>
+                                <!-- 가맹점명 -->
+                                <th class="slds-is-resizable slds-text-title--caps" scope="col">
+                                    <div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+                                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text"
+                                               id="cell-resize-handle-604" tabindex="0"/>
+                                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true"
+                                              ondrag="{!c.setNewWidth}">
+			                            <span class="slds-resizable__divider"></span>
+	                       			</span>
+                                        {!v.ExpDetailLabel.StoreName__c}
+                                    </div>
+                                </th>
+                                <!-- 업종 -->
+                                <th class="slds-is-resizable slds-text-title--caps" scope="col">
+                                    <div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+                                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text"
+                                               id="cell-resize-handle-604" tabindex="0"/>
+                                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true"
+                                              ondrag="{!c.setNewWidth}">
+			                            <span class="slds-resizable__divider"></span>
+	                       			</span>
+                                        {!v.ExpDetailLabel.BusinessType__c}
+                                    </div>
+                                </th>
+                                <!-- 청구금액 -->
+                                <th class="slds-is-resizable slds-text-title--caps" scope="col">
+                                    <div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+                                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text"
+                                               id="cell-resize-handle-604" tabindex="0"/>
+                                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true"
+                                              ondrag="{!c.setNewWidth}">
+			                            <span class="slds-resizable__divider"></span>
+	                       			</span>
+                                        {!v.ExpDetailLabel.BillingAmount__c}
+                                    </div>
+                                </th>
+                                <!-- 경비신청금액 -->
+                                <th class="slds-is-resizable slds-text-title--caps" scope="col">
+                                    <div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+                                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text"
+                                               id="cell-resize-handle-604" tabindex="0"/>
+                                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true"
+                                              ondrag="{!c.setNewWidth}">
+			                            <span class="slds-resizable__divider"></span>
+	                       			</span>
+                                        {!v.ExpDetailLabel.Amount__c}
+                                    </div>
+                                </th>
+                                <!-- 비용구분 -->
+                                <th class="slds-is-resizable slds-text-title--caps" scope="col">
+                                    <div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+                                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text"
+                                               id="cell-resize-handle-606" tabindex="0"/>
+                                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true"
+                                              ondrag="{!c.setNewWidth}">
+			                            <span class="slds-resizable__divider"></span>
+	                       			</span>
+                                        {!v.ExpDetailLabel.Category2__c}
+                                    </div>
+                                </th>
+                                <aura:if isTrue="{!v.objExp.BudgetType__c == '영업'}">
+                                    <!-- 영업구분 -->
+                                    <th class="slds-is-resizable slds-text-title--caps" scope="col">
+                                        <div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+                                            <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text"
+                                                   id="cell-resize-handle-606" tabindex="0"/>
+                                            <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true"
+                                                  ondrag="{!c.setNewWidth}">
+                                            <span class="slds-resizable__divider"></span>
+                                        </span>
+                                            {!v.ExpDetailLabel.SalesType__c}
+                                        </div>
+                                    </th>
+                                    <!-- 관련됨 -->
+                                    <th class="slds-is-resizable slds-text-title--caps" scope="col" style="width:10%">
+                                        <div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+                                            <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text"
+                                                   id="cell-resize-handle-606" tabindex="0"/>
+                                            <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true"
+                                                  ondrag="{!c.setNewWidth}">
+                                            <span class="slds-resizable__divider"></span>
+                                        </span>
+                                            관련됨
+                                        </div>
+                                    </th>
+                                </aura:if>
+                                <aura:if isTrue="{!and(v.objExp.BudgetType__c != '영업', and(v.objExp.BudgetType__c != '자격증', and(v.objExp.BudgetType__c != '본사행정', and(v.objExp.BudgetType__c != '마케팅', v.objExp.BudgetType__c != '임원 및 감사님')))) }">
+                                    <!-- 경비사전승인 -->
+                                    <th class="slds-is-resizable slds-text-title--caps" scope="col">
+                                        <div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+                                            <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text"
+                                                   id="cell-resize-handle-606" tabindex="0"/>
+                                            <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true"
+                                                  ondrag="{!c.setNewWidth}">
+                                            <span class="slds-resizable__divider"></span>
+                                        </span>
+                                            {!v.ExpDetailLabel.PriorExpenseApplication__c}
+                                        </div>
+                                    </th>
+                                </aura:if>
+                                <!-- 내용 -->
+                                <th class="slds-is-resizable slds-text-title--caps" scope="col" style="width:15%">
+                                    <div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+                                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text"
+                                               id="cell-resize-handle-609" tabindex="0"/>
+                                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true"
+                                              ondrag="{!c.setNewWidth}">
+			                            <span class="slds-resizable__divider"></span>
+	                       			</span>
+                                        {!v.ExpDetailLabel.Description__c}
+                                    </div>
+                                </th>
+                                <th class="slds-is-resizable slds-text-title--caps" scope="col">
+                                    <div class="slds-resizable" onmousemove="{!c.calculateWidth}">
+                                        <input type="range" min="5" max="1000" class="slds-resizable__input slds-assistive-text"
+                                               id="cell-resize-handle-610" tabindex="0"/>
+                                        <span class="slds-resizable__handle" onmousemove="{!c.calculateWidth}" draggable="true"
+                                              ondrag="{!c.setNewWidth}">
+			                            <span class="slds-resizable__divider"></span>
+	                       			</span>
+                                        삭제
+                                    </div>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <aura:iteration items="{!v.listExpDetail}" var="expDetail" indexVar="idx">
+                                <tr>
+                                    <td style="padding:unset; text-align:center">
+                                        <!-- No -->
+                                        {!idx+1}
+                                    </td>
+                                    <td>
+                                        <!-- 사용일자 -->
+                                        <lightning:input type="text" value="{!expDetail.Dt}" required="true" disabled="{!v.objExp.BudgetType__c != '자격증'}"/>
+
+                                    </td>
+                                    <td>
+                                        <!-- 카드사 -->
+                                        <lightning:input type="text" value="{!expDetail.CardCompany}" required="true" disabled="true"/>
+
+                                    </td>
+                                    <td>
+                                        <!-- 가맹점명 -->
+                                        <lightning:input type="text" value="{!expDetail.StoreName}" required="true" disabled="true"/>
+
+                                    </td>
+                                    <td>
+                                        <!-- 업종 -->
+                                        <lightning:input type="text" value="{!expDetail.BusinessType}" required="true" disabled="true"/>
+
+                                    </td>
+                                    <td>
+                                        <!-- 청구금액 -->
+                                        <lightning:input class="rightAlign" type="number" value="{!expDetail.BillingAmount}" required="true"
+                                                         formatter="currency" disabled="true"/>
+
+                                    </td>
+                                    <td>
+                                        <!-- 경비사용금액 -->
+                                        <lightning:input aura:id="field" class="rightAlign" name="{!'exp-' + idx}"
+                                                         value="{!expDetail.Amount}" min="1" max="{!expDetail.BillingAmount}"
+                                                         required="true" type="number"
+                                                         messageWhenValueMissing="값을 입력하세요"
+                                                         messageWhenRangeUnderflow="값이 너무 작습니다."
+                                                         messageWhenRangeOverflow="청구금액보다 많은 금액을 입력했습니다."
+                                                         formatter="currency"/>
+                                    </td>
+                                    <aura:if isTrue="{!v.objExp.BudgetType__c == '자격증'}">
+                                        <!-- 비용구분 -->
+                                        <td>
+                                            <lightning:input type="text" value="{!expDetail.Category2}" required="true" disabled="true"/>
+                                        </td>
+                                        <aura:set attribute="else">
+                                            <td>
+                                                <!-- 비용구분 -->
+                                                <lightning:select aura:id=""
+                                                                  name="{!'exp-' + idx}"
+                                                                  value="{!expDetail.Category2}"
+                                                                  required="true"
+                                                >
+                                                    <aura:iteration items="{!v.category2}" var="item">
+                                                        <option text="{!item.label}" value="{!item.value}"
+                                                                selected="{!if(item.selected != '식비' , true , false)}"/>
+                                                    </aura:iteration>
+                                                </lightning:select>
+                                            </td>
+                                        </aura:set>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.objExp.BudgetType__c == '영업'}">
+                                        <td>
+                                            <!-- 영업구분 -->
+                                            <lightning:select aura:id=""
+                                                              name="{!'exp-' + idx}"
+                                                              value="{!expDetail.SalesType}"
+                                                              required="true"
+                                            >
+                                                <aura:iteration items="{!v.SalesTypeList}" var="item">
+                                                    <option text="{!item.label}" value="{!item.value}"/>
+                                                </aura:iteration>
+                                            </lightning:select>
+                                        </td>
+                                        <td>
+                                            <aura:if isTrue="{!expDetail.SalesType == '프로젝트'}">
+                                                <!-- 프로젝트 -->
+                                                <div contenteditable="true">
+                                                    <span data-index="{!idx}">
+                                                        <c:DN_Lookup    aura:id="project"
+                                                                        objectName="Project__c"
+                                                                        fieldSet="['Name', 'fm_PM__c']"
+                                                                        orderByField = 'CreatedDate DESC'
+                                                                        comparisonField="['Name']"
+                                                                        primaryDisplayField="Name"
+                                                                        alternateDisplayField="['fm_PM__c']"
+                                                                        lightningIconName="custom:custom42"
+                                                                        selectedId="{!expDetail.ProjectNameId}"
+                                                                        selectedLabel="{!expDetail.ProjectName}"
+                                                                        compact="false"
+                                                                        minimumCharacter="1"
+                                                                        uniqueLookupIdentifier="" />
+                                                    </span>
+                                                </div>
+                                            </aura:if>
+                                            <aura:if isTrue="{!expDetail.SalesType == '영업기회'}">
+                                                <!-- 영업기회 -->
+                                                <div contenteditable="true">
+                                                    <c:DN_Lookup    aura:id="oppty"
+                                                                    objectName="Opportunity__c"
+                                                                    fieldSet="['Name', 'Stage__c']"
+                                                                    whereCondition="AND Stage__c != '06. Closed'"
+                                                                    orderByField = 'CreatedDate DESC'
+                                                                    comparisonField="['Name']"
+                                                                    primaryDisplayField="Name"
+                                                                    alternateDisplayField="['Stage__c']"
+                                                                    lightningIconName="custom:custom41"
+                                                                    selectedId="{!expDetail.OpportunityNameId}"
+                                                                    selectedLabel="{!expDetail.OpportunityName}"
+                                                                    compact="false"
+                                                                    minimumCharacter="1"
+                                                                    uniqueLookupIdentifier="" />
+                                                </div>
+                                            </aura:if>
+                                            <aura:if isTrue="{!expDetail.SalesType == '잠재고객'}">
+                                                <!-- 잠재고객 -->
+                                                <div contenteditable="true">
+                                                    <c:DN_Lookup    aura:id="Lead"
+                                                                    objectName="Lead__c"
+                                                                    fieldSet="['Name', 'Company__c']"
+                                                                    orderByField = 'CreatedDate DESC'
+                                                                    comparisonField="['Name']"
+                                                                    primaryDisplayField="Name"
+                                                                    alternateDisplayField="['Company__c']"
+                                                                    lightningIconName="custom:custom69"
+                                                                    selectedId="{!expDetail.Lead}"
+                                                                    selectedLabel="{!expDetail.LeadName}"
+                                                                    compact="false"
+                                                                    minimumCharacter="1"
+                                                                    uniqueLookupIdentifier="" />
+                                                </div>
+                                            </aura:if>
+                                        </td>
+                                    </aura:if>
+                                    <!-- 경비사전승인 -->
+                                    <aura:if isTrue="{!and(v.objExp.BudgetType__c != '영업', and(v.objExp.BudgetType__c != '자격증', and(v.objExp.BudgetType__c != '본사행정',and(v.objExp.BudgetType__c != '마케팅', v.objExp.BudgetType__c != '임원 및 감사님')))) }">
+                                        <aura:if isTrue="{!greaterthanorequal(expDetail.Amount, 300000)}">
+                                            <td>
+                                                <div contenteditable="true">
+                                                    <c:DN_Lookup    aura:id="PriorExpenseApplication"
+                                                                    objectName="PriorExpenseApplication__c"
+                                                                    fieldSet="['Name', 'UseDate__c', 'Place__c', 'AttendeeNumber__c', 'Description__c']"
+                                                                    whereCondition="AND ApprovalStatus__c = '승인완료' AND ExpenseDetail__c = null"
+                                                                    comparisonField="['Name']"
+                                                                    primaryDisplayField="Name"
+                                                                    alternateDisplayField="['UseDate__c']"
+                                                                    lightningIconName="custom:custom28"
+                                                                    selectedId="{!expDetail.PriorExpenseApplication}"
+                                                                    selectedLabel="{!expDetail.PriorExpenseApplicationName}"
+                                                                    compact="false"
+                                                                    minimumCharacter="1"
+                                                                    uniqueLookupIdentifier="" />
+
+                                                </div>
+                                            </td>
+                                            <aura:set attribute="else">
+                                                <td></td>
+                                            </aura:set>
+                                        </aura:if>
+                                    </aura:if>
+                                    <td>
+                                        <!-- 내용 -->
+                                        <lightning:input aura:id="field" name="{!'exp-' + idx}"
+                                                         value="{!expDetail.Description}"
+                                                         required="false" type="text"/>
+                                    </td>
+                                    <td>
+                                        <lightning:button variant="brand" name="{!idx}" label="삭제" class="maxBtn"
+                                                          onclick="{!c.fnDeleteSelectedRow}"/>
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- 법인카드 청구내역 -->
+        <aura:if isTrue="{!v.showModal}">
+            <c:CardBillingModal showModal           = "{!v.showModal}"
+                                listExpDetail       = "{!v.listExpDetail}"
+                                UseYear__c          = "{!v.selectedYear}"
+                                UseMonth__c         = "{!v.selectedMonth}"
+                                BudgetType          = '{!v.objExp.BudgetType__c}'
+                                inputDate           = "{!v.inputDate}"
+                                withdrawDate        = "{!v.withdrawDate}"
+
+
+            />
+        </aura:if>
+
+        <!-- 사용목적 변경 확인 모달 -->
+        <aura:if isTrue="{!v.showCheckModal}">
+            <c:CheckModal       showModal       = "{!v.showCheckModal}"
+                                strMessage      = "{!v.strMessage}"
+                                isConfirm       = "{!v.typeChangeConfirm}"
+            />
+        </aura:if>
+</aura:component>

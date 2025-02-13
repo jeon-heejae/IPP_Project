@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DoNotChange_Fields</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(NOT(ISPICKVAL(Status__c, &apos;계획작성중&apos;)),
+				OR(ISCHANGED(WorkingTime__c), 
+       ISCHANGED(Project__c)
+						)
+   )</errorConditionFormula>
+    <errorMessage>계획승인 이후에는 근무일자, 프로젝트를 변경할 수 없습니다.</errorMessage>
+</ValidationRule>

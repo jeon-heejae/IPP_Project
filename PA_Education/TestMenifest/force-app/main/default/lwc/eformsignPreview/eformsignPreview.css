@@ -1,0 +1,15 @@
+/**
+ * Created by woojong.lee on 2024-07-04.
+ */
+
+.custom-modal-wrap{
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translate(-20%,-45%);
+
+}
+.button{
+    display: flex;
+    justify-content: flex-end;
+}

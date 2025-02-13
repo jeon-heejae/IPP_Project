@@ -1,0 +1,129 @@
+<aura:component controller="CommonLookupController" >
+    <aura:handler name="init" action="{!c.fnInit}" value="{!this}" />
+    <!--declare attributes--> 
+    <aura:attribute name="selectedRecord" type="Object" default="{}" description="Use,for store SELECTED sObject Record"/>
+    <aura:attribute name="sObj" type="string"/>
+    <aura:attribute name="sId" type="string"/>
+    <aura:attribute name="sNm" type="string"/>
+    <aura:attribute name="sLabel" type="string"/>
+    <aura:attribute name="sIconName" type="string" default="standard:account" />
+    <aura:attribute name="sParentId" type="string"/>
+    <aura:attribute name="sParentField" type="string"/>
+    <aura:method name="requiredCheck" action="{!c.doRequiredMark}"/>
+    <aura:method name="errorCheck" action="{!c.doErrorMsg}"> 
+        <aura:attribute name="errorMsg" type="String" /> 
+    </aura:method>
+    <aura:attribute name="errorMessage" type="String" />
+
+    <aura:attribute name="timer" type="String" default=""/>
+
+    <aura:attribute name="listOfSearchRecords" type="list" description="Use,for store the list of search records which returns from apex class"/>
+    <aura:attribute name="sSearchKeyWord" type="string"/>
+    <aura:attribute name="sMessage" type="String" default="Search Result.."/>
+    <aura:attribute name="bShowSearchIcon" type="Boolean" default="true" />
+
+    <aura:attribute name="bRequired"    type="Boolean" default="true"   />
+    <aura:attribute name="bIsBasic"     type="Boolean" default="true"   description="룩업 기본 타입과 테이블 타입 구분 용도" />
+
+    <aura:attribute name="accountId" type="String" />
+    
+<!--     <aura:method name="parentSet" action="{!c.parentSet}" access="PUBLIC">
+        <aura:attribute name="param" type="CommonLookupController.dataWrapper" />
+    </aura:method> 
+    <aura:method name="clear" action="{!c.clear}" access="PUBLIC"/>  -->
+
+    <aura:method name="selectItem" action="{!c.getSelectItem}" access="PUBLIC">
+        <aura:attribute name="fieldNm" type="string" />
+    </aura:method> 
+    <aura:method name="clear" action="{!c.clear}" access="PUBLIC"/> 
+
+    <!--declare events hendlers-->  
+    <aura:handler name="selectedLookupEvent" event="c:CommonLookup_evt" action="{!c.handleComponentEvent}"/>
+    <!-- <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/> -->
+ 
+    <!-- https://www.lightningdesignsystem.com/components/lookups/ --> 
+    <div aura:id="searchRes" class="slds-form-element slds-lookup slds-is-close" data-select="single">
+        <aura:if isTrue="{! v.sLabel != ''}">
+            <label class="slds-form-element__label" for="lookup-348">
+                <aura:if isTrue="{! v.bRequired == true}" >
+                    <abbr aura:id="requiredMark" class="slds-required" title="required">*</abbr>
+                </aura:if>
+                {! v.sLabel}
+            </label>
+        </aura:if>
+        <!--This part is for display search bar for lookup-->  
+        <div aura:id="lookupErrorBox" class="slds-form-element__control">
+            <div class="slds-input-has-icon slds-input-has-icon--right">
+                <aura:if isTrue="{!v.bShowSearchIcon}">
+                    <lightning:icon iconName="utility:search" class="slds-input__icon slds-show" size="x-small"/>
+                </aura:if>
+                <!-- This markup is for when an record is selected -->
+                <div aura:id="lookup-pill" class="slds-pill-container slds-hide">
+                    <span class="slds-pill">
+                        <span class="slds-icon_container slds-combobox__input-entity-icon" title="record">
+                            <lightning:icon class="slds-icon slds-icon_small slds-icon-text-default" iconName="{!v.sIconName}" size="x-small" />
+                            <span class="slds-assistive-text"></span>
+                        </span>
+                        <span class="slds-pill__label slds-p-left_x-large">
+                            {!v.selectedRecord.strName}  
+                        </span>
+                        <button class="slds-button slds-button--icon slds-pill__remove" onclick="{!c.clear}">
+                            <lightning:icon iconName="utility:close" class="slds-button__icon" size="x-small"/>
+                            <span class="slds-assistive-text">Remove</span>
+                        </button>
+                    </span>
+                </div>
+                <div aura:id="lookupField" class="slds-show">
+                    <span class="slds-icon_container slds-combobox__input-entity-icon" title="record">
+                        <lightning:icon class="slds-icon slds-icon_small slds-icon-text-default" iconName="{!v.sIconName}" size="x-small" />
+                        <span class="slds-assistive-text"></span>
+                    </span>
+                    <!-- 수정 2019-02-28 ljk Enter키 조회 삭제 -->
+                    <div onkeyup="{!c.keyPressController}" id="testkey">
+                        <ui:inputText   updateOn="keyup" class="slds-lookup__search-input slds-input custom-left-padding"
+                                        value="{!v.sSearchKeyWord}" placeholder="search.." required = "true" />
+                    </div>
+
+<!--                     <ui:inputText   updateOn="keyup" keyup="{!c.keyPressController}" 
+                                        class="slds-lookup__search-input slds-input custom-left-padding" 
+                                        value="{!v.sSearchKeyWord}" placeholder="search.." required = "true" /> -->
+                </div>   
+            </div>
+
+            <div aura:id="lookupErrorMsg" class="slds-form-element__help slds-hide" id="form-error-01">{!v.errorMessage}</div>
+        </div>
+        
+        <div class="slds-lookup__menu slds" id="lookup-348" style="position:absolute;">
+            <aura:if isTrue="{!v.bIsBasic}">
+                <div class="slds-lookup__item--label slds-text-body--small">{!v.sMessage}</div>
+                <ul class="slds-lookup__list" role="listbox">
+                    <div class="resultDivArea">
+                        <aura:iteration items="{!v.listOfSearchRecords}" var="singleRec">
+                            <c:CommonLookupResult   recordInfo="{!singleRec}" sIconName="{! v.sIconName}" sParentId="{! v.sParentId}" 
+                                                    sParentField="{! v.sParentField}" searchKeyword="{!v.sSearchKeyWord}" bIsBasic="{!v.bIsBasic}" />
+                        </aura:iteration>
+                    </div>
+                </ul>
+
+                <aura:set attribute="else">
+                    <div class="slds-lookup__item--label slds-text-body--small">{!v.sMessage}</div>
+                    <div class="resultTableArea">
+                        <table id="custom_table">
+                            <tr>
+                                <th width="45%">기업체명</th>
+                                <th width="15%">법인형태</th>
+                                <th width="20%">대표이사</th>
+                                <th width="20%">법인등록번호</th>
+                            </tr>
+                            <aura:iteration items="{!v.listOfSearchRecords}" var="singleRec">
+                                <c:CommonLookupResult   recordInfo="{!singleRec}" sIconName="{! v.sIconName}" sParentId="{! v.sParentId}" 
+                                                        sParentField="{! v.sParentField}" searchKeyword="{!v.sSearchKeyWord}" bIsBasic="{!v.bIsBasic}" />
+                            </aura:iteration>
+                        </table>
+                    </div>
+                </aura:set>
+            </aura:if>
+        </div>
+    </div>
+</aura:component>

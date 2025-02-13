@@ -1,0 +1,140 @@
+<!--
+ - Created by Kwanwoo.Jeon on 2024-01-03.
+ -->
+
+<aura:component description="CardBillingModal"
+                controller="CardBillingModalController"
+                implements="force:hasRecordId,flexipage:availableForRecordHome,force:appHostable,forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes,force:lightningQuickActionWithoutHeader,force:hasSObjectName,lightning:actionOverride">
+
+    <!-- Parameter -->
+    <aura:attribute name="showModal"            type="Boolean"      default="false"/>
+    <aura:attribute name="showSpinner"          type="boolean"      default="false"/>
+
+    <!-- DataTable -->
+    <aura:attribute name="Data"                 type="List"/>
+    <aura:attribute name="selectedCardData"     type="List"/>
+    <aura:attribute name="Columns"              type="List"/>
+    <aura:attribute name="checked"              type="Boolean"      default="false"/>
+    <aura:attribute name="listCardNickName"     type="List"         default="['All']"/>
+    <aura:attribute name="selectedCard"         type="String"       default="All"/>
+
+    <!-- Parameter in Main Component -->
+    <aura:attribute name="listExpDetail"        type="List"/>
+    <aura:attribute name="UseYear__c"           type="String"/>
+    <aura:attribute name="UseMonth__c"          type="String"/>
+    <aura:attribute name="BudgetType"           type="String"/>
+
+    <!-- Parameter Where budgetType == '프로젝트' -->
+    <aura:attribute name="inputDate"            type="String"/>
+    <aura:attribute name="withdrawDate"         type="String"/>
+
+    <aura:handler name="init"                   value="{!this}"     action="{!c.fnInit}" />
+
+    <aura:html tag="style">
+        .slds-modal__container {
+            max-width: 80rem !important;
+            width: auto !important;
+        }
+        button.slds-button.slds-button_icon.slds-modal__close.closeIcon.slds-button_icon-bare.slds-button_icon-inverse{
+        display: none;
+        }
+    </aura:html>
+
+    <div aura:id="CardBillingModal" class="slds-show">
+        <div role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open " onclick="{!c.fnClose}">
+            <div class = "slds-modal__container" onclick="{!c.stopPropagation}">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                        청구 내역
+                    </h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" style="height:60vh !important">
+                    <aura:if isTrue="{!v.listCardNickName.length > 2}">
+                        <div class="slds-form" style="width: 15%; padding-bottom:0.5rem">
+                            <lightning:select aura:id=""
+                                              label="카드 별칭"
+                                              value="{!v.selectedCard}"
+                                              required="true"
+                                              onchange="{!c.fnChangeCard}">
+                                <aura:iteration items="{!v.listCardNickName}" var="item">
+                                    <option text="{!item}" value="{!item}" selected="{!if(v.selectedCard == item, true, false)}"/>
+                                </aura:iteration>
+                            </lightning:select>
+                        </div>
+                    </aura:if>
+                    <!-- slds-table_fixed-layout 쓰면 DN_Lookup에서 Layout 깨짐-->
+                    <table aria-multiselectable="true" class="slds-table slds-table_bordered slds-table_fixed-layout slds-table_resizable-cols" role="grid" >
+                        <colgroup>
+                            <col width="5%"/>
+                            <col width="11%"/>      <!--카드별칭-->
+                            <col width="8%"/>       <!--사용일자-->
+                            <col width="10%" />     <!--카드사-->
+                            <col width="20%" />     <!--가맹점명-->
+                            <col width="10%"/>      <!--업종-->
+                            <col width="28%"/>      <!--주소-->
+                            <col width="8%"/>       <!--청구금액-->
+                        </colgroup>
+                        <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="slds-text-align_right slds-cell_action-mode" scope="col" style="width:3.25rem">
+                                <span id="column-group-header" class="slds-assistive-text">Choose a row</span>
+                                <div class="slds-th__action slds-th__action_form slds-text-align_center">
+                                    <lightning:input aura:Id="selectAll" type="checkbox" checked="{!if(v.checked, 'checked', false)}" name="selectAll" onchange="{!c.fnSelectRow}"/>
+                                </div>
+                            </th>
+                            <!--LRP Order는 화면 상에서 보여주는 Column이 상이함-->
+                            <aura:iteration items="{!v.Columns}" var="FieldLabel" indexVar="ind">
+                                <th aria-label="Name" aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
+                                    <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-center slds-has-flexi-truncate">
+                                        <span class="slds-truncate" title="{!FieldLabel}">{!FieldLabel}</span>
+                                    </div>
+                                </th>
+                            </aura:iteration>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <aura:if isTrue="{!v.selectedCardData.length > 0}">
+                            <aura:iteration items="{!v.selectedCardData}" var="obj" indexVar="idx">
+                                <tr aria-selected="false" class="slds-hint-parent">
+                                    <td class="slds-text-align_center" role="gridcell">
+                                        <lightning:input type="checkbox" checked="{!obj.checked}" name="{!idx}" aura:Id="detailCheckBox" onchange="{!c.fnSelectRow}"/>
+                                    </td>
+                                    <td title="사용일자">
+                                        <div class="slds-text-align_center" title="사용일시">{!obj.BillingDate}</div>
+                                    </td>
+                                    <td title="카드별칭">
+                                        <div class="slds-text-align_center" title="카드별칭">{!obj.CorporateCardNickName}</div>
+                                    </td>
+                                    <td title="카드사">
+                                        <div class="slds-text-align_center" title="카드사">{!obj.CardCompany}</div>
+                                    </td>
+                                    <td title="가맹점명" >
+                                        <div class="slds-text-align_center"  title="가맹점명">{!obj.StoreName}</div>
+                                    </td>
+                                    <td title="업종">
+                                        <div class="slds-text-align_center" title="업종">{!obj.BusinessType}</div>
+                                    </td>
+                                    <td title="주소">
+                                        <div class="slds-text-align_center" title="주소">{!obj.StoreAddress}</div>
+                                    </td>
+                                    <td class="slds-text-align_right" title="청구금액" style="padding-right: 1rem">
+                                        <lightning:formattedNumber  value="{!obj.BillingAmount}" style="currency" currencyCode="{!obj.CurrencyIsoCode}"/>
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                        </aura:if>
+                        </tbody>
+                    </table>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning:button label="Cancel" onclick="{!c.fnClose}"   variant="neutral"/>
+                    <lightning:button label="Submit" onclick="{!c.fnSave}"    type="submit"    variant="brand"/>
+                </footer>
+            </div>
+            <aura:if isTrue="{!v.showSpinner}">
+                <lightning:spinner variant="brand" size="medium" />
+            </aura:if>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open" id="backdrop"/>
+    </div>
+</aura:component>

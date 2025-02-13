@@ -1,0 +1,277 @@
+<aura:component controller="ProjectBudgetController"  implements="lightning:isUrlAddressable,lightning:actionOverride,force:hasSObjectName,force:hasRecordId" access="global" >
+    <aura:attribute name="totAmt" type="Decimal" />
+    <aura:attribute name="prjBgt" type="ProjectBudget__c" />
+    <aura:attribute name="user" type="User" />
+    <aura:attribute name="prjBgtDtlLst" type="List"/>
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="parentId" type="Id" />
+    <aura:attribute name="bizMngHlpTxt" type="String" />
+    <aura:attribute name="category2Lst"   type="List" description="예산구분 선택 리스트"/>
+    <aura:attribute name="modalYn" type="Boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    
+    <aura:if isTrue="{!v.toggleSpinner}">
+        <lightning:spinner aura:id="spinner" alternativeText="Loading" size="large" variant="brand"/>
+    </aura:if>        
+    <div class="c-container">
+        <lightning:card title="프로젝트 예산">
+            <aura:set attribute="actions">
+                <lightning:button label="도움말" iconName="utility:announcement" iconPosition="left"  variant="brand-outline" onclick="{! c.fnModalOpen }" />
+                <lightning:button variant="brand" label="저장" title="저장" onclick="{! c.fnDoSave }" />
+                <lightning:button variant="destructive" label="취소" title="취소" onclick="{! c.fnCancel }"/>
+            </aura:set>
+            <lightning:recordEditForm objectApiName="ProjectBudget__c">
+                <lightning:messages />
+                <lightning:inputField fieldName="Name" value="{!v.prjBgt.Name}" />
+                <lightning:inputField fieldName="Description__c" value="{!v.prjBgt.Description__c}"/>
+            </lightning:recordEditForm>
+            <lightning:layout multipleRows="true">
+                <lightning:layoutItem padding="around-small" size="12">
+                    <strong>
+                        예산 상세
+                        <lightning:button variant="base" class="slds-m-right--x-small" iconName="utility:add" title="행 추가" name="Consulting"  onclick="{!c.fnAddRow}"/>
+                        <lightning:button variant="base" class="slds-m-right--x-small" iconName="utility:dash" title="행 삭제" name="Consulting" onclick="{!c.fnDeleteRow}"/>     
+                    </strong>
+                </lightning:layoutItem> 
+                <aura:if isTrue="{!v.prjBgtDtlLst.length != 0}">
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout .custom_tablePadding">
+                        <thead>
+                            <tr class="slds-table slds-table_cell`-buffer slds-table_bordered slds-table_fixed-layout">
+                                <th width="60px">
+                                    <lightning:input type="checkbox" name="checkall" onchange="{!c.fnCheckAll}"/>
+                                </th>
+                                <th class="" scope="col" width="60px">
+                                    <div class="slds-truncate">No</div>
+                                </th>
+                                <th class="" scope="col" width="" style="text-align:center;">
+                                    <div class="slds-truncate">구분</div>
+                                </th>
+                                <th class="" scope="col"  width="" style="text-align:center;">
+                                    <div class="slds-truncate">단가</div>
+                                </th>
+                                <th class="" scope="col" width="" style="text-align:center;">
+                                    <div class="slds-truncate">수량</div>
+                                </th>
+                                <th class="" scope="col" width="" style="text-align:center;">
+                                    <div class="slds-truncate">금액</div>
+                                </th>
+                                <th class="" scope="col" width="" style="text-align:center;">
+                                    <div class="slds-truncate">비고(산출근거)</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.prjBgtDtlLst}"  var="prjBgtDtl" indexVar="idx">
+                                <tr class="slds-line-height_reset slds-table_fixed-layout">
+                                    <td>
+                                        <lightning:input type="checkbox" checked="{!prjBgtDtl.isChecked}" name="check"/>
+                                    </td>
+                                    <td>
+                                        {!idx+1}
+                                    </td>
+                                    <td>
+                                        <lightning:select name="select" variant="label-hidden" value="{!prjBgtDtl.Category2__c}">
+                                            <aura:iteration items="{!v.category2Lst}" var="option">
+                                                <option text="{!option.label}" value="{!option.value}" 
+                                                        selected="{!if(prjBgtDtl.Category2__c == option.value, true, false)}"></option>
+                                            </aura:iteration>
+                                        </lightning:select>
+                                    </td>
+                                    <td>
+                                        <lightning:input type="number" value="{!prjBgtDtl.UnitPrice__c}" formatter="currency" 
+                                                         name="{!'detail-' + idx}" onchange="{!c.fnChangeAmount}"/>
+                                    </td>
+                                    <td>
+                                        <lightning:input type="number" value="{!prjBgtDtl.Quantity__c}"
+                                                         name="{!'detail-' + idx}" onchange="{!c.fnChangeAmount}"/>
+                                    </td>
+                                    <td>
+                                        <lightning:input type="number" value="{!prjBgtDtl.Amount__c}" disabled="true"  formatter="currency"/>
+                                    </td>
+                                    <td>
+                                        <lightning:input type="text" value="{!prjBgtDtl.Memo__c}"/>
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                    <lightning:layoutItem padding="around-small" size="12">
+                        <lightning:input label="총 예산 금액" type="number"  value="{!v.totAmt}" disabled="true" formatter="currency"/>
+                    </lightning:layoutItem>
+                </aura:if>
+            </lightning:layout>
+        </lightning:card>
+    </div>
+    <aura:if isTrue="{!v.modalYn}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-modal_medium slds-fade-in-open slds-align_absolute-center">
+            <div class="slds-modal__container" style="position:relative">
+                <header class="slds-modal__header">
+                    <h2 class="inlineTitle slds-p-top--large slds-p-horizontal--medium slds-p-bottom--medium slds-text-heading--medium">
+                        프로젝트 예산 입력 가이드
+                    </h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutItem size="12" padding="horizontal-large">
+                            <table class="slds-table slds-no-row-hover">
+                                <colgroup>
+                                    <col width="15%" />
+                                    <col width="15%" />
+                                    <col width="" />
+                                    <col width="15%" />
+                                </colgroup>
+                                <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col" colspan="2" style="width: 16.6%;" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-center" title="구분"><b>구분</b></div>
+                                    </th>
+                                    <th scope="col" colspan="1" style="width: 24.4%;" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-center" title="상세내역"><b>상세내역</b></div>
+                                    </th>
+                                    <th scope="col" colspan="1" style="width: 24.4%;" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-center" title="비율"><b>비율</b></div>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!-- 직접비 -->
+                                <tr class="slds-hint-parent">
+                                    <th scope="col" rowspan="3" style="width: 16.6%;" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-center" title="직접비"><b>직접비</b></div>
+                                    </th>
+                                    <th scope="col" style="width: 16.6%;" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-center" title="노무비"><b>노무비</b></div>
+                                    </th>
+                                    <td class="slds-truncate cellBorder numberRight" style="width:16.6%;">
+                                        <div class="slds-truncate slds-align_absolute-left">
+                                            식대(8,000원/1식 기준)<br/>
+                                            - 석식: 20시 이후 근무자에 한함(조식/중식대는 비용 처리 불가)<br/>
+                                            - 당사 직원에 한함(타사 및 계약. 프리랜스 제외)
+                                        </div>
+                                    </td>
+                                    <td class="slds-truncate cellBorder numberRight" style="width:16.6%;">
+                                        <div class="slds-truncate slds-align_absolute-center">
+                                            (노무비/계약금액)x100
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th scope="col" style="width: 16.6%;" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-center" title="외주비"><b>외주비</b></div>
+                                    </th>
+                                    <td class="slds-truncate cellBorder numberRight" style="width:16.6%;">
+                                        <div class="slds-truncate slds-align_absolute-left">
+                                            외주 및 프리랜스(M/M)
+                                        </div>
+                                    </td>
+                                    <td class="slds-truncate cellBorder numberRight" style="width:16.6%;">
+                                        <div class="slds-truncate slds-align_absolute-center">
+                                            (노무비/계약금액)x100
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th scope="col" style="width: 16.6%;" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-center" title="소계"><b>소계</b></div>
+                                    </th>
+                                    <td class="slds-truncate cellBorder numberRight" style="width:16.6%;">
+                                    </td>
+                                    <td class="slds-truncate cellBorder numberRight" style="width:16.6%;">
+                                    </td>
+                                </tr>
+                                <!-- 경비 -->
+                                <tr class="slds-hint-parent">
+                                    <th scope="col" rowspan="6" style="width: 16.6%;" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-center" title="경비"><b>경비</b></div>
+                                    </th>
+                                    <th scope="col" style="width: 16.6%;" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-center" title="식대"><b>식대</b></div>
+                                    </th>
+                                    <td class="slds-truncate cellBorder numberRight" style="width:16.6%;">
+                                        <div class="slds-truncate slds-align_absolute-left">
+                                            식대(8,000원/1식 기준)<br/>
+                                            - 석식: 20시 이후 근무자에 한함(조식/중식대는 비용 처리 불가)<br/>
+                                            - 당사 직원에 한함(타사 및 계약. 프리랜스 제외)
+                                        </div>
+                                    </td>
+                                    <td class="slds-truncate cellBorder numberRight" style="width:16.6%;">
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th scope="col" style="width: 16.6%;" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-center" title="교통비"><b>교통비</b></div>
+                                    </th>
+                                    <td class="slds-truncate cellBorder numberRight" style="width:16.6%;">
+                                        <div class="slds-truncate slds-align_absolute-left">
+                                            - 심야교통비: 23시 이후까지 근무자에 한함<br/>
+                                            - 시내교통비: 대중교통 기준<br/>
+                                            - 주차비/유류비: 업무상 시내 및 경인지역 출장에 한함(출퇴근용 차량은 대상이 아님)
+                                        </div>
+                                    </td>
+                                    <td class="slds-truncate cellBorder numberRight" style="width:16.6%;">
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th scope="col" style="width: 16.6%;" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-center" title="출장비"><b>출장비</b></div>
+                                    </th>
+                                    <td class="slds-truncate cellBorder numberRight" style="width:16.6%;">
+                                        <div class="slds-truncate slds-align_absolute-left">
+                                            - 지방 출장: 고속(우등)버스/고속열차(일반석), 항공(이코노미), 숙박(1박 3~5만원), 일비(3만원/일: 식대, 교통비 포함)<br/>
+                                            - 경인지역(당일): 대중교통비, 유류대/톨비/주차비(자동차), 식대(8,000/1식: 중식제외)
+                                        </div>
+                                    </td>
+                                    <td class="slds-truncate cellBorder numberRight" style="width:16.6%;">
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th scope="col" style="width: 16.6%;" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-center" title="회식비"><b>회식비</b></div>
+                                    </th>
+                                    <td class="slds-truncate cellBorder numberRight" style="width:16.6%;">
+                                        <div class="slds-truncate slds-align_absolute-left">
+                                            - 회식비: 예산 범위내에서 집행<br/>
+                                            * 회식 비용으로 1회 예상금액 * 횟수)
+                                        </div>
+                                    </td>
+                                    <td class="slds-truncate cellBorder numberRight" style="width:16.6%;">
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th scope="col" style="width: 16.6%;" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-center" title="기타비용"><b>기타비용</b></div>
+                                    </th>
+                                    <td class="slds-truncate cellBorder numberRight" style="width:16.6%;">
+                                        <div class="slds-truncate slds-align_absolute-left">
+                                            - 차대 및 간식비, 회의비, 퀵서비스, 사무용품, 접대비
+                                            * 접대비: 30만원 이상은 사업부장의 승인을 득한 후에 집행
+                                        </div>
+                                    </td>
+                                    <td class="slds-truncate cellBorder numberRight" style="width:16.6%;">
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th scope="col" style="width: 16.6%;" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-center" title="소계"><b>소계</b></div>
+                                    </th>
+                                    <td class="slds-truncate cellBorder numberRight" style="width:16.6%;">
+                                    </td>
+                                    <td class="slds-truncate cellBorder numberRight" style="width:16.6%;">
+                                        <div class="slds-truncate slds-align_absolute-center">
+                                            (경비/계약금액)x100
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.fnModalClose}">닫기</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+</aura:component>

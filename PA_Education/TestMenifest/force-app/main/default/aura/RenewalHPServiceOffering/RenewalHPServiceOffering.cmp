@@ -1,0 +1,60 @@
+<!--
+- @description       : Service Offering of Homepage Renewal Project
+- @author            : Chan Kang
+- @group             : Boundary
+- Modifications Log
+- Ver   Date         Author           Modification
+- 1.0   2021.12.24   Chan Kang        Initial Version
+  1.1   2022.04.17   Myeonghwan Kim   Load english data conditionally
+                                      Add event handler to load english data
+                                      Add isEnglish parameter to APEX callout
+-->
+
+<aura:component
+    implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes"
+    access="global">
+    <aura:attribute name="isEnglish" type="boolean" access="global" default="false" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:handler event="c:i18nEvent" action="{!c.init}" />
+
+    <section>
+        <div class="contents">
+            <aura:if isTrue="{!v.isEnglish}">
+                <h1>
+                    <b class="textDeepBlue">From All Fields, Daeu Nextier provides services with:</b><br />
+
+                    <div class="innerCenter">
+                        <ul class="listService" style="list-style: disc inside">
+                            <li>System Strategy</li>
+                            <li>Build Business Process</li>
+                            <li>System Construction &amp; Operation</li>
+                        </ul>
+                    </div>
+
+                </h1>
+                <h2>
+                    We provide services in all systems with lifecycle areas based on Salesforce-specialized
+                    methodology.<br />
+                    Daeu Nextier is always ready with broad &amp; deep experience,<br />
+                    and our experts in Salesforce Administration / Development / Consulting / Marketing are waiting for
+                    you!
+                </h2>
+                <aura:set attribute="else">
+                    <h1>
+                        <b class="textDeepBlue">우리는</b><br />
+                        <b class="textDeepBlue">시스템 구축 전략, 비즈니스 프로세스 설계,</b><br />
+                        <b class="textDeepBlue">시스템 구축과 운영</b>까지<br />
+                        모든 영역에서 서비스를 제공합니다. <br />
+                    </h1>
+                    <h2>
+                        많은 프로젝트 수행 경험으로 정립한 Salesforce 특화 자체 방법론을 바탕으로<br />
+                        시스템 라이프사이클 전 영역에 걸친 서비스를 제공합니다.
+                    </h2>
+                </aura:set>
+            </aura:if>
+
+            <img class="is_pc" width="1280" src="{!$Resource.renewalHPServiceOffering}" />
+            <img class="is_mobile" src="{!$Resource.renewalHPServiceOfferingMobile}" />
+        </div>
+    </section>
+</aura:component>

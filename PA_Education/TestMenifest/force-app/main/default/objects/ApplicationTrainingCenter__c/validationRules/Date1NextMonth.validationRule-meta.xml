@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Date1NextMonth</fullName>
+    <active>true</active>
+    <errorConditionFormula>IF( AND( OR( ISNEW(), TEXT( Status__c) = &apos;신청&apos;),
+								$Profile.Name != &apos;System Administrator&apos;,
+								$Profile.Name != &apos;시스템 관리자&apos;),
+					 LEFT( TEXT( ADDMONTHS( TODAY (), 1 ) ), 7 ) != LEFT( TEXT(Date1__c) , 7),
+			  FALSE)</errorConditionFormula>
+    <errorDisplayField>Date1__c</errorDisplayField>
+    <errorMessage>다음달의 수련원 신청만 가능합니다.</errorMessage>
+</ValidationRule>

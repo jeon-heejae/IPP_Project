@@ -1,0 +1,8 @@
+/**
+ * Created by Kwanwoo.Jeon on 2023-12-11.
+ */
+
+/*수정가능한 Picklist 오른쪽 Padding 줄임*/
+.THIS td.timePicklist{
+    padding-right: 8px !important;
+}

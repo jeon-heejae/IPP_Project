@@ -1,0 +1,174 @@
+<!--
+
+-->
+<apex:page controller="InventoryManage" tabstyle="TabInventoryManage__tab">
+	<head>
+		<apex:stylesheet value="{!URLFOR($Resource.CssMenu, '/menu_source/styles.css')}" />
+		<apex:stylesheet value="{!URLFOR($Resource.jquery_ui, 'themes/base/jquery-ui.css')}"/>
+		<style>
+		input#InputBarcode {
+			ime-mode: disabled;
+		}
+		</style>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'jquery-1.10.2.js')}"/>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'ui/jquery-ui.js')}"/>
+		
+		<script type="text/javascript">
+			$(function() {
+				$( "#dialog-modal" ).dialog({
+					autoOpen: true,
+					height: 140,
+					modal: true	,
+					open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); }
+				});
+			});
+		</script>
+		<script type="text/javascript">
+			function barcode_select(){
+				var text_input = document.getElementById ('InputBarcode');
+				text_input.focus();
+				text_input.select();
+			}
+			function showDialog(){
+				$("#dialog-modal").dialog( "open" );
+				return false;
+			}
+			
+			function hideDialog(){
+				$("#dialog-modal").dialog( "close" );
+				document.getElementById('InputBarcode').focus();				
+				barcode_select();
+				return false;
+			}
+			function formInit() {
+				Warehouse();
+				hideDialog();
+			}
+			
+			function focus(targetId){
+				document.getElementById(targetId).focus();
+			}
+			
+			try {
+				window.addEventListener('load',formInit,false);
+			}catch(e){
+				window.attachEvent('onload',formInit);
+			}
+		</script>
+		<script type="text/javascript">
+			function KeyPressIvName(e, strSeq, targetId){
+				var keynum;
+				if(window.event){		// IE
+					keynum = e.keyCode;
+				}
+				if(keynum == 13){
+					InputBarcodeForPage(document.getElementById('InputBarcode').value, strSeq);
+					return false;
+				}
+			}
+			// 반납수량 처리 로직 추가
+			function bindQtyWhenValidateCnt(e, seq){
+				var keynum;
+				if(window.event){		// IE
+					keynum = e.keyCode;
+				}
+				if(keynum == 13){
+					bindReturnQty(document.getElementById('el-returnQty').value, seq);
+					return false;
+				}
+			}
+		</script>
+	</head>
+	<apex:form id="mainFrm">
+		<!--
+		ZA00000010100ZZ14D0101, ZA00000010a00ZZ14D0101
+		-->
+
+		<apex:actionStatus onstart="showDialog();" onstop="hideDialog();"  id="IngStatus"/>
+				 
+		<!-- StockProcess -->
+        <apex:actionFunction action="{!Warehouse}" name="Warehouse" rerender="mainFrm" status="IngStatus">
+			<apex:param name="test" assignTo="{!warehouse_category}" value="창고" />
+        </apex:actionFunction>  
+		<!-- 바코드 등록 -->
+        <apex:actionFunction action="{!InputBarcodeForPage}" name="InputBarcodeForPage" rerender="mainFrm" status="IngStatus">
+			<apex:param name="getVal" assignTo="{!InputBarcodeGetVal}" value="" />
+            <apex:param name="seq" assignTo="{!InputBarcodeSeq}" value="" />
+        </apex:actionFunction>
+        
+        <apex:actionFunction action="{!bindReturnQty}" name="bindReturnQty" rerender="mainFrm" status="IngStatus">
+			<apex:param name="returnQty" assignTo="{!returnQty}" value="" />
+            <apex:param name="returnSeq" assignTo="{!returnSeq}" value="" />
+        </apex:actionFunction>
+        
+		<apex:sectionHeader title="자재관리" />
+		<apex:pageMessages escape="false" />
+		<div id='cssmenu'>
+			<ul>
+			   <li ><a href='/apex/Inventory_Search'><span>부품 조회</span></a></li>
+			   <li ><a href='/apex/Inventory_Stock'><span>생산현장 출고</span></a></li>
+			   <li ><a href='/apex/Inventory_Line'><span>생산현장 재고</span></a></li>
+			   <li class='active'><a href='/apex/Inventory_Delivery'><span>자재창고 반납</span></a></li>
+			   <li class='last'><a href='/apex/Inventory_PrintBarcodeOnly'><span>일반바코드출력</span></a></li>
+			</ul>
+		</div>
+		<apex:pageBlock title="자재창고 반납" id="pgBlock">
+			* 반납할 자재창고를 선택하시고, 반납할 재고 바코드를 입력하세요.
+			<br/>
+			<br/>
+			<b>{!$ObjectType.Inventory__c.Fields.Warehouse__c.Label}</b>&nbsp;&nbsp;&nbsp; 
+			<!-- <apex:inputField value="{!SearchIV.Warehouse__c}" /> --> 
+			<apex:selectlist value="{!sel_warehouse}" size="1">
+            	<apex:selectOptions value="{!Warehouse}" />
+            </apex:selectlist>
+			<br/>
+			<br/>
+			
+		    <apex:pageBlockTable value="{!cIVs}" var="item" id="pgBlockTable">
+		    	<apex:column headerValue="Seq" value="{!item.Seq}"/>
+		    	<!--
+		    	<apex:column headerValue="State(system)" value="{!item.State}"/>
+		    	<apex:column headerValue="Id(system)" value="{!item.IV.Id}"/>
+		    	-->
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Name.Label}" id="clBar">
+		    		<apex:outputField id="IV_Name" value="{!item.IV.Name}" rendered="{!item.state<>1}" />
+		    		<apex:outputPanel rendered="{!item.state==1}">
+			    		<input type="text" id="InputBarcode" 
+			    			value="{!InputBarcodeGetVal}"
+			    			onkeypress="return KeyPressIvName(event, '{!item.Seq}', '{!$Component.IV_Name}');"
+			    		/>
+		    		</apex:outputPanel>
+		    	</apex:column>
+		    	
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Item__c.Label}" value="{!item.IV.Item__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Account__c.Label}" value="{!item.IV.Account__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.DateManufacture__c.Label}" value="{!item.IV.DateManufacture__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.CntImportInspection__c.Label}" value="{!item.IV.CntImportInspection__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Seq__c.Label}" value="{!item.IV.Seq__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.CntImport__c.Label}" value="{!item.IV.CntImport__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.CntUsed2__c.Label}" value="{!item.IV.CntUsed2__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.CntShipment__c.Label}" value="{!item.IV.CntShipment__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.CntInventory2__c.Label}">
+		    		<apex:outputText value="{!item.IV.CntInventory2__c}" rendered="{!item.state==2}" />
+		    		<apex:outputText value="{!item.currQty}" rendered="{!item.state==5}" />
+	    		</apex:column>
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Warehouse__c.Label}" value="{!item.IV.Warehouse__c}"/>
+		    	<apex:column headerValue="반납수량">
+		    		<apex:outputText value="{!item.returnQty}" rendered="{!item.state==5}" />
+			    	<apex:outputPanel rendered="{!item.state==2}">
+			    		<apex:inputText value="{!item.returnQty}" />
+			    	</apex:outputPanel>
+			    </apex:column>
+		    </apex:pageBlockTable>
+
+			<apex:pageBlockButtons location="bottom">
+				<apex:commandButton value="자재창고 반납" action="{!StockProcess}" rendered="{! !IsAllSaved}" status="IngStatus" rerender="mainFrm"/>
+			</apex:pageBlockButtons>
+		</apex:pageBlock>
+	</apex:form>
+
+	<div id="dialog-modal" title="처리중...">
+		<p>처리중입니다.</p>
+	</div>
+
+</apex:page>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>QuoteItem_License_Percent__c</fullName>
+    <description>할인율 License</description>
+    <formula>( QuoteItem_LicenseListPrice__c - QuoteItem_LicenseDiscountedPrice__c ) / QuoteItem_LicenseListPrice__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>할인율</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Percent</type>
+</CustomField>

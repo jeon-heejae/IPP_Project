@@ -1,0 +1,16 @@
+<template>
+    <lightning-card title="암호화폐 실시간 TOP 100"  style="--slds-c-card-heading-font-size:2rem;">
+        <!-- 최근 업데이트 날짜 출력 -->
+        <div class="slds-text-align_right slds-m-bottom_small slds-m-right_small">
+            <lightning-formatted-text value={getLast_updated} style="font-size: medium;"></lightning-formatted-text>
+        </div>
+
+        <lightning-datatable
+            key-field="id"
+            data={data}
+            columns={columns}
+            hide-checkbox-column>
+
+        </lightning-datatable>
+    </lightning-card>
+</template>

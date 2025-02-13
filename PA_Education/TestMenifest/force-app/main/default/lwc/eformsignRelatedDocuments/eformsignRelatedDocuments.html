@@ -1,0 +1,40 @@
+<!--
+ - Created by hs.jung on 2024-06-07.
+ -->
+
+
+<template>
+    <div>
+        <article class="slds-card slds-card_boundary slds-p-around_medium">
+            <div class="slds-card__header slds-page-header slds-page-header_joined slds-page-header_bleed slds-grid slds-theme_shade">
+                <header class="slds-media slds-media_center slds-has-flexi-truncate slds-theme_shade">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name="standard:contact" size="small"></lightning-icon>
+                    </div>
+                    <div class="slds-media__body">
+                        <h2 class="slds-card__header-title">
+                            <a class="slds-card__header-link slds-truncate" onclick={handleViewAll}>전자계약 문서({recordNum})</a>
+                        </h2>
+                    </div>
+                </header>
+            </div>
+            <template if:true={relatedRecords}>
+                <div class="slds-card__body">
+                    <lightning-datatable class="related-list"
+                                         onrowaction={handleRowAction}
+                                         columns={columns}
+                                         data={relatedRecords}
+                                         key-field="Id"
+                                         hide-checkbox-column="true"
+                                         resize-column-disabled="true">
+                    </lightning-datatable>
+                </div>
+            </template>
+            <!--
+            <footer class="slds-card__footer">
+                <a class="slds-card__footer-action" onclick={handleViewAll}>View All</a>
+            </footer>
+            -->
+        </article>
+    </div>
+</template>

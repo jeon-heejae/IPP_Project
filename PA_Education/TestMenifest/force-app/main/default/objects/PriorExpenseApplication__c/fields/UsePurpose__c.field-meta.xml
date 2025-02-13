@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>UsePurpose__c</fullName>
+    <label>사용목적</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>프로젝트</fullName>
+                <default>false</default>
+                <label>프로젝트</label>
+            </value>
+            <value>
+                <fullName>영업</fullName>
+                <default>false</default>
+                <label>영업</label>
+            </value>
+            <value>
+                <fullName>경영관리</fullName>
+                <default>false</default>
+                <label>경영관리</label>
+            </value>
+            <value>
+                <fullName>동호회</fullName>
+                <default>false</default>
+                <label>동호회</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

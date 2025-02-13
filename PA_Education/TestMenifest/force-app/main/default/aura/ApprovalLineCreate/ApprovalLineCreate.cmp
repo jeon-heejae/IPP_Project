@@ -1,0 +1,105 @@
+<aura:component  controller="ApprovalLineCreateController" implements="force:hasRecordId">
+
+	<!-- Parameter -->
+	<aura:attribute name="sId" 		   	 	   type="String"  />
+	<aura:attribute name="objUser" 	   	 	   type="User"    />
+	<aura:attribute name="fieldName"   	 	   type="String"  />
+	<aura:attribute name="listLabel"   	 	   type="Object"  />
+	<aura:attribute name="bHistory"	   	 	   type="Boolean" default="false"  description="ApprovalHistory에서 넘어온거면 true"/>
+	<aura:attribute name="sObjectName"	 	   type="String"  />
+	<aura:attribute name="sHistoryRecordId"	   type="String"  />
+	<aura:attribute name="iApproverLimit"      type="Integer" />
+	<aura:attribute name="sRecordId"		   type="String" 	description="ApprovalLine에서 넘어온 recordId , expense__c에서 유지보수 하는데 recordId가 넘어오지않아서 만듦" />
+
+	<aura:attribute name="sModalTitle"			type="String"/>
+
+	<!-- Handler -->
+    <aura:handler name="init" value="{!this}" action="{!c.fnInit}"  />
+
+	<div class="custom_modal demo-only" style="height: 640px;" aura:id="divModal">
+		<section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+			<div class="slds-modal__container">
+				<header class="slds-modal__header">
+					<lightning:buttonIcon iconName="utility:close" variant="bare" onclick="{!c.fnClose }" alternativeText="close" 
+										  class="slds-modal__close slds-button_icon-inverse" />
+					<h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">		
+						{!$Label.c.New}&nbsp;{!$Label.c.Approval_ApprovalLine}
+					</h2>
+				</header>
+				<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+					<aura:if isTrue="{!v.bHistory != true}" >
+						<div style="margin: 0 3px 3vh 3px;">
+							<lightning:input label="Subject" type="text" placeholder="ex. Approval Line 1" value="{!v.listLabel.label}" disabled="{!v.listLabel.label == '휴가신청라인'}"/>
+						</div>
+					</aura:if>
+					<lightning:layout class="slds-section slds-is-open slds-section__title slds-theme_shade">
+						<div class="slds-section__title slds-theme_shade">
+							<span class="slds-truncate slds-p-horizontal_small" title="Select Approver">{!$Label.c.Approval_ApprovalLine}</span>
+						 </div>
+					</lightning:layout>
+					<aura:iteration items="{!v.listLabel.userDatas}" var="user" indexVar="idx" end="{!v.iApproverLimit}">
+						<lightning:layout>
+							<!-- 승인자 띄우기 -->
+							<c:DN_Lookup 	aura:id 				= "UserLookup"
+											uniqueLookupIdentifier  = "UserLookup"
+											fieldSet 				= "['Name']"
+											objectName 				= "User"
+											whereCondition 			= ""
+											minimumCharacter 		= "1"
+											lightningIconName 		= "standard:account"
+											displayLabel 			= ""
+											selectedId 				= "{!user.Id}"
+											selectedLabel  			= "{!user.Name}"
+											required 				= "true"
+											primaryDisplayField 	= "Name"  	/>
+
+							<lightning:buttonIcon variant="border-filled" size="x-small" iconName="utility:dash"  name="{!idx}" onclick="{!c.fnDeleteRow}" class="custom-icon-center"/>
+						</lightning:layout>
+
+						<!-- 화살표 띄우기 -->
+						<lightning:layout horizontalAlign="center">
+							<aura:if isTrue="{! idx+1 != v.listLabel.userDatas.length}">
+								<div style="text-align: right;">
+									<lightning:icon  iconName="utility:arrowdown" size="small"/> {!idx +2} step
+								</div>
+							</aura:if>
+						</lightning:layout>
+					</aura:iteration>
+
+					<lightning:layout>
+						<lightning:button label="Add approver" class="slds-button slds-button_neutral slds-button_stretch" variant="Neutral" title="승인자 추가" onclick="{!c.fnAddRow}" iconPosition="right">{!$Label.c.Approver}&nbsp;{!$Label.c.New}</lightning:button>
+					</lightning:layout>
+					
+					<aura:if isTrue="{!v.bHistory == true}" >
+						&nbsp;&nbsp;
+						<lightning:layout class="slds-section slds-is-open slds-section__title slds-theme_shade">
+								<div class="slds-section__tit le slds-theme_shade">
+								   	<span class="slds-truncate slds-p-horizontal_small" title="">{!$Label.c.Comment}</span>
+								 </div>
+						</lightning:layout>
+
+
+						<lightning:buttonIcon iconName="utility:close" size="small" alternativeText="Close" 
+											  variant="bare-inverse" class="slds-modal__close" onclick="{!c.fnCancel}" />
+	                    <h2 class="slds-text-heading_medium" id="modal-heading-id">{!v.sModalTitle}</h2>
+	        			<ui:inputTextArea aura:id="comments"  rows="3" value="" />
+        			</aura:if>
+				</div>
+
+				<footer class="slds-modal__footer">
+	                <lightning:button class="slds-button slds-button_neutral" onclick="{!c.fnClose}">{!$Label.c.Cancel}</lightning:button>
+	    			<aura:if isTrue="{!v.bHistory == true }">
+	    				<lightning:button variant="brand" label="" onclick="{!c.fnSave}" >{!$Label.c.Submit}</lightning:button>
+	    				<aura:set attribute="else">
+	    					<lightning:button variant="brand" label="" onclick="{!c.fnSave}" >{!$Label.c.save}</lightning:button>
+	    				</aura:set>
+	    			</aura:if>
+				</footer>
+			</div>
+		</section>
+
+		<aura:if isTrue="{!v.bHistory == false}">
+			<div class="slds-backdrop slds-backdrop_open"></div>
+		</aura:if>
+	</div>
+</aura:component>

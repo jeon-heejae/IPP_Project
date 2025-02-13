@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Salesforce_Industry__c</fullName>
+    <description>이전회사에서 세일즈포스 프로젝트를 참여했을 시 해당 프로젝트의 산업분류를 확인하고자 함</description>
+    <inlineHelpText>Salesforce 프로젝트를 진행 했을 경우 선택</inlineHelpText>
+    <label>Salesforce 산업분류</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>자동차</fullName>
+                <default>false</default>
+                <label>자동차</label>
+            </value>
+            <value>
+                <fullName>통신</fullName>
+                <default>false</default>
+                <label>통신</label>
+            </value>
+            <value>
+                <fullName>소비재</fullName>
+                <default>false</default>
+                <label>소비재</label>
+            </value>
+            <value>
+                <fullName>교육</fullName>
+                <default>false</default>
+                <label>교육</label>
+            </value>
+            <value>
+                <fullName>에너지 및 유틸리티</fullName>
+                <default>false</default>
+                <label>에너지 및 유틸리티</label>
+            </value>
+            <value>
+                <fullName>금융 서비스</fullName>
+                <default>false</default>
+                <label>금융 서비스</label>
+            </value>
+            <value>
+                <fullName>공공부문</fullName>
+                <default>false</default>
+                <label>공공부문</label>
+            </value>
+            <value>
+                <fullName>헬프케어 및 생명과학</fullName>
+                <default>false</default>
+                <label>헬프케어 및 생명과학</label>
+            </value>
+            <value>
+                <fullName>제조업</fullName>
+                <default>false</default>
+                <label>제조업</label>
+            </value>
+            <value>
+                <fullName>미디어</fullName>
+                <default>false</default>
+                <label>미디어</label>
+            </value>
+            <value>
+                <fullName>비영리</fullName>
+                <default>false</default>
+                <label>비영리</label>
+            </value>
+            <value>
+                <fullName>리테일</fullName>
+                <default>false</default>
+                <label>리테일</label>
+            </value>
+            <value>
+                <fullName>기술</fullName>
+                <default>false</default>
+                <label>기술</label>
+            </value>
+            <value>
+                <fullName>운송 및 호스피탈리티</fullName>
+                <default>false</default>
+                <label>운송 및 호스피탈리티</label>
+            </value>
+            <value>
+                <fullName>직접입력</fullName>
+                <default>false</default>
+                <label>직접입력</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

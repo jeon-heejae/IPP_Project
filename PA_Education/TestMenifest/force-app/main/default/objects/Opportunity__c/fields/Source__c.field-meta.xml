@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Source__c</fullName>
+    <inlineHelpText>Help : Opportunity 최초 발굴사</inlineHelpText>
+    <label>리드소스</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Cold Call</fullName>
+                <default>false</default>
+                <label>Cold Call</label>
+            </value>
+            <value>
+                <fullName>Customer</fullName>
+                <default>false</default>
+                <label>고객추천</label>
+            </value>
+            <value>
+                <fullName>직접요청</fullName>
+                <default>false</default>
+                <label>직접요청</label>
+            </value>
+            <value>
+                <fullName>웹</fullName>
+                <default>false</default>
+                <label>Web문의</label>
+            </value>
+            <value>
+                <fullName>Salesforce</fullName>
+                <default>false</default>
+                <label>SFDC</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

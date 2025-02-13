@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>WorkingPlace__c</fullName>
+    <label>근무지역</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>서울</fullName>
+                <default>false</default>
+                <label>서울</label>
+            </value>
+            <value>
+                <fullName>경기</fullName>
+                <default>false</default>
+                <label>경기</label>
+            </value>
+            <value>
+                <fullName>인천</fullName>
+                <default>false</default>
+                <label>인천</label>
+            </value>
+            <value>
+                <fullName>수원</fullName>
+                <default>false</default>
+                <label>수원</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

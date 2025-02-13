@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>FormRequest_ShowPrvNo__c</fullName>
+    <defaultValue>false</defaultValue>
+    <inlineHelpText>주민번호 뒷자리를 표시할 경우 체크하세요.</inlineHelpText>
+    <label>주민번호 뒷자리 표시 여부</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

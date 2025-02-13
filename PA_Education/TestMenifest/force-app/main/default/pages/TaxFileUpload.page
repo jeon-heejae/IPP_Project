@@ -1,0 +1,32 @@
+<!--
+ - Created by user on 2024-08-09.
+ -->
+
+<apex:page id="TaxFileUpload" standardController="CorporateCardBilling__c" recordSetVar="listQuoteProduct" lightningStylesheets="true" >
+    <apex:includeLightning />
+    <div id="lightning" />
+
+    <script>
+
+
+        var currentURL = document.referrer;
+
+
+        if(SfdcApp.projectOneNavigator) {
+            SfdcApp.projectOneNavigator.fireContainerEvent(
+              "force:navigateToComponent",
+              {
+                componentDef: 'c:TaxFileUpload', // component
+                componentAttributes: {
+                    "parentId" : '{!$CurrentPage.parameters.id}',
+
+                    "sObjName" : "CorporateCardBilling__c" // 리다이렉트 개체
+                },
+
+                resetHistory: false
+              }
+            );
+        }
+
+    </script>
+</apex:page>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>QuoteItem_FOC__c</fullName>
+    <defaultValue>false</defaultValue>
+    <inlineHelpText>FOC일 경우 체크하세요.
+이 경우 금액이 계산되지 않습니다.</inlineHelpText>
+    <label>FOC</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

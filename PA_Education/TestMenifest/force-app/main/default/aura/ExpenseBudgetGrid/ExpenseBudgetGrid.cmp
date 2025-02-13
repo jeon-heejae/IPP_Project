@@ -1,0 +1,130 @@
+<aura:component controller ="ExpenseBudgetGridCmpController"
+				implements ="flexipage:availableForAllPageTypes,force:appHostable,force:hasRecordId,force:hasSObjectName"
+				access 	   ="global">
+
+	<!-- Spinner Container -->
+	<aura:attribute name="toggleSpinner"	 	type="boolean" 		default="true" />
+
+	<aura:attribute name="objExpense" 			type="Expense__c" />
+	<aura:attribute name="listExpenseDetail" 	type="List" />
+	<aura:attribute name="mapEDLabel"			type="Map"  />
+	<aura:attribute name="listLabel"    		type="List" />
+
+	<aura:attribute name="mouseOver" 			type="boolean" />
+	
+	<aura:attribute name="customLookupUser1st" 	type="Aura.component"/>
+  	<aura:attribute name="sValue" 				type="String"/>
+  	<aura:attribute name="sLabel" 				type="String"/>
+
+<!--	<aura:attribute name="bIsEdit" 				type="Boolean" 		default="false"/>-->
+
+	<aura:attribute name="isExp" 				type="boolean" 		default="false" />
+    <aura:attribute name="isExpDetail" 			type="boolean" 		default="false" />
+
+	<aura:handler name="init" 	value="{!this}" 	 action="{!c.fnInit}" />
+	<aura:handler name="change" value="{!v.bIsEdit}" action="{!c.fnInit}"/>
+
+	<aura:if isTrue="{!v.toggleSpinner}">
+		<lightning:spinner aura:id="spinner" alternativeText="Loading" size="large" variant="brand"/>
+	</aura:if>
+	<article class="slds-card" style="border: 1px solid rgb(221, 219, 218); border-radius: .25rem;">
+        <div class="slds-card__header slds-grid" style="padding: .75rem 1rem 0;">
+			<header class="slds-media slds-media_center slds-has-flexi-truncate">
+				<div class="slds-media__figure">
+					<span class="slds-icon_container slds-icon-standard-account" title="account">
+						<lightning:icon iconName="standard:insights" size="small" />
+						<span class="slds-assistive-text">
+							{!$Label.c.expense_Detail} / {!v.toggleSpinner}
+						</span>
+					</span>
+				</div>
+				<div class="slds-media__body">
+					<h2 class="slds-card__header-title">
+						<a href="javascript:void(0);" class="slds-card__header-link slds-truncate" title="custom" onclick="{!c.fnGoToRelatedView}">
+							<span>
+								{!$Label.c.expense_Detail} ({!v.listExpenseDetail.length})
+							</span>
+						</a>
+					</h2>
+				</div>
+<!--				<aura:if isTrue="{!v.bIsEdit == true}">-->
+<!--					<div onmouseover="{!c.fnMouseOver}" class="slds-m-right_x-large">-->
+<!--						경비신청코드 <lightning:icon iconName="utility:info" size="x-small"/>-->
+<!--						<aura:if isTrue="{!v.mouseOver}">-->
+<!--							<c:ExpenseCreationInfo mouseOver="{!v.mouseOver}"/>-->
+<!--						</aura:if>-->
+<!--					</div>-->
+<!--					<aura:set attribute="else">-->
+<!--						<lightning:button variant="neutral" label="New/Edit" onclick="{!c.fnNewEdit}"/>-->
+<!--					</aura:set>-->
+<!--				</aura:if>-->
+			</header>
+        </div>
+
+		<aura:if isTrue="{!v.listExpenseDetail.length > 0}">
+<!--			<aura:if isTrue="{!v.bIsEdit == false}">-->
+				<div class="slds-card__body">
+					<table id="dataTable" class="slds-table slds-scrollable slds-table_bordered slds-no-row-hover slds-table_cell-buffer">
+						<thead>
+						<tr class="slds-text-title_caps">
+							<th class="custom_No text-left">NO</th>
+							<th class="text-left">{!v.mapEDLabel.Date__c}</th>
+							<th class="text-left">{!v.mapEDLabel.CardCompany__c}</th>
+							<th class="text-left">{!v.mapEDLabel.Category2__c}</th>
+							<aura:if isTrue="{!v.objExpense.BudgetType__c == '영업'}">
+								<th class="text-left">{!v.mapEDLabel.SalesType__c}</th>
+								<th class="text-left">관련됨</th>
+							</aura:if>
+							<th class="text-left">{!v.mapEDLabel.BillingAmount__c}</th>
+							<th class="text-left">{!v.mapEDLabel.Amount__c}</th>
+							<th style="text-align: left; width: 20vw;">{!v.mapEDLabel.Description__c}</th>
+							<th class="text-left">{!v.mapEDLabel.StoreName__c}</th>
+							<th class="text-left">{!v.mapEDLabel.BusinessType__c}</th>
+<!--							<th>{!v.mapEDLabel.Category1__c}</th>-->
+							<th class="text-left">{!v.mapEDLabel.StoreAddress__c}</th>
+<!--							<th style="width: 25vh;">{!v.mapEDLabel.fm_ProjectOppty__c}</th>-->
+						</tr>
+						</thead>
+						<tbody>
+						<aura:iteration items="{!v.listExpenseDetail}" var="obj" indexVar="idx" end="">
+							<tr>
+								<td class="custom_No">{!idx+1} </td>
+								<td title="{!obj.Date__c}" class="slds-truncate">{!obj.Date__c}</td>
+								<td title="{!obj.CardCompany__c}" class="slds-truncate">{!obj.CardCompany__c}</td>
+								<td title="{!obj.Category2__c}" class="slds-truncate custom_No">{!obj.Category2__c}</td>
+								<aura:if isTrue="{!v.objExpense.BudgetType__c == '영업'}">
+									<td title="{!obj.SalesType__c}" class="slds-truncate custom_No">{!obj.SalesType__c}</td>
+									<td class="slds-truncate custom_No">
+										<aura:if isTrue="{!obj.SalesType__c == '프로젝트'}">{!obj.Project_Name__r.Name}</aura:if>
+										<aura:if isTrue="{!obj.SalesType__c == '영업기회'}">{!obj.Opportunity_Name__r.Name}</aura:if>
+										<aura:if isTrue="{!obj.SalesType__c == '잠재고객'}">{!obj.Lead__r.Name}</aura:if>
+									</td>
+								</aura:if>
+								<td title="{!obj.BillingAmount__c}" class="slds-truncate" style="text-align: right;">
+									<ui:outputCurrency value="{!obj.BillingAmount__c}"/>
+								</td>
+								<td title="{!obj.Amount__c}" class="slds-truncate" style="text-align: right;">
+									<ui:outputCurrency value="{!obj.Amount__c}"/>
+								</td>
+								<td title="{!obj.Description__c}" class="slds-truncate" style="width: 40vh;">
+									{!obj.Description__c}
+								</td>
+								<td title="{!obj.StoreName__c}" class="slds-truncate">{!obj.StoreName__c}</td>
+								<td title="{!obj.BusinessType__c}" class="slds-truncate">{!obj.BusinessType__c}</td>
+<!--								<td title="{!obj.Category1__c}" class="slds-truncate custom-tenper"> {!obj.Category1__c}</td>-->
+								<td title="{!obj.StoreAddress__c}" class="slds-truncate custom-tenper">{!obj.StoreAddress__c}</td>
+<!--								<td title="{!obj.fm_ProjectOppty__c}" class="slds-truncate" style="width: 25vh;">{!obj.fm_ProjectOppty__c}</td>-->
+<!--								<td title="{!obj.Payment_Type__c}" class="slds-truncate"> {!obj.Payment_Type__c}</td>-->
+
+							</tr>
+						</aura:iteration>
+						</tbody>
+					</table>
+				</div>
+<!--				<aura:set attribute="else">-->
+<!--					<c:ExpenseNew recordId = "{!v.recordId}"/>-->
+<!--				</aura:set>-->
+			</aura:if>
+<!--		</aura:if>-->
+	</article>
+</aura:component>

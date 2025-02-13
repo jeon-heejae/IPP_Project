@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>QuoteItem_SortOrder__c</fullName>
+    <externalId>false</externalId>
+    <inlineHelpText>구분,등급,단가 순서보다 우선 적용되는 표기 순번입니다.</inlineHelpText>
+    <label>순서</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

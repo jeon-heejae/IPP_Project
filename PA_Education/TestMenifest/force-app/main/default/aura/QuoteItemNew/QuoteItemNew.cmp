@@ -1,0 +1,96 @@
+<!--
+  * ===============================================================
+  * File Name   : QuoteItemNew.cmp
+  * Author      : Soyoung.Jung
+  * Date        : 2019.01.14
+  * Description : 견적 상세 생성 모달
+  * Modification Log
+  * ===============================================================
+  * Ver     Date        Author          Modification
+  * ===============================================================
+  * 1.0     2019.01.14  Soyoung.Jung    Create
+  * ===============================================================
+-->
+
+<aura:component controller="QuoteItemNewController" implements="lightning:actionOverride">
+	
+	<!-- Parameter Attribute -->
+	<aura:attribute name="idParentRecord" type="String" />
+
+	<!-- Component Attribute -->
+	<aura:attribute name="listRecordTypeQI" type="List" />
+	<aura:attribute name="mapRecordTypeId" type="Map" />
+	<aura:attribute name="sRecordType" type="String" default="Consulting" />
+
+	<aura:attribute name="bIsAutomatic" type="Boolean" default="true" />
+	
+
+	<!-- Handler -->
+	<aura:handler name="init" value="{!this}" action="{!c.fnInit}" />
+
+	
+	<div aura:id="modalContainer">
+        <section role="alertdialog" tabindex="-1" aria-labelledby="modal-heading-id" aria-describedby="modal-content-id" class="slds-modal slds-fade-in-open" aria-modal="true">
+            <div class="slds-modal__container">
+                <!-- Header -->
+                <header class="modal-header slds-modal__header">
+                    <lightning:buttonIcon   iconName="utility:close" size="small" alternativeText="Close" variant="bare-inverse" class="slds-modal__close" onclick="{!c.fnCancel}" />
+                    <h2 class="slds-text-heading_medium" id="modal-heading-id">New 견적 상세</h2>
+                </header>
+                
+                <!-- Content -->
+                <div class="slds-modal__content slds-p-around_medium custom_contents" id="modal-content-id-1">
+                	<!-- 레코드 타입 선택 -->
+                	<lightning:radioGroup name="radioRecordtype" label="Select a record type" options="{!v.listRecordTypeQI}" value="{!v.sRecordType}"
+                						  class="custom_selectRecordtype" />
+
+                    <!-- <fieldset class="slds-form-element custom_selectRecordtype">
+						<legend class="slds-form-element__legend slds-form-element__label">Select a record type</legend>
+						<div class="slds-form-element__control">
+							<aura:iteration items="{!v.listRecordTypeQI}" var="objRecordType" indexVar="idx">
+								<span class="slds-radio">
+									<input type="radio" id="{!'recordtype-' + idx}" name="recordtype" value="{!objRecordType.DeveloperName}" />
+									<label class="slds-radio__label" for="{!'recordtype-' + idx}" style="display: -webkit-inline-box;">
+										<span class="slds-radio_faux"></span>
+										<div>
+											<span class="slds-form-element__label">{!objRecordType.Name}</span>
+											<div class="custom_radioHelptext">{!objRecordType.Description}</div>
+										</div>
+									</label>
+								</span>	
+							</aura:iteration>
+						</div>
+					</fieldset> -->
+
+                    <!-- 자동 입력 여부 선택 -->
+                    <aura:if isTrue="{!v.sRecordType == 'Consulting'}">
+	                    <div class="custom_divarea">
+	                    	<lightning:input type="checkbox" label="Is it automatic?" class="custom_isAutoCheck" checked="{!v.bIsAutomatic}" />
+	                    </div>
+                    </aura:if>
+
+                    <!-- 사원 선택 -->
+                    <aura:if isTrue="{!and(v.sRecordType == 'Consulting', v.bIsAutomatic)}">
+	                    <div class="custom_divarea custom_lookup">
+		                    <c:CommonLookup aura:id="employeeLookup" 
+		                    				sId="" 
+		                    				sNm=""
+		                    				sLabel="Select an employee"
+		                    				sObj="Employee__c" 
+		                    				sIconName="custom:custom3" />
+	                    </div>
+                    </aura:if>
+                </div>
+                
+                <!-- Footer -->
+                <footer class="slds-modal__footer">
+                    <lightning:button label="Cancel" onclick="{!c.fnCancel}" />
+                    <lightning:button label="Next" onclick="{!c.fnNext}" />
+                </footer>
+            </div>
+        </section>
+
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>	
+
+</aura:component>

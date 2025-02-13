@@ -1,0 +1,83 @@
+<apex:page standardController="Quote__c" showHeader="true" sidebar="true">
+	
+	<apex:includeLightning />
+    
+    <div id="lightning" /> 
+
+    <script src="../../soap/ajax/37.0/connection.js" type="text/javascript"></script>
+    <script>
+        // Parameter Check
+        var parameter = decodeURIComponent(window.location.search.substring(1));
+        var parameterMap = parameter.split("&");
+        var parameterDetail, key, value;
+        var recordId;
+        var idOppty;
+        var nameOppty;
+        var qMode;
+        //퀵액션 으로 Oppty 에서 Quote 생성시 매핑해 넘겨주는값들
+        var opptyAccId, opptyAccName, opptyContactId, opptyContactName;
+
+
+
+        if(parameter !== "") {
+            for(var index = 0, maxIndex = parameterMap.length ; index < maxIndex; index++) {
+                parameterDetail = parameterMap[index].split("=");
+                //oppty ID
+                key = parameterDetail[0];
+                value = parameterDetail[1];
+
+                // //oppty Name
+                // key2 = parameterDetail[2];
+                // value2 = parameterDetail[3];
+
+                // //oppty Owner
+                // key3 = parameterDetail[4];
+                // value3 = parameterDetail[5];
+
+                // //oppty Acc.Id
+                // key4 = parameterDetail[6];
+                // value4 = parameterDetail[7];
+
+
+                if(key === "recordId") {
+                    recordId = value;
+                }
+
+                if(key === "idOppty") {
+                    idOppty = value;
+                }
+
+                if(key == "nameOppty") {
+                    nameOppty = value;
+                }
+                if(key == "opptyAccId") {
+                    opptyAccId = value;
+                } 
+                if(key == "opptyAccName") {
+                    opptyAccName = value;
+                }                                   
+                if(key == "qMode") {
+                    qMode = value;
+                }                   
+                // if(key.indexOf("_lkid") > 0) idRecord = value;
+                // if(key === "RecordType") idRecordType = value;
+            }
+
+            //if(SfdcApp.projectOneNavigator) {
+                SfdcApp.projectOneNavigator.fireContainerEvent("force:navigateToComponent", {
+                    componentDef: 'c:QuoteCreation',
+                    componentAttributes: {
+                        recordId : recordId,
+                        idOppty : idOppty,
+                        nameOppty : nameOppty,
+                        opptyAccId : opptyAccId,
+                        opptyAccName : opptyAccName,
+                        qMode : 'clone'
+
+                    },
+                    resetHistory: false
+                });      
+            //}
+        }
+    </script>
+</apex:page>

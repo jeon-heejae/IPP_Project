@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RequiredFieldUseType</fullName>
+    <active>true</active>
+    <errorConditionFormula>ISPICKVAL( UseType__c, &quot;&quot;)</errorConditionFormula>
+    <errorMessage>사용 유형을 선택해 주세요. (&apos;1박&apos; 혹은 &apos;2박&apos;)</errorMessage>
+</ValidationRule>

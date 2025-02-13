@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LeadSource__c</fullName>
+    <label>리드 소스</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>웹</fullName>
+                <default>false</default>
+                <label>웹</label>
+            </value>
+            <value>
+                <fullName>유선문의</fullName>
+                <default>false</default>
+                <label>유선문의</label>
+            </value>
+            <value>
+                <fullName>파트너 추천</fullName>
+                <default>false</default>
+                <label>파트너 추천</label>
+            </value>
+            <value>
+                <fullName>기타 등등</fullName>
+                <default>false</default>
+                <label>기타 등등</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

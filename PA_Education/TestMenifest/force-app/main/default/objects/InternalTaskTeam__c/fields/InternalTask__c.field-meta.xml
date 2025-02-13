@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>InternalTask__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>내부 Task</label>
+    <referenceTo>InternalTask__c</referenceTo>
+    <relationshipLabel>내부 Task 수행팀</relationshipLabel>
+    <relationshipName>InternalTask</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

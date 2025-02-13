@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>QuoteItem_ConsultAmount__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( QuoteItem_FOC__c ,0, 
+IF(QuoteItem_ConsultDiscountedPrice__c == 0 , QuoteItem_ConsultListPrice__c,QuoteItem_ConsultDiscountedPrice__c) * QuoteItem_ConsultManMonths__c
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>할인후 금액</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

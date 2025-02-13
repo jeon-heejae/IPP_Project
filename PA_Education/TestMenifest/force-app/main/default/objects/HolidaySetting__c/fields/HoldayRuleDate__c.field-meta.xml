@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>HoldayRuleDate__c</fullName>
+    <defaultValue>DATE(2000,1,1)</defaultValue>
+    <description>입사일기준이 False일 경우
+설정된 날짜(년도 무시)를 기준으로 연차 생성 및 사용일수 초기화를 한다.</description>
+    <label>연차 기준일</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

@@ -1,0 +1,82 @@
+<!--
+ - @description       : Competency of Homepage Renewal Project
+ - @author            : Chan Kang
+ - @group             : Boundary
+ - Modifications Log
+ - Ver   Date         Author           Modification
+ - 1.0   2021.12.24   Chan Kang        Initial Version
+   1.1   2022.04.17   Myeonghwan Kim   Load english data conditionally
+                                       Add event handler to load english data
+                                       Add isEnglish parameter to APEX callout
+-->
+
+<aura:component
+    implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes"
+    access="global">
+    <aura:attribute name="isEnglish" type="boolean" access="global" default="false" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:handler event="c:i18nEvent" action="{!c.init}" />
+    <section>
+        <div class="contents" id="competency">
+            <p class="pageTitle">
+                Competency
+            </p>
+            <aura:if isTrue="{!v.isEnglish}">
+                <!--                English -->
+                <h1 class="is_pc">
+                    Our <b class="textDeepBlue">Core Competency</b> always provides<br />
+                    <b class="textDeepBlue>">Significant Values</b> to customers
+                </h1>
+                <h1 class="is_mobile">
+                    Our <b class="textDeepBlue">Core Competency</b> always provides<br />
+                    <b class="textDeepBlue>">Significant Values</b> to customers
+                </h1>
+                <h2 class="is_pc">
+                    We constantly strive for better value to our customers based on:
+                    <ul class="list">
+                        <li>Customer-Centered Mindset</li>
+                        <li>Respect-Based Leadership</li>
+                        <li>Dynamic Teamwork &amp; Members</li>
+                        <li>Driving Force</li>
+                        <li>Ability to Pinpoint Key Challenge</li>
+                    </ul>
+                </h2>
+                <h2 class="is_mobile">
+                    We constantly strive for better value to our customers based on:
+                    <ul class="list">
+                        <li>Customer-Centered Mindset</li>
+                        <li>Respect-Based Leadership</li>
+                        <li>Dynamic Teamwork &amp; Members</li>
+                        <li>Driving Force</li>
+                        <li>Ability to Pinpoint Key Challenge</li>
+                    </ul>
+                </h2>
+
+                <aura:set attribute="else">
+                    <!--                Korean -->
+                    <h1 class="is_pc textDeepBlue">
+                        우리는<br />
+                        핵심역량에 기반한 차별화된 가치를<br />
+                        고객에게 전달합니다.
+                    </h1>
+                    <h1 class="is_mobile textDeepBlue">
+                        우리는<br />
+                        핵심역량에 기반한 차별화된 가치를<br />
+                        고객에게 전달합니다.
+                    </h1>
+                    <h2 class="is_pc">
+                        고객 중심의 시각, 변화과제를 발취하는 능력, 구성원을 존중하는 리더십,<br />
+                        상호 배려하는 팀워크, 지치지 않는 추진력, 그리고 다양한 구성원이 가지는 역동성을 기반으로<br />
+                        고객에게 가치를 전달하고자 끊임 없이 노력합니다.<br />
+                    </h2>
+                    <h2 class="is_mobile">
+                        고객 중심의 시각, 변화과제를 발취하는 능력, 구성원을 존중하는 리더십,<br />
+                        상호 배려하는 팀워크, 지치지 않는 추진력, 그리고 다양한 구성원이 가지는 역동성을 기반으로<br />
+                        고객에게 가치를 전달하고자 끊임 없이 노력합니다.<br />
+                    </h2>
+                </aura:set>
+            </aura:if>
+            <img class="competency_img" src="{!$Resource.DaeuProfileCompetency}" />
+        </div>
+    </section>
+</aura:component>

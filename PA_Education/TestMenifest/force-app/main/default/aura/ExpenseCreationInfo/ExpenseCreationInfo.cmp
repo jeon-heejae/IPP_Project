@@ -1,0 +1,520 @@
+<!--
+ - Created by Kwanwoo.Jeon on 2024-01-04.
+ -->
+
+<aura:component description="ExpenseCreationInfo"
+                implements="force:hasRecordId,flexipage:availableForRecordHome,force:appHostable,forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes,force:lightningQuickActionWithoutHeader,force:hasSObjectName,lightning:actionOverride">
+
+    <aura:attribute name="mouseOver" type="boolean"/>
+
+    <div class="slds-m-aroundxx-large" aura:id="divModal" onclick="{!c.fnCloseModal}">
+        <lightning:overlayLibrary aura:id="overlayLib"/>
+        <div role="dialog" tabindex="1" aria-labelledby="header99"
+             class="slds-modal slds-fade-in-open ">
+            <div class="slds-modal__container customDSize" onclick="{!c.stopPropagation}">
+                <div class="slds-box slds-modal__content slds-p-around_medium" style="overflow-x:scroll"
+                     id="modal-content-id-1">
+                    <!--<center>
+                        <img src="{!$Resource.expense_rule}" width="1200" height="1000"/>
+                    </center>-->
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutItem size="12" padding="horizontal-large">
+                            <div>
+                                <b style="font-size : 1.3em">※ 경비규정 Quip 링크</b><br/>
+                                <a href="https://daeunextier.quip.com/RgzXAtUUltw0/2-" target="_blank" onclick="{!c.fnCloseModal}">https://daeunextier.quip.com/RgzXAtUUltw0/2-</a>
+                            </div>
+                            <br/>
+                            <!-- 사용목적 -->
+                            <table class="slds-table slds-no-row-hover">
+                                <colgroup>
+                                    <col width="10%"/>
+                                    <col width="45%"/>
+                                    <col width="45%"/>
+                                </colgroup>
+                                <thead>
+                                <b style="font-size : 1.3em">1) 사용목적</b>
+                                </thead>
+                                <tbody>
+                                <tr class="slds-hint-parent">
+                                    <td>
+                                        <div>
+                                            • 본사행정 : 동호회활동비, 본사행정 업무로 발생한 비용
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <td>
+                                        <div>
+                                            • 마케팅 : 마케팅 목적으로 발생한 비용
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <td>
+                                        <div style="white-space:nowrap">
+                                            • 프로젝트 : 투입(예정)된 프로젝트 관련하여 발생한 비용
+                                            <b>(프로젝트가 생성되지 않은 경우 함소이님께 요청하여 생성 후 작성)</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <br/>
+
+                            <!-- 비용구분 -->
+                            <b style="font-size : 1.3em">2) 비용구분</b>
+                            <table class="slds-table slds-no-row-hover">
+                                <colgroup>
+                                    <col width="10%"/>
+                                    <col width="25%"/>
+                                    <col width="15%"/>
+                                    <col width="50%"/>
+                                </colgroup>
+                                <thead>
+
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col" colspan="1"
+                                        class="cellBorder tr_smmy th_color">
+                                        <div class="slds-truncate slds-align_absolute-left"
+                                             title="구분"><b>구분</b></div>
+                                    </th>
+                                    <th scope="col" colspan="1"
+                                        class="cellBorder tr_smmy th_color">
+                                        <div class="slds-truncate slds-align_absolute-left"
+                                             title="내용"><b>내용</b></div>
+                                    </th>
+                                    <th scope="col" colspan="1"
+                                        class="cellBorder tr_smmy th_color">
+                                        <div class="slds-truncate slds-align_absolute-left"
+                                             title="청구 기준"><b>청구 기준</b></div>
+                                    </th>
+                                    <th scope="col" colspan="1"
+                                        class="cellBorder tr_smmy th_color">
+                                        <div class="slds-truncate slds-align_absolute-left"
+                                             title="항목별 가이드 라인 (필수기재사항)"><b>항목별 가이드 라인 (필수기재사항)</b>
+                                        </div>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="slds-hint-parent">
+                                    <th scope="col" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-left"
+                                             title="식비"><b>식비</b></div>
+                                    </th>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">
+                                        <div>
+                                            야근, 주말근무,<br/>
+                                            출장시 저녁 식대<br/>
+                                            (점심식사 제외)
+                                        </div>
+                                    </td>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">
+                                        <div class="slds-truncate slds-align_absolute-left">
+                                            12,000원
+                                        </div>
+                                    </td>
+                                    <td class="slds-truncate cellBorder numberRight" style="padding:0px">
+                                        <table class="slds-truncate slds-align_absolute-left">
+                                            <td class="slds-truncate cellBorder numberRight cellPadding">
+                                                <div>
+                                                    - 참석인원 명시 <b>(대유임직원 직급생략, 그 외는 회사 및 직급 기재)</b><br/>
+                                                    - 구매내역 기재<br/>
+                                                    * 편의점 등 *<span style="text-decoration:underline">일반음식점 외 가맹점에서 구매시</span> 거래내역 기재 필수<br/>
+                                                    &emsp;(회계상 비용인정 여부 판단위해 구분 기재 필수)<br/>
+                                                    <b>- 휴일 근무시 점심 식대 허용</b><br/>
+                                                    &emsp;(단, <span style="text-decoration:underline">휴일 근무 신청 완료한 건</span>에 한하여 허용) <a href="https://daeunextier.quip.com/eewRAiwo0A0n/6-" target="_blank"> 6. 휴일근무 신청(최종)</a>
+                                                    <p style="background-color:#fccad4;font-weight: bolder; margin-top: 4px;">
+                                                        (ex) 야근식대 2명 (이름1,이름2, A사 김대유 차장) / <span style="text-decoration:underline">삼각김밥, 음료 외 구입</span>
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th scope="col" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-left"
+                                             title="회식비"><b>부 서<br/>회식비</b></div>
+                                    </th>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">
+                                        <div>
+                                            임직원 회식대<br/>
+                                            (점심, 저녁포함)
+                                        </div>
+                                    </td>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">
+                                        <div class="slds-truncate slds-align_absolute-left">
+                                            1인당 5만원<br/>
+                                            (1,2차 등 포함)
+                                        </div>
+                                    </td>
+                                    <td class="slds-truncate cellBorder numberRight cellPadding">
+                                        <div>
+                                            - 프로젝트 팀의 단합과 사기 증진을 위해 <span class="font-red">사전계획에 의해 집행된 비용</span><br/>
+                                            - <span class="font-red">부서/프로젝트 회식에 대한 사전 경비 승인</span> 올리기 (금액 무관)<br/>
+                                            &emsp;( 사전 승인한 예산 초과시에 경영지원부서장에게 메일 통보 요망)<br/>
+                                            - PM 미참석인 경우 PM이 승인한자가 결제 후 경비신청<br/>
+                                            - 목적, 인원수, 참석인원 명시<br/>
+                                            <p style="background-color:#fccad4;font-weight: bolder; margin-top: 4px;">(ex) 프로젝트 전체회의 4명 (이름1,이름2,이름3,이름4)</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th scope="col" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-left"
+                                             title="회의비"><b>회의비</b></div>
+                                    </th>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">
+                                        <div>
+                                            임직원 회의시 음료대 외
+                                        </div>
+                                    </td>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">
+                                        <div class="slds-truncate slds-align_absolute-left">
+                                            1인당 2만원<br/>(2인 이상 필수)
+                                        </div>
+                                    </td>
+                                    <td class="slds-truncate cellBorder numberRight cellPadding">
+                                        <div>
+                                            - 식대, 음료대 포함하여 인당 2만원<br/>
+                                            - 회의 목적이므로 2인 이상 사용<br/>
+                                            - 회의 목적 외에 식대를 올리는 것을 지양<br/>
+                                            - 회의목적, 인원 수, 참석인원 명시<br/>
+                                            <p style="background-color:#fccad4;font-weight: bolder; margin-top: 4px;">(ex) 요구사항 확정회의 4명 (이름1,이름2,이름3,이름4)</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th scope="col" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-left"
+                                             title="접대비"><b>접대비</b></div>
+                                    </th>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">
+                                        <div>
+                                            고객사 접대비
+                                        </div>
+                                    </td>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">
+                                        <div class="slds-truncate slds-align_absolute-left">
+                                            접대목적에<br/>부합한 경우에<br/>한해 인정
+                                        </div>
+                                    </td>
+                                    <td class="slds-truncate cellBorder numberRight cellPadding">
+                                        <div>
+                                            - 프로젝트 수행 중 단계보고 및 중요한 이벤트 발생 시 고객이 참여하는 회식<br/>
+                                            - PM 사전승인 필수<br/>
+                                            - 목적, 인원수, 참석인원 명시<br/>
+                                            <p style="background-color:#fccad4;font-weight: bolder; margin-top: 4px;">(ex) 완료보고 후 저녁식사 3명 / (이름1,이름2, A사 김대유 차장)</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th scope="col" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-left"
+                                             title="교통비"><b>교통비</b></div>
+                                    </th>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">
+                                        <div>
+                                            임직원<br/>
+                                            야근, 외근시 교통비
+                                        </div>
+                                    </td>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">
+                                        <div>
+                                            10시 이후<br/>
+                                            퇴근 및 탑승
+                                        </div>
+                                    </td>
+                                    <td class="slds-truncate cellBorder numberRight cellPadding">
+                                        <div>
+                                            - 10시 이후 퇴근 원칙<br/>
+                                            - <span class="font-red">10시 이전의 교통비는</span> PM이 승인하에 청구<br/>
+                                            &emsp;(ex. 천재지변에 의해 대중교통 이용 불가할 시 PM 승인하에 이용가능)<br/>
+                                            - 목적, 출발지, 목적지, 탑승시간, (해당시) <span class="font-red">PM 승인사항 기재</span><br />
+                                            <p style="background-color:#fccad4;font-weight: bolder; margin-top: 4px;">
+                                                (ex) 야근 후 귀가 / 성수→판교 <span class="font-red">9:30</span> 탑승/ <span class="font-red">집중호우로 대중교통 이용불가 <br/>&emsp;&emsp;/ PM승인 완료 </span><br/>
+                                                &emsp;&emsp;야근 후 귀가 / 성수->판교 11:00 탑승
+                                            </p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th scope="col" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-left"
+                                             title="교육/훈련"><b>동호회<br/>활동비</b></div>
+                                    </th>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">
+                                        <div>
+                                            동호회 활동비용
+                                        </div>
+                                    </td>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">
+                                        <div>
+                                            1인 2만원 이내
+                                        </div>
+                                    </td>
+                                    <td class="slds-truncate cellBorder numberRight cellPadding">
+                                        <div>
+                                            - 동호회 운영 규정에 맞게 사용된 동호회 활동비<br/>
+                                            - <b>사용목적 "본사행정" 선택</b><br/>
+                                            <p style="background-color:#fccad4;font-weight: bolder; margin-top: 4px;">
+                                                (ex) 동호회(동호회명기재) 5명 활동비
+                                            </p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th scope="col" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-left"
+                                             title="소모품비"><b>소모품비</b></div>
+                                    </th>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">
+                                        업무목적상<br/>
+                                        필요한 공용물품<br/>
+                                        구매비용
+                                    </td>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">
+                                        <span class="font-red">공용 목적</span>에<br/>
+                                        부합한 경우에<br/>
+                                        한해 인정
+                                    </td>
+                                    <td class="slds-truncate cellBorder numberRight cellPadding">
+                                        <b>- 비품 성격이 있는 지출은 경영지원 문의 후 구매 (PC주변기기, 전자레인지 등)</b><br />
+                                        - 개인 필요에 의한 물품 제외<br/>
+                                        - 본사에서 수령 가능한 경우 본사에서 수령 / 추가 필요물품 별도요청<br/>
+                                        <p style="background-color:#fccad4;font-weight: bolder; margin-top: 4px;">
+                                            (ex) 무선 마우스 / 키보드 용 건전지 -> 개인필요에 의한 물품<br/>
+                                            &emsp;&emsp;본사 근무 시 사무용품, 간식 -> 본사 구비 중
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th scope="col" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-left"
+                                             title="통신비"><b>통신비</b></div>
+                                    </th>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">우편료</td>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">-</td>
+                                    <td class="slds-truncate cellBorder numberRight cellPadding">
+                                        <p style="font-weight: bolder">(ex) 고객사 우편 발송 (LG - 마곡)</p>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th scope="col" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-left"
+                                             title="업무출장(지방)"><b>업무출장<br/>(국내)</b></div>
+                                    </th>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">
+                                        <div>
+                                            국내 출장시<br/>
+                                            교통비, 숙박비 외
+                                        </div>
+                                    </td>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">(주1)</td>
+                                    <td class="slds-truncate cellBorder numberRight cellPadding">
+                                        <div>
+                                            - 출장목적, 장소 및 사용자 기재<br/>
+                                            - <span style="text-decoration:underline">숙박이 동반된 출장 건</span>에 대한 <span style="text-decoration:underline">점심 식대 인정</span>
+                                            <p style="font-weight: bolder">(ex) 고객사 방문 2인 항공료 / 고객사명 / 지역 / (이름1, 이름2)</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th scope="col" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-left"
+                                             title="업무출장(해외)"><b>업무출장<br/>(해외)</b></div>
+                                    </th>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">
+                                        <div>
+                                            해외 출장시<br/>교통비, 숙박비 외
+                                        </div>
+                                    </td>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">-</td>
+                                    <td class="slds-truncate cellBorder numberRight cellPadding">
+                                        <div>
+                                            - 출장목적, 장소 및 사용자 기재<br/>
+                                            <p style="font-weight: bolder">(ex) 해외출장  2인 항공료/ 목적 / 지역 / (이름1, 이름2)</p><br/>
+                                            <b>*** 해외 출장비 규정 수정</b> <a href="https://daeunextier.quip.com/VjbNAJ6ZfI7G/9-" target="_blank"> 9. 해외출장 규정</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th scope="col" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-left"
+                                             title="기타"><b>기타</b></div>
+                                    </th>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">기타비용</td>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">-</td>
+                                    <td class="slds-truncate cellBorder numberRight cellPadding">
+                                        <p style="font-weight: bolder">(ex) 계약서 퀵 발송 (성수→LG)</p>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <br/>
+                            <div>
+                                (주1) 교통비 : 철도, 항공, 선박, 자동차운임 및 현지교통비 포함 <b>(지급금액 : 일반석기준)</b><br/>
+                                &emsp;&emsp; 숙박비 : 2인(동성) 1실 <b>(지급금액 : 1실 7만원 이내)</b><br/>
+                                &emsp;&emsp; 식비 : 출장기간에 포함된 식사 횟수 (석식) : 12,000원 / 숙박이 동반된 출장 건에 대한 점심식사 : 12,000원
+                            </div>
+                            <br/><br/>
+
+                            <!-- 승인자 지정 -->
+                            <b style="font-size : 1.3em">3) 승인자 지정</b><br/><br/>
+                            <a href="https://daeunextier.lightning.force.com/lightning/r/0D5GC0000CBEcck0QD/view" target="_blank">https://daeunextier.lightning.force.com/lightning/r/0D5GC0000CBEcck0QD/view</a><br/>
+                            <table class="slds-table slds-no-row-hover">
+                                <colgroup>
+                                    <col width="10%"/>
+                                    <col width="45%"/>
+                                    <col width="45%"/>
+                                </colgroup>
+                                <thead>
+
+                                </thead>
+                                <tbody>
+                                <tr class="slds-hint-parent">
+                                    <td>
+                                        <div>
+                                            • <b>프로젝트 투입인원 :  [1차] PM → [2차] 경영지원부 → [3차] 프로젝트 부서장</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <td>
+                                        <div>
+                                            • <b>프로젝트 미 투입인원 : [1차] 경영지원부 → [2차] 조직도 부서장</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <td>
+                                        <div>
+                                            • <b>부서장 사용 비용 : [1차] 경영지원부 → [2차] 이응도 대표님</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <td>
+                                        <div>
+                                            • <b>R&amp;D센터 / 경영지원부 : [1차] 경영지원부 → [2차] 소속부서장</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <td>
+                                        <div>
+                                            • <b>영업부(마케팅 포함) : [1차] 신정현 상무 → [2차] 경영지원부 → [3차] 이응도 대표</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <td>
+                                        <div>
+                                            • <b>동호회 활동비 : [1차] 경영지원부 → [2차] 이응도 대표</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <br/><br/>
+
+                            <!-- 자격증 취득 비용(시험접수비) : 개인카드 결제 후 정산 -->
+                            <b style="font-size : 1.3em"> 자격증 취득 비용 (시험접수비) : 개인카드 결제 후 정산</b>
+                            <table class="slds-table slds-no-row-hover">
+                                <colgroup>
+                                    <col width="10%"/>
+                                    <col width="25%"/>
+                                    <col width="15%"/>
+                                    <col width="50%"/>
+                                </colgroup>
+                                <tbody>
+                                <tr class="slds-hint-parent">
+                                    <th scope="col" class="cellBorder tr_smmy">
+                                        <div class="slds-truncate slds-align_absolute-left"
+                                             title="자격증"><b>자격증</b></div>
+                                    </th>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">
+                                        <div>
+                                            자격증 취득비용
+                                        </div>
+                                    </td>
+                                    <td class="slds-truncate slds-text-align_center cellBorder numberRight">
+                                        <div class="slds-truncate slds-align_absolute-left">
+                                            <span class="font-red">취득일자<br/>
+                                                기준 신청</span>
+                                        </div>
+                                    </td>
+                                    <td class="slds-truncate cellBorder numberRight" style="padding:0px">
+                                        <div class="slds-truncate slds-align_absolute-left">
+                                            Org 자격증 등록시 첨부해야 할 파일<br/><br/>
+
+                                            1) 개인카드 (<span class="font-blue">개인 소유카드 O, 하나 법인카드X</span>)로 결제한 신용카드 매출전표<br/>
+                                            2) <span class="font-red">자격증 합격증</span><br/>
+                                            3) Trailhead Trailmix의 화면 캡쳐본<br/><br/>
+
+                                            - 7월 11일 자격증 결제 후 <span class="font-red">8월 15일에 자격증 취득시 8월분 경비신청에 포함</span>
+                                            <p style="background-color:#fccad4;font-weight: bolder; margin-top: 4px;">
+                                                <b>(ex) 자격증 취득비용 (Service Cloud Consultant)</b>
+                                            </p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <br/><br/>
+
+
+                            <table class="slds-table slds-no-row-hover">
+                                <colgroup>
+                                    <col width="10%"/>
+                                    <col width="45%"/>
+                                    <col width="45%"/>
+                                </colgroup>
+                                <thead>
+
+                                </thead>
+                                <tbody>
+                                <tr class="slds-hint-parent">
+                                    <td>
+                                        <div>
+                                            • 자격증 취득 비용(시험접수비)은 취득월의 다음달 말일 정산 및 지급합니다.
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <td>
+                                        <div>
+                                            • 개인카드로 먼저 지출 한 후, 취득 후에 경비 신청을 해야 합니다.
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <td>
+                                        <div>
+                                            • 개인카드 사용분은 사용월의 다음달 15일까지 Org 자격증 등록에 결제 영수증을 함께 첨부해야 합니다.<br/>
+                                            &emsp;→(직원) Org 자격증 등록시 결제 영수증 파일 첨부<br/>
+                                            &emsp;→(재경) 15일까지 신청 완료시 22일 전후 정산 금액 지급
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <td>
+                                        <div>
+                                            (참고) 개인책임법인(하나)카드의 발급은 수습기간 종료 후 발급 진행합니다.
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <br/><br/>
+
+                            <button onclick="{!c.fnCloseModal}" style="display:block; margin:auto">닫기</button>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </div>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open" id="backdrop"/>
+    </div>
+</aura:component>

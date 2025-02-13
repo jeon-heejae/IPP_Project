@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Request_Column_Format__c</fullName>
+    <description>(정의서) 요청 컬럼 포멧 |
+데이터 처리를 위한 format을 기재
+- 날짜, 핸드폰번호, 이메일 등 데이터 형식에 대한 포맷을 기재
+- 함수를 적용할 경우에는 함수명+()로 기재</description>
+    <inlineHelpText>(정의서) 요청 컬럼 포멧 |
+데이터 처리를 위한 format을 기재
+- 날짜, 핸드폰번호, 이메일 등 데이터 형식에 대한 포맷을 기재
+- 함수를 적용할 경우에는 함수명+()로 기재</inlineHelpText>
+    <label>데이터 포맷</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>yyyy-MM-dd</fullName>
+                <default>false</default>
+                <label>yyyy-MM-dd</label>
+            </value>
+            <value>
+                <fullName>yyyy-MM-dd HH:mm:ss</fullName>
+                <default>false</default>
+                <label>yyyy-MM-dd HH:mm:ss</label>
+            </value>
+            <value>
+                <fullName>hh:mm:ss</fullName>
+                <default>false</default>
+                <label>hh:mm:ss</label>
+            </value>
+            <value>
+                <fullName>yyyy-MM-dd&apos;T&apos;HH:mm:ss&apos;Z&apos;</fullName>
+                <default>false</default>
+                <label>yyyy-MM-dd&apos;T&apos;HH:mm:ss&apos;Z&apos;</label>
+            </value>
+            <value>
+                <fullName>yyyyMMdd</fullName>
+                <default>false</default>
+                <label>yyyyMMdd</label>
+            </value>
+            <value>
+                <fullName>yyyy.MM.dd</fullName>
+                <default>false</default>
+                <label>yyyy.MM.dd</label>
+            </value>
+            <value>
+                <fullName>HH</fullName>
+                <default>false</default>
+                <label>HH</label>
+            </value>
+            <value>
+                <fullName>mm</fullName>
+                <default>false</default>
+                <label>mm</label>
+            </value>
+            <value>
+                <fullName>yyyy-MM-dd hh:mm</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>yyyy-MM-dd hh:mm</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

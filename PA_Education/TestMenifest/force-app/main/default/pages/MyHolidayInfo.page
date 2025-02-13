@@ -1,0 +1,135 @@
+<apex:page showHeader="false" showQuickActionVfHeader="false" sidebar="false" controller="HolidayMyInfoController" action="{!RedirectToProfile}">
+    <apex:form >
+        <apex:pageBlock mode="maindetail">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Action" action="{!Action}" />
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection Title="Information" collapsible="false">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Holiday__c.fields.Holiday_JoinDate__c.Label}" />
+                    <apex:outputField value="{!h.Holiday_JoinDate__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Holiday__c.fields.Holiday_IsAnnualleave__c.Label}" />
+                    <apex:outputField value="{!h.Holiday_IsAnnualleave__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Holiday__c.fields.Holiday_PeriodEnd__c.Label}" />
+                    <apex:outputField value="{!h.Holiday_PeriodEnd__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Holiday__c.fields.Holiday_WorkingYears__c .Label}" />
+                    <apex:outputField value="{!h.Holiday_WorkingYears__c }" />
+                </apex:pageBlockSectionItem>
+                <!-- <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Holiday__c.fields.FirstApprover__c.Label}" />
+                    <apex:outputField value="{!h.FirstApprover__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Holiday__c.fields.SecondApproverSelection__c.Label}" />
+                    <apex:outputField value="{!h.SecondApproverSelection__c}" />
+                </apex:pageBlockSectionItem> -->
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Holiday__c.fields.Holiday_NoticeLevel__c.Label}" />
+                    <apex:outputField value="{!h.Holiday_NoticeLevel__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Holiday__c.fields.Holiday_LastActivity__c.Label}" />
+                    <apex:outputField value="{!h.Holiday_LastActivity__c}" />
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection Title="Days" collapsible="false">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Holiday__c.fields.Holiday_Calculated__c.Label}" />
+                    <apex:outputField value="{!h.Holiday_Calculated__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Holiday__c.fields.Holiday_GivenHolidays__c.Label}" />
+                    <apex:outputField value="{!h.Holiday_GivenHolidays__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Holiday__c.fields.Holiday_UseDays__c.Label}" />
+                    <apex:outputField value="{!h.Holiday_UseDays__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Holiday__c.fields.Holiday_Remain__c.Label}" />
+                    <apex:outputField value="{!h.Holiday_Remain__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Holiday__c.fields.Holiday_Unpaid__c.Label}" />
+                    <apex:outputField value="{!h.Holiday_Unpaid__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Holiday__c.fields.Holiday_Uncountable__c.Label}" />
+                    <apex:outputField value="{!h.Holiday_Uncountable__c}" />
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection Title="Holiday Info History" columns="1" >
+                <apex:pageBlockTable value="{!hldHstClsLst}" var="list">
+                    <apex:column headerValue="Date">
+                    <!--
+                        <apex:outputText value="{0,date,yyyy.MM.dd hh:mm:ss}">
+                            <apex:param value="{!list.createdDate}" />
+                        </apex:outputText>
+                    -->
+                    <apex:outputText value="{!list.createdDateStr}" />
+                    </apex:column>
+                    <apex:column headerValue="User">
+                        <apex:outputText value="{!list.user}"/>
+                    </apex:column>
+                    <apex:column headerValue="Action">
+                        <apex:outputText rendered="{! IF(list.language == 'ko',true,false)}">
+                            {!list.actStrVerb1}
+                            <strong>{!list.actStrNoun }</strong>
+                            {!list.actStrNounPosition }                    
+                            <apex:outputText value="{0, number, ###,###.##}" rendered="{! IF(list.isNumeric,true,false) }">
+                                <apex:param value="{!list.actStrOldDecimal }" />
+                            </apex:outputText>
+                            <apex:outputText value="{!list.actStrOldValue }" rendered="{! IF(list.isNumeric,false,true) }"/>
+                            <apex:outputText value="{!list.actStrOldPosition}" rendered="{!if(list.actStrOldValue != null, true, false)}"/>
+                            <strong>
+                                <apex:outputText value="{0, number, ###,###.##}" rendered="{! IF(list.isNumeric,true,false) }">
+                                    <apex:param value="{!list.actStrNewDecimal }" />
+                                </apex:outputText>
+                                <apex:outputText value="{!list.actStrNewValue }" rendered="{! IF(list.isNumeric,false,true) }"/>
+                            </strong>
+                            {!list.actStrNewPosition}
+                            {!list.actStrVerb2 }
+                        </apex:outputText>
+                        <apex:outputText rendered="{! IF(list.language != 'ko',true,false)}">
+                            {!list.actStrVerb1}
+                            {!list.actStrVerb2 }
+                            <strong>{!list.actStrNoun }</strong>
+                            <apex:outputText value="{!list.actStrOldPosition}" rendered="{!if(list.actStrOldValue != null, true, false)}"/>
+                            <apex:outputText value="{0, number, ###,###.##}" rendered="{! IF(list.isNumeric,true,false) }">
+                            <apex:param value="{!list.actStrOldDecimal }" />
+                            </apex:outputText>
+                            <apex:outputText value="{!list.actStrOldValue }" rendered="{! IF(list.isNumeric,false,true) }"/>
+                            {!list.actStrNewPosition}
+                            <strong>
+                                <apex:outputText value="{0, number, ###,###.##}" rendered="{! IF(list.isNumeric,true,false) }">
+                                    <apex:param value="{!list.actStrNewDecimal }" />
+                                </apex:outputText>
+                                <apex:outputText value="{!list.actStrNewValue }" rendered="{! IF(list.isNumeric,false,true) }"/>
+                            </strong>
+                            .
+                        </apex:outputText>
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection Title="Action History" columns="1" >
+                <apex:pageblockTable value="{!haLst}" var="ha">
+                    <apex:column headerValue="{!$ObjectType.HolidayAction__c.fields.Name.Label}">
+                        <apex:outputLink value="/{!ha.Id}" target="_blank">{!ha.Name}</apex:outputLink>
+                    </apex:column>
+                    <apex:column headerValue="{!$ObjectType.HolidayAction__c.fields.HolidayAction_Days__c.Label}" value="{!ha.HolidayAction_Days__c}"/>
+                    <apex:column headerValue="{!$ObjectType.HolidayAction__c.fields.HolidayAction_Type__c.Label}" value="{!ha.HolidayAction_Type__c}"/>
+                    <apex:column headerValue="{!$ObjectType.HolidayAction__c.fields.HolidayAction_IsConfirm__c.Label}" value="{!ha.HolidayAction_IsConfirm__c}"/>
+                    <apex:column headerValue="{!$ObjectType.HolidayAction__c.fields.FirstHolidayRequest__c.Label}" value="{!ha.FirstHolidayRequest__r.Name}"/>
+                    <apex:column headerValue="{!$ObjectType.HolidayAction__c.fields.SecondApproverSelection__c.Label}" value="{!ha.SecondApproverSelection__c}"/>
+                    <apex:column headerValue="{!$ObjectType.HolidayAction__c.fields.CreatedDate .Label}" value="{!ha.CreatedDate }"/>
+                </apex:pageblockTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

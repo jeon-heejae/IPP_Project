@@ -1,0 +1,24 @@
+<!--
+ - Created by smyan on 2021-01-29.
+ -->
+
+<aura:component controller="VideoViewController" implements="flexipage:availableForAllPageTypes,force:hasRecordId" description="VideoView" access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.fnInit}"/>
+    <aura:attribute name="videoVal" type="String" />
+    <aura:attribute name="videoYn" type="boolean" default="true" />
+    <aura:attribute name="strUrl" type="String" />
+    <aura:attribute name="pdfBody" type="Aura.Component" />
+    
+	<aura:handler event="aura:locationChange" action="{!c.fnLocChange}"/>
+    
+    <aura:if isTrue="{! v.videoYn}" >
+        <aura:unescapedHtml value="{!v.videoVal}"> </aura:unescapedHtml>
+    <aura:set attribute="else">
+        {! v.pdfBody}
+    </aura:set>
+    </aura:if>
+
+    <!--<video aura:id="videoCmp" id="videoCmp" width="1152" height="640" autoplay="autoplay" controls="Play,Pause" controlsList="nodownload">
+
+    </video>-->
+</aura:component>

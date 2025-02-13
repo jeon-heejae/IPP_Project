@@ -1,0 +1,21 @@
+.THIS .custom-card{
+    height: 500px;
+}
+
+.THIS .slds-card__body table {
+    display: table;
+    table-layout: auto !important;
+    border: 1px solid #ccc;
+    width: 95%;
+    max-width: 100%;
+    margin: 0 auto;
+    background-color: transparent;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+.THIS .slds-card__body table td, .THIS .slds-card__body table th {
+    border: 1px solid #e1e1e1;
+    padding: .4em;
+    background-clip: padding-box;
+}

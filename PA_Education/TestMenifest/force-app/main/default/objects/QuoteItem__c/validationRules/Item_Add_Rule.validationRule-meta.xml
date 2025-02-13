@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Item_Add_Rule</fullName>
+    <active>true</active>
+    <description>초안 반려일때만 추가 가능</description>
+    <errorConditionFormula>ISPICKVAL( QuoteItem_Quote__r.Quote_Status__c , &apos;Approved&apos;)
+|| ISPICKVAL( QuoteItem_Quote__r.Quote_Status__c , &apos;Pending&apos;)</errorConditionFormula>
+    <errorMessage>승인 진행 또는 완료된 견적은 수정 할 수 없습니다.</errorMessage>
+</ValidationRule>

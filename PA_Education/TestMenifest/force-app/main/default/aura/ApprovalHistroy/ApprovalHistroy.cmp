@@ -1,0 +1,228 @@
+<!--
+  * ===============================================================
+  * File Name   : ApprovalHistoryRelatedList.cmp
+  * Author      : Soyoung.Jung
+  * Date        : 2018.10.15
+  * Description : Approval > ApprovalHistory Related List Component
+  * Modification Log
+  * ===============================================================
+  * Ver     Date        Author          Modification
+  * ===============================================================
+  * 1.0     2018.10.15  Soyoung.Jung    Create
+  * 1.1     2019.06.20  Seungji.Kim     Modified
+  * ===============================================================
+-->
+
+<aura:component controller="ApprovalHistoryController"
+                implements="flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,flexipage:availableForAllPageTypes,force:appHostable,force:lightningQuickAction">
+    <aura:attribute name="recordId"           type="String"/>
+    <!-- Component Attribute -->
+    <aura:attribute name="bIsShowButton"      type="Boolean"  default="true" />
+
+    <aura:attribute name="simpleRecord"       type="Object"   />
+    <aura:attribute name="sComponentName"     type="String"   />
+    <aura:attribute name="sIconName"          type="String"   />
+    
+    <aura:attribute name="bIsHideFeeProduct"  type="Boolean"  default="false" />
+    <!-- <aura:attribute name="bIsShowSpinner"     type="Boolean"  default="false" /> -->
+    <aura:attribute name="bIsOpenComment"     type="Boolean"  default="false" />
+    <aura:attribute name="bIsShowLookup"      type="Boolean"  default="false" />
+    <aura:attribute name="sActionName"        type="String"   />
+    <aura:attribute name="sModalTitle"        type="String"   />
+    
+    <aura:attribute name="bIsPending"               type="Boolean"  default="false" />
+    <aura:attribute name="bIsSubmitter"             type="Boolean"  default="false" />
+    <aura:attribute name="bIsApprover"              type="Boolean"  default="false" />
+    <aura:attribute name="iRecordCount"             type="Integer"  default="0" />
+    <!-- <aura:attribute name="listWrapApprovalHistory"  type="ApprovalHistoryController.WrapperApprovalHistory[]" /> -->
+    <aura:attribute name="listWrapApprovalHistory"  type="String[]" />
+
+    <aura:attribute name="bIsLoading"      type="Boolean" default="false" />
+    
+    <!-- sj -->
+    <aura:attribute name="ApprovalLines"   type="Aura.Component" />
+    <aura:attribute name="userId"          type="Id"             />
+    <aura:attribute name="listApprover"    type="List"           />
+    <aura:attribute name="sPendingUser"    type="String"         />
+
+    <!-- Handler -->
+    <aura:handler name="init" value="{!this}" action="{!c.fnInit}" />
+
+    <!-- Dependency Event Handler -->
+    <aura:dependency resource="markup://force:refreshView" type="EVENT" />
+    <aura:handler event="force:refreshView" action="{!c.fnInit}" />
+
+    <!-- <aura:handler   name="cmpEvent"    event="c:ApprovalHistory_evt" action="{!c.fnInit}" /> -->
+
+    <!-- Contents -->
+    <article class="slds-card" style="border: 1px solid rgb(221, 219, 218); border-radius: .25rem;">
+        <!-- Card Header -->
+        <div class="slds-card__header slds-grid" style="padding: .75rem 1rem 0;">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <span class="slds-icon_container slds-icon-standard-account" title="account">
+                        <lightning:icon iconName="standard:approval" size="small" />
+                        <span class="slds-assistive-text">
+                            <aura:if isTrue="{!v.sComponentName==''}">
+                                {!$Label.c.Approval_History}
+                            </aura:if>
+                            <aura:set attribute="else">
+                                {!v.sComponentName}
+                            </aura:set>
+                        </span>
+                    </span>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <a href="javascript:void(0);" class="slds-card__header-link slds-truncate" title="{!v.sComponentName}" onclick="{!c.fnGoToRelatedView}">
+                            <span>
+                                <aura:if isTrue="{!greaterthan(v.iRecordCount, 6)}">
+                                        <aura:if isTrue="{!or(v.sComponentName=='', v.sComponentName==null) }">
+                                            {!$Label.c.Approval_History} (+6)
+                                            <aura:set attribute="else">
+                                                {!v.sComponentName} (+6)
+                                            </aura:set>                                             
+                                        </aura:if>
+                                    <aura:set attribute="else">
+                                        <aura:if isTrue="{!or(v.sComponentName=='', v.sComponentName==null) }">
+                                            {!$Label.c.Approval_History} ({!v.iRecordCount}) 
+                                            <aura:set attribute="else">
+                                                {!v.sComponentName} ({!v.iRecordCount})
+                                            </aura:set>                                                        
+                                        </aura:if>
+                                    </aura:set>
+                                </aura:if>
+                            </span>
+                        </a>                        
+                    </h2>
+                </div>
+                <aura:if isTrue="{!and(v.bIsShowButton, v.bIsPending)}">
+                    <div class="slds-no-flex">
+                        <aura:if isTrue="{!and(v.bIsSubmitter, v.bIsApprover)}">
+                            <!-- 제출자이고 승인자인 경우 ex) System Admin -->
+                            <lightning:buttonGroup>
+                                <lightning:button variant="neutral" name="Approve" label="{!$Label.c.Approval_Approve}" onclick="{!c.fnDoActionApprove}" />
+                                <lightning:button variant="neutral" name="Reject"  label="{!$Label.c.Approval_Reject}"  onclick="{!c.fnDoActionApprove}" />
+
+                                <lightning:buttonMenu aura:id="buttonMenu" menuAlignment="right" class="slds-button_last" onselect="{!c.fnDoActionApprove}">
+                                    <lightning:menuItem value="Reassign" label="{!$Label.c.Approval_Reassign}" />
+                                    <lightning:menuItem value="Removed" label="{!$Label.c.Approval_Recall}" />
+                                </lightning:buttonMenu>
+                            </lightning:buttonGroup>
+
+                            <aura:set attribute="else">
+                                <aura:if isTrue="{!v.bIsSubmitter}">
+                                    <!-- 제출자인 경우 -->
+                                    <lightning:button variant="neutral" name="Removed" label="{!$Label.c.Approval_Recall}" onclick="{!c.fnDoActionApprove}" />
+                                </aura:if>
+
+                                <aura:if isTrue="{!v.bIsApprover}">
+                                    <!-- 승인자인 경우 -->
+                                    <lightning:buttonGroup>
+                                        <lightning:button variant="neutral" name="Approve" label="{!$Label.c.Approval_Approve}" onclick="{!c.fnDoActionApprove}" />
+                                        <lightning:button variant="neutral" name="Reject" label="{!$Label.c.Approval_Reject}" onclick="{!c.fnDoActionApprove}" />
+
+                                        <lightning:buttonMenu aura:id="buttonMenu" menuAlignment="right" class="slds-button_last" onselect="{!c.fnDoActionApprove}">
+                                            <lightning:menuItem value="Reassign" label="{!$Label.c.Approval_Reassign}" />
+                                        </lightning:buttonMenu>
+                                    </lightning:buttonGroup>
+                                </aura:if>                                                                
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </aura:if>
+            </header>
+            <!-- 1.status가 writing, rejected, recall 일때만 보여져야함  -->
+            <aura:if isTrue="{!and(v.bIsPending == false, or(v.listWrapApprovalHistory[0].sStepStatus != '승인됨', v.listWrapApprovalHistory[0].sStepStatus != 'Approved'))}">
+                <lightning:button variant="neutral"  label="{!$Label.c.Submit}" onclick="{!c.fnApprovalLine}"/>
+            </aura:if>
+        </div>
+
+        <aura:if isTrue="{!v.iRecordCount > 0}">
+            <!-- Card Body -->
+            <div class="slds-card__body">
+                <table id="dataTable" class="slds-table slds-table_fixed-layout slds-table_bordered slds-no-row-hover slds-table_cell-buffer">
+                    <thead>
+                        <tr class="slds-text-title_caps">
+                            <th>{!$Label.c.StepName}</th>
+                            <th>{!$Label.c.Date}     </th>
+                            <th>{!$Label.c.Status}     </th>
+                            <th>{!$Label.c.Manager}   </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.listWrapApprovalHistory}" var="objWrapApprovalHistory" indexVar="index" end="6">
+                            <tr>
+                                <td>
+                                    {!objWrapApprovalHistory.sProcessNodeName}
+                                </td>
+                                <td>
+                                    {!objWrapApprovalHistory.sCreatedDate}
+                                </td>
+                                <td>
+                                    {!objWrapApprovalHistory.sStepStatus}
+                                </td>
+                                <td>
+                                    <a  class="textUnderline outputLookupLink slds-truncate forceOutputLookup"
+                                        href="{!'/lightning/r/' + objWrapApprovalHistory.idOriginActor + '/view'}" target="_self" title="">
+                                        {!objWrapApprovalHistory.sOriginActorName}
+                                    </a>
+                                </td>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Card Footer -->
+            <footer class="slds-card__footer">
+                <a class="slds-card__footer-action" href="javascript:void(0);" onclick="{!c.fnGoToRelatedView}">{!$Label.c.View_All}</a>
+            </footer>
+        </aura:if>
+    </article>  
+    
+
+    <!-- Comments modal -->
+    <aura:if isTrue="{!v.bIsOpenComment}">
+        <div aura:id="modalContainer">
+            <section role="alertdialog" tabindex="-1" aria-labelledby="modal-heading-id" aria-describedby="modal-content-id" class="slds-modal slds-fade-in-open" aria-modal="true">
+                <aura:if isTrue="{!v.bIsLoading}">
+                    <div class="custom_spinner">
+                        <lightning:spinner aura:id="spinner" alternativeText="Loading" size="medium" variant="brand" />
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </div>
+                </aura:if>
+
+                <div class="slds-modal__container">    
+                    <!-- Header -->
+                    <header class="modal-header slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close" size="small" alternativeText="Close" variant="bare-inverse" class="slds-modal__close" onclick="{!c.fnCancel}" />
+                        <h2 class="slds-text-heading_medium" id="modal-heading-id">{!v.sModalTitle}</h2>
+                    </header>
+                    
+                    <!-- Content -->
+                    <div class="slds-modal__content slds-p-around_x-large" id="modal-content-id-1">
+                        <aura:if isTrue="{!v.bIsShowLookup}">
+                            <div class="custom_reassignArea">
+                                <c:CommonLookup aura:id="UserLookup" sId="" sNm="" sLabel="{!$Label.c.Approval_Reassign}" sObj="User" sIconName="standard:user" bIsBasic="true" />
+                            </div>
+                        </aura:if>
+
+                        <ui:inputTextArea aura:id="comments" label="{!$Label.c.Description}" rows="10" />
+                    </div>
+                    
+                    <!-- Footer -->
+                    <footer class="slds-modal__footer">
+                        <lightning:button name="cancelButton" label="{!$Label.c.Cancel}" aura:id="cancelButton" onclick="{!c.fnCancel}"  />
+                        <lightning:button name="confirmButton" label="{!v.sModalTitle}" aura:id="confirmButton" onclick="{!c.fnConfirm}" variant="brand" />
+                    </footer>
+                </div>
+            </section>
+
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </aura:if>
+
+    {!v.ApprovalLines}
+
+</aura:component>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>O_project_Period__c</fullName>
+    <externalId>false</externalId>
+    <formula>(TEXT(YEAR(O_project_start__c ))&amp; &quot;-&quot; &amp; TEXT(MONTH(O_project_start__c )) &amp;&quot;-&quot; &amp; TEXT(DAY(O_project_start__c )) &amp; &quot; ~ &quot; &amp;
+TEXT(YEAR(O_PROJECT_END__c ))&amp; &quot;-&quot; &amp; TEXT(MONTH(O_PROJECT_END__c )) &amp;&quot;-&quot; &amp; TEXT(DAY(O_PROJECT_END__c )))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>수행기간</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

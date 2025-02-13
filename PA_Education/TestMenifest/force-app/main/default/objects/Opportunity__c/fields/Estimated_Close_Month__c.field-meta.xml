@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Estimated_Close_Month__c</fullName>
+    <inlineHelpText>02. Identified &amp; Customer Interviewed - 예상일자 입력
+06. Closed - 수주 확정 일자 입력</inlineHelpText>
+    <label>종료일자</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

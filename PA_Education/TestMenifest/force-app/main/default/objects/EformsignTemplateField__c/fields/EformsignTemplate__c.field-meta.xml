@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>EformsignTemplate__c</fullName>
+    <label>이폼사인 템플릿</label>
+    <referenceTo>EformsignTemplate__c</referenceTo>
+    <relationshipLabel>eformsign Template Field</relationshipLabel>
+    <relationshipName>eformsign_Template_Field</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <trackTrending>false</trackTrending>
+    <type>MasterDetail</type>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+</CustomField>

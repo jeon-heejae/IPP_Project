@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CompactLayout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Internal_Task_Compact_Layout</fullName>
+    <fields>Name</fields>
+    <fields>Creator__c</fields>
+    <fields>StartDate__c</fields>
+    <fields>ExpectedEndDate__c</fields>
+    <fields>EndDate__c</fields>
+    <fields>Completed__c</fields>
+    <label>Internal Task Compact Layout</label>
+</CompactLayout>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Filter_P_C_B_Assy_Side</fullName>
+    <columns>NAME</columns>
+    <columns>Seq__c</columns>
+    <columns>Item__c</columns>
+    <columns>ItemCode__c</columns>
+    <columns>Count__c</columns>
+    <columns>RillLocation__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>ProcessInfo__c</field>
+        <operation>equals</operation>
+        <value>P.C.B Assy (Side)</value>
+    </filters>
+    <label>Filter : P.C.B Assy (Side)</label>
+    <language>ko</language>
+</ListView>

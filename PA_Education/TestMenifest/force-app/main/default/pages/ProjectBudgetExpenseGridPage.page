@@ -1,0 +1,26 @@
+<apex:page showHeader="false" sidebar="false" standardController="Project__c" extensions="ProjectBudgetExpenseGridController" lightningStylesheets="true">
+    <apex:dataTable value="{!prjExpBgtList}" var="prjExpBgt" width="100%" rendered="{!prjExpBgtList.size > 0}">
+        <apex:column width="25%">
+            <apex:facet name="header">구분</apex:facet>
+            <apex:outputText value="{!prjExpBgt.type}"  style="{! IF(prjExpBgt.type == '계', 'font-weight:bold' , '')}"/>
+        </apex:column>
+        <apex:column width="25%">
+            <apex:facet name="header">예산</apex:facet>
+            <apex:outputText value="{0, number, ￦###,##0}" style="{! IF(prjExpBgt.type == '계', 'font-weight:bold' , '')}">
+                <apex:param value="{!prjExpBgt.budgetAmount}" />
+            </apex:outputText>
+        </apex:column>
+        <apex:column width="25%">
+            <apex:facet name="header">실적</apex:facet>
+            <apex:outputText value="{0, number, ￦###,##0}" style="{! IF(prjExpBgt.type == '계', 'font-weight:bold' , '')}">
+                <apex:param value="{!prjExpBgt.expenseAmount}" />
+            </apex:outputText>
+        </apex:column>
+        <apex:column width="25%">
+            <apex:facet name="header">잔액</apex:facet>
+            <apex:outputText value="{0, number, ￦###,##0}" style="{! IF(prjExpBgt.type == '계', 'font-weight:bold' , '')}" >
+                <apex:param value="{!prjExpBgt.remainAmount}" />
+            </apex:outputText>
+        </apex:column>
+    </apex:dataTable>
+</apex:page>

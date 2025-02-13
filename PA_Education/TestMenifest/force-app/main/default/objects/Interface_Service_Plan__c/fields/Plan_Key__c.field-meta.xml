@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Plan_Key__c</fullName>
+    <description>수행계획의 고유한 ID를 기재(규칙:인터페이스ID_수행순번)</description>
+    <externalId>true</externalId>
+    <inlineHelpText>수행계획의 고유한 ID를 기재(규칙:인터페이스ID_수행순번)</inlineHelpText>
+    <label>수행계획ID</label>
+    <length>100</length>
+    <required>true</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

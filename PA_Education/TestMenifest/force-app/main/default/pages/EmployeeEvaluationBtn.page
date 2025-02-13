@@ -1,0 +1,22 @@
+<!--
+ - Created by yj.kim on 2023-07-04.
+ -->
+
+<apex:page id="EmployeeEvaluationBtn"
+           extensions="EmployeeEvaluationBtnController"
+           standardController="Project__c">
+    <apex:includeLightning />
+    <div id="lightning"></div>
+    <script type="text/javascript">
+    SfdcApp.projectOneNavigator.fireContainerEvent(
+        "force:navigateToComponent",
+        {
+            componentDef: 'c:EmployeeEvaluation',
+            componentAttributes: {
+                'recordId' : '{!recordId}'
+            },
+            resetHistory: false
+        }
+    );
+    </script>
+</apex:page>

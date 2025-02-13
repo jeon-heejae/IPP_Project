@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ExpenseDetail__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>해당 청구내역이 Expense Detail에 사용되었을 경우 Lookup 필드 해당 Expense Detail로 업데이트</description>
+    <label>Expense Detail</label>
+    <referenceTo>ExpenseDetail__c</referenceTo>
+    <relationshipLabel>법인카드청구내역</relationshipLabel>
+    <relationshipName>CorporateCardBilling_ExpenseDetail</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Interface_Service_Detail__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>상위항목의 시스템 ID를 선택(TABLE 타입인 경우, 필수 입력항목임)</description>
+    <inlineHelpText>상위항목의 시스템 ID를 선택(TABLE 타입인 경우, 필수 입력항목임)</inlineHelpText>
+    <label>상위항목 시스템ID</label>
+    <referenceTo>Interface_Service_Detail__c</referenceTo>
+    <relationshipLabel>Interface Service Detail</relationshipLabel>
+    <relationshipName>Interface_Service_Detail</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

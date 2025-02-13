@@ -1,0 +1,502 @@
+<apex:page showHeader="false" standardStylesheets="false">    
+
+    <html class="no-js" lang="zxx">
+        <head>
+                <meta charset="utf-8"/>
+                <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+                <title>DaeU NexTier | Careers</title>
+                <meta name="description" content=""/>
+                <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+
+                <!-- Homepage Favicon -->
+                <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
+                <!-- <apex:stylesheet value="{!URLFOR($Resource.daeunextier, '/apple-touch-icon.png')}"/> -->
+
+                <!-- Place favicon.ico in the root directory -->
+        
+        <!-- all css here -->
+                <apex:stylesheet value="{!URLFOR($Resource.daeunextier, '/css/bootstrap.min.css')}"/>
+                <apex:stylesheet value="{!URLFOR($Resource.daeunextier, '/css/font-awesome.min.css')}"/>
+                <apex:stylesheet value="{!URLFOR($Resource.daeunextier, '/css/owl.carousel.css')}"/>
+                <apex:stylesheet value="{!URLFOR($Resource.daeunextier, '/css/icofont.css')}"/>
+                <apex:stylesheet value="{!URLFOR($Resource.daeunextier, '/css/magnific-popup.css')}"/>
+                <apex:stylesheet value="{!URLFOR($Resource.daeunextier, '/css/meanmenu.css')}"/>
+                <apex:stylesheet value="{!URLFOR($Resource.daeunextier, '/style.css')}"/> 
+                <apex:stylesheet value="{!URLFOR($Resource.DaeunextierBg, '/style.css')}"/>
+                <apex:stylesheet value="{!URLFOR($Resource.daeunextier, '/css/responsive.css')}"/>
+            
+                <!-- <apex:includeScript value="{!URLFOR($Resource.daeunextier, '/js/vendor/jquery-1.12.0.min.js')}"/> -->
+                <apex:includeScript value="{!URLFOR($Resource.daeunextier, '/js/vendor/modernizr-2.8.3.min.js')}"/>
+<style type="text/css">
+                    h1 {text-transform:uppercase; font-weight:700        }
+                    .carousel-control.right, .carousel-control.left{ background:none;}
+                    .btn-capsul {border-radius:30px;}
+                    .full-width-navigation { position: absolute;  width: 100%; top:40%;}
+                    .full-width-navigation .carousel-control .glyphicon-chevron-right {right:21%}
+                    .full-width-navigation .carousel-control .glyphicon-chevron-left {left:21%}
+                    .small-width-navigation {bottom: 34%; position: absolute; width: 5%;}
+                    .social-links span {width:40px; height:40px; border:1px solid #fff; color:#fff; border-radius:50%; text-align:center; line-height:40px; margin: 20px 10px;}
+                    .banner-01 {background: #CCCCCC; float: left; width: 100%;  position:relative;}
+                    .action-sec{width:100%; float:left; background:#222}
+                    .action-box{float:left; width:100%; text-align:center;}
+                    .action-box h2{color:#fff; font-size:20px;}
+
+                    #style-10::-webkit-scrollbar-track
+                    {
+                        -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,3.9);
+                        border-radius: 10px;
+                        background-color: #FFFFFF;
+                    }
+
+                    #style-10::-webkit-scrollbar
+                    {
+                        width: 10px;
+                        background-color: #F5F5F5;
+                    }
+
+                    #style-10::-webkit-scrollbar-thumb
+                    {
+                        background-color: #AAA;
+                        border-radius: 10px;
+                    }
+
+
+                    .animate {
+                        -webkit-transition: all 0.3s ease-in-out;
+                        -moz-transition: all 0.3s ease-in-out;
+                        -o-transition: all 0.3s ease-in-out;
+                        -ms-transition: all 0.3s ease-in-out;
+                        transition: all 0.3s ease-in-out;
+                    }
+
+                    .navbar-bootsnipp {
+                        background-color: rgb(255, 255, 255);
+                        border-color: rgb(95, 176, 228);
+                        border-radius: 0px;
+                        margin-bottom: 0px;
+                        z-index: 100;
+                    }
+                    .navbar-bootsnipp:nth-of-type(2) {
+                        border-top-width: 1px;
+                        z-index: 50
+                    }
+
+                    .navbar-bootsnipp.affix-top {
+                        position: absolute;
+                        top: 0px;
+                        width: 100%;
+                    }
+                    .navbar-bootsnipp.affix {
+                        top: 0px;
+                        width: 100%;
+                    }
+                    .navbar-bootsnipp .navbar-toggle .icon-bar {
+                        background-color: rgb(95, 176, 228);
+                    }
+
+                    .navbar-bootsnipp .navbar-brand {
+                        color: rgb(95, 176, 228);
+                        font-weight: 900;
+                        letter-spacing: 2px;
+                    }
+
+                    .navbar-bootsnipp .navbar-nav > li > a {
+                        border: 0px solid rgb(95, 176, 228);
+                        color: rgb(120, 120, 120);
+                        padding: 15px 14px;
+                    }
+
+                    .navbar-bootsnipp .navbar-nav > li > form > .input-group > input,
+                    .navbar-bootsnipp .navbar-nav > li > form > .input-group > .input-group-btn > .btn {
+                        border-radius: 0px;
+                    }
+
+                    .navbar-bootsnipp .navbar-nav > li:not(.disabled).open > a,
+                    .navbar-bootsnipp .navbar-nav > li:not(.disabled).active > a,
+                    .navbar-bootsnipp .navbar-nav > li:not(.disabled) > a:hover, 
+                    .navbar-bootsnipp .navbar-nav > li:not(.disabled) > a:focus {
+                        border-left-width: 5px;
+                        color: rgb(95, 176, 228);
+                        padding-left: 10px;
+                    }
+                    .navbar-bootsnipp .navbar-nav > li.disabled > a {
+                        color: rgb(200, 200, 200);
+                    }
+
+                    .navbar-bootsnipp .navbar-nav > li > .dropdown-menu {
+                        border-radius: 0;
+                        margin-right: -1px;
+                        min-width: 220px;
+                        padding: 0px;
+                    }
+                    .navbar-bootsnipp .navbar-nav > li:not(.dropdown-right) > .dropdown-menu {
+                        left: 0px;
+                        margin-left: -1px;
+                        right: auto;
+                    }
+                    .navbar-bootsnipp .navbar-nav > li > .dropdown-menu > li > a {
+                        border-left: 0px solid rgb(95, 176, 228);
+                        color: rgb(120, 120, 120);
+                        font-size: 16px;
+                        font-weight: 400;
+                        padding: 10px 20px;
+                        white-space: nowrap;
+                    }
+                    .navbar-bootsnipp .navbar-nav > li > .dropdown-menu > li.active > a, 
+                    .navbar-bootsnipp .navbar-nav > li > .dropdown-menu > li > a:hover, 
+                    .navbar-bootsnipp .navbar-nav > li > .dropdown-menu > li > a:focus {
+                        background-color: rgb(245, 245, 245);
+                        border-left-width: 5px;
+                        padding-left: 21px;
+                    }
+
+                    .navbar .bootsnipp-profile > a {
+                        padding-bottom: 9px; 
+                        padding-top: 9px; 
+                    }
+                    .navbar .bootsnipp-profile > a > img {
+                        border-radius: 50%;
+                        width: 32px;
+                    }
+                    .navbar .bootsnipp-profile > .dropdown-menu {
+                        width: 320px;
+                    }
+                    .navbar .bootsnipp-profile > .dropdown-menu > li > .row {
+                        padding: 5px 15px;
+                    }
+                    .navbar .bootsnipp-profile > .dropdown-menu > li > .row img {
+                        width: 100%;
+                    }
+
+                    .navbar-bootsnipp .bootsnipp-search {
+                        display: none;
+                    }
+                    .navbar-bootsnipp .bootsnipp-search .form-control {
+                        background-color: rgb(235, 235, 235);
+                        border-radius: 0px;
+                        border-width: 0px;
+                        font-size: 24px;
+                        padding: 25px 0px;
+                        margin-left : 45px;
+                    }
+                    .navbar-bootsnipp .bootsnipp-search .form-control:focus {
+                        border-color: transparent;
+                        outline: 0;
+                        -webkit-box-shadow: none;
+                        box-shadow: none;
+                    }
+                    .navbar-bootsnipp .bootsnipp-search .input-group-btn > .btn {
+                        padding: 14px 16px;
+                        border-radius: 0px;
+                    }
+                    .navbar-bootsnipp .bootsnipp-search .input-group-btn > .btn.active,
+                    .navbar-bootsnipp .bootsnipp-search .input-group-btn > .btn:hover,
+                    .navbar-bootsnipp .bootsnipp-search .input-group-btn > .btn:focus {
+                        padding: 14px 16px 14px 15px;
+                    }
+                    .navbar-bootsnipp .bootsnipp-search .input-group-btn > .btn-default {
+                        background-color: rgb(245, 245, 245);
+                    }
+                    .nav-padding {
+                        padding-top: 61px;
+                    }
+
+                    @media screen and (min-width: 768px) {
+                        .navbar-bootsnipp .navbar-brand {
+                            font-size: 20px;
+                            height: auto;
+                            padding: 15px 5px;
+                        }
+                        .navbar-bootsnipp .navbar-nav > li > a {
+                            font-size: 18px;
+                            letter-spacing: 1px;
+                            margin-left : 0px;
+                        }
+                        .navbar-bootsnipp .navbar-nav > li:not(.disabled).open > a,
+                        .navbar-bootsnipp .navbar-nav > li:not(.disabled).active > a,
+                        .navbar-bootsnipp .navbar-nav > li:not(.disabled) > a:hover, 
+                        .navbar-bootsnipp .navbar-nav > li:not(.disabled) > a:focus {
+                            border-bottom-width: 5px;
+                            border-left-width: 0px;
+                            padding-bottom: 10px;
+                            padding-left: 14px;
+                        }
+
+                        .navbar-bootsnipp .navbar-nav > li.disabled > a {
+                            padding-left: 10px;
+                            padding-right: 10px;
+                        }
+
+
+                        .navbar-bootsnipp .bootsnipp-search {
+                            background-color: rgb(235, 235, 235);
+                            display: block;
+                            position: absolute;
+                            top: 100%;
+                            width: 100%;
+                            -webkit-transform: rotateX(-90deg);
+                            -moz-transform: rotateX(-90deg);
+                            -o-transform: rotateX(-90deg);
+                            -ms-transform: rotateX(-90deg);
+                            transform: rotateX(-90deg);
+                            -webkit-transform-origin: 0 0 0;
+                            -moz-transform-origin: 0 0 0;
+                            -o-transform-origin: 0 0 0;
+                            -ms-transform-origin: 0 0 0;
+                            transform-origin: 0 0 0;
+                            visibility: hidden;
+                        }
+                        .navbar-bootsnipp .bootsnipp-search.open {
+                            -webkit-transform: rotateX(0deg);
+                            -moz-transform: rotateX(0deg);
+                            -o-transform: rotateX(0deg);
+                            -ms-transform: rotateX(0deg);
+                            transform: rotateX(0deg);
+                            visibility: visible;    
+                        }
+                        .navbar-bootsnipp .bootsnipp-search > .container {
+                            padding: 0px;
+                        }    
+                    }
+                    .nav-button-mt30{
+                        margin-top: 30px;
+                    }
+                                        .text-center
+                    {
+                        text-align:center;
+                    }
+
+                    .col-md-80
+                    {
+                        width:80%;
+                    }
+
+                    .col-md-20
+                    {
+                        width:20%;
+                    }
+                    @media (min-width:992px)
+                    {
+                        .media-img
+                        {
+                            width:100%;
+                            height:100%;
+                        }
+                    }
+                </style>
+                <script type="text/javascript">
+                    
+                $(function() { 
+
+                    $('a[href="#toggle-search"], .navbar-bootsnipp .bootsnipp-search .input-group-btn > .btn[type="reset"]').on('click', function(event) {
+                        event.preventDefault();
+                        $('.navbar-bootsnipp .bootsnipp-search .input-group > input').val('');
+                        $('.navbar-bootsnipp .bootsnipp-search').toggleClass('open');
+                        $('a[href="#toggle-search"]').closest('li').toggleClass('active');
+
+                        if ($('.navbar-bootsnipp .bootsnipp-search').hasClass('open')) {
+                            /* I think .focus dosen't like css animations, set timeout to make sure input gets focus */
+                            setTimeout(function() { 
+                                $('.navbar-bootsnipp .bootsnipp-search .form-control').focus();
+                            }, 100);
+                        }           
+                    });
+
+                    $(document).on('keyup', function(event) {
+                        if (event.which == 27 && $('.navbar-bootsnipp .bootsnipp-search').hasClass('open')) {
+                            $('a[href="#toggle-search"]').trigger('click');
+                        }
+                    });
+
+                });
+
+                </script>
+
+        </head>
+        <body id="style-10" style="overflow-y:auto; background-color:#002E5B  " >
+                <!--[if lt IE 8]>
+                        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+                <![endif]-->
+
+                <!-- Add your site or application content here -->
+        <!-- header start -->
+        <header style="min-height:52px; background-color: #FFFFFF">
+            <!-- <div class="header-top-area gray-bg-1 hidden-xs" style="background-color: #FFFFFF !important; margin-bottom:0px ;">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-6 hidden-xs" style="margin-top:12px">
+                            <div class="header-top-area">
+                                <ul class="header-left">
+                                    <div class="logo">
+                                    <a href="TestTemplate" style="color:#009ee2">
+                                        <p style="font-size:40px; margin-top:31px"> Daeunextier </p>
+                                        <h2 style="font-size:40px; ">대유 <span style="font-size: 20px;font-weight: 600;color: #009ee2;">(DaeUnextier)</span></h2>
+                                    </a>
+                            </div>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            <!-- manu-area-start -->
+            <div class="main-menu-area navbar-fixed-top " style="background-color:#FFFFFF !important; border-bottom:2px solid; border-color:#5fb0e4">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-3" style="margin-bottom:6px">
+                            <a href="TestAboutUs" style="color:#009ee2">
+                                <!-- <h2><span style="font-size: 34px;color: #009ee2;letter-spacing: -1.5px;">대유</span> <span style="font-size: 19px;font-weight: 600;color: #009ee2;">(DaeU NexTier)</span></h2> -->
+                               <apex:image url="{!URLFOR($Resource.newlogo, 'logo/salesforce_DaeunextierLogo.jpg')}" style="max-width:84%" alt="MainLogo"/>
+                                <!--로고 이미지 수정-->
+                            </a>
+                        </div> 
+                        <div class="col-md-9 col-sm-9" style="margin-top: 0px; margin-left : auto">
+                            <div class="  navbar-bootsnipp animate" role="navigation">
+                                <div class="navbar-header">
+                                    <button type="button" class="[ navbar-toggle ]" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" style="float:left;">
+                                    <span class="[ icon-bar ]"></span>
+                                    <span class="[ icon-bar ]"></span>
+                                    <span class="[ icon-bar ]"></span>
+                                    </button>
+                                </div>
+                                <div class="[ collapse navbar-collapse ]" id="bs-example-navbar-collapse-1">
+                                    <ul class="[ nav navbar-nav navbar-right ]" style="margin-right:0px; margin-bottom:1px">
+                                    <li><a class="animate" href="TestTemplate">HOME</a></li>
+                                        <li><a class="animate" href="TestPublicCloud" >PUBLIC CLOUD</a></li>
+                                        <li><a class="animate" href="TestPrivateCloud">PRIVATE CLOUD</a></li>
+                                        <li><a class="animate" href="TestSaasService">SaaS SERVICE</a></li>
+                                        <li><a class="animate" href="TestBPOService">BPO SERVICE</a></li>
+                                        <li><a href="TestSupport" class="[ dropdown-toggle ][ animate ]"  data-toggle="dropdown">CONTACT US 
+                                                <span class="[ caret ]"></span></a>
+                                            <ul class="[ dropdown-menu ]" role="menu" style="margin-left:0px">
+                                                <li><a href="TestSupport" class="[ animate ]">Contact <span class="[ pull-right glyphicon  ]"></span></a></li>
+                                                <li><a href="TestCareers" class="[ animate ]">Careers <span class="[ pull-right glyphicon  ]"></span></a></li>
+                                            </ul>
+                                        </li>
+                                        <!-- <li><a class="animate" href="testAboutUs">ABOUT US</a></li> -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- manu-area-end -->
+        </header>
+
+
+        <div class="breadcrumb-banner-area bg-img-careersbg ptb-100 bg-opacity-4" style="padding:138px 0">
+            <div class="container">
+                <div class="row">
+                    <div class="breadcrumb-text text-center">
+                    <h1> C<h style="text-transform:lowercase;">areers </h></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- breadcrumb-banner-area-end -->
+        <div class="features-area pt-40 pb-70" style="background-color:#FFFFFF;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 pt-40 pb-60" >
+                                <div class="section-tittle text-center">
+                                    <h2>WELCOME <span>Daeu!</span></h2>
+                                </div>
+                                <div class="text-center">
+                                   <p style="font-size:18px;letter-spacing: -0.6px;line-height: 140%;"> 
+                                        Cloud 기반 비즈니스 &amp; IT 컨설팅의 선두 주자인 ㈜대유넥스티어가  Cloud IT 세상을 함께 열어갈 도전정신과 열정을 가진 인재를 구합니다.<br/>
+                                        세계 최고 SaaS Cloud 기업인 세일즈포스닷컴 (Salesforce.com) 플랫폼 분야에서 국내 최고 전문가가 될 수 있는 유일한 기회가 여러분 앞에 놓여 있습니다 .<br/>
+                                        대유넥스티어에서는 프로다운 열정을 바탕으로 맡은 일을 즐기고 책임감을 가지고 끊임없이 도전하는 창의적인 인재를 희망하고 있습니다. <br/>만약 당신이 그런 사람이라고 생각되고 실질적인 기여를 원한다면 대유넥스티어에서 즐거운 업무의기회를 잡으시기 바랍니다.
+                                   </p>
+                              
+                        </div>
+                    </div>
+                    <div class="col-md-12 pt-40 pb-60" >
+                                <div class="section-tittle text-center">
+                                    <h2>RE<span>CRUIT</span></h2>           
+                                </div>
+                    </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-4">
+                        <div class="our-single-blog mb-30">
+                            <div class="our-blog-img">
+                                <apex:Image Value="{!URLFOR($Resource.daeunextier, 'img/team/recruit_img1.jpg')}" alt=""/>
+                            </div>
+                            <div class="our-blog-title text-center">
+                                <h3 style="font-size:22px">클라우드환경 개발경력자</h3>
+                                <div class="our-blog-content text-center">
+                                    <p style="font-size:18px"> 세일즈포스닷컴의 Force.com 환경에서 <br/> 개발경험이 있는 개발자 </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        <div class="our-single-blog mb-30">
+                            <div class="our-blog-img">
+                                <apex:Image Value="{!URLFOR($Resource.daeunextier, 'img/team/recruit_img2.jpg')}" alt=""/>
+                            </div>
+                            <div class="our-blog-title text-center">
+                                <h3 style="font-size:22px">소셜분석 도구 경력자</h3>
+                                <div class="our-blog-content text-center">
+                                    <p style="font-size:18px;letter-spacing: -1.1px"> 국내외 소셜분석 도구(Radian6,와이즈넛 등)에 대한 영업 및 고객 가이드가 가능한 분 </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        <div class="our-single-blog mb-30">
+                            <div class="our-blog-img">
+                                <apex:Image Value="{!URLFOR($Resource.daeunextier, 'img/team/recruit_img3.jpg')}" alt=""/>
+                            </div>
+                            <div class="our-blog-title text-center">
+                                <h3 style="font-size:22px">클라우드 도입전략 컨설턴트</h3>
+                                <div class="our-blog-content text-center">
+                                    <p style="font-size:18px"> 기업의 클라우드 도입전략 수립 및 구축 가이드가 가능한 분 </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        </div>
+        </div> 
+<footer>
+            <div class="footer-bottom-area blue-bg ptb-5" style="background-color:#002E5B !important; padding:6px">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6" style="margin-top:-11px">
+                            <div class="copyright">
+                                <p> 서울 성동구 성수일로 99, 서울숲에이케이밸리 5층 대유넥스티어 <br/>
+                                Tel : 02-553-9981 Fax : 02-553-9967<br/>
+                                Copyright © 2018 Daeunextier.com</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 col-md-6 col-sm-6">
+                            <div class="icon floatright" style="margin-top:4px">
+                                <a href="https://www.facebook.com/daeunextier/" target="_blank"><i class="fa fa-facebook" style="margin-top:9px"></i></a>
+                                <a href="http://blog.naver.com/daeunextier" target="_blank"><h1> B </h1></a>
+                                <!-- <a href="TestCareers_EU"><h1 style="margin-top:6px; font-size:30px"> EN </h1></a> -->
+                            </div>
+                            <center style="margin-top:8px">
+                                    <apex:image url="{!URLFOR($Resource.newlogo, 'logo/appexchangewhitelogo.png')}" width="40%" height="40%"/>
+                            </center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </footer>
+        <!-- all js here -->
+                <apex:includeScript value="{!URLFOR($Resource.daeunextier, '/js/vendor/jquery-1.12.0.min.js')}"/>
+                <apex:includeScript value="{!URLFOR($Resource.daeunextier, '/js/bootstrap.min.js')}"/>
+                <apex:includeScript value="{!URLFOR($Resource.daeunextier, '/js/jquery.magnific-popup.min.js')}"/>
+                <apex:includeScript value="{!URLFOR($Resource.daeunextier, '/js/jquery.counterup.min.js')}"/>
+                <apex:includeScript value="{!URLFOR($Resource.daeunextier, '/js/waypoints.min.js')}"/>
+                <apex:includeScript value="{!URLFOR($Resource.daeunextier, '/js/jquery.appear.js')}"/>
+                <apex:includeScript value="{!URLFOR($Resource.daeunextier, '/js/jquery.knob.js')}"/>
+                <apex:includeScript value="{!URLFOR($Resource.daeunextier, '/js/jquery.meanmenu.js')}"/>
+                <apex:includeScript value="{!URLFOR($Resource.daeunextier, '/js/jquery.mixitup.min.js')}"/>
+                <apex:includeScript value="{!URLFOR($Resource.daeunextier, '/js/owl.carousel.min.js')}"/>
+                <apex:includeScript value="{!URLFOR($Resource.daeunextier, '/js/plugins.js')}"/>
+                <apex:includeScript value="{!URLFOR($Resource.daeunextier, '/js/main.js')}"/>
+        </body>
+</html>
+</apex:page>

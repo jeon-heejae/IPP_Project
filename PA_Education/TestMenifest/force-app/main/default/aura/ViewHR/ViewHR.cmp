@@ -1,0 +1,392 @@
+<!--
+  * ===============================================================
+  * File Name   : ViewHR.cmp
+  * Author      : Soyoung.Jung
+  * Date        : 2019.01.17
+  * Description : 인력 현황 보드
+  * Modification Log
+  * ===============================================================
+  * Ver     Date        Author          Modification
+  * ===============================================================
+  * 1.0     2019.01.17  Soyoung.Jung    Create
+  * ===============================================================
+-->
+
+<aura:component controller="ViewHRController" implements="force:appHostable">
+	
+	<!-- Component Attribute -->
+    <aura:attribute name="listMainHeader" type="List" />
+    <aura:attribute name="listSubHeader" type="List" />
+    <aura:attribute name="listWrapRow" type="List" />
+
+    <aura:attribute name="ViewHRInfoCmp" type="Aura.Component" />
+
+
+
+    <!-- Filter Attribute -->
+    <aura:attribute name="sRadioValue" type="String" default="MONTHLY" />
+    <aura:attribute name="listDivisionRadio" type="List" description="조회 구분 라디오 버튼" 
+                    default="[{'label': '월단위', 'value': 'MONTHLY'}
+                            , {'label': '주단위', 'value': 'WEEKLY'}
+                            , {'label': '일단위', 'value': 'DAILY'}]" />
+
+    <aura:attribute name="sWeeklyValue" type="String" default="HALF" />
+    <aura:attribute name="listDivisionWeekly" type="List" description="주단위 구분 픽리스트" 
+                    default="[{'label': '반기', 'value': 'HALF'}
+                            , {'label': '분기', 'value': 'QUARTER'}
+                            , {'label': '지정', 'value': 'POINT'}]" />
+
+    <aura:attribute name="sDailyValue" type="String" default="QUARTER" />
+    <aura:attribute name="listDivisionDaily" type="List" description="일단위 구분 픽리스트" 
+                    default="[{'label': '분기', 'value': 'QUARTER'}
+                            , {'label': '월', 'value': 'MONTHLY'}
+                            , {'label': '지정', 'value': 'POINT'}]" />
+    
+    <aura:attribute name="sQuarterDefault" type="String" />
+    <aura:attribute name="listQuarter" type="List" description="분기 픽리스트"
+                    default="[{'label': '1분기', 'value': '1'}
+                            , {'label': '2분기', 'value': '2'}
+                            , {'label': '3분기', 'value': '3'}
+                            , {'label': '4분기', 'value': '4'}]" />
+    
+    <aura:attribute name="sHalfDefault" type="String" />
+    <aura:attribute name="listHalf" type="List" description="반기 픽리스트"
+                    default="[{'label': '전반기', 'value': 'A'}
+                            , {'label': '후반기', 'value': 'B'}]" />
+    
+    <aura:attribute name="sYearDefault" type="String" />
+    <aura:attribute name="listYear" type="List" description="연도 픽리스트" />
+
+    <aura:attribute name="sMonthDefault" type="String" />
+    <aura:attribute name="listMonth" type="List" description="월 픽리스트" />
+
+    <aura:attribute name="dFromDate" type="Date" description="지정 데이트 피커 시작일" />
+    <aura:attribute name="dToDate" type="Date" description="지정 데이트 피커 종료일" />
+    <aura:attribute name="dMinDate" type="Date" description="지정 데이트 피커 최소 선택 가능한 날짜" />
+    <aura:attribute name="dMaxDate" type="Date" description="지정 데이트 피커 최대 선택 가능한 날짜" />
+
+    <aura:attribute name="pFromDt" type="Date" />
+    <aura:attribute name="pToDt" type="Date" />
+    
+
+    <!-- Paging Attribute -->
+    <aura:attribute name="recordCount" type="Integer" default="15" description="한 페이지에 보여질 레코드 갯수" />
+    <aura:attribute name="currentPageNumber" type="Integer" default="1" description="현재 페이지 번호" />
+    <aura:attribute name="maxPageNumber" type="Integer" description="총 레코드 갯수" />
+    <aura:attribute name="cmpPaging" type="Aura.component" description="페이징 컴포넌트" />
+
+
+	<!-- Handler -->
+	<aura:handler name="init" value="{!this}" action="{!c.fnInit}" />
+    <aura:handler name="change" value="{!v.currentPageNumber}" action="{!c.fnSearch}" />
+
+
+	<!-- Header -->
+    <lightning:layout>
+        <lightning:layoutItem size="12">
+            <div class="slds-page-header">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <lightning:icon iconName="custom:custom100" />
+                    </div>
+                    <div class="slds-media__body">
+                        <!-- Header Media Body -->
+                        <lightning:layout>
+                            <lightning:layoutItem size="7">
+                                <p class="slds-text-body_small slds-line-height_reset">인력 현황</p>
+                                <h1 class="slds-page-header__title slds-truncate slds-align-middle" title="Human Resource Board">Human Resource Board</h1>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="5">
+                                <!-- Buttons -->
+                                <div class="slds-float_right">
+                                </div>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </div>
+                </div>
+            </div>    
+        </lightning:layoutItem>
+    </lightning:layout>
+
+
+	<!-- Contents -->
+    <lightning:spinner aura:id="spinner" class="slds-hide" variant="brand" size="large" />
+
+    <!-- 필터 -->
+    <!-- 메인 선택 옵션 -->
+    <lightning:layout>
+        <!-- 조회 구분 -->
+        <lightning:layoutItem padding="around-small" size="2">
+            <lightning:radioGroup   aura:id="divisionRadio" 
+                                    name="divisionRadio" 
+                                    class="custom_divRadio" 
+                                    label="조회 구분" 
+                                    options="{!v.listDivisionRadio}" 
+                                    value="{!v.sRadioValue}"
+                                    onchange="{!c.fnChangeRadio}" />
+        </lightning:layoutItem>
+        
+        <!-- 휴가 여부 -->
+        <lightning:layoutItem padding="around-small" size="2">
+            <lightning:input type="checkbox" aura:id="hasHoliday" label="휴가포함여부" class="custom_holidayChk" checked="true" />
+        </lightning:layoutItem>
+
+        <!-- 조회 버튼 -->
+        <lightning:layoutItem padding="around-small" size="8">
+            <lightning:button aura:id="searchBtn" label="조회" class="slds-float_right" onclick="{!c.fnSearch}" />
+        </lightning:layoutItem>
+    </lightning:layout>
+    
+    <!-- 서브 선택 옵션 -->
+    <lightning:layout>
+        <!-- 구분 -->
+        <!-- 조회 구분이 "WEEKLY" 혹은 "DAILY" 인 경우 -->
+        <aura:if isTrue="{!or(v.sRadioValue == 'WEEKLY'
+                            , v.sRadioValue == 'DAILY')}">
+            <lightning:layoutItem padding="around-small" size="2">
+                <lightning:combobox aura:id="division" label="구분"
+                                    name="{!if(v.sRadioValue == 'WEEKLY', 'Weekly', 'Daily')}"
+                                    options="{!if(v.sRadioValue == 'WEEKLY', v.listDivisionWeekly, v.listDivisionDaily)}"
+                                    value="{!if(v.sRadioValue == 'WEEKLY', v.sWeeklyValue, v.sDailyValue)}"
+                                    onchange="{!c.fnChangeDivision}" />
+            </lightning:layoutItem>
+        </aura:if>
+        
+        <!-- 연도 -->
+        <!-- 조회 구분이 "MONTHLY" 혹은 상세 구분이 "HALF", "QUARTER", "MONTHLY" 중 하나인 경우 -->
+        <aura:if isTrue="{!or(v.sRadioValue == 'MONTHLY'
+                            , or(and(v.sRadioValue == 'WEEKLY', or(v.sWeeklyValue == 'HALF', v.sWeeklyValue == 'QUARTER'))
+                                , and(v.sRadioValue == 'DAILY', or(v.sDailyValue == 'QUARTER', v.sDailyValue == 'MONTHLY'))))}">
+            <lightning:layoutItem padding="around-small" size="2">
+                <lightning:combobox aura:id="year" label="연도" options="{!v.listYear}" value="{!v.sYearDefault}" />
+            </lightning:layoutItem>
+        </aura:if>
+
+        <!-- 반기 -->
+        <!-- 조회 구분이 "WEEKLY" 일 때 선택하는 값이 "HALF" 인 경우 -->
+        <aura:if isTrue="{!and(v.sRadioValue == 'WEEKLY', v.sWeeklyValue == 'HALF')}">
+            <lightning:layoutItem padding="around-small" size="2">
+                <lightning:combobox aura:id="half" label="반기" options="{!v.listHalf}" value="{!v.sHalfDefault}" />
+            </lightning:layoutItem>
+        </aura:if>
+        
+        <!-- 분기 -->
+        <!-- 조회 구분이 "WEEKLY" 혹은 "DAILY" 일 때 선택하는 값이 "QUARTER" 인 경우 -->
+        <aura:if isTrue="{!or(and(v.sRadioValue == 'WEEKLY', v.sWeeklyValue == 'QUARTER')
+                            , and(v.sRadioValue == 'DAILY', v.sDailyValue == 'QUARTER'))}">
+            <lightning:layoutItem padding="around-small" size="2">
+                <lightning:combobox aura:id="quarter" label="분기" options="{!v.listQuarter}" value="{!v.sQuarterDefault}" />
+            </lightning:layoutItem>
+        </aura:if>
+        
+        <!-- 월 -->
+        <!-- 조회 구분이 "DAILY" 일 때 선택하는 값이 "MONTHLY" 인 경우 -->
+        <aura:if isTrue="{!and(v.sRadioValue == 'DAILY', v.sDailyValue == 'MONTHLY')}">
+            <lightning:layoutItem padding="around-small" size="2">
+                <lightning:combobox aura:id="month" label="월" options="{!v.listMonth}" value="{!v.sMonthDefault}" />
+            </lightning:layoutItem>
+        </aura:if>
+        
+        <!-- 날짜 -->
+        <!-- 조회 구분이 "WEEKLY" 혹은 "DAILY" 일 때 선택하는 값이 "POINT" 인 경우 -->
+        <aura:if isTrue="{!or(and(v.sRadioValue == 'WEEKLY', v.sWeeklyValue == 'POINT')
+                            , and(v.sRadioValue == 'DAILY', v.sDailyValue == 'POINT'))}">
+            <lightning:layoutItem padding="around-small" size="2">
+                <lightning:input type="date" aura:id="fromDate" label="시작일" value="{!v.dFromDate}" onchange="{!c.fnChangeDate}" />
+            </lightning:layoutItem>
+
+            <lightning:layoutItem padding="around-small" size="2">
+                <lightning:input type="date" aura:id="toDate" label="종료일" value="{!v.dToDate}" min="{!v.dFromDate}" max="{!v.dToDate}" />
+            </lightning:layoutItem>
+        </aura:if>
+
+        <!-- 범례 -->
+        <aura:if isTrue="{!greaterthan(v.listWrapRow.length, 0)}">
+            <lightning:layoutItem padding="around-small" flexibility="auto" class="custom_relative">
+                <lightning:layout class="custom_legend-position">
+                    <lightning:layoutItem class="custom_legend-padding">
+                        <div class="custom_color-holiday custom_legend-square"></div> 
+                        휴가 포함
+                    </lightning:layoutItem>
+                    <lightning:layoutItem class="custom_legend-padding">
+                        <div class="custom_color-1 custom_legend-square"></div> 
+                        1.0 이상
+                    </lightning:layoutItem>
+                    <lightning:layoutItem class="custom_legend-padding">
+                        <div class="custom_color-5 custom_legend-square"></div> 
+                        0.5 이상
+                    </lightning:layoutItem>
+                    <lightning:layoutItem class="custom_legend-padding">
+                        <div class="custom_color-2 custom_legend-square"></div> 
+                        0.2 이상
+                    </lightning:layoutItem>
+                    <lightning:layoutItem class="custom_legend-padding">
+                        <div class="custom_color-0 custom_legend-square"></div> 
+                        0.2 미만
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </lightning:layoutItem>
+        </aura:if>
+    </lightning:layout>
+    
+    <!-- 범례 -->
+    <!-- <aura:if isTrue="{!greaterthan(v.listWrapRow.length, 0)}">
+        <lightning:layout class="slds-float_right">
+            <lightning:layoutItem class="custom_legend-padding">
+                <div class="custom_color-holiday custom_legend-square"></div> 
+                휴가 포함
+            </lightning:layoutItem>
+            <lightning:layoutItem class="custom_legend-padding">
+                <div class="custom_color-1 custom_legend-square"></div> 
+                1.0 이상
+            </lightning:layoutItem>
+            <lightning:layoutItem class="custom_legend-padding">
+                <div class="custom_color-5 custom_legend-square"></div> 
+                0.5 이상
+            </lightning:layoutItem>
+            <lightning:layoutItem class="custom_legend-padding">
+                <div class="custom_color-2 custom_legend-square"></div> 
+                0.2 이상
+            </lightning:layoutItem>
+            <lightning:layoutItem class="custom_legend-padding">
+                <div class="custom_color-0 custom_legend-square"></div> 
+                0.2 미만
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:if> -->
+
+    <!-- 테이블 -->
+    <lightning:layout horizontalAlign="spread" class="custom_table-both">
+        <lightning:layoutItem padding="around-small" size="12">
+            <aura:if isTrue="{!greaterthan(v.listWrapRow.length, 0)}">
+                <div class="custom_table slds-scrollable_x">
+                    <table class="slds-table slds-table_bordered slds-table_col-bordered slds-no-row-hover" width="100%">
+                        <thead id="tableMainHeader">
+                            <tr class="slds-line-height_reset"> 
+                                <th class="" scope="col" colspan="3" width="20%">       
+                                    <div class="custom_headerFont slds-truncate">구분</div> 
+                                </th>
+                                <aura:iteration items="{!v.listMainHeader}" var="wrapHeader">
+                                    <th class="" scope="col" colspan="{!wrapHeader.iColSpan}">
+                                        <div class="custom_headerFont slds-truncate">
+                                            {!wrapHeader.sHeader}{!wrapHeader.sType}
+                                            <aura:if isTrue="{!v.sRadioValue != 'MONTHLY'}">
+                                                ({!wrapHeader.sHeader2}{!wrapHeader.sType2})
+                                            </aura:if>
+                                        </div>
+                                    </th>
+                                </aura:iteration>
+                            </tr>
+                            <tr class="slds-line-height_reset">
+                                <th class="" scope="col">       
+                                    <div class="custom_headerFont slds-truncate">부서</div> 
+                                </th>   
+                                <th class="" scope="col">       
+                                    <div class="custom_headerFont slds-truncate">사원명</div>    
+                                </th>   
+                                <th class="" scope="col">       
+                                    <div class="custom_headerFont slds-truncate">직급</div> 
+                                </th>
+
+                                <aura:iteration items="{!v.listSubHeader}" var="wrapHeader">
+                                    <th class="" scope="col">
+                                        <div class="custom_headerFont slds-truncate">
+                                            {!wrapHeader.sHeader}{!wrapHeader.sType}
+                                        </div>
+                                    </th>
+                                </aura:iteration>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.listWrapRow}" var="objWrapRow">
+                                <tr>
+                                    <aura:if isTrue="{!objWrapRow.iRowSpan != null}">
+                                        <th class="custom_table-header" scope="col" rowspan="{!objWrapRow.iRowSpan}">
+                                            <div class="custom_headerFont slds-truncate">{!objWrapRow.objEmployee.Department__c}</div> 
+                                        </th>
+                                    </aura:if>
+                                    <th class="custom_table-header custom_th-border" scope="col">       
+                                        <div class="slds-truncate">
+                                            <a href="javascript:void(0);" tabindex="-1" onclick="{!c.fnClickName}" data-employee="{!objWrapRow.objEmployee.Id}">
+                                                {!objWrapRow.objEmployee.Name}
+                                            </a>
+                                        </div> 
+                                    </th>
+                                    <th class="custom_table-header" scope="col">
+                                        <div class="slds-truncate">{!objWrapRow.objEmployee.Position__c}</div> 
+                                    </th>
+                                    
+                                    <aura:iteration items="{!objWrapRow.listDateWrapper}" var="objWrapDate">
+                                        <td class="{!if(objWrapDate.holidayRatio != 0 
+                                                        , 'custom_color-holiday'
+                                                        , if(greaterthanorequal(objWrapDate.totalRatio, 1)
+                                                            , 'custom_color-1'
+                                                            , if(greaterthanorequal(objWrapDate.totalRatio, 0.5)
+                                                                , 'custom_color-5'
+                                                                , if(greaterthanorequal(objWrapDate.totalRatio, 0.2)
+                                                                    , 'custom_color-2'
+                                                                    , 'custom_color-0')
+                                                                )
+                                                            )
+                                                        )
+                                                    }">
+                                            <div class="">
+                                                <aura:if isTrue="{!objWrapDate.totalRatio != 0}">
+                                                    <ui:outputNumber value="{!objWrapDate.totalRatio}" format="0.0" />
+                                                </aura:if>
+                                            </div>
+                                        </td>
+                                    </aura:iteration>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </div>  
+
+                <div class="custom_paging slds-col slds-align_absolute-center slds-p-top_medium">
+                    <c:CommonPaging currentPageNumber="{!v.currentPageNumber}" maxPageNumber="{!v.maxPageNumber}" />
+                </div>
+            </aura:if>
+        </lightning:layoutItem>
+
+        <!-- <lightning:layoutItem padding="around-small" size="1">
+            <aura:if isTrue="{!greaterthan(v.listWrapRow.length, 0)}">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-no-row-hover" width="100%">
+                    <thead>
+                        <tr class="slds-line-height_reset"> 
+                            <th class="" scope="col" colspan="2" width="100%">
+                                <div class="custom_headerFont slds-truncate">구분</div> 
+                            </th>
+                        </tr>
+                    </thead> 
+                    <tbody>
+                        <tr>
+                            <td class="custom_color-holiday">1.0</td>
+                            <td>휴가포함</td>
+                        </tr>
+                        <tr>
+                            <td class="custom_color-1">1.0</td>
+                            <td>1.0 이상</td>
+                        </tr>
+                        <tr>
+                            <td class="custom_color-5">0.5</td>
+                            <td>0.5 이상</td>
+                        </tr>
+                        <tr>
+                            <td class="custom_color-2">0.2</td>
+                            <td>0.2 이상</td>
+                        </tr>
+                        <tr>
+                            <td class="custom_color-0">0.0</td>
+                            <td>0.2 미만</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </aura:if>
+        </lightning:layoutItem> -->
+    </lightning:layout>
+
+    <!-- Modal Open/Close -->   
+    {!v.ViewHRInfoCmp}
+    
+</aura:component>

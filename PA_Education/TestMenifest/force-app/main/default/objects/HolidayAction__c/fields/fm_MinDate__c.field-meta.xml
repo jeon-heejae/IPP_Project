@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>fm_MinDate__c</fullName>
+    <formula>CASE(
+  MIN(
+    YEAR(HolidayAction_Date1__c) * 10000 + MONTH(HolidayAction_Date1__c) * 100  + DAY(HolidayAction_Date1__c),
+    BLANKVALUE(YEAR(HolidayAction_Date2__c) * 10000 + MONTH(HolidayAction_Date2__c) * 100  + DAY(HolidayAction_Date2__c),99999999),
+    BLANKVALUE(YEAR(HolidayAction_Date3__c) * 10000 + MONTH(HolidayAction_Date3__c) * 100  + DAY(HolidayAction_Date3__c),99999999),
+    BLANKVALUE(YEAR(HolidayAction_Date4__c) * 10000 + MONTH(HolidayAction_Date4__c) * 100  + DAY(HolidayAction_Date4__c),99999999),
+    BLANKVALUE(YEAR(HolidayAction_Date5__c) * 10000 + MONTH(HolidayAction_Date5__c) * 100  + DAY(HolidayAction_Date5__c),99999999) ),
+  YEAR(HolidayAction_Date1__c) * 10000 + MONTH(HolidayAction_Date1__c) * 100  + DAY(HolidayAction_Date1__c), HolidayAction_Date1__c, 
+  YEAR(HolidayAction_Date2__c) * 10000 + MONTH(HolidayAction_Date2__c) * 100  + DAY(HolidayAction_Date2__c), HolidayAction_Date2__c, 
+  YEAR(HolidayAction_Date3__c) * 10000 + MONTH(HolidayAction_Date3__c) * 100  + DAY(HolidayAction_Date3__c), HolidayAction_Date3__c, 
+  YEAR(HolidayAction_Date4__c) * 10000 + MONTH(HolidayAction_Date4__c) * 100  + DAY(HolidayAction_Date4__c), HolidayAction_Date4__c,
+  HolidayAction_Date5__c
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Min Date</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

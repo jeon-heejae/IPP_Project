@@ -1,0 +1,155 @@
+<!--
+ - @description       : Any question of Homepage Renewal Project
+ - @author            : Chan Kang
+ - @group             : Boundary
+ - Modifications Log
+ - Ver   Date         Author           Modification
+ - 1.0   2021.12.24   Chan Kang        Initial Version
+ - 1.1   2022.01.30   CJ Sohn          Convert Web-to-Lead → Save Lead__c
+-->
+
+
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes"
+                controller="RenewalHPContactFormController"
+                access="global">
+
+    <aura:attribute name="LeadName" type="String" />
+    <aura:attribute name="Company" type="String" />
+    <aura:attribute name="Mobile" type="String" />
+    <aura:attribute name="Email" type="String" />
+    <aura:attribute name="LeadType" type="String" />
+    <aura:attribute name="listLeadTypes" type="List"/>
+    <aura:attribute name="Subject" type="String" />
+    <aura:attribute name="Description" type="String" />
+    <aura:attribute name="emailSelf" default="false" type="Boolean" />
+    <aura:attribute name="PersonalInformationUseAgreement" type="Boolean" default="false" />
+    <aura:attribute name="termsOpen" type="Boolean" default="false" />
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+    <aura:handler name="init" value="{!this}" action="{!c.fnInit}" />
+    <section>
+        <div class="contents" id="form">
+            <aura:if isTrue="{!v.showSpinner}">
+                <div class="custom_spinner">
+                    <lightning:spinner aura:id="spinner" alternativeText="Loading" size="medium" variant="brand" />
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </div>
+            </aura:if>
+            <p class="pageTitle">
+                Any questions?
+            </p>
+            <div class="form">
+                <div style="display: flex; flex-direction: row; width: 100%;">
+                    <div style="flex: 1; margin-right: 4px;">
+                        <label for="name"><span class="slds-required">*</span>Name</label>
+                        <lightning:input type="text" label="name" variant="label-hidden" value="{!v.LeadName}" placeholder="Name"/>
+                    </div>
+                    <div style="flex: 1; margin-left: 4px;">
+                        <label for="company"><span class="slds-required">*</span>Company</label>
+                        <lightning:input type="text" label="company" variant="label-hidden" value="{!v.Company}" placeholder="Company"/>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: row; width: 100%;">
+                    <div style="flex: 1;">
+                        <label for="email"><span class="slds-required">*</span>Email</label>
+                        <input id="email" maxlength="40" name="email" size="20" type="hidden" placeholder="Email" value="{!v.Email}" required="true"/>
+                        <div style="display: flex; margin-top: 20px !important; flex-direction: row; align-items: center">
+                            <input id="email" style="flex: 1; margin: 0; margin-right: 8px;" type="text" placeholder="Id" onchange="{!c.fnChangeEmail}" required="true"/>
+                            @
+                            <aura:renderIf isTrue="{!v.emailSelf == false}">
+                                <select style="flex: 1; padding: 14px 16px; margin-left: 8px;" onchange="{!c.fnChangeEmailProvider}">
+                                    <option value="naver.com">naver.com</option>
+                                    <option value="gmail.com">gmail.com</option>
+                                    <option value="daum.net">daum.net</option>
+                                    <option value="kakao.com">kakao.com</option>
+                                    <option value="nate.com">nate.com</option>
+                                    <option value="self">직접 입력</option>
+                                </select>
+                            </aura:renderIf>
+                            <aura:renderIf isTrue="{!v.emailSelf}">
+                                <input style="flex: 1; margin: 0; margin-left: 8px;" type="text" id="provider" onchange="{!c.fnChangeEmailProvider}" />
+                            </aura:renderIf>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: row; width: 100%;">
+                    <div style="flex: 1; margin-right: 4px;">
+                        <label for="mobile"><span class="slds-required">*</span>Mobile</label>
+                        <lightning:input type="text" label="mobile" variant="label-hidden" value="{!v.Mobile}" placeholder="Mobile" onchange="{!c.fnPhoneMasking}"/>
+                    </div>
+                    <div style="flex: 1; margin-left: 4px;">
+                        <label for="type"><span class="slds-required">*</span>Type</label>
+                        <div style="display: flex; flex-direction: row; align-items: center">
+                            <select style="flex: 1; padding: 14px 16px; margin-top: 20px; margin-left: 4px;" onchange="{!c.fnChangeLeadType}">
+                                <option value="">-- Select --</option>
+                                <aura:iteration items="{!v.listLeadTypes}" var="leadType">
+                                    <option value="{!leadType.value}">{!leadType.label}</option>
+                                </aura:iteration>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <label for="title"><span class="slds-required">*</span>Subject</label>
+                <lightning:input type="text" label="title" variant="label-hidden" value="{!v.Subject}" placeholder="Title"/>
+                <label for="description"><span class="slds-required">*</span>Description</label>
+                <lightning:textarea label="description" variant="label-hidden" value="{!v.Description}" placeholder="Description" />
+                <div style="display: flex; flex-direction: row; width: 100%;">
+                    <lightning:input id="PersonalInformationUseAgreement" name="PersonalInformationUseAgreement" type="checkbox" checked="{!v.PersonalInformationUseAgreement}"/>
+                    <label for="PersonalInformationUseAgreement" style="display: inline; width: 90%; margin-left: 16px;"><a onclick="{!c.fnTermsOpen}">개인정보 수집 및 활용</a> 동의</label>
+                </div>
+                <lightning:button class="submitBtn" label="Submit" variant="brand" onclick="{!c.fnSave}"/>
+            </div>
+        </div>
+        <aura:renderIf isTrue="{!v.termsOpen}">
+            <div class="modal-background active" onclick="{!c.fnTermsClose}">
+                <div class="modal" style="height: 80vh; overflow: scroll;">
+                    <header style="height: 100px;">
+                        <h1>개인정보 수집 및 활용 동의</h1>
+                        <button class="close" onclick="{!c.fnTermsClose}">
+                            &times;
+                        </button>
+                    </header>
+                    <section>
+                        <p>
+                            (주)대유넥스티어(이하’회사’)는 개인정보보호법 등 관련 법령에 따라 상담 및 문의, 답변 등의 목적으로 지원자의 개인정보를 수집하고 있습니다. <br />
+                            귀하의 개인정보 수집 및 이용과 관련하여 아래의 안내 내용을 자세히 읽어 보시고, 모든 내용을 숙지하신 후에 개인정보의 수집 및 이용에 관한 동의 여부를 결정해 주시기 바랍니다.
+                        </p>
+                        <h1>1. 개인정보의 수집 및 이용 목적</h1>
+                        <table style="border: 1px solid #212123;">
+                            <tr style="border: 1px solid #212123;">
+                                <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">개인정보항목</th>
+                                <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">수집·이용 목적</th>
+                                <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">보유기간</th>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #212123;">
+                                    수집항목 : 성명, 회사명, 전화번호, 이메일, 상담 및 문의 내용등
+                                </td>
+                                <td style="border: 1px solid #212123;">
+                                    상담 및 문의에 대한 정보 전달 등을 위해 수집된 개인정보를 통하여 따른 본인 식별
+                                </td>
+                                <td style="border: 1px solid #212123;">
+                                    개인정보의 수집 및 이용 목적이 달성된 때 또는 지원자께서 개인정보제공 동의를 철회 하셨을 경우에는 지체 없이 지원자의 개인정보 파기함
+                                </td>
+                            </tr>
+                        </table>
+                        <h1>2. 제3자 정보제공 동의</h1>
+                        <p>
+                            회사는 원칙적으로 지원자의 개인정보를 지원자의 동의 없이 타 기업 또는 기관에 제공하지 않습니다. 다만, 다음의 경우에는 예외적으로 동의 없이 개인정보를 제공할 수 있습니다.<br />
+                            -	법령의 규정에 의하거나 수사 목적으로 법령에 정해진 절차와 방법에 따라 수사기관의 요구가 있는 경우
+                        </p>
+                        <p>
+                            3.	당사는 취득한 개인정보를 수집한 목적에 필요한 범위에서 적합하게 처리하고 그 목적 외의 용도로 사용하지 않으며 개인정보를 제공한 계약당사자는 언제나 자신이 입력한 개인정보를 열람·수정 및 정보제공에 대한 철회할 수 있습니다.
+                        </p>
+                        <p>
+                            4.  지원자는 본 안내에 따른 개인정보의 수집, 이용, 제공 및 위탁 등과 관련한 위 사항에 대하여 원하지 않는 경우 동의를 거부할 수 있습니다.<br />
+                            다만, 본 안내에 따른 개인정보의 수집, 이용등과 관련한 위 사항은 필수적인 항목으로 이에 대하여 동의하지 않는 경우 서비스에 제한이 있을 수 있는 점을 안내드립니다.
+                        </p>
+                        <p>
+                            개인정보 수집 및 이용안내, 제3자 정보제공 동의를 모두 읽었으며, 아래 내용에 모두 동의합니다.
+                        </p>
+                    </section>
+                </div>
+            </div>
+        </aura:renderIf>
+    </section>
+</aura:component>

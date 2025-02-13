@@ -1,0 +1,234 @@
+<!--
+- @description       : Navigation of Homepage Renewal Project
+- @author            : Chan Kang
+- @group             : Boundary
+- Modifications Log
+- Ver   Date         Author           Modification
+- 1.0   2021.12.24   Chan Kang        Initial Version
+  1.1   2022.04.17   Myeonghwan Kim   Add language toggle
+                                      Add CSS class for language buttons
+  1.2   2022.04.20   Gyubin Lee       Add i18nEvent application event for localization
+                                      Add isEnglish localization status attribute
+                                      Add language toggle function
+                                      Add function to save and load latest language setting from localStorage
+-->
+<aura:component implements="forceCommunity:themeLayout,force:appHostable" access="global">
+    <!--    <ltng:require scripts="{!$Resource.languageController}" afterScriptsLoaded="{!c.init}"/>-->
+    <!--    <aura:attribute name="defaultUrl" type="String"/>-->
+    <!--    <aura:handler event="c:i18nEvent" name="init" action="{!c.getLocalization}"/>-->
+    <aura:attribute name="isEnglish" type="Boolean" default="false" />
+    <aura:attribute name="languageString" type="String" />
+    <aura:handler name="render" value="{!this}" action="{!c.init}" />
+    <aura:attribute name="isDoneRendering" type="Boolean" default="false" />
+    <aura:registerEvent name="i18nEvent" type="c:i18nEvent" />
+    <div>
+        <header>
+            <div class="inner">
+                <a href="./" class="logo">
+                    <img src="{!$Resource.headerLogo}" class="in_pc" />
+                    <img src="{!$Resource.RenewalHPLogoMobile}" class="in_mobile" />
+                </a>
+                <ul class="in_pc">
+                    <li onmouseover="{!c.onMouseOver}" onmouseout="{!c.onMouseOut}">
+                        <a href="./daeu-nextier">
+                            DAEU nextier
+                            <ul class="submenu">
+                                <li>
+                                    <a href="./daeu-nextier">Company Profile</a>
+                                    <!--                                    <lightning:formattedUrl value="/daeu-nextier" label="Company Profile" target="_self" />-->
+                                </li>
+                                <li>
+                                    <a href="./daeu-nextier#competency">Competency</a>
+                                </li>
+                                <li>
+                                    <a href="./daeu-nextier#record">Track Record</a>
+                                </li>
+                            </ul>
+                        </a>
+                    </li>
+                    <li onmouseover="{!c.onMouseOver}" onmouseout="{!c.onMouseOut}">
+                        <a href="./value-proposition">
+                            Value Proposition
+                            <ul class="submenu">
+                                <li>
+                                    <a href="./value-proposition#offering">Service Offering</a>
+                                    <!--                                    <lightning:formattedUrl value="/value-proposition#offering" label="Service Offering" target="_self" />-->
+                                </li>
+                                <li>
+                                    <a href="./value-proposition#solution">Solution Delivery</a>
+                                </li>
+                            </ul>
+                        </a>
+                    </li>
+                    <!--
+					2022.11.09	Changjoo.Sohn	신정현 상무님께 전달받은 사항(Salesforce 요청으로 Training Service 메뉴 제거) 반영
+                    <li onmouseover="{!c.onMouseOver}" onmouseout="{!c.onMouseOut}">
+                        <a href="./training-service">
+                            Training Service
+                            <ul class="submenu">
+                                <li>
+                                    <a href="./training-service#curriculum">Curriculum</a>
+                                </li>
+                                <li>
+                                    <a href="./training-service#class">Class Information</a>
+                                </li>
+                            </ul>
+                        </a>
+                    </li>
+					-->
+                    <li onmouseover="{!c.onMouseOver}" onmouseout="{!c.onMouseOut}">
+                        <a href="./recruiting">
+                            Recruiting
+                            <ul class="submenu">
+                                <li>
+                                    <a href="./recruiting#description">Job Description</a>
+                                </li>
+                                <li>
+                                    <a href="./recruiting#positions">Open Positions</a>
+                                </li>
+                            </ul>
+                        </a>
+                    </li>
+                    <li onmouseover="{!c.onMouseOver}" onmouseout="{!c.onMouseOut}">
+                        <a href="./contact">
+                            Contact
+                            <ul class="submenu">
+                                <li>
+                                    <a href="./contact#address">Address</a>
+                                </li>
+                                <li>
+                                    <a href="./contact#form">Contact</a>
+                                </li>
+                            </ul>
+                        </a>
+                    </li>
+                    <!--현진님-->
+                    <li onmouseover="{!c.onMouseOver}" onmouseout="{!c.onMouseOut}">
+                        <a href="./DIgitalSquare">
+                            Subsidiary
+                            <ul class="submenu">
+                                <li>
+                                    <a href="https://www.digisquare.co.kr/s/?language=ko">Digital Square</a>
+                                </li>
+                            </ul>
+                        </a>
+                    </li>                    
+                    <!--현진님-->
+                    <li>
+                        <!--                        <aura:if isTrue="{!v.isEnglish}">-->
+                        <!--                            <a class="language" href="{!v.defaultUrl + '/homepage/s/'}">Korean</a>-->
+                        <!--                            &lt;!&ndash;                            <lightning:formattedUrl class="language" value="{!v.defaultUrl + '/homepage/s/'}" label="Korean" onclick="window.location.reload()" />&ndash;&gt;-->
+                        <!--                            <aura:set attribute="else">-->
+                        <!--                                <a class="language" href="{!v.defaultUrl + '/homepage/s/en'}">English</a>-->
+                        <!--                                &lt;!&ndash;                                <lightning:formattedUrl class="language" value="{!v.defaultUrl + '/homepage/s/en'}" label="English" />&ndash;&gt;-->
+                        <!--                            </aura:set>-->
+                        <!--                        </aura:if>-->
+                        <p id="language" class="language" onclick="{!c.languageToggle}">{!v.languageString}</p>
+                        <div class="upDownButton">
+                            <div aura:id="upTriangle" class="triangle up on" onclick="{!c.languageToggle}"></div>
+                            <div aura:id="downTriangle" class="triangle down" onclick="{!c.languageToggle}"></div>
+                        </div>
+                    </li>
+                </ul>
+                <button class="in_pc" onclick="{!c.signup}">Sign up</button>
+                <a class="gnbOpen in_mobile" onclick="{!c.gnbOpen}">
+                    <img src="{!$Resource.iconGNB}" />
+                </a>
+
+            </div>
+        </header>
+        <div aura:id="mobileGnb" class="mobile_gnb is_mobile">
+            <section class="gnb_header">
+                <a href="./" class="logo">
+                    <img src="{!$Resource.RenewalHPLogoMobile}" class="in_mobile" />
+                </a>
+                <a class="gnbClose in_mobile" onclick="{!c.gnbClose}">
+                    <img src="{!$Resource.iconClose}" />
+                </a>
+
+                <aura:if isTrue="{!v.isEnglish}">
+                    <div class="is_mobile language mobile">
+                        <p id="language" class="language button" onclick="{!c.mobileLanguageToKorean}">Korean</p>
+                        <p id="language" class="language button active" onclick="{!c.mobileLanguageToEnglish}">English
+                        </p>
+                    </div>
+                    <aura:set attribute="else">
+                        <div class="is_mobile language mobile">
+                            <p id="language" class="language button active" onclick="{!c.mobileLanguageToKorean}">Korean
+                            </p>
+                            <p id="language" class="language button" onclick="{!c.mobileLanguageToEnglish}">English</p>
+                        </div>
+                    </aura:set>
+                </aura:if>
+            </section>
+
+
+
+            <ul class="mobile_gnb_menu">
+                <li>
+                    <a href="#">DAEU nextier</a>
+                    <ul class="mobile_submenu">
+                        <li>
+                            <a href="./daeu-nextier">Company Profile</a>
+                        </li>
+                        <li>
+                            <a href="./daeu-nextier#competency">Competency</a>
+                        </li>
+                        <li>
+                            <a href="./daeu-nextier#record">Track Record</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Value Proposition</a>
+                    <ul class="mobile_submenu">
+                        <li>
+                            <a href="./value-proposition#offering">Service Offering</a>
+                        </li>
+                        <li>
+                            <a href="./value-proposition#solution">Solution Delivery</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Training Service</a>
+                    <ul class="mobile_submenu">
+                        <li>
+                            <a href="./training-service#curriculum">Curriculum</a>
+                        </li>
+                        <li>
+                            <a href="./training-service#class">Class Information</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Recruiting</a>
+                    <ul class="mobile_submenu">
+                        <li>
+                            <a href="./recruiting#description">Job Description</a>
+                        </li>
+                        <li>
+                            <a href="./recruiting#positions">Open Positions</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Contact Us</a>
+                    <ul class="mobile_submenu">
+                        <li>
+                            <a href="./contact#address">Address</a>
+                        </li>
+                        <li>
+                            <a href="./contact#form">Contact</a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+        <div>
+            {!v.body}
+        </div>
+        <div class="header-background" aura:id="background"></div>
+    </div>
+</aura:component>

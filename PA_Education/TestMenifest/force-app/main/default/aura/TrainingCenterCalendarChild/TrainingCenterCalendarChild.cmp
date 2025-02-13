@@ -1,0 +1,44 @@
+<!--
+* ==================================================================================
+*   File Name   : REP_ScheduleChild.cmp
+*   Author      : Kwanwoo.Jeon
+*   Date        : 2024.02.16
+*   Description : Event component in Schedule Tab
+*   Modification Log
+* ==================================================================================
+*   Ver     Date          Author          Modification
+* ==================================================================================
+*   1.0     2024.02.16    Kwanwoo.Jeon       Create
+* ==================================================================================
+-->
+<aura:component controller="TrainingCenterCalendarController" implements="flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global">
+    <ltng:require styles="{!$Resource.TrainingCenterCalendar + '/fullcalendar.min.css'}"/>
+    <aura:attribute name="events"               type="Map"          description='Event Data used in Calendar'/>
+    <aura:attribute name="sObjectName"          type="String"       description='Target Object'/>
+    <aura:attribute name="eventBackgroundColor" type="String"       description='Calendar Backgroud Color'/>
+    <aura:attribute name="eventBorderColor"     type="String"       description='Event Border Color in Calendar'/>
+    <aura:attribute name="eventTextColor"       type="String"       description='Event Text Color in Calendar'/>
+
+
+    <!-- AnyCalendar invalid Attribute   -->
+    <aura:attribute name="objectLabel"          type="String"/>
+    <aura:attribute name="titleField"           type="String"/>
+    <aura:attribute name="startDateTimeField"   type="String"/>
+    <aura:attribute name="endDateTimeField"     type="String"/>
+    <aura:attribute name="descriptionField"     type="String"/>
+    <aura:attribute name="userField"            type="String"/>
+    <aura:attribute name="calendarButtons"      type="String"/>
+    <aura:attribute name="weekends"             type="Boolean"/>
+    <aura:attribute name="idVal"                type="String"/>
+    <aura:attribute name="titleVal"             type="String"/>
+    <aura:attribute name="descriptionVal"       type="String"/>
+    <aura:attribute name="startDateTimeVal"     type="DateTime"/>
+    <aura:attribute name="endDateTimeVal"       type="DateTime"/>
+    <aura:attribute name="DateNextMonth"        type="String"/>
+
+
+    <aura:handler name="change" value="{!v.events}" action="{!c.renderCalendar}"/>
+
+
+    <div id="calendar" class="anyCalendar"></div>
+</aura:component>

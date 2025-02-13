@@ -1,0 +1,40 @@
+<!--
+ - @description       : Performance of Homepage Renewal Project
+ - @author            : Chan Kang
+ - @group             : Boundary
+ - Modifications Log
+ - Ver   Date         Author           Modification
+ - 1.0   2021.12.24   Chan Kang        Initial Version
+-->
+
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes"
+    			access="global"
+                controller="RenewalHPDaeuPerfomance">
+    <aura:attribute name="performances" type="List" />
+    <ltng:require scripts="{!$Resource.chartjs}" afterScriptsLoaded="{!c.init}" />
+	<section>
+    	<div class="contents" id="performance">
+        	<p class="pageTitle">
+            	Performance
+            </p>
+            <h1 class="is_pc">
+                우리는<br />
+                고객에게 <b>차별화된 가치</b>를 전달하기 위하여<br />
+                노력하고 있으며,<br />
+                <b>지속적인 성장</b>이 이를 증명합니다. 
+            </h1>
+            <h1 class="is_mobile">
+                우리는<br />
+                고객에게 <b>차별화된 가치를</b><br />
+                전달하기 위하여<br />
+                노력하고 있으며,<br />
+                <b>지속적인 성장</b>이<br />
+                이를 증명합니다.
+            </h1>
+            <h2>
+                끊임없는 도전과 새로운 시도로 성장을 지속하고 있습니다.<br />
+                성과의 결과는 고객을 위한 연구개발과 조직원을 위한 복지향상 재투자 하고 있습니다.<br />
+            </h2>
+        </div>
+    </section>
+</aura:component>

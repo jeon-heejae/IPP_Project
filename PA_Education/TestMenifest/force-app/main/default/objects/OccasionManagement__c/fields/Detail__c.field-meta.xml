@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Detail__c</fullName>
+    <inlineHelpText>결혼의 경우 날짜, 장소 신랑/신부 이름, 문의 가능 연락처 등 / 부고의 경우 영안실, 발인일, 장지, 문의 가능 연락처 등</inlineHelpText>
+    <label>상세내용 (Chatter 기재)</label>
+    <length>32768</length>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>LongTextArea</type>
+    <visibleLines>25</visibleLines>
+</CustomField>

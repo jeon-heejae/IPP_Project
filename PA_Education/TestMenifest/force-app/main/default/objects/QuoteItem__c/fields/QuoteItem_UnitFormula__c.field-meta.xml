@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>QuoteItem_UnitFormula__c</fullName>
+    <externalId>false</externalId>
+    <formula>CASE(RecordType.Name , &apos;컨설팅&apos;, TEXT(QuoteItem_ConsultManMonths__c) &amp; &apos; M/M&apos;,
+                       &apos;라이센스&apos;, TEXT(QuoteItem_LicenseNumberOfUser__c) &amp;&apos; Users&apos;,
+TEXT(QuoteItem_TrainingCount__c) &amp;&apos; Users&apos;)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>단위</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

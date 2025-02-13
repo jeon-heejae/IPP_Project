@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Stage3EndDate__c</fullName>
+    <description>Stage 3 종료일자, 변경 시 셋팅, Stage3로 셋팅되었는데 종료일자가 있는경우 Null로 업데이트, 종료일자 이후 다시 셋팅</description>
+    <label>Stage 3 종료일</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

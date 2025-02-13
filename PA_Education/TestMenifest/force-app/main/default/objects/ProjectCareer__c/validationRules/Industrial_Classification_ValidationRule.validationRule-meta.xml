@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Industrial_Classification_ValidationRule</fullName>
+    <active>true</active>
+    <description>산업분류 값중 직접입력을 선택했을때 반드시 직접입력(산업분류) 필드에 값을 입력해야함</description>
+    <errorConditionFormula>IF(
+				AND(
+								ISPICKVAL(Industrial_Classification__c, &apos;직접입력&apos;),
+								ISBLANK(Typein_Industrial_Classification__c)
+								),
+				TRUE, FALSE
+				)</errorConditionFormula>
+    <errorDisplayField>Typein_Industrial_Classification__c</errorDisplayField>
+    <errorMessage>값을 입력해주세요.</errorMessage>
+</ValidationRule>

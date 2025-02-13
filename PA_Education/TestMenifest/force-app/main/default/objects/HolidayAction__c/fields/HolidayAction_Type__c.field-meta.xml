@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>HolidayAction_Type__c</fullName>
+    <label>Type</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Annual Holiday</fullName>
+                <default>false</default>
+                <label>연차</label>
+            </value>
+            <value>
+                <fullName>Half-day Leave</fullName>
+                <default>false</default>
+                <label>반차</label>
+            </value>
+            <value>
+                <fullName>Reward Holiday</fullName>
+                <default>false</default>
+                <label>대체휴가</label>
+            </value>
+            <value>
+                <fullName>Reward Half-Holiday</fullName>
+                <default>false</default>
+                <label>대체휴가(반차)</label>
+            </value>
+            <value>
+                <fullName>Public Works</fullName>
+                <default>false</default>
+                <label>공가(공무)</label>
+            </value>
+            <value>
+                <fullName>Family Leave</fullName>
+                <default>false</default>
+                <label>경조휴가</label>
+            </value>
+            <value>
+                <fullName>Sick Leave</fullName>
+                <default>false</default>
+                <label>병가(무급)</label>
+            </value>
+            <value>
+                <fullName>Women Holiday</fullName>
+                <default>false</default>
+                <label>생리휴가</label>
+            </value>
+            <value>
+                <fullName>가족돌봄휴가</fullName>
+                <default>false</default>
+                <label>가족돌봄휴가</label>
+            </value>
+            <value>
+                <fullName>출산휴가</fullName>
+                <default>false</default>
+                <label>출산휴가</label>
+            </value>
+            <value>
+                <fullName>휴직</fullName>
+                <default>false</default>
+                <label>휴직</label>
+            </value>
+            <value>
+                <fullName>육아휴직</fullName>
+                <default>false</default>
+                <label>육아휴직</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

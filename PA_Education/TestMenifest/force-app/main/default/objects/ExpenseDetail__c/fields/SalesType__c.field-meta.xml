@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SalesType__c</fullName>
+    <label>영업구분</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>기타</fullName>
+                <default>false</default>
+                <label>기타</label>
+            </value>
+            <value>
+                <fullName>잠재고객</fullName>
+                <default>false</default>
+                <label>잠재고객</label>
+            </value>
+            <value>
+                <fullName>영업기회</fullName>
+                <default>false</default>
+                <label>영업기회</label>
+            </value>
+            <value>
+                <fullName>프로젝트</fullName>
+                <default>false</default>
+                <label>프로젝트</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

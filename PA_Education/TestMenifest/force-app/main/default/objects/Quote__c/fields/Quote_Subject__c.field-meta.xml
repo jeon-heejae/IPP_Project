@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Quote_Subject__c</fullName>
+    <description>&apos;[&apos; &amp; Quote_Opportunity__r.Account_Name__r.Name &amp; &apos;]&apos; &amp; 
+&apos; - &apos; &amp; Quote_Opportunity__r.Engagement_Description__c
+를 Workflow에 설정</description>
+    <externalId>false</externalId>
+    <inlineHelpText>입력하지 않는 경우 저장시
+[기회명] + 기회 Engagement Description
+으로 자동 설정됩니다.</inlineHelpText>
+    <label>견적명</label>
+    <length>255</length>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

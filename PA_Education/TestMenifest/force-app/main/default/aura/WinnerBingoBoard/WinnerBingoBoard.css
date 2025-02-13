@@ -1,0 +1,66 @@
+/**
+ * Created by jihwa on 2023-11-23.
+ */
+
+ @font-face {
+   font-family: 'BingoFont1';
+   src: url('/resource/BingoFont1') format('woff');
+ }
+.THIS {
+    font-size : 10px;
+}
+.THIS .isChecked{
+    background-color: pink; /* isChecked일 때의 배경색 */
+}
+.THIS .winnerTable {
+    font-family : 'BingoFont1', sans-serif;
+    color:black;
+    text-align : center;
+    height : 600px;
+    width : 600px;
+}
+
+.THIS .winnerTable, .THIS .winnerTable tr, .THIS .winnerTable td {
+    border : 2px solid  black;
+    text-align : center;
+}
+
+.THIS .winnerTable tr{
+
+    background-color : white;
+}
+
+
+.THIS .winnerTable td {
+    height : 20%;
+    width : 20%;
+}
+.THIS .winnerTable .bingoText {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: wrap; /* 텍스트 줄 바꿈 방지 */
+    overflow: hidden; /* 넘치는 부분 숨김 */
+    text-overflow: ellipsis; /* 생략 부호 추가 */
+}
+
+.THIS .modalTitle {
+    font-size: 55px;
+    font-weight: bolder;
+    color: black;
+}
+
+.THIS .modalContent {
+    font-size: 25px;
+    color: black;
+}
+
+.THIS .modalFooter {
+    font-size: 30px;
+}
+
+
+.THIS .slds-modal__container {
+    animation: fadeIn 1s ease-in-out;
+}

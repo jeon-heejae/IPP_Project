@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Target_Column_Type__c</fullName>
+    <description>Select 및 DML 쿼리 수행시 대상이 되는 컬럼 타입을 기재
+- 일반항목은 Salesforece Object field 기본 타입과 동일하게 기재할 것
+- 응답 시 List나 Map 정보인 경우에는 LIST 또는 MAP, MAP.STRING으로 기재
+ ( MAP.STRING으로 설정 시 Map와 동일하게 쿼리가 수행되고, 응답시 Map의 내용을 0레벨에 표시함)</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Select 및 DML 쿼리 수행시 대상이 되는 컬럼 타입을 기재
+- Salesforece Object field 기본 타입과 동일하게 기재할 것
+- 응답 시 List나 Map 정보인 경우에는 LIST 또는 MAP, MAP.STRING으로 기재
+  (MAP.STRING으로 설정 시 Map와 동일하게 쿼리가 수행되고, 응답시 Map의 내용을 0레벨에 표시함)</inlineHelpText>
+    <label>대상컬럼타입</label>
+    <length>100</length>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

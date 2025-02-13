@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BingoMember__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Bingo Member</label>
+    <referenceTo>BingoMember__c</referenceTo>
+    <relationshipLabel>Bingo Cell</relationshipLabel>
+    <relationshipName>Bingo_Cell</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

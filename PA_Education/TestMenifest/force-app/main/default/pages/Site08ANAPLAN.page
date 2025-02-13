@@ -1,0 +1,292 @@
+<apex:page showHeader="false" standardStylesheets="false">
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"></html> <!--<![endif]-->
+<head>
+
+    <!-- Basic Page Needs
+  ================================================== -->
+	<meta charset="utf-8" />
+	<title>(주)대유넥스티어, DaeU NexTier, Daeunextier</title>
+	
+    <!-- Mobile Specific Metas
+  ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+	<meta name="fb_admins_meta_tag" content="daeunextier"/>
+	<meta name="keywords" content="Daeunextier, Radian6, 대유넥티어, 데이터사이언티스트, 벨류인에이블러, 에반젤리스트"/>
+	<meta name="description" content="클라우드 기반 솔루션 프로바이더로서 기업이 필요로 하는 어플리케이션을 일일이 구축하지 않고 즉시 활용할 수 있는 서비스를 제공함으로써 중견,중소 기업의 비용부담을 최소화하고 생산성 향상 및 고객가치 증진에 기여하고자 합니다. ㈜대유넥스티어에 보내주시는 관심과 성원에 감사를 드립니다."/>
+    <!-- CSS
+  ================================================== -->
+	<apex:stylesheet value="{!URLFOR($Resource.daeunextier, 'css/zerogrid.css')}"/>
+	<apex:stylesheet value="{!URLFOR($Resource.daeunextier, 'css/style.css')}"/>
+	<apex:stylesheet value="{!URLFOR($Resource.daeunextier, 'css/responsive.css')}"/>
+	<apex:stylesheet value="{!URLFOR($Resource.daeunextier, 'css/responsiveslides.css')}"/>
+	
+	<!--[if lt IE 8]>
+       <div style=' clear: both; text-align:center; position: relative;'>
+         <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+           <img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." />
+        </a>
+      </div>
+    <![endif]-->
+    <!--[if lt IE 9]>
+		<script src="js/html5.js"></script>
+		<script src="js/css3-mediaqueries.js"></script>
+	<![endif]-->
+	
+	
+	<link href='./images/favicon.ico' rel='icon' type='image/x-icon'/>
+  	<apex:includeScript value="{!URLFOR($Resource.daeunextier, 'js/jquery.min.js')}"/>
+  	<apex:includeScript value="{!URLFOR($Resource.daeunextier, 'js/responsiveslides.js')}"/>
+		<script>
+			$(function () {
+				  $("#slider").responsiveSlides({
+						auto: false,
+						pager: false,
+						nav: true,
+						speed: 500,
+						/**maxwidth: 962,*/
+						maxwidth: 540,
+						namespace: "centered-btns"
+				  });
+			});
+		
+			$(function () {
+				  $("#slider2").responsiveSlides({
+						auto: true,
+						pager: false,
+						nav: false,
+						speed: 500,
+						maxwidth: 200,
+						namespace: "centered-btns"
+				  });
+			});
+
+
+			$(function () {
+				  $("#slider3").responsiveSlides({
+						auto: true,
+						pager: false,
+						nav: false,
+						speed: 500,
+						maxwidth: 222,
+						namespace: "centered-btns"
+				  });
+			});
+		</script>
+		<!-- Google Analysis -->
+		<script type="text/javascript">
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-42633798-1']);
+		  _gaq.push(['_trackPageview']);
+		
+		  (function() {
+		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+		
+		</script>
+		
+</head>
+<body>
+<!--------------Header--------------->
+<div class="zerogrid"> 
+<header>
+	<div class="wrap-header zerogrid">
+		<div id="logo">
+			<a href="/"><apex:image dir="100RTL" value="{!URLFOR($Resource.daeunextier, '/images/logo7.png')}"  alt=""/ ></a>
+			<nav>
+				<div class="wrap-nav" style="left:180px;">
+					<div class="menu">
+						<ul>
+                            <li id="nav1"><a href="/">Home</a></li>
+                            <li id="nav2" ><a href="Site02AboutUs">About Us</a></li>
+                            <li id="nav3" ><a href="Site03Service">Services</a></li>
+                            <li id="nav4" ><a href="Site04MarketingCloud">Salesforce.com</a></li>
+                            <li id="nav5" class="active"><a href="Site08ANAPLAN">ANAPLAN</a></li>
+                            <li id="nav6" ><a href="Site05Clients">Clients</a></li>
+                            <li id="nav7" ><a href="Site06Careers">Careers</a></li>
+                            <li id="nav8"><a href="Site07Support">Support</a></li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</div>
+	</div>
+</header>
+<div class="featured">
+	<div class="wrap-featured zerogrid">
+		<table cellpadding="0" cellspacing="0" border="0">
+			<tr>
+				<!-- 동영상 슬라이더 시작 -->
+				<td>
+					<div class="slider">
+						<div class="rslides_container">
+							<ul class="rslides" id="slider">
+								<li><embed width="540" height="290" src="http://www.youtube.com/v/nvCOXTa1e7k" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true"></embed></li>
+							</ul>
+						</div>
+					</div>
+				</td>				
+				<!-- 동영상 슬라이더 끝 -->
+
+				<!-- 슬라이더 2 시작 -->
+				<td>
+					<div class="slider">
+						<div class="rslides_container" style="padding-top: 3px; padding-left: 20px;">
+							<ul class="rslides" id="slider2">
+								<li>
+									<b style="padding-left: 10px;">Anaplan for Finance</b><br />
+									<br/>
+									<a href="/ANAPLAN"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Platform.jpg')}" alt=""/></a>
+								</li>
+								<li>
+									<b style="padding-left: 10px;">Anaplan for Sales</b><br />
+									<br/>
+									<a href="/ANAPLAN"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Service.jpg')}" alt=""/></a>
+								</li>
+								<li>
+									<b style="padding-left: 10px;">Anaplan &amp; Salesforce</b><br />
+									<br/>
+									<a href="/ANAPLAN"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/Market.jpg')}" alt=""/></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</td>
+				<!-- 슬라이더 2 끝 -->
+
+				<!-- 슬라이더 3 시작 -->
+				<td>
+					<div class="slider">
+						<div class="rslides_container" style="padding-top: 50px;">
+							<ul class="rslides" id="slider3">
+								<li><a href="/ANAPLAN">운영 데이터와의 실시간 연결로<br></br>완벽한 재무 통합분석 예산수립,<br></br> 예측(Forecasting) 보고서 이익/손실 분석<br></br> 전략적인 계획으로 효율성 증대 현금 계획 인력자원 계획</a></li>
+								<li><a href="/ANAPLAN">영업사원들의 영업목표 계획관리<br></br>영업사원들의 인센티브 보상 계산 <br></br>영업 담당 구역/지역 계획 판매 예측(forecasting)<br></br>제품가격 및 견적관리 영업리소스 계획</a></li>
+								<li><a href="/ANAPLAN">영업 담당 구역 및 영업목표 계획관리<br></br>영업사원들의 인센티브 보상 계산<br></br>판매 예측(forecasting)<br></br>하나로 통합된 솔루션<br></br> (Anaplan은 단 한번의 사용자 인증을 통해 Salesforce내에서 영업프로세스를 계획, 관리, 이행할 수 있도록 지원)</a></li>
+							</ul>
+						</div>
+					</div>
+				</td>
+				<!-- 슬라이더 3 끝 -->
+			</tr>
+		</table>
+	</div>
+</div>
+<!--------------Content--------------->
+<section id="content">
+	<div class="wrap-content zerogrid">
+		
+		<div class="row block02">
+	
+		
+			<table border="1" width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<td rowspan="2">
+						<apex:image value="{!URLFOR($Resource.daeunextier, 'images/anaplan_logo.png')}" alt=""/>
+					</td>
+					
+				</tr>
+
+				<tr>
+					<td>
+						클라우드 기반의 비즈니스 모델링 및 플래닝 플랫폼으로써 영업, 운영, 재무 계획 및 실적 분석을 통해 ROI분석이 가능하며,<br></br>실시간으로 데이터 기반의 의사결정을 내릴 수 있도록 도와줍니다.
+					</td>
+					
+				</tr>
+			</table>
+			<div class="row block02">
+			<br />
+			
+				<div class="col-full">
+					<h2>
+						<strong><p style="font-family: 맑은 고딕" >성과를 극대화하기 위한 새로운 방법!</p></strong>
+					</h2>
+				</div>
+				<div class="divider"></div>
+				<br />
+				<table border="0" width="100%" cellpadding="0" cellspacing="0">
+					<tr>
+						<td width="100%"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/anaplan_pic_01.png')}" alt=""/></td>
+					
+					</tr>
+				</table>
+			<br />
+			<br />
+			
+			<div class="col-full">
+				<h2>
+				<strong><p style="font-family: 맑은 고딕" >주요특징</p></strong>
+				</h2>
+			</div>
+			<div class="divider"></div>
+			<br />
+			<table border="0" width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<td width="100%"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/anaplan_pic_02.png')}" alt=""/></td>
+				
+				</tr>
+			</table>
+			<br />
+
+
+		</div>
+		</div>
+	</div>
+</section>
+<!--------------Footer--------------->
+<footer>
+	<div class="wrap-footer zerogrid">
+		<div class="row">
+			<div class="col-2-3">
+				<div class="wrap-col">
+					<div class="box">
+						<div class="heading"><h2>Contact Us</h2></div>
+						<div class="content">
+							<ul>
+								<li>+ Address: 138-832 서울시 성동구 성수이로22길 37 아크밸리(성수IT종합센터)505호</li>
+								<li>+ TEL: 082-02-553-9981, + FAX: 082-02-553-9967, + Email:info@daeunextier.com</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-1-3">
+				<div class="wrap-col">
+					<div class="box">
+						<div class="heading"><h2>Follow Us</h2></div>
+						<div class="content">
+							<ul id="icons">
+								<li>
+																													
+									<a href="https://www.facebook.com/daeunextier" target="_blank" title="Facebook"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/social/icon1.png')}" alt=""/>Facebook</a>
+									<a href="https://twitter.com/daeunextier" target="_blank" title="Twitter"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/social/icon2.png')}" alt=""/>Twitter</a>
+									<a href="http://blog.daeunextier.com" target="_blank" title="Blog"><apex:image value="{!URLFOR($Resource.daeunextier, 'images/social/icon3.png')}" alt=""/>Blog</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="copyright">
+		<p>Copyright &copy; 2014 Daeunextier Inc.</p>
+	</div>
+</footer>
+</div>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-42633798-1', 'daeunextier.com');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</apex:page>

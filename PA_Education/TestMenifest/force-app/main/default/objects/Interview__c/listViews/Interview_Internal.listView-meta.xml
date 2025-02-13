@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Interview_Internal</fullName>
+    <columns>Intv_NameLink__c</columns>
+    <columns>RECORDTYPE</columns>
+    <columns>Intv_Date__c</columns>
+    <columns>Intv_Mentee__c</columns>
+    <columns>Intv_WorkIntensity__c</columns>
+    <columns>Intv_Content__c</columns>
+    <columns>Intv_WorkGoals__c</columns>
+    <columns>Intv_Mentor__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Interview__c.InterviewRecordType_Internal</value>
+    </filters>
+    <label>내부 면담일지</label>
+</ListView>

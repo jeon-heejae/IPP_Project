@@ -1,0 +1,104 @@
+/* Normal desktop :992px. */
+@media (min-width: 992px) and (max-width: 1200px) {
+
+
+}
+
+ 
+/* Tablet desktop :768px. */
+@media (min-width: 768px) and (max-width: 991px) {
+.main-menu ul li a {
+  padding: 40px 13px;
+}
+.footer-info > p {
+  font-size: 13px;
+}
+.progress-circular {
+  margin-bottom: 50px;
+}
+.our-skill-area {
+  padding: 151px 0 110px;
+}
+
+
+
+
+}
+
+/* small mobile :320px. */
+@media (max-width: 767px) {
+/* .container {width:300px} */
+.top-icon {
+  float: none;
+  text-align: center;
+}
+.logo {
+}
+.slider-text h1 {
+  font-size: 51px;
+  line-height: 51px;
+  margin-bottom: 20px;
+}
+.slider-text p {
+  font-size: 23px;
+  line-height: 28px;
+}
+.slider-text a {
+  margin-top: 30px;
+}
+.portfolio-item {
+  width: 100%;
+}
+.icon {
+  float: none;
+  text-align: center;
+}
+.copyright {
+  text-align: center;
+}
+.single-counter {
+  border-right: none;
+}
+.team-img img {
+  width: 100%;
+}
+.blog-img img {
+  width: 100%;
+}
+.main-menu-area {
+  padding-bottom: 14px;
+}
+.portfolio-img img {
+  width: 100%;
+}
+.single-skill {
+  margin-bottom: 40px;
+}
+.our-skill-area {
+  padding: 151px 0 120px;
+}
+.our-blog-img img {
+  width: 100%;
+}
+.copyright {
+  margin-bottom: 15px;
+}
+.creative-img {
+  float: none;
+}
+.header-top-area {
+  display: none;
+}
+
+
+
+}
+
+/* Large Mobile :480px. */
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+.container {width:450px}
+ 
+} 
+ 
+ 
+

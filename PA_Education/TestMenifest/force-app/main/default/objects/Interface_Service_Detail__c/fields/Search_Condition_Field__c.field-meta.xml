@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Search_Condition_Field__c</fullName>
+    <description>서브쿼리 수행 시 상위 테이블 컬럼와 연결되는 하위 테이블 컬럼을 기재</description>
+    <externalId>false</externalId>
+    <inlineHelpText>서브쿼리 수행 시 상위 테이블 컬럼와 연결되는 하위 테이블 컬럼을 기재</inlineHelpText>
+    <label>검색조건필드</label>
+    <length>100</length>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

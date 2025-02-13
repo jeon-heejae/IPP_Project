@@ -1,0 +1,312 @@
+<apex:page controller="PrintBarcode" standardStylesheets="false" showHeader="false">
+    <head>
+        <script type="text/javascript" src="{!URLFOR($Resource.jquery_barcode_2_0_3,'sample/jquery-1.3.2.min.js')}"/>
+        <script type="text/javascript" src="{!URLFOR($Resource.jquery_barcode_2_0_3,'jquery-barcode.js')}"/>
+        <style>
+        	<apex:outputText rendered="{!IsDownScaleMode=='Y'}">
+        	body {
+        		-ms-transform: scale(.7)!important;
+        		-webkit-transform: scale(.7,.7)!important;
+        		-moz-transform: scale(.7,.7)!important;
+        	}
+        	</apex:outputText>
+        </style>
+        <script type="text/javascript">
+            $(function(){
+                generateBarcode();
+            });
+            
+            function generateBarcode(){
+                var value = '{!barcodeWithIsPrintCnt}';
+                var btype = 'code128';
+                var renderer = 'css';
+                                
+                //#FFFFFF/#000000/2/50/5/10/20/1 
+                 
+                var settings = {
+                    output:'bmp',
+                    bgColor: '#FFFFFF',
+                    color: '#000000',
+                    barWidth: '1',
+                    barHeight: '20',
+                    moduleSize: '0',
+                    posX: '0',
+                    posY: '0',
+                    addQuietZone: '1',
+                    showHRI: false
+                };
+                
+                //$("#target-test").html("").show().barcode(value, btype, settings);
+                $("#barcodeTarget").css('width','100%');
+                $("#barcodeTarget").css('text-align','center');
+                
+                var barcode = value.split("|");             
+                var str = '';
+                
+                /*
+                for(var i=0;i<barcode.length;i++){
+                    console.log(barcode[i]);
+                }
+                */
+                
+                str += '<a href="javascript:window.print();">Print</a>';
+                str += '<span class="blank">&nbsp;&nbsp;&nbsp;</span>';
+                if('Y'=='{!IsDownScaleMode}'){
+                	str += '<a href="PrintBarcode?ItemId={!ItemId}&AccountId={!AccountId}&DateManufacture={!DateManufacture}&CntImportInspection={!CntImportInspection}&Seq={!Seq}&barcode={!barcode}&IsDownScaleMode=N&IsPrintCnt={!IsPrintCnt}">확대</a>';
+                }else{
+                	str += '<a href="PrintBarcode?ItemId={!ItemId}&AccountId={!AccountId}&DateManufacture={!DateManufacture}&CntImportInspection={!CntImportInspection}&Seq={!Seq}&barcode={!barcode}&IsDownScaleMode=Y&IsPrintCnt={!IsPrintCnt}">축소</a>';
+                }
+
+                str += '<span class="blank">&nbsp;&nbsp;&nbsp;</span>';
+
+                if('Y'=='{!IsPrintCnt}'){
+                    str += '<a href="PrintBarcode?ItemId={!ItemId}&AccountId={!AccountId}&DateManufacture={!DateManufacture}&CntImportInspection={!CntImportInspection}&Seq={!Seq}&barcode={!barcode}&IsDownScaleMode={!IsDownScaleMode}&IsPrintCnt=N">수량없이</a>';
+                }else{
+                    str += '<a href="PrintBarcode?ItemId={!ItemId}&AccountId={!AccountId}&DateManufacture={!DateManufacture}&CntImportInspection={!CntImportInspection}&Seq={!Seq}&barcode={!barcode}&IsDownScaleMode={!IsDownScaleMode}&IsPrintCnt=Y">수량포함</a>';
+                }
+                //'<a href="javascript:DownscalePrint();">축소 Print</a>';
+                for(var i=0;i<barcode.length;i++){
+                    var temp = $(".inner").barcode(barcode[i], btype, settings).html();                 
+                    str += '<table style="font-family: 돋음, Dotum, Baekmuk Dotum, Undotum, Apple Gothic, Latin font, sans-serif;"><tr style="text-align:center;" valign="middle">';
+                    str += '<td style="width:48px;font-weight:bold;" valign="middle" >품목</td>';
+                    str += '<td style="width:217px;font-weight:bold;" colspan="4">'+"{!ItemName}"+'</td>';
+                    str += '</tr>';
+                    str += '<tr>';
+                    str += '<td style="font-weight:bold;">코드</td>';
+                    str += '<td colspan="2" style="font-weight:bold;">'+"{!ItemCode}"+'</td>';
+                    str += '<td style="width:33px;font-weight:bold;">수량</td>';
+                    str += '<td style="width:55px;font-weight:bold;">'+"{!CntImportInspection}"+'</td>';
+                    str += '</tr>';
+                    str += '<tr>';
+                    str += '<td style="font-weight:bold;">제조사</td>';
+                    str += '<td style="width:86px;font-weight:bold;">'+"{!AccountName}"+'</td>';
+                    str += '<td style="width:43px;font-weight:bold;">제조일</td>';
+                    str += '<td colspan="2" style="font-weight:bold;">'+"{!DateManufacture}"+'</td>';             
+                    str += '<tr>';
+                    str += '<td colspan="5" style="padding: 5px 0px 5px 0px;">';
+                    str += '<div id="barcodeTarget" class="barcodeTarget" style="width:100%;">';
+                    str += temp;
+                    str += '</div>';
+                    str += '<div style="width:100%;text-align:center;font-size: 12px;">'+barcode[i]+'</div>';                    
+                    str += '</td>';
+                    str += '</tr>';
+                    str += '</tr></table>';                 
+                    if(i!=barcode.length-1){
+                        str += '<div style="page-break-before: always;" />'
+                    }           
+                }
+                
+                $(".inner").html(str);
+                $(".inner").css('width','280px');
+                
+                
+                //$(str).appendTo( ".inner" );
+                
+            }
+        </script>
+        <style>
+            body {
+              background: #ffffff;
+              margin: 0;
+              padding: 8px;
+              line-height: 1.4em;
+              font-family: tahoma, arial, sans-serif, "돋음", Dotum;
+              font-size: 12px;
+            }
+            table {
+              margin: 0;
+              background: #FFFFFF;
+              border: 1px solid #000000;
+              border-collapse: collapse;
+            }
+            td, th {
+              border: 1px solid #000000;
+              padding: 5px 2px 5px 2px;
+              text-align: left;
+            }
+            th {
+              
+            }
+            caption {
+              background: #E0E0E0;
+              margin: 0;
+              border: 1px solid #000000;
+              border-bottom: none;
+              padding: 6px 16px;
+              font-weight: bold;
+            }
+            
+            #barcodeTarget, #canvasTarget{
+                margin-top: 5px;
+            }
+            @media print {
+                a, a:link:after, a:visited:after { 
+                    display:none;
+                }
+                span.blank{
+                    display:none;
+                }
+            }
+            @page{margin:0in;}
+        </style>
+    </head>
+    <apex:form id="mainFrm">
+        <!-- 
+            div.inner{
+                width:300px; !important
+            }
+
+
+        <table>
+            <tr style="text-align:center;" valign="middle">
+                <td style="width:120px;" valign="middle" >품목</td>
+                <td style="width:450px;">{!ItemName}</td>
+            </tr>
+            <tr>
+                <td>제조사</td>
+                <td>{!AccountName}</td>
+            </tr>
+            <tr>
+                <td>제조일</td>
+                <td>{!DateManufacture}</td>
+            </tr>
+            <tr>
+                <td>수량</td>
+                <td>{!CntImportInspection}</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="padding: 20px 0px 20px 0px;">
+                    <div id="barcodeTarget" class="barcodeTarget"></div>
+                    <div style="padding-top:10px;padding-bottom:10px;width:100%;text-align:center;font-size: 150%;">{!barcode}</div>                     
+                </td>
+            </tr>           
+        </table>
+        <a href="javascript:window.print();">Print</a>
+        
+        <br/>
+        <br/>
+        <div id="target-test" />
+         -->
+         
+        <div class="inner" style="width:265px;margin-top:12px;" >
+        </div>
+    </apex:form>
+    <!--
+        <apex:pageBlockButtons location="bottom">
+            <apex:commandButton value="출력"/>
+        </apex:pageBlockButtons>
+    -->
+</apex:page>
+
+
+
+
+<!--
+<apex:page controller="PrintBarcode" standardStylesheets="false" showHeader="false">
+    <head>
+        <script type="text/javascript" src="{!URLFOR($Resource.jquery_barcode_2_0_3,'sample/jquery-1.3.2.min.js')}"/>
+        <script type="text/javascript" src="{!URLFOR($Resource.jquery_barcode_2_0_3,'jquery-barcode.js')}"/>
+        <script type="text/javascript">
+            $(function(){
+                generateBarcode();
+            });
+            
+            function generateBarcode(){
+                var value = '{!barcode}';
+                var btype = 'code128';
+                var renderer = 'css';
+                
+                //#FFFFFF/#000000/2/50/5/10/20/1 
+                 
+                var settings = {
+                    output:renderer,
+                    bgColor: '#FFFFFF',
+                    color: '#000000',
+                    barWidth: '2',
+                    barHeight: '150',
+                    moduleSize: '5',
+                    posX: '10',
+                    posY: '20',
+                    addQuietZone: '1',
+                    fontSize: '25'
+                };
+                
+                $("#barcodeTarget").html("").show().barcode(value, btype, settings);
+                $("#barcodeTarget > div").css( "margin-top", "30px" );
+                $("#barcodeTarget > div:last").css( "margin-top", "190px" );
+            }
+        </script>
+        
+        <style>
+            body {
+              background: #ffffff;
+              margin: 0;
+              padding: 20px;
+              line-height: 1.4em;
+              font-family: tahoma, arial, sans-serif;
+              font-size: 80%;
+            }
+            table {
+              margin: 0;
+              background: #FFFFFF;
+              border: 1px solid #333333;
+              border-collapse: collapse;
+            }
+            td, th {
+              border: 1px solid #333333;
+              padding: 10px 5px 10px;
+              text-align: center;
+            }
+            th {
+              background: #EEEEEE;
+              font-weight: bold;
+            }
+            caption {
+              background: #E0E0E0;
+              margin: 0;
+              border: 1px solid #333333;
+              border-bottom: none;
+              padding: 6px 16px;
+              font-weight: bold;
+            }
+            
+            #barcodeTarget, #canvasTarget{
+                margin-top: 20px;
+                width:100%;
+            }
+            //.barcodeTarget{height:250px;width:550px;}
+            //#head{width:53px;height:100px;vertical-align:middle}
+            @media print {
+                a:link:after, a:visited:after { 
+                    display:none; 
+                }
+            }
+        </style>
+    </head>
+    <apex:form id="mainFrm">
+        <table>
+            <tr style="text-align:center;" valign="middle">
+                <th id="head">품목</th>
+                <td>{!ItemName}</td>
+                <th id="head">제조사</th>
+                <td>{!AccountName}</td>
+                <th id="head">제조일</th>
+                <td>{!DateManufacture}</td>
+                <th id="head">수량</th>
+                <td>{!CntImportInspection}</td>
+            </tr>
+            
+            <tr>
+                <th id="head">barcode</th>
+                <td colspan="7">
+                    <div id="barcodeTarget" class="barcodeTarget"></div>
+                </td>
+            </tr>
+            
+        </table>
+        <a href="javascript:window.print();">Print</a>
+    </apex:form>
+</apex:page>
+
+
+-->

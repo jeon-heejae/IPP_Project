@@ -1,0 +1,111 @@
+<!--
+
+-->
+<apex:page controller="Inventory_Line" tabstyle="TabInventoryManage__tab">
+	<head>
+		<apex:stylesheet value="{!URLFOR($Resource.CssMenu, '/menu_source/styles.css')}" />
+		<apex:stylesheet value="{!URLFOR($Resource.jquery_ui, 'themes/base/jquery-ui.css')}"/>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'jquery-1.10.2.js')}"/>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'ui/jquery-ui.js')}"/>
+
+		<script type="text/javascript">
+			var $j = jQuery.noConflict();
+			$j(function() {
+				$j( "#dialog-modal" ).dialog({
+					autoOpen: true, 
+					height: 140,
+					modal: true,
+					open: function(event, ui) { $j(".ui-dialog-titlebar-close").hide(); 
+					}
+				});
+			});
+		</script>
+		<script type="text/javascript">
+			function showDialog(){
+				$j("#dialog-modal").dialog( "open" );
+				return false;
+			}
+			
+			function hideDialog(){
+				$j("#dialog-modal").dialog( "close" );				
+				return false;
+			}
+			function formInit() {
+				hideDialog();
+			}
+			try {
+				window.addEventListener('load',formInit,false);
+			}catch(e){
+				window.attachEvent('onload',formInit);
+			}
+		</script>
+	</head>
+	<apex:form id="mainFrm">
+		<apex:actionStatus onstart="showDialog();" onstop="hideDialog();"  id="IngStatus"/>
+		
+		<apex:sectionHeader title="생산현장 재고" />
+		<apex:pageMessages escape="false" />
+		<div id='cssmenu'> 
+			<ul>
+			   <li ><a href='/apex/Inventory_Search'><span>부품 조회</span></a></li>
+			   <li ><a href='/apex/Inventory_Stock'><span>생산현장 출고</span></a></li>
+			   <li class='active'><a href='/apex/Inventory_Line'><span>생산현장 재고</span></a></li>
+			   <li ><a href='/apex/Inventory_Delivery'><span>자재창고 반납</span></a></li>
+			   <li class='last'><a href='/apex/Inventory_PrintBarcodeOnly'><span>일반바코드출력</span></a></li>
+			</ul>
+		</div>
+		<apex:pageBlock title="생산라인 재고" id="pgBlock">
+			<table cellspacing="0" cellpadding="0" border="0" class="list">
+				<tr class="headerRow">
+					<th class="headerRow">
+						<apex:outputText value="{!$ObjectType.Item__c.Fields.Name.Label}"/>
+					</th>
+					<th class="headerRow">
+						<apex:outputText value="{!$ObjectType.Item__c.Fields.Standard__c.Label}"/>
+					</th>
+					<th class="headerRow">
+						<apex:outputText value="수량"/>
+					</th>
+					<th class="headerRow">
+						<apex:outputText value="바코드"/>
+					</th>
+					<th class="headerRow">
+						<apex:outputText value="{!$ObjectType.Inventory__c.Fields.CntInventory2__c.Label}"/>
+					</th>
+				</tr>
+				<apex:repeat value="{!cIVs}" var="item">
+					<apex:variable var="rowNum" value="{!1}" />
+					<apex:repeat value="{!item.IVs}" var="IV">
+						<tr>
+							<apex:outputText rendered="{!rowNum==1}">
+								<td rowspan="{!item.IVs.size}">
+									<apex:outputText value="{!item.ItemName}" />
+								</td>
+								<td rowspan="{!item.IVs.size}">
+									<apex:outputText value="{!item.ItemStandard}" />
+								</td>
+								<td rowspan="{!item.IVs.size}">
+									<apex:outputText value="{0, number, ###,###,###,##0}" >
+										<apex:param value="{!item.ITCntSum}"/>
+									</apex:outputText>
+								</td>
+							</apex:outputText>
+
+							<td>
+								<apex:outputText value="{!IV.Name}" />
+							</td>
+							<td>
+								<apex:outputText value="{!IV.CntInventory2__c}" />
+							</td>
+						</tr>
+						<apex:variable var="rowNum" value="{!rowNum + 1}"/>
+					</apex:repeat>
+				</apex:repeat>
+			</table>
+		</apex:pageBlock>
+	</apex:form>
+	<div id="dialog-modal" title="처리중...">
+		<p>처리중입니다.</p>
+	</div>
+
+</apex:page>

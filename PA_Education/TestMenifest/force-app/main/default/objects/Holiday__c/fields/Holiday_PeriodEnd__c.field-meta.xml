@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Holiday_PeriodEnd__c</fullName>
+    <description>수식 필드에 대한 상세설명 작성(필드 상세설명 수정일: 2021-12-23, 수정자: cj.sohn@daeunextier.com)
+1. 입사일 기준여부가 TRUE일 때,
+1-1) 금연도 입사월일이 오늘보다 작을 때, 금연도 입사월일 - 1 + 365
+1-2) 금연도 입사월일이 오늘보다 크거나 같을 때, 금연도 입사월일 -1 + 0
+
+ex) 오늘: 2021년 12월 23일
+사원A: 입사일 2019-12-15 →  금연도 입사월일 (2021-12-15) → 연차만료일: 2022-12-15
+사원B: 입사일 2020-12-28 → 금연도 입사월일 (2021-12-28) → 연차만료일: 2021-12-28
+사원C: 입사일 2021-12-23 →  금연도 입사월일 (2021-12-23) → 연차만료일: 2022-12-22
+
+2. 입사일 기준여부가 FALSE일 때,
+2-1) 금연도 말일이 오늘보다 클 때, 전연도 말일 + 365
+2-2) 금연도 말일이 오늘보다 작거나 같을 때, 전연도 말일 + 0 (가능성 0%)
+
+ex) 오늘: 2021년 2월 4일, 금연도 말일: 2021년 12월 31일 → 연차만료일: 2021년 12월 31일
+
+* 참고사항
+Custom Setting(HolidaySetting__c)의 필드 및 값 정리 (2021-12-23 기준)
+- 연차기준일(HoldayRuleDate__c): 2000. 1. 1
+- 갱신일 이전 일수 차감여부(IsCeil__c): true
+- 입사일 기준여부(JoinDateRule__c): false</description>
+    <formula>IF(
+    $Setup.HolidaySetting__c.JoinDateRule__c,
+    DATE( YEAR(TODAY()), MONTH(Holiday_JoinDate__c), DAY(Holiday_JoinDate__c) ) - 1 +
+    IF(
+        DATE( YEAR(TODAY()), MONTH(Holiday_JoinDate__c), DAY(Holiday_JoinDate__c) ) &lt; TODAY(),
+        365,
+        0
+    ),
+    DATE( YEAR(TODAY()), MONTH($Setup.HolidaySetting__c.HoldayRuleDate__c ), DAY($Setup.HolidaySetting__c.HoldayRuleDate__c) ) - 1 +
+    IF(
+        DATE( YEAR(TODAY()), MONTH($Setup.HolidaySetting__c.HoldayRuleDate__c), DAY($Setup.HolidaySetting__c.HoldayRuleDate__c) ) &lt; TODAY(),
+        365,
+        0
+    )
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>연차만료일</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

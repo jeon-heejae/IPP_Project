@@ -1,0 +1,156 @@
+<!--
+ - @description       : Job Description of Homepage Renewal Project
+ - @author            : Chan Kang
+ - @group             : Boundary
+ - Modifications Log
+ - Ver   Date         Author           Modification
+ - 1.0   2021.12.24   Chan Kang        Initial Version
+   1.1   2022.04.17   Gunwoo Kim       Load english data conditionally
+                                       Add event handler to load english data
+                                       Add isEnglish parameter to APEX callout
+   1.2   2022.04.19   Gyubin Lee       Update employee benefits to css variant instead of image
+                                       Add css class for employee benefits
+-->
+
+<aura:component
+    implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes"
+    access="global">
+    <aura:attribute name="isEnglish" type="Boolean" access="global" default="false" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:handler event="c:i18nEvent" action="{!c.init}" />
+    <section>
+        <div class="contents" id="description">
+            <p class="pageTitle">
+                Job Description
+            </p>
+
+            <aura:if isTrue="{!v.isEnglish}">
+                <h1 class="textDeepBlue">
+                    Daeu Nextier’s door is always open for you!
+                </h1>
+                <h2>
+                    We are looking for people with passion, responsibility, and talent.<br />
+                    If you are the kind of person and ready to enjoy,<br />
+                    do not hesitate to contact us!
+                </h2>
+
+                <aura:set attribute="else">
+                    <h1 class="textDeepBlue">
+                        우리는<br />
+                        미래를 함께 만들어갈 인재를 찾고 있습니다.
+                    </h1>
+                    <h2>
+                        열정을 바탕으로 맡은 일을 즐기고, 책임감을 가지며 끊임없이 도전하는, 창의적인 인재를 원합니다.<br />
+                        만약 당신이 그런 사람이라고 생각된다면, 당신은 바로 우리가 찾는 사람입니다.
+                    </h2>
+                </aura:set>
+            </aura:if>
+
+            <aura:if isTrue="{!v.isEnglish}">
+                <a href="#positions">
+                    Apply Now
+                </a>
+                <aura:set attribute="else">
+                    <a href="#positions">
+                        지금 바로 지원하세요
+                    </a>
+                </aura:set>
+            </aura:if>
+
+
+            <!--            Original Images -->
+            <!--            <img src="{!$Resource.RenewalHPDescription}" class="is_pc" />-->
+            <!--            <img src="{!$Resource.RenewalHPDescriptionMobile}" class="is_mobile" />-->
+            <aura:if isTrue="{!v.isEnglish}">
+                <div class="infographics">
+                    <div class="panel black">
+                        <p>Customer<br />First</p>
+                    </div>
+                    <div class="panel black">
+                        <p>Highly Regard on <br />Faith &amp; Principle</p>
+                    </div>
+                    <div class="panel black">
+                        <p>Innovative<br />Idea</p>
+                    </div>
+                    <div class="panel black">
+                        <p>Passion for<br />Work</p>
+                    </div>
+                    <div class="panel black">
+                        <p>Altruistic<br />Mind</p>
+                    </div>
+                </div>
+                <aura:set attribute="else">
+                    <div class="infographics">
+                        <div class="panel black">
+                            <p>고객을<br />먼저 생각하는 사람</p>
+                        </div>
+                        <div class="panel black">
+                            <p>신의와 원칙을<br />중요시하는 사람</p>
+                        </div>
+                        <div class="panel black">
+                            <p>혁신적인<br />사고를 하는 사람</p>
+                        </div>
+                        <div class="panel black">
+                            <p>일에 대한<br />열정을 가지고 있는 사람</p>
+                        </div>
+                        <div class="panel black">
+                            <p>팀원을 생각하는<br />이타적인 사고를<br />하는 사람</p>
+                        </div>
+                    </div>
+                </aura:set>
+            </aura:if>
+            <h1 class="infoTitle">
+                <aura:if isTrue="{!v.isEnglish}">
+                    Employee Benefits
+                    <aura:set attribute="else">
+                        복리후생
+                    </aura:set>
+                </aura:if>
+            </h1>
+            <aura:if isTrue="{!v.isEnglish}">
+                <div class="infographics">
+                    <div class="panel">
+                        <p>Certification Expense<br />Support &amp; Monthly Incentivize</p>
+                    </div>
+                    <div class="panel">
+                        <p>Healing Camp</p>
+                    </div>
+                    <div class="panel">
+                        <p>Reward for Long-Term Employed</p>
+                    </div>
+                    <div class="panel">
+                        <p>Provide Welcome Box</p>
+                    </div>
+                    <div class="panel">
+                        <p>Family Event Care</p>
+                    </div>
+                    <div class="panel">
+                        <p>Provide Welfare Card</p>
+                    </div>
+                </div>
+                <aura:set attribute="else">
+                    <div class="infographics">
+                        <div class="panel">
+                            <p>Certi 비용 지원 및<br />인센티브 매월 지급</p>
+                        </div>
+                        <div class="panel">
+                            <p>힐링 캠프 실시</p>
+                        </div>
+                        <div class="panel">
+                            <p>장기 근속자 포상</p>
+                        </div>
+                        <div class="panel">
+                            <p>웰컴 박스 지급</p>
+                        </div>
+                        <div class="panel">
+                            <p>경조사 지원</p>
+                        </div>
+                        <div class="panel">
+                            <p>복지카드 지원</p>
+                        </div>
+                    </div>
+                </aura:set>
+            </aura:if>
+        </div>
+    </section>
+</aura:component>

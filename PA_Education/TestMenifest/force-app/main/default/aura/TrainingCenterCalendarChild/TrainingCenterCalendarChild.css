@@ -1,0 +1,31 @@
+/**
+ * Created by Kwanwoo.Jeon on 2024-02-19.
+ */
+
+.THIS .anyCalendar{
+    font-family: 'Salesforce Sans',Arial,sans-serif;
+}
+.THIS .fc-toolbar h2 {
+    margin: 0;
+    font-family: 'Salesforce Sans',Arial,sans-serif;
+    font-size: 1.5em;
+    line-height: 1.5;
+    color: #141a4d;
+}
+.THIS button.fc-button {
+    text-transform: capitalize;
+}
+.THIS .fc-icon {
+    font-family: 'Salesforce Sans',Arial,sans-serif;
+}
+
+.THIS span.fc-title{
+    font-size: 12px;
+    font-weight: 600;
+}
+.THIS .fc-content{
+    padding: 5px;
+}
+.THIS .fc-event{
+    cursor: default;
+}

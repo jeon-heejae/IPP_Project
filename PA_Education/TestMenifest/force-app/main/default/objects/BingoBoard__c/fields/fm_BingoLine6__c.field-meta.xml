@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>fm_BingoLine6__c</fullName>
+    <formula>Cell_00__c + Cell_10__c + Cell_20__c + Cell_30__c + Cell_40__c = 5</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>BingoLine6</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

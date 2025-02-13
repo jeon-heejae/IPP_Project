@@ -1,0 +1,83 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="false">
+	<script type="text/javascript" src="https://apis.google.com/js/client.js"></script>
+    
+    <style type="text/css">
+    	.iframe {
+            background: none !important;
+        }
+    </style>
+    <apex:includeLightning />
+    
+    <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+    <head>
+      <meta charset="utf-8" />
+      <meta http-equiv="x-ua-compatible" content="ie=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <!-- Import the Design System style sheet -->
+      <apex:slds />
+    </head>
+    <body class="slds-scope" style="padding: .75rem .75rem 0 .75rem;">
+	    <div class="slds-brand-band slds-brand-band_cover slds-brand-band_medium slds-template_bottom-magnet brand-band_magnetic forceBrandBand">
+	    	<div class="slds-template__container">
+	    		<div id="lightning"></div>
+			</div>
+		</div>
+	    <script type="text/javascript">
+			console.log("test");
+	    	$Lightning.use("c:GoogleContactApp", function() {
+	            $Lightning.createComponent("c:GoogleContact", 
+	            {
+	                'gapi' : gapi
+	            },
+	            "lightning",
+	            function(cmp) {
+	            });
+	        });
+			// var clientId = '233210659614-huo6v62duhe3ce4h9cf4v2ij2v3sfo5k.apps.googleusercontent.com';
+			// var apiKey = 'AIzaSyAbgSieXKl8qiSr3iSicL5LqN39XElUHSM';
+			// var scopes = 'https://www.googleapis.com/auth/contacts.readonly';
+
+			// $(document).on("click",".googleContactsButton", function(){
+			// 	gapi.client.setApiKey(apiKey);
+			// 	window.setTimeout(authorize);
+			// });
+
+			// $(document).on("click",".googleGroupsButton", function(){
+			// 	gapi.client.setApiKey(apiKey);
+			// 	window.setTimeout(authorize2);
+			// });
+
+			// function authorize() {
+			// 	gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: false}, handleAuthorization);
+			// }
+
+			// function authorize2() {
+			// 	gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: false}, handleAuthorizationGroup);
+			// }
+
+			// function handleAuthorization(authorizationResult) {
+			// 	console.log(authorizationResult);
+			// 	if (authorizationResult && !authorizationResult.error) {
+			// 		$.get("https://www.google.com/m8/feeds/contacts/sm.yang@daeunextier.com/full?alt=json&access_token=" + authorizationResult.access_token + "&max-results=500&v=3.0",
+			// 			function(response){
+			// 				console.log(response);
+			// 			}
+			// 		);
+			// 	}
+			// }        
+
+			// function handleAuthorizationGroup(authorizationResult) {
+			// 	console.log(authorizationResult);
+			// 	if (authorizationResult && !authorizationResult.error) {
+			// 		$.get("https://www.google.com/m8/feeds/groups/sm.yang@daeunextier.com/full?alt=json&access_token=" + authorizationResult.access_token + "&max-results=500&v=3.0",
+			// 			function(response){
+			// 				console.log(response);
+			// 			}
+			// 		);
+			// 	}
+			// }     
+	    </script>
+	</body>
+   <!--  <button class="googleContactsButton">Get my contacts</button>
+    <button class="googleGroupsButton">Get my groups</button> -->
+</apex:page>

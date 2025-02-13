@@ -1,0 +1,107 @@
+<template>
+    <div class="container">
+        <div class="header">
+           <b><lightning-formatted-rich-text value={label.dnb_MenuInformation}></lightning-formatted-rich-text></b>
+        </div>
+        <lightning-accordion class="setting-accordion">
+            <lightning-accordion-section name="section1" label="카테고리 제목 표시 #1">
+                <div class="settings">
+                    <span class="label"><b>자동 갱신 주기</b></span>
+                    <div class="radio-group">
+                        <input type="radio" id="no-use" name="cycle" value="no-use">
+                        <label for="no-use">사용 안함</label>
+                        <input type="radio" id="email-0h" name="cycle" value="email-0h">
+                        <label for="email-0h">매일 (0시)</label>
+                        <input type="radio" id="weekly" name="cycle" value="weekly">
+                        <label for="weekly">매주 (월요일 0시)</label>
+                        <input type="radio" id="monthly-1d" name="cycle" value="monthly-1d">
+                        <label for="monthly-1d">매월 (1일 0시)</label>
+                        <input type="radio" id="quarterly" name="cycle" value="quarterly">
+                        <label for="quarterly">매분기 (1일 0시)</label>
+                        <input type="radio" id="half-yearly" name="cycle" value="half-yearly">
+                        <label for="half-yearly">반기 (1일 0시)</label>
+                        <input type="radio" id="yearly" name="cycle" value="yearly">
+                        <label for="yearly">매년 (4월 1일 0시)</label>
+                    </div>
+                </div>
+                <table class="info-table">
+                    <thead>
+                        <tr>
+                            <th>구분</th>
+                            <th>사용 여부</th>
+                            <th>제공 단가 (원)</th>
+                            <th>당월 과금 (원)</th>
+                            <th>당월 사용량 (건)</th>
+                            <th>당월 제공량 (건)</th>
+                            <th>제공 정보</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>상품명 #1</td>
+                            <td>
+                                <lightning-combobox name="usage" value="" options={optionsPicklist}></lightning-combobox>
+                            </td>
+                            <td>INTERFACE</td>
+                            <td>INTERFACE</td>
+                            <td>INTERFACE</td>
+                            <td>INTERFACE</td>
+                            <td><lightning-button label="보기" onclick={handleViewClick} class="view-button"></lightning-button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </lightning-accordion-section>
+            
+            <lightning-accordion-section class="custom-accordion-section" name="section2" label="카테고리 제목 표시 #2">
+            </lightning-accordion-section>
+
+            <lightning-accordion-section class="custom-accordion-section" name="section3" label="카테고리 제목 표시 #3">
+            </lightning-accordion-section>
+
+            <lightning-accordion-section class="custom-accordion-section" name="section4" label="카테고리 제목 표시 #4">
+            </lightning-accordion-section>
+
+            <lightning-accordion-section class="custom-accordion-section" name="section5" label="카테고리 제목 표시 #5">
+            </lightning-accordion-section>
+
+            <lightning-accordion-section class="custom-accordion-section" name="section6" label="카테고리 제목 표시 #6">
+            </lightning-accordion-section>
+
+            <lightning-accordion-section class="custom-accordion-section" name="section7" label="카테고리 제목 표시 #7">
+            </lightning-accordion-section>
+
+        </lightning-accordion>
+
+        <div class="buttons">
+            <button class="save">저장</button>
+            <button class="cancel">취소</button>
+        </div>
+
+        <!-- Modal Popup -->
+        <template if:true={isModalOpen}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Header -->
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 class="slds-text-heading_medium">카테고리 제목 #1 - (상품명 #1) 제공정보</h2>
+                    </header>
+                    <!-- Modal/Popup Body -->
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <p><strong>정보 개요</strong> 국문 기업명을 기준으로 사업자번호 및 기업식별 관련 참조 정보를 검색 결과를 제공 합니다.</p>
+                        <p><strong>제공 정보</strong> 사업자등록번호, 법인등록번호, 기업명, 대표자명, 전화번호, 팩스전화번호, 우편번호, 주소, 상세주소, 기업형태명, 기업규모명, 공기업구분, 산업코드, 산업코드명</p>
+                    </div>
+                    <!-- Modal/Popup Footer -->
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" onclick={closeModal}>Close</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </div>
+
+</template>

@@ -1,0 +1,248 @@
+<!--/************************************************************************************
+* File Name   		: HPClassView.cmp
+* Author	  		: SJ.Kang
+* Date				: 2021.12.06
+* Tester	  		: HPClassView.cmp
+* Description 		:
+* Modification Log
+* ===================================================================================
+* Ver      Date            Author          Modification    description
+* ===================================================================================
+1.0      2021.12.06        SJ.Kang             Create
+1.1      2022.01.20        SJ.Kang             modify      Tuition 항목 삭제 및 Label 명 한글로 변경, pageNumber 50 -> 15 로 수정
+*************************************************************************************/-->
+
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes"
+                access="global"
+                controller="HPClassViewController"
+                description="HPClassView">
+    <!-- Record -->
+    <aura:attribute name="tableHeaders" type="List" />
+    <aura:attribute name="classItem" type="Class__c" />
+
+    <!-- input params -->
+    <aura:attribute name="strMobile" type="String" />
+    <aura:attribute name="dBirthDate" type="Date" />
+    <aura:attribute name="checkTerms" type="Boolean" default="false"/>
+
+    <!-- Paging Attribute -->
+    <aura:attribute name="pageRecords" type="List" />
+    <aura:attribute name="countPerPage" type="Integer" default="15" />
+    <aura:attribute name="pageNumber" type="Integer" default="1" />
+    <aura:attribute name="maxPage" type="Integer"/>
+
+    <!-- render modal -->
+    <aura:attribute name="isOpenRecordModal" type="Boolean" default="false"/>
+    <aura:attribute name="isOpenModal" type="Boolean" default="false"/>
+    <aura:attribute name="isOpen" type="Boolean" default="false"/>
+    <aura:attribute name="termsOpen" type="Boolean" default="false"/>
+
+    <!-- Handle Event -->
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <section>
+        <!-- Main Modal -->
+        <div class="contents">
+            <h2 id="element-with-table-label" class="slds-text-heading_medium slds-m-bottom_xx-small">강의 리스트</h2>
+            <!-- Record Table -->
+            <table id="main_table" class="slds-table slds-table_bordered slds-table_col-bordered">
+                <colgroup>
+                </colgroup>
+                <thead>
+                <tr class="slds-line-height_reset">
+                    <aura:iteration items="{!v.tableHeaders}" var="header">
+                        <th class="" scope="col">{!header.label}</th>
+                    </aura:iteration>
+                </tr>
+                </thead>
+                <tbody>
+
+                <aura:iteration items="{!v.pageRecords}" var="body" indexVar="body_idx">
+                    <tr class="slds-line-height_reset">
+                        <!-- 엑셀 데이터 -->
+                        <td style="width: 5%;">
+                            <div class="recordsItem slds-truncate">
+                                {!body.IndexNumber}
+                            </div>
+                        </td>
+                        <td style="width: 15%; max-width: 300px !important;">
+                            <div class="recordsItem slds-truncate">
+                                {!body.ClassName}
+                            </div>
+                        </td>
+                        <td style="width: 15%; max-width: 300px !important;">
+                            <div class="recordsItem slds-truncate" id="{!body.Id}" onclick="{!c.showRecordModal}">
+                                <a>{!body.Subject}</a>
+                            </div>
+                        </td>
+                        <td style="width: 10%;">
+                            <div class="recordsItem slds-truncate">
+                                {!body.Target}
+                            </div>
+                        </td>
+                        <td style="width: 5%;">
+                            <div class="recordsItem slds-truncate">
+                                {!body.Times}
+                            </div>
+                        </td>
+                        <td style="width: 10%;">
+                            <div class="recordsItem slds-truncate">
+                                {!body.StartDate}
+                            </div>
+                        </td>
+                        <td style="width: 10%;">
+                            <div class="recordsItem slds-truncate">
+                                {!body.EndDate}
+                            </div>
+                        </td>
+                        <!--수강료 부분 주석처리 SJ.Knag-->
+                        <!--<td style="width: 10%;">
+                            <div class="recordsItem slds-truncate">
+                                <lightning:formattedNumber value="{!body.Tuition}" style="currency" currencyCode="KRW"/>
+                            </div>
+                        </td>-->
+                        <td style="width: 10%;">
+                            <aura:if isTrue="{!body.IsEnd == 'true'}">
+                                <lightning:button label="신청마감" type="submit" class="endRequest" />
+                            </aura:if>
+                            <aura:if isTrue="{!body.IsEnd == 'false'}">
+                                <lightning:button label="신청하기" value="{!body}" type="submit" onclick="{!c.showModal}"/>
+                            </aura:if>
+                        </td>
+                    </tr>
+                </aura:iteration>
+                </tbody>
+            </table>
+
+            <!-- Paging -->
+            <div class="slds-col slds-align_absolute-center" style="margin-top: 50px;">
+                <c:DN_Paging currentPageNumber="{!v.pageNumber}" maxPageNumber="{!v.maxPage}" />
+            </div>
+        </div>
+
+        <!-- Background Modal -->
+        <div class="modal-background" aura:id="recordModal" onclick="{!c.hideRecordModal}">
+            <div class="modal" style="width: 800px;">
+                <aura:renderIf isTrue="{!v.classItem != null}">
+                    <div>
+                        <p class="title">{!v.classItem.ClassName__c}</p>
+                        <div class="infoItem">
+                            <p class="itemTitle">구분</p>
+                            <p class="itemContent">{!v.classItem.Subject__c}</p>
+                        </div>
+                        <div class="infoItem">
+                            <p class="itemTitle">대상</p>
+                            <p class="itemContent">{!v.classItem.Target__c}</p>
+                        </div>
+                        <hr />
+                        <div class="infoItem" style="width: 100%;">
+                            <p class="itemTitle">진행 기간</p>
+                            <div class="subItem">
+                                <div>
+                                    <p class="subItemTitle">시작</p>
+                                    <p class="subItemContent">
+                                        <lightning:formattedDateTime value="{!v.classItem.StartDate__c}" year="numeric" month="numeric" day="numeric" hour="numeric"
+                                                                     weekday="long"/>
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="subItemTitle">종료</p>
+                                    <p class="subItemContent">
+                                        <lightning:formattedDateTime value="{!v.classItem.EndDate__c}" year="numeric" month="numeric" day="numeric" hour="numeric"
+                                                                     weekday="long"/>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <footer>
+                            <aura:if isTrue="{!v.classItem.fm_Status__c == '신청마감'}">
+                                <lightning:button label="신청마감" type="submit" class="endRequest" />
+                            </aura:if>
+                            <aura:if isTrue="{!v.classItem.fm_Status__c == '신청진행중'}">
+                                <lightning:button label="신청하기" value="{!v.classItem}" type="submit" onclick="{!c.showModal}"/>
+                            </aura:if>
+                        </footer>
+                    </div>
+                </aura:renderIf>
+            </div>
+        </div>
+        <!-- Apply To -->
+        <div class="modal-background" aura:id="modal" onclick="{!c.hideModal}">
+            <div class="modal">
+                <aura:renderIf isTrue="{!v.isOpen}">
+                    <header>
+                        <h1>Apply to</h1>
+                        <button class="close" onclick="{!c.hideModal}">
+                            &times;
+                        </button>
+                    </header>
+                    <section>
+                        <lightning:recordEditForm aura:id="recordEditForm" objectApiName="Registration__c">
+                            <lightning:messages />
+                            <lightning:inputField fieldName="Class__c" value="{!v.classItem.Id}" disabled="true" style="display: none;" />
+                            <lightning:textarea label="항목명" value="{!v.classItem.Subject == null || v.classItem.Subject == undefined ? v.classItem.Subject__c : v.classItem.Subject}" variant="label-inline" readonly="true" tabindex="-1"/>
+                            <lightning:inputField fieldName="Register__c" value="{!v.strRegister}"/>
+                            <lightning:inputField fieldName="Mobile__c" value="{!v.strMobile}" onchange="{!c.phoneMasking}"/>
+                            <lightning:inputField fieldName="Birthdate__c" value="{!v.dBirthDate}"/>
+                        </lightning:recordEditForm>
+                        <input type="checkbox" id="terms" name="terms" value="{!v.checkTerms}" onchange="{!c.termsChanged}" />
+                        <label for="terms" style="display: inline; width: 90%; margin-left: 16px;"><a onclick="{!c.termsOpen}">개인정보 수집 및 활용</a> 동의</label>
+                        <button class="submitBtn" type="button" onclick="{!c.fnSave}">Submit</button>
+                    </section>
+                </aura:renderIf>
+            </div>
+        </div>
+        <aura:renderIf isTrue="{!v.termsOpen}">
+            <div class="modal-background" aura:id="termsModal" onclick="{!c.termsClose}">
+                <div class="modal" style="height: 80vh; overflow: scroll;">
+                    <header style="height: 100px;">
+                        <h1>개인정보 수집 및 활용 동의</h1>
+                        <button class="close" onclick="{!c.termsClose}">
+                            &times;
+                        </button>
+                    </header>
+                    <section>
+                        <p>
+                            (주)대유넥스티어(이하’회사’)는 개인정보보호법 등 관련 법령에 따라 수강신청 및 수강지원자의 교육진행 및 관리 등의 목적으로 지원자의 개인정보를 수집하고 있습니다. <br />
+                            귀하의 개인정보 수집 및 이용과 관련하여 아래의 안내 내용을 자세히 읽어 보시고, 모든 내용을 숙지하신 후에 개인정보의 수집 및 이용에 관한 동의 여부를 결정해 주시기 바랍니다.
+                        </p>
+                        <h1>1. 개인정보의 수집 및 이용 목적</h1>
+                        <table style="border: 1px solid #212123;">
+                            <tr style="border: 1px solid #212123;">
+                                <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">개인정보항목</th>
+                                <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">수집·이용 목적</th>
+                                <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">보유기간</th>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #212123;">
+                                    수강신청시 수집항목 : 성명, 생년월일, 이메일, 전화번호등
+                                </td>
+                                <td style="border: 1px solid #212123;">
+                                    자료제공, 상담, 서비스 신청 등을 위해 수집된 개인정보를 통하여 따른 본인 식별
+                                </td>
+                                <td style="border: 1px solid #212123;">
+                                    개인정보의 수집 및 이용 목적이 달성된 때 또는 지원자께서 개인정보제공 동의를 철회 하셨을 경우에는 지체 없이 지원자의 개인정보 파기함
+                                </td>
+                            </tr>
+                        </table>
+                        <h1>2. 제3자 정보제공 동의</h1>
+                        <p>
+                            회사는 원칙적으로 지원자의 개인정보를 지원자의 동의 없이 타 기업 또는 기관에 제공하지 않습니다. 다만, 다음의 경우에는 예외적으로 동의 없이 개인정보를 제공할 수 있습니다.<br />
+                            -	법령의 규정에 의하거나 수사 목적으로 법령에 정해진 절차와 방법에 따라 수사기관의 요구가 있는 경우
+                        </p>
+                        <p>
+                            3.	당사는 취득한 개인정보를 수집한 목적에 필요한 범위에서 적합하게 처리하고 그 목적 외의 용도로 사용하지 않으며 개인정보를 제공한 계약당사자는 언제나 자신이 입력한 개인정보를 열람·수정 및 정보제공에 대한 철회할 수 있습니다.
+                        </p>
+                        <p>
+                            4.  지원자는 본 안내에 따른 개인정보의 수집, 이용, 제공 및 위탁 등과 관련한 위 사항에 대하여 원하지 않는 경우 동의를 거부할 수 있습니다.<br />
+                            다만, 본 안내에 따른 개인정보의 수집, 이용등과 관련한 위 사항은 필수적인 항목으로 이에 대하여 동의하지 않는 경우 서비스에 제한이 있을 수 있는 점을 안내드립니다.
+                        </p>
+                        <p>
+                            개인정보 수집 및 이용안내, 제3자 정보제공 동의를 모두 읽었으며, 아래 내용에 모두 동의합니다.
+                        </p>
+                    </section>
+                </div>
+            </div>
+        </aura:renderIf>
+    </section>
+</aura:component>

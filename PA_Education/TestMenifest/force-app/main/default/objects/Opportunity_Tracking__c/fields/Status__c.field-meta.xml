@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status__c</fullName>
+    <label>Status</label>
+    <required>false</required>
+    <trackFeedHistory>true</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>00. 선택</fullName>
+                <default>true</default>
+                <label>00. 선택</label>
+            </value>
+            <value>
+                <fullName>02. Suspect Opportunity identified</fullName>
+                <default>false</default>
+                <label>02. Suspect Opportunity identified</label>
+            </value>
+            <value>
+                <fullName>03. Customer interviewed</fullName>
+                <default>false</default>
+                <label>03. Customer interviewed</label>
+            </value>
+            <value>
+                <fullName>05. Budget available/Opportunity qualified</fullName>
+                <default>false</default>
+                <label>05. Budget available/Opportunity qualified</label>
+            </value>
+            <value>
+                <fullName>05. Decision Maker Validation</fullName>
+                <default>false</default>
+                <label>05. Decision Maker Validation</label>
+            </value>
+            <value>
+                <fullName>06. Proposal definition approach defined</fullName>
+                <default>false</default>
+                <label>06. Proposal definition approach defined</label>
+            </value>
+            <value>
+                <fullName>04. Proposal submitted (Demo)</fullName>
+                <default>false</default>
+                <label>04. Proposal submitted (Demo)</label>
+            </value>
+            <value>
+                <fullName>09. Evaluation committee has recomended us</fullName>
+                <default>false</default>
+                <label>09. Evaluation committee has recomended us</label>
+            </value>
+            <value>
+                <fullName>10. Business issues / Terms resolved</fullName>
+                <default>false</default>
+                <label>10. Business issues / Terms resolved</label>
+            </value>
+            <value>
+                <fullName>11. contractual issues / terms resolved</fullName>
+                <default>false</default>
+                <label>11. contractual issues / terms resolved</label>
+            </value>
+            <value>
+                <fullName>12. Decision maker tell us we&apos;ve won</fullName>
+                <default>false</default>
+                <label>12. Decision maker tell us we&apos;ve won</label>
+            </value>
+            <value>
+                <fullName>13. All approvals obtained, Date set for signing</fullName>
+                <default>false</default>
+                <label>13. All approvals obtained, Date set for signing</label>
+            </value>
+            <value>
+                <fullName>14. Authorized engagement letter/contract received</fullName>
+                <default>false</default>
+                <label>14. Authorized engagement letter/contract received</label>
+            </value>
+            <value>
+                <fullName>15. Booked</fullName>
+                <default>false</default>
+                <label>15. Booked</label>
+            </value>
+            <value>
+                <fullName>16. Engagement lost to Competitor</fullName>
+                <default>false</default>
+                <label>16. Engagement lost to Competitor</label>
+            </value>
+            <value>
+                <fullName>18. Potential engagement delayed</fullName>
+                <default>false</default>
+                <label>18. Potential engagement delayed</label>
+            </value>
+            <value>
+                <fullName>19. Contract extension</fullName>
+                <default>false</default>
+                <label>19. Contract extension</label>
+            </value>
+            <value>
+                <fullName>20. Contracted, Interim Option</fullName>
+                <default>false</default>
+                <label>20. Contracted, Interim Option</label>
+            </value>
+            <value>
+                <fullName>21. Contracted, Out Year Option</fullName>
+                <default>false</default>
+                <label>21. Contracted, Out Year Option</label>
+            </value>
+            <value>
+                <fullName>01. Lead</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>01. Lead</label>
+            </value>
+            <value>
+                <fullName>08. Oral presentations completed</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>08. Oral presentations completed</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

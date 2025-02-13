@@ -1,0 +1,413 @@
+<!--
+
+-->
+<apex:page controller="ImportInspection" tabStyle="TabImportInspection__tab">
+    <head>
+
+        <apex:stylesheet value="{!URLFOR($Resource.CssMenu, '/menu_source/styles.css')}" />
+        
+        <apex:stylesheet value="{!URLFOR($Resource.jquery_ui, 'themes/base/jquery-ui.css')}" />
+        
+        <script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'jquery-1.10.2.js')}" />
+        <script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'ui/jquery-ui.js')}" />
+        
+        <style type="text/css">
+           .customPopup_IAF{
+                background-color: white;
+                border-style: solid;
+                border-width: 1px;
+                border-radius: 5px;
+                left: 10%;
+                padding:10px;
+                position: absolute;
+                z-index: 11;
+                width: 80%;
+                //margin-left: -300px;
+                top:30px;
+            }
+        </style>
+        
+        <script type="text/javascript">
+                    $(function() {
+                        $( "#dialog-modal" ).dialog({
+                            autoOpen: true,
+                            height: 140,
+                            modal: true ,
+                            open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); }
+                        });
+                    });
+                </script>
+        <script type="text/javascript">
+            function barcode_select(){
+                var text_input = document.getElementById ('InputBarcode');
+                text_input.focus();
+                text_input.select();
+
+                //j_id0:mainFrm:j_id103:pgBlockTable2:0:OutIvName
+                var text_input2 = document.getElementById ('j_id0:mainFrm:j_id103:pgBlockTable2:0:OutIvName');
+                if(!(text_input2==null)){
+                    text_input2.focus();
+                    text_input2.select();
+                }
+
+            }
+            function KeyPressIvName(e, strSeq, targetId){
+                var keynum;
+                if(window.event){       // IE
+                    keynum = e.keyCode;
+                }
+                if(keynum == 13){
+                    InputBarcodeForPage(document.getElementById('InputBarcode').value, strSeq);
+                    return false;
+                }
+            }
+
+            function KeyPressOutIvName(e){
+                var keynum;
+                if(window.event){       // IE
+                    keynum = e.keyCode;
+                }
+                if(keynum == 13){
+                    InputIVName();
+                    return false;
+                }
+            }
+            
+            
+            
+            function showDialog(){
+                $("#dialog-modal").dialog( "open" );
+                return false;
+            }
+            
+            function hideDialog(){
+                $("#dialog-modal").dialog( "close" );
+                //document.getElementById('InputBarcode').focus();
+                barcode_select();
+                return false;
+            }
+            function formInit() {
+                hideDialog();
+            }
+            
+            function focus(targetId){
+                document.getElementById(targetId).focus();
+            }
+            
+            //바코드 출력창
+            function popupBarcode(form, ItemId, AccountId, DateManufacture, CntImportInspection, Seq, barcode) {
+                window.open('', 'formBarcode','width=325,height=200,resizeable,scrollbars');
+                form.ItemId.value = ItemId;
+                form.AccountId.value = AccountId;
+                form.DateManufacture.value = DateManufacture;
+                form.CntImportInspection.value = CntImportInspection;
+                form.Seq.value = Seq;
+                form.barcode.value = barcode;
+                form.target = 'formBarcode';
+            }
+            
+            function submitFormBarocde(ItemId, AccountId, DateManufacture, CntImportInspection, Seq, barcode){
+                popupBarcode(document.frmBarcode, ItemId, AccountId, DateManufacture, CntImportInspection, Seq, barcode);
+                document.frmBarcode.submit();
+            }
+            
+            try {
+                window.addEventListener('load',formInit,false);
+            }catch(e){
+                window.attachEvent('onload',formInit);
+            }       
+            function checktext(){
+                //alert('hh');
+                var str = document.getElementById('InputBarcode').value;
+            }     
+        </script>
+    </head>
+    <apex:form id="mainFrm">
+        
+
+        <apex:actionStatus onstart="showDialog();" onstop="hideDialog();"
+            id="IngStatus" />
+
+        <!-- 바코드 등록 -->
+        <apex:actionFunction action="{!InputBarcodeForPage}"
+            name="InputBarcodeForPage" rerender="mainFrm" status="IngStatus">
+            <apex:param name="getVal" assignTo="{!InputBarcodeGetVal}" value="" />
+            <apex:param name="seq" assignTo="{!InputBarcodeSeq}" value="" />
+        </apex:actionFunction>
+
+        <!-- 수동등록 -->
+        <apex:actionFunction action="{!InputCustom}" name="InputCustom"
+            rerender="mainFrm" status="IngStatus">
+            <apex:param name="seq" assignTo="{!InputBarcodeSeq}" value="" />
+        </apex:actionFunction>
+
+        <!-- 등록 -->
+        <apex:actionFunction action="{!InputForError}" name="InputForError"
+            rerender="mainFrm" status="IngStatus">
+            <apex:param name="seq" assignTo="{!InputBarcodeSeq}" value="" />
+        </apex:actionFunction>
+
+        <!-- 행 삭제 -->
+        <apex:actionFunction action="{!DeleteRow}" name="DeleteRow"
+            rerender="mainFrm" status="IngStatus">
+            <apex:param name="seq" assignTo="{!InputBarcodeSeq}" value="" />
+        </apex:actionFunction>
+
+        <!-- 취소 -->
+        <apex:actionFunction action="{!RowCancel}" name="RowCancel"
+            rerender="mainFrm" status="IngStatus">
+            <apex:param name="seq" assignTo="{!InputBarcodeSeq}" value="" />
+        </apex:actionFunction>
+        
+        <!-- 외주결과처리 창 뛰우기-->
+        <apex:actionFunction action="{!runDispOut}" name="runDispOut"
+            rerender="mainFrm" status="IngStatus">
+            <apex:param name="barcode" assignTo="{!SelectBarcode}" value="" />
+        </apex:actionFunction>
+        
+        <!-- 외주결과처리 원 바코드 입력 -->
+        <apex:actionFunction action="{!InputIVName}"
+            name="InputIVName" rerender="mainFrm" status="IngStatus">
+            <!--
+            <apex:param name="getVal" assignTo="{!InputBarcode}" value="" />
+            -->
+        </apex:actionFunction>
+
+        
+        <apex:sectionHeader title="수입검사" />
+        <apex:pageMessages escape="false" />
+        <div id='cssmenu'>
+            <ul>
+                <li class='active'><a href='#'><span>의뢰</span></a></li>
+                <li><a href='/apex/ImportInspection_Search'><span>조회</span></a></li>
+                <li class='last'><a href='/apex/ImportInspection_Result'><span>결과등록</span></a></li>
+            </ul>
+        </div>
+        <apex:pageBlock title="수입검사 의뢰" id="pgBlock">
+            <apex:pageBlockTable value="{!cIVs}" var="item" id="pgBlockTable">
+                <apex:column headerValue="Seq" value="{!item.Seq}" />
+                <!--
+                <apex:column headerValue="State(system)" value="{!item.State}"/>
+                <apex:column headerValue="Id(system)" value="{!item.IV.Id}"/>
+                -->
+                <apex:column headerValue="바코드" id="clBar">
+                    <apex:outputField id="IV_Name" value="{!item.IV.Name}"
+                        rendered="{!item.state<>1 && item.state <> 3}" />
+                    <apex:outputPanel rendered="{!item.state==1 || item.state == 3}">
+                        <input type="text" id="InputBarcode"
+                            value="{!InputBarcodeGetVal}"
+                            onkeypress="return KeyPressIvName(event, '{!item.Seq}', '{!$Component.IV_Name}');"
+                            style="-webkit-ime-mode:disabled" />
+                        <script type="text/javascript">
+                            var text_input3 = document.getElementById ('InputBarcode');
+                            text_input3.focus();
+                            text_input3.select();
+                        </script>
+                    </apex:outputPanel>
+                </apex:column>
+
+                <apex:column headerValue="품목">
+                    <apex:outputField value="{!item.IV.Item__c}"
+                        rendered="{!item.state<>3 && item.state<>4}" />
+                    <apex:inputField required="false" value="{!item.IV.Item_PartEtc__c}"
+                        rendered="{!item.state==3 || item.state==4}"
+                    />
+                </apex:column>
+                <apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Account__c.Label}">
+                    <!-- <apex:outputField value="{!item.IV.Account__c}" rendered="true"/> -->
+                    <apex:outputField value="{!item.IV.Account__c}"
+                        rendered="{!item.state<>3 && item.state<>4}" />
+                    <apex:inputField required="false" value="{!item.IV.Account__c}"
+                        rendered="{!item.state==3 || item.state==4}"
+                        style="width:80px;" 
+                    />
+                </apex:column>
+                <apex:column headervalue="{!$ObjectType.Inventory__c.Fields.DateManufacture__c.Label}">
+                    <apex:outputField value="{!item.IV.DateManufacture__c}"
+                        rendered="{!item.state<>3 && item.state<>4}" />
+                    <apex:inputField required="false"
+                        value="{!item.IV.DateManufacture__c}"
+                        rendered="{!item.state==3 || item.state==4}" />
+                </apex:column>
+                <apex:column headervalue="{!$ObjectType.Inventory__c.Fields.CntImportInspection__c.Label}">
+                    <apex:outputField value="{!item.IV.CntImportInspection__c}"
+                        rendered="{!item.state<>3 && item.state<>4}" />
+                    <apex:inputField required="false"
+                        value="{!item.IV.CntImportInspection__c}"
+                        rendered="{!item.state==3 || item.state==4}"
+                        style="width:80px;"
+                    />
+                </apex:column>
+                <apex:column headervalue="{!$ObjectType.Inventory__c.Fields.Seq__c.Label}">
+                    <apex:outputField value="{!item.IV.Seq__c}"
+                        rendered="{!item.state<>3 && item.state<>4}" />
+                    <apex:inputField required="false" value="{!item.IV.Seq__c}"
+                        rendered="{!item.state==3 || item.state==4}"
+                        style="width:40px;"
+                    />
+                </apex:column>
+                <apex:column headerValue="기능">
+                    <apex:commandButton value="바코드등록"
+                        onclick="InputBarcodeForPage(document.getElementById('InputBarcode').value, '{!item.Seq}'); return false;"
+                        rendered="{!item.state==1}" />
+                    <apex:commandButton value="바코드출력"
+                        onclick="submitFormBarocde('{!item.IV.Item__c}', '{!item.IV.Account__c}', '{!item.IV.DateManufacture__c}', '{!item.IV.CntImportInspection__c}', '{!item.IV.Seq__c}', '{!item.IV.Name}');return false;"
+                        rendered="{!item.state==2 || item.state==5}" />
+                    <apex:commandButton value="수동입력"
+                        onclick="InputCustom('{!item.seq}');return false;"
+                        rendered="{!item.state==1}" />
+                    <apex:commandButton value="등록"
+                        onclick="InputForError('{!item.seq}');return false;"
+                        rendered="{!item.state==4 || item.state==3}" />
+                    <apex:commandButton value="삭제"
+                        onclick="DeleteRow('{!item.seq}');return false;"
+                        rendered="{!item.state==2 || item.state==3 || item.state==5}" />
+                    <apex:commandButton value="취소"
+                        onclick="RowCancel('{!item.seq}');return false;"
+                        rendered="{!item.state==4}" />
+                    <!--외주가공처리 state==2일결우만-->
+                    <apex:commandButton value="외주결과처리"
+                        onclick="runDispOut('{!item.IV.Name}');return false;"
+                        rendered="{!item.state==2}" />
+                    
+                </apex:column>
+
+            </apex:pageBlockTable>
+
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="저장" action="{!Save}"
+                    rendered="{! !IsAllSaved}" status="IngStatus" />
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+        
+        <div class="ui-widget-overlay" style="{!IF(isDispOut,'display:;','display:none;')} width:2000px; height:2000px; z-index:10;">
+        </div>
+        <apex:outputPanel styleClass="customPopup_IAF" rendered="{!isDispOut}">
+            <apex:pageMessages escape="false" />
+            
+            <apex:pageBlock rendered="{!wOS<>null}">
+                <apex:pageBlockTable value="{!wOS}" var="item" id="pgBlockTable2" >
+                    <apex:column headerValue="원재고 바코드">
+                        <apex:inputField required="false" value="{!item.IV.Name}" id="OutIvName"
+                            onkeypress="return KeyPressOutIvName(event);"
+                            rendered="{!item.IV.Name==''}"
+                        />
+                        <script type="text/javascript">
+                            //var text_input3 = document.getElementById ('{!$Component.OutIvName}');
+                            //text_input3.focus();
+                            //text_input3.select();
+                        </script>
+                        <apex:outputField value="{!item.IV.Name}"
+                            rendered="{!item.IV.Name<>''}"
+                        />
+                        <apex:commandButton value="취소" action="{!runOutInputCancle}"
+                            rerender="mainFrm"
+                            status="IngStatus"
+                            rendered="{!item.IV.Name<>''}"
+                        />
+                    </apex:column>
+                    <apex:column headerValue="원재고 외주수량">
+                        <apex:outputField value="{!item.IV.CntOutSoursing__c}"
+                            rendered="{!item.IV.Name<>''}"
+                        />
+                    </apex:column>
+                    <apex:column headerValue="외주결과처리">
+                        <apex:pageBlockTable value="{!item.wOSRs}" var="wOSR" rendered="{!item.IV.Name<>''}">
+                            <apex:column headerValue="외주처리의뢰수량">
+                                <apex:outputField value="{!wOSR.OS.CntOutSoursing__c}"
+                                />
+                            </apex:column>
+                            <apex:column headerValue="외주결과처리">
+                                <apex:pageBlockTable value="{!wOSR.OSRs}" var="OSR">
+                                    <apex:column headerValue="입고수량">
+                                        <apex:outputField value="{!OSR.CntImport__c}"
+                                            rendered="{! !(OSR.TempBarcode__c==SelectBarcode)}"
+                                        />
+                                        <!-- rendered="{!OSR.InventoryAfter__c==item.IV.ID}" -->
+                                        <apex:inputField value="{!OSR.CntImport__c}"
+                                            rendered="{!OSR.TempBarcode__c==SelectBarcode}"
+                                            style="width:100px;"
+                                        />
+                                    </apex:column>
+                                    <apex:column headerValue="에러수량">
+                                        <apex:outputField value="{!OSR.CntError__c}"
+                                            rendered="{! !(OSR.TempBarcode__c==SelectBarcode)}"
+                                        />
+                                        <apex:inputField value="{!OSR.CntError__c}"
+                                            rendered="{!OSR.TempBarcode__c==SelectBarcode}"
+                                            style="width:100px;"
+                                        />
+                                    </apex:column>
+                                    <apex:column headerValue="폐기수량">
+                                        <apex:outputField value="{!OSR.CntDisuse__c}"
+                                            rendered="{! !(OSR.TempBarcode__c==SelectBarcode)}"
+                                        />
+                                        <apex:inputField value="{!OSR.CntDisuse__c}"
+                                            rendered="{!OSR.TempBarcode__c==SelectBarcode}"
+                                            style="width:100px;"
+                                        />
+                                    </apex:column>
+                                </apex:pageBlockTable>
+                            </apex:column>
+                        </apex:pageBlockTable>
+                    </apex:column>
+                </apex:pageBlockTable>
+                <apex:pageBlockButtons location="bottom">
+                    <apex:commandButton value="닫기" action="{!runDispOutDisable}"
+                        rerender="mainFrm"
+                        status="IngStatus"
+                    />
+                </apex:pageBlockButtons>
+            </apex:pageBlock>
+        </apex:outputPanel>
+
+        
+        
+        <!--
+        <div id="divOutsoursing" title="외주결과처리">
+            SelectBarcode : {!SelectBarcode}
+            <br/>
+            wOS.barcode : {!wOS.barcode}
+            <br/>
+            item.IV.Name : {!wOS.IV.Name}
+            <br/>
+            <apex:pageMessages escape="false" />
+            
+            <apex:pageBlock rendered="{!wOS<>null}">
+                <apex:pageBlockTable value="{!wOS}" var="item" id="pgBlockTable2" >
+                    <apex:column headerValue="원재고 바코드">
+                        <apex:inputField required="false" value="{!item.IV.Name}" id="OutIvName"
+                            onkeypress="return KeyPressOutIvName(event, '{!$Component.OutIvName}');"
+                        />
+                    </apex:column>
+                    <apex:column headerValue="외주결과처리">
+                        
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlock>
+        </div>
+        
+        <script type="text/javascript">
+            $( "#divOutsoursing" ).dialog({
+                autoOpen: {!if(isDispOut, 'true', 'false')},
+                height: 500,
+                width: 1000,
+                modal: true ,
+                //open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); }
+            });
+        </script>
+        -->
+    </apex:form>
+
+    <form name="frmBarcode" action="PrintBarcode" method="post">
+        <input type="hidden" name="ItemId" value="" /> <input type="hidden"
+            name="AccountId" value="" /> <input type="hidden"
+            name="DateManufacture" value="" /> <input type="hidden"
+            name="CntImportInspection" value="" /> <input type="hidden"
+            name="Seq" value="" /> <input type="hidden" name="barcode" value="" />
+    </form>
+
+    <div id="dialog-modal" title="처리중...">
+        <p>처리중입니다.</p>
+    </div>
+</apex:page>

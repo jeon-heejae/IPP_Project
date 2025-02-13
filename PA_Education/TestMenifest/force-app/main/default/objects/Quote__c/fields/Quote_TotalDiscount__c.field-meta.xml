@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Quote_TotalDiscount__c</fullName>
+    <externalId>false</externalId>
+    <formula>Quote_SalesDiscount__c+
+Quote_ConsultDiscount__c+Quote_TrainDiscount__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>단위:원, VAT 별도</inlineHelpText>
+    <label>할인(합계)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

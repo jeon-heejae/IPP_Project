@@ -1,0 +1,19 @@
+<template>
+    <lightning-card  title={title}>
+        <div class="slds-align_absolute-center slds-p-bottom_small">
+            <lightning-button label={setting} slot="actions" class="actions"></lightning-button>
+        </div>
+            <lightning-datatable
+                key-field="id"
+                columns={columns}
+                data={data}
+                hide-checkbox-column
+                default-sort-direction={defaultSortDirection}
+                sorted-direction={sortDirection}
+                sorted-by={sortedBy}
+                onsort={onHandleSort}>
+        </lightning-datatable>
+        <p>{noted}</p>
+    </lightning-card>
+    
+</template>

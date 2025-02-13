@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>FormRequest_Date__c</fullName>
+    <defaultValue>TODAY()</defaultValue>
+    <inlineHelpText>증명서에 출력되는 일자입니다.</inlineHelpText>
+    <label>신청일자</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

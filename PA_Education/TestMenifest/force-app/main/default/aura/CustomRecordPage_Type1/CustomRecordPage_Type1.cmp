@@ -1,0 +1,31 @@
+<aura:component implements="lightning:recordHomeTemplate" description="Full-width header above a left(6) and right(4).">
+	<aura:attribute name="top" type="Aura.Component[]" />
+    <aura:attribute name="left" type="Aura.Component[]" />
+    <aura:attribute name="right" type="Aura.Component[]" />
+
+    <div>
+        <lightning:layout multipleRows="true">
+
+            <lightning:layoutItem size="12">
+                {!v.top}
+            </lightning:layoutItem>
+
+            <lightning:layoutItem size="7" 
+                                    smallDeviceSize="12" 
+                                    mediumDeviceSize="12" 
+                                    largeDeviceSize="7"
+                                    class="left-Area">
+                {!v.left}
+            </lightning:layoutItem>
+
+            <lightning:layoutItem size="5" 
+                                    smallDeviceSize="12" 
+                                    mediumDeviceSize="12" 
+                                    largeDeviceSize="5"
+                                    class="right-Area">
+                {!v.right}
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+    
+</aura:component>

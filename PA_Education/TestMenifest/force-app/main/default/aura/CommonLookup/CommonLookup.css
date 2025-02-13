@@ -1,0 +1,41 @@
+/* Basic Type */
+
+
+
+
+/* Basic Type */
+.THIS .slds-pill {
+    width: 100%;
+    padding: 5px 2px 5px 2px;
+}
+
+.THIS .custom-left-padding {
+    padding-left : 2rem;
+    height:32px;
+    min-height:32px;
+}
+
+.THIS .resultDivArea {
+    overflow-y : auto;
+    overflow-x : hidden;
+    max-height : 150px;
+}
+
+/* Table Type */
+.THIS .resultTableArea {
+    overflow-y : auto;
+    overflow-x : hidden;
+    max-height : 200px;    
+}
+
+.THIS #custom_table th {
+    padding: 5px;
+}
+
+.THIS #custom_table td {
+    padding: 5px;
+}
+
+.THIS .custom_tr:hover { 
+    background-color: #f3f2f2;
+}

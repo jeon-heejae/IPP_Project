@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Holiday_Total_Remain__c</fullName>
+    <description>대유넥스티어 연차 계산법 기준이 회계연도로 변경되어 필드 생성 (생성일: 2022-12-27, 생성자: hyunsoo.song@daeunextier.com)
+
+* 필드 설명
+- 신규 입사자 &amp; 기존 입사자
+: 올해 월차일수 + 올해 연차일수 + 전년도 연차 잔여일수 + 추가부여일수 - 사용일수</description>
+    <externalId>false</externalId>
+    <formula>BLANKVALUE(Holiday_Monthly_Calculated__c, 0) +  BLANKVALUE(Holiday_Annual_Calculated__c, 0) + BLANKVALUE(HolidayRemainOfLastYear__c, 0) +  Holiday_GivenHolidays__c
+-  Holiday_UseDays__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>총 연월차일수 + 추가 부여 일수 - 연월차 사용일수</inlineHelpText>
+    <label>연월차 잔여일수</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>1</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

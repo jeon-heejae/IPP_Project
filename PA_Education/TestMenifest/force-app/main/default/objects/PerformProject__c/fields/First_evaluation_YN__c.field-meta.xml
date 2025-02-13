@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>First_evaluation_YN__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>외주인력 대상 투입 30일 후 진행할 1차 평가 여부</description>
+    <label>1차평가 여부</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

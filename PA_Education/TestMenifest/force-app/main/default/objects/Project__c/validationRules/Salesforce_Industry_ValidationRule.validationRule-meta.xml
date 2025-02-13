@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Salesforce_Industry_ValidationRule</fullName>
+    <active>true</active>
+    <description>Salesforce 산업분류 값중 직접입력을 선택했을때 반드시 직접입력(SF산업분류) 필드에 값을 입력해야함</description>
+    <errorConditionFormula>IF(
+				AND(
+								ISPICKVAL(Salesforce_Industry__c, &apos;직접입력&apos;),
+								ISBLANK(Typein_Salesforce_Industry__c)
+								),
+				TRUE, FALSE
+				)</errorConditionFormula>
+    <errorDisplayField>Typein_Salesforce_Industry__c</errorDisplayField>
+    <errorMessage>값을 입력해주세요.</errorMessage>
+</ValidationRule>

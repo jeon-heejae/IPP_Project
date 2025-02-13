@@ -1,0 +1,13 @@
+<apex:component >
+    <apex:includeScript value="{!URLFOR($Resource.jquery_ui2, 'external/jquery/jquery-2.1.1.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.jquery_ui2, 'jquery-ui.js')}" />
+    <link rel="stylesheet" type="text/css" href="{!URLFOR($Resource.jquery_ui2, 'jquery-ui.css')}" />
+    <script>
+        try {
+            $jq = $.noConflict();
+
+        } catch(exp) {
+        
+        }
+    </script>
+</apex:component>

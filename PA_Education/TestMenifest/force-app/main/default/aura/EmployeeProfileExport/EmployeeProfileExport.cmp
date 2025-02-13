@@ -1,0 +1,175 @@
+<!--
+  * ===============================================================
+  * File Name   : EmployeeProfileExport.cmp
+  * Author      : Soyoung.Jung
+  * Date        : 2019.01.09
+  * Description : 사원 프로필 문서 생성 및 로컬 다운로드
+  * Modification Log
+  * ===============================================================
+  * Ver     Date        Author          Modification
+  * ===============================================================
+  * 1.0     2019.01.09  Soyoung.Jung    Create
+  * ===============================================================
+-->
+
+<aura:component controller="EmployeeProfileExportController" implements="flexipage:availableForRecordHome" access="global">
+    
+    <!-- Component Attribute -->
+    <aura:attribute name="bIsShowSpinner" type="Boolean" default="false" />
+	
+	<!-- Step1 Attribute -->
+	<!-- DataTable Attribute -->
+    <aura:attribute name="listColumns"      type="List" />
+    <aura:attribute name="listEmployee"    type="List" />
+    <aura:attribute name="listSelectedRows" type="List" />
+    <!-- Sorting Attribute -->
+    <aura:attribute name="sSortBy"              type="String" />
+    <aura:attribute name="sSortDirection"       type="String" />
+    <aura:attribute name="defaultSortDirection" type="String" />
+    <!-- Infinite Loading Attribute -->
+    <aura:attribute name="bEnableLoading"   type="Boolean" default="true"   />
+    <aura:attribute name="iInitRows"        type="Integer" default="50"     />
+    <aura:attribute name="iLoadCnt"         type="Integer" default="10"     />
+    <aura:attribute name="iTotalRows"       type="Integer" default="10"     />
+    <aura:attribute name="iRowNumberOffset" type="Integer" default="0"      />
+    <aura:attribute name="iCurrentCnt"      type="Integer" default="10"     />
+    <aura:attribute name="sLoadMoreStatus"  type="String"  />
+	
+	<!-- Step2 Attribute -->
+	<aura:attribute name="listChildObject" 		type="List" />
+	<aura:attribute name="listChildSelected" 	type="List" default="['Re_Education__r', 'EmployeePerformPjt__r', 'Re_Project_Career__r']" />
+	<aura:attribute name="requiredOptions" 		type="List" default="['Re_Education__r', 'EmployeePerformPjt__r', 'Re_Project_Career__r']" />
+
+
+    <!-- Handler -->
+    <aura:handler name="init" value="{!this}" action="{!c.fnInit}" />
+
+
+    <!-- Style Tag -->
+    <aura:html tag="style">
+        .toastMessage.forceActionsText {
+            white-space : pre-line !important;
+        }
+    </aura:html>
+
+	
+    <!-- Header -->
+    <lightning:layout>
+        <lightning:layoutItem size="12">
+            <div class="slds-page-header">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <lightning:icon iconName="custom:custom3" />
+                    </div>
+                    <div class="slds-media__body">
+                        <!-- Header Media Body -->
+                        <lightning:layout>
+                            <lightning:layoutItem size="7">
+                                <p class="slds-text-body_small slds-line-height_reset">사원</p>
+                                <h1 class="slds-page-header__title slds-truncate slds-align-middle" title="Export resource profile">Export resource profile</h1>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="5">
+                                <!-- Buttons -->
+                                <div class="slds-float_right">
+                                	<!-- Export 버튼은 Step3에서 활성화 됨 -->
+                                	<lightning:button aura:id="exportBtn" label="Export" onclick="{!c.fnExport}" disabled="true" />
+                                </div>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+
+                        <!-- Progress Bar -->
+                        <lightning:layout>
+                        	<lightning:layoutItem size="12" class="custom_progress">
+                            	<lightning:progressIndicator aura:id="progress">
+							        <lightning:progressStep value="step1" label="Step1. Select Employees" />
+							        <lightning:progressStep value="step2" label="Step2. Select document options" />
+							        <lightning:progressStep value="step3" label="Step3. Start Export" />
+							    </lightning:progressIndicator>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </div>
+                </div>
+            </div>    
+        </lightning:layoutItem>
+    </lightning:layout>
+	
+	<!-- Contents -->
+    <aura:if isTrue="{!v.bIsShowSpinner}">
+        <lightning:spinner aura:id="spinner" alternativeText="Loading" size="large" variant="brand" />
+    </aura:if>
+
+    <lightning:layout>
+    	<!-- Step1 사원 선택 -->
+        <lightning:layoutItem size="6" padding="around-small">
+            <!-- Data Table --> 
+			<ol class="slds-setup-assistant">
+				<li class="slds-setup-assistant__item">
+					<article class="slds-setup-assistant__step">
+						<div class="slds-setup-assistant__step-summary">
+							<div class="slds-media">
+								<div class="slds-setup-assistant__step-summary-content slds-media__body">
+									<h3 class="slds-setup-assistant__step-summary-title slds-text-heading_small">Step1. Select Employees</h3>
+									<p>{!$Label.c.ResourceProfileStep1}</p>
+								</div>
+							</div>
+						</div>
+					</article>
+				</li>
+			</ol>
+            <div class="custom_datatable" style="padding: 16px;">
+	            <lightning:datatable    aura:id="datatable"
+	                                    columns="{!v.listColumns}"
+	                                    data="{!v.listEmployee}"
+	                                    keyField="Id"
+	                                    showRowNumberColumn="true"
+	                                    onrowselection="{!c.fnStep1Validation}"
+
+	                                    sortedBy="{!v.sSortBy}"
+	                                    sortedDirection="{!v.sSortDirection}"
+	                                    defaultSortDirection="{!v.defaultSortDirection}"
+	                                    onsort="{!c.fnColumnSorting}"
+
+	                                    enableInfiniteLoading="{!v.bEnableLoading}"
+	                                    rowNumberOffset="0"
+	                                    loadMoreOffset="{!v.loadMoreOffset}"
+	                                    onloadmore="{!c.fnLoadMore}" />
+	            
+	            <!-- <div class="custom_margin-top-5px">
+	                {!v.sLoadMoreStatus}
+	            </div> -->
+            </div>
+        </lightning:layoutItem>
+
+        <!-- Step2 문서 옵션 선택 -->
+        <lightning:layoutItem size="6" padding="around-small">
+            <!-- Data Table --> 
+			<ol class="slds-setup-assistant">
+				<li class="slds-setup-assistant__item">
+					<article class="slds-setup-assistant__step">
+						<div class="slds-setup-assistant__step-summary">
+							<div class="slds-media">
+								<div class="slds-setup-assistant__step-summary-content slds-media__body">
+									<h3 class="slds-setup-assistant__step-summary-title slds-text-heading_small">Step2. Select document options</h3>
+									<p>{!$Label.c.ResourceProfileStep2}</p>
+								</div>
+							</div>
+						</div>
+					</article>
+				</li>
+			</ol>
+            <div style="padding: 16px;">
+            	<!-- 옵션 선택란은 Step2에서 활성화 됨 -->
+	        	<lightning:dualListbox aura:id="childObjects"
+			                           label="Select child objects" 
+			                           sourceLabel="Available" 
+			                           selectedLabel="Selected" 
+			                           options="{!v.listChildObject}" 
+			                           value="{!v.listChildSelected}" 
+			                           requiredOptions="{!v.requiredOptions}"
+			                           required="true"
+			                           disabled="true" />
+            </div>
+        </lightning:layoutItem>
+    </lightning:layout>
+
+</aura:component>

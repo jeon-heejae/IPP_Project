@@ -1,0 +1,379 @@
+<!--
+ - @description       : 교육 커리큘럼 찾기, 생성
+ - @author            : Chan Kang
+ - @group             : Boundary
+ - Modifications Log
+ - Ver   Date         Author           Modification
+ - 1.0   2021.12.24   Chan Kang        Initial Version
+   1.1   2022.04.17   Gunwoo Kim       Load english data conditionally
+                                       Add event handler to load english data
+                                       Add isEnglish parameter to APEX callout
+-->
+
+<aura:component
+    implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes"
+    access="global" controller="RenewalHPClassInformation">
+    <aura:attribute name="isEnglish" type="Boolean" access="global" default="false" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:handler event="c:i18nEvent" action="{!c.init}" />
+    <aura:attribute name="classInformation" type="List" />
+    <aura:attribute name="ClassObj" type="Object" description="Registration 사용할 Class Object" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:attribute name="Register" type="String" description="applyTo 지원자" />
+    <aura:attribute name="Mobile" type="String" description="applyTo Mobile" />
+    <aura:attribute name="PersonalInformationUseAgreement" type="Boolean" description="applyTo 개인정보 수집 및 활용 동의" />
+    <aura:attribute name="BirthDate" type="Date" description="applyTo Birthdate" />
+    <aura:attribute name="isOpen" type="boolean" default="false" description="applyto 모달창 여는 IF" />
+    <aura:attribute name="fileToBeUploaded" type="Object[]" />
+    <aura:attribute name="fileName" type="String" />
+    <aura:attribute name="base64Data" type="String" />
+    <aura:attribute name="contentType" type="String" />
+    <aura:attribute name="myVal" type="String" />
+    <aura:attribute name="nowDate" type="Datetime" />
+    <aura:attribute name="checkTerms" type="Boolean" />
+    <aura:attribute name="hasMore" type="Boolean" />
+    <aura:attribute name="termsOpen" type="Boolean" default="false" />
+
+    <section>
+        <div class="contents" id="class">
+            <p class="pageTitle">
+                Class Information
+            </p>
+            <aura:if isTrue="{!v.classInformation.length > 0}">
+                <div class="classInformations">
+                    <aura:iteration items="{!v.classInformation}" var="classItem">
+
+
+                        <!--                                    Korean-->
+                        <aura:if isTrue="{!v.isEnglish}">
+                            <div>
+                                <p class="title">{!classItem.ClassNameEng__c}</p>
+
+                                <div class="infoItem">
+                                    <p class="itemTitle">Subject</p>
+                                    <p class="itemContent">{!classItem.SubjectEng__c}</p>
+                                </div>
+                                <div class="infoItem">
+                                    <p class="itemTitle">Target</p>
+                                    <p class="itemContent">{!classItem.Target__c}</p>
+                                </div>
+                                <hr />
+                                <div class="infoItem" style="width: 100%;">
+                                    <p class="itemTitle">Period</p>
+                                    <div class="subItem">
+                                        <div>
+                                            <p class="subItemTitle">Start Date</p>
+                                            <p class="subItemContent">{!classItem.StartDate__c}</p>
+                                        </div>
+                                        <div>
+                                            <p class="subItemTitle">End Date</p>
+                                            <p class="subItemContent">{!classItem.EndDate__c}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <footer>
+                                    <aura:if isTrue="{!classItem.isEnd == true}">
+                                        <lightning:button label="Closed" type="submit" class="endRequest" />
+                                    </aura:if>
+                                    <aura:if isTrue="{!classItem.isEnd == false}">
+                                        <lightning:button label="Apply" value="{!classItem}" type="submit"
+                                            onclick="{!c.showModal}" />
+                                    </aura:if>
+                                </footer>
+                            </div>
+
+                            <aura:set attribute="else">
+                                <div>
+                                    <p class="title">{!classItem.ClassName__c}</p>
+
+                                    <div class="infoItem">
+                                        <p class="itemTitle">구분</p>
+                                        <p class="itemContent">{!classItem.Subject__c}</p>
+                                    </div>
+                                    <div class="infoItem">
+                                        <p class="itemTitle">대상</p>
+                                        <p class="itemContent">{!classItem.Target__c}</p>
+                                    </div>
+                                    <hr />
+                                    <div class="infoItem" style="width: 100%;">
+                                        <p class="itemTitle">진행 기간</p>
+                                        <div class="subItem">
+                                            <div>
+                                                <p class="subItemTitle">시작</p>
+                                                <p class="subItemContent">{!classItem.StartDate__c}</p>
+                                            </div>
+                                            <div>
+                                                <p class="subItemTitle">종료</p>
+                                                <p class="subItemContent">{!classItem.EndDate__c}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <footer>
+                                        <aura:if isTrue="{!classItem.isEnd == true}">
+                                            <lightning:button label="신청마감" type="submit" class="endRequest" />
+                                        </aura:if>
+                                        <aura:if isTrue="{!classItem.isEnd == false}">
+                                            <lightning:button label="신청하기" value="{!classItem}" type="submit"
+                                                onclick="{!c.showModal}" />
+                                        </aura:if>
+                                    </footer>
+                                </div>
+
+                            </aura:set>
+                        </aura:if>
+
+
+                    </aura:iteration>
+                </div>
+                <aura:set attribute="else">
+                    <p class="pageSubTitle">
+                        현재 신청 가능한 강의가 없습니다.<br />
+                        마감된 강의 리스트를 보시려면 더 보기 버튼을 눌러주세요.
+                    </p>
+                </aura:set>
+            </aura:if>
+
+            <div style="text-align: center;">
+                <a style="display: inline-block;" class="loadMore" href="./classes-list">
+                    <aura:if isTrue="{!v.isEnglish}">
+                        View More
+                        <aura:set attribute="else">
+                            더 보기
+                        </aura:set>
+                    </aura:if>
+                </a>
+            </div>
+        </div>
+        <div class="modal-background" aura:id="modal" onclick="{!c.hideModal}">
+            <div class="modal">
+                <aura:renderIf isTrue="{!v.isOpen}">
+                    <header>
+                        <h1>Apply to</h1>
+                        <button class="close" onclick="{!c.hideModal}">
+                            &times;
+                        </button>
+                    </header>
+
+                    <aura:if isTrue="{!v.isEnglish}">
+                        <section>
+                            <lightning:recordEditForm aura:id="recordEditForm" objectApiName="Registration__c">
+                                <lightning:messages />
+                                <lightning:inputField fieldName="Class__c" value="{!v.ClassObj.Id}" disabled="true"
+                                    style="display: none;" />
+                                <lightning:textarea label="Subject" value="{!v.ClassObj.Subject__c}"
+                                    variant="label-inline" readonly="true" tabindex="-1" />
+
+                                <label for="applyApplicant">
+                                    <abbr lightning-input_input="" title="required" class="slds-required">*</abbr>
+                                    Applicant Name</label>
+
+                                <lightning:inputField aura:id="applyApplicant" fieldName="Register__c"
+                                    value="{!v.Register}" variant="label-hidden" />
+
+                                <label for="applyMobile">
+                                    <abbr lightning-input_input="" title="required" class="slds-required">*</abbr>
+                                    Contact Number</label>
+                                <lightning:inputField fieldName="Mobile__c" value="{!v.Mobile}" variant="label-hidden"
+                                    onchange="{!c.phoneMasking}" />
+
+                                <label for="applyBirthday">
+                                    <abbr lightning-input_input="" title="required" class="slds-required">*</abbr>
+                                    Birthday</label>
+                                <lightning:inputField fieldName="Birthdate__c" value="{!v.BirthDate}"
+                                    variant="label-hidden" />
+                            </lightning:recordEditForm>
+                            <input type="checkbox" id="terms" name="terms" value="{!v.checkTerms}"
+                                onchange="{!c.termsChanged}" />
+                            <label for="terms" style="display: inline; width: 90%; margin-left: 16px;">Agree with <a
+                                    onclick="{!c.termsOpen}">Sending and usage of personal information</a>
+                            </label>
+                            <button class="submitBtn" type="button" onclick="{!c.fnSave}">Submit</button>
+                        </section>
+
+                        <aura:set attribute="else">
+                            <section>
+                                <lightning:recordEditForm aura:id="recordEditForm" objectApiName="Registration__c">
+                                    <lightning:messages />
+                                    <lightning:inputField fieldName="Class__c" value="{!v.ClassObj.Id}" disabled="true"
+                                        style="display: none;" />
+                                    <lightning:textarea label="항목명" value="{!v.ClassObj.Subject__c}"
+                                        variant="label-inline" readonly="true" tabindex="-1" />
+
+                                    <label for="applyApplicant">
+                                        <abbr lightning-input_input="" title="required" class="slds-required">*</abbr>
+                                        지원자 이름</label>
+
+                                    <lightning:inputField aura:id="applyApplicant" fieldName="Register__c"
+                                        value="{!v.Register}" variant="label-hidden" />
+
+                                    <label for="applyMobile">
+                                        <abbr lightning-input_input="" title="required" class="slds-required">*</abbr>
+                                        연락처</label>
+                                    <lightning:inputField fieldName="Mobile__c" value="{!v.Mobile}"
+                                        variant="label-hidden" onchange="{!c.phoneMasking}" />
+
+                                    <label for="applyBirthday">
+                                        <abbr lightning-input_input="" title="required" class="slds-required">*</abbr>
+                                        생년월일</label>
+                                    <lightning:inputField fieldName="Birthdate__c" value="{!v.BirthDate}"
+                                        variant="label-hidden" />
+                                </lightning:recordEditForm>
+                                <input type="checkbox" id="terms" name="terms" value="{!v.checkTerms}"
+                                    onchange="{!c.termsChanged}" />
+                                <label for="terms" style="display: inline; width: 90%; margin-left: 16px;"><a
+                                        onclick="{!c.termsOpen}">개인정보 수집 및 활용</a>
+                                    동의</label>
+                                <button class="submitBtn" type="button" onclick="{!c.fnSave}">Submit</button>
+                            </section>
+                        </aura:set>
+                    </aura:if>
+
+
+
+                </aura:renderIf>
+            </div>
+        </div>
+        <aura:renderIf isTrue="{!v.termsOpen}">
+            <div class="modal-background active" onclick="{!c.termsClose}">
+                <div class="modal" style="height: 80vh; overflow: scroll;">
+                    <header style="height: 100px;">
+                        <aura:if isTrue="{!v.isEnglish}">
+                            <h1>Consent to Collect &amp; Use Personal Information</h1>
+                            <aura:set attribute="else">
+                                <h1>개인정보 수집 및 활용 동의</h1>
+                            </aura:set>
+                        </aura:if>
+
+                        <button class="close" onclick="{!c.termsClose}">
+                            &times;
+                        </button>
+                    </header>
+                    <section>
+                        <aura:if isTrue="{!v.isEnglish}">
+                            <p>
+                                According to the Personal Information Protection Act. and related statutory, Daeu
+                                Nextier Inc.
+                                collects personal information of applicants for the purpose of personnel management
+                                after employment.<br />
+                                Please read the following inforamtion regarding the collection&amp;use of your personal
+                                information and make decision of agreement.
+                            </p>
+                            <h1>1. Purpose of collect and use personal information</h1>
+                            <table style="border: 1px solid #212123;">
+                                <tr style="border: 1px solid #212123;">
+                                    <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">
+                                        Personal Information Item
+                                    </th>
+                                    <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">
+                                        Purpose of Collection&amp;Use
+                                    </th>
+                                    <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">
+                                        Retention Period</th>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #212123;">
+                                        Collection Item : Name, Date of Birth, Email, Phone
+                                    </td>
+                                    <td style="border: 1px solid #212123;">
+                                        Identify Applicant for : Provide information, consulting and apply service
+                                    </td>
+                                    <td style="border: 1px solid #212123;">
+                                        1. When the purpose of collection and use about personal information is complete
+                                        2. When applicants withdraw their personal information
+                                    </td>
+                                </tr>
+                            </table>
+                            <h1>2. Consent to provide information to Third parties</h1>
+                            <aura:set attribute="else">
+                                <p>
+                                    (주)대유넥스티어(이하’회사’)는 개인정보보호법 등 관련 법령에 따라 수강신청 및 수강지원자의 교육진행 및 관리 등의 목적으로 지원자의 개인정보를
+                                    수집하고 있습니다.
+                                    <br />
+                                    귀하의 개인정보 수집 및 이용과 관련하여 아래의 안내 내용을 자세히 읽어 보시고, 모든 내용을 숙지하신 후에 개인정보의 수집 및 이용에 관한 동의
+                                    여부를 결정해
+                                    주시기 바랍니다.
+                                </p>
+                                <h1>1. 개인정보의 수집 및 이용 목적</h1>
+                                <table style="border: 1px solid #212123;">
+                                    <tr style="border: 1px solid #212123;">
+                                        <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">
+                                            개인정보항목
+                                        </th>
+                                        <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">
+                                            수집·이용 목적
+                                        </th>
+                                        <th style="text-align: center; font-weight: bold; border: 1px solid #212123;">
+                                            보유기간</th>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: 1px solid #212123;">
+                                            수강신청시 수집항목 : 성명, 생년월일, 이메일, 전화번호등
+                                        </td>
+                                        <td style="border: 1px solid #212123;">
+                                            자료제공, 상담, 서비스 신청 등을 위해 수집된 개인정보를 통하여 따른 본인 식별
+                                        </td>
+                                        <td style="border: 1px solid #212123;">
+                                            개인정보의 수집 및 이용 목적이 달성된 때 또는 지원자께서 개인정보제공 동의를 철회 하셨을 경우에는 지체 없이 지원자의 개인정보 파기함
+                                        </td>
+                                    </tr>
+                                </table>
+                                <h1>2. 제3자 정보제공 동의</h1>
+                            </aura:set>
+                        </aura:if>
+
+                        <aura:if isTrue="{!v.isEnglish}">
+                            <p>
+                                In Principle, company does not provide applicant's personal information to other
+                                companies or institutions without applicant's consent.
+                                However, personal information might be provided without consent in following case:<br />
+                                - Request from institutions with prescribed procedure and method for purpose of
+                                investigation.
+                            </p>
+                            <p>
+                                3. Company uses collected personal information for proper purpose, and does not use for
+                                other.
+                                Applicant who provided personal information can withdraw their information any time.
+                            </p>
+                            <p>
+                                4. Applicant may refuse to consent about the above content of collection, use, provision
+                                and entrustment.<br />
+                                However, it might be effected on applicant's recruitment screening due to following
+                                contents are mandatory.
+                            </p>
+                            <p>
+                                <br />I agree with all of the above:<br />
+                                Purpose of collect and use personal information<br />
+                                Purpose of collect and use sensitive information<br />
+                                Consent to provide information to Third parties<br />
+                            </p>
+                            <aura:set attribute="else">
+                                <p>
+                                    회사는 원칙적으로 지원자의 개인정보를 지원자의 동의 없이 타 기업 또는 기관에 제공하지 않습니다. 다만, 다음의 경우에는 예외적으로 동의 없이
+                                    개인정보를 제공할 수
+                                    있습니다.<br />
+                                    - 법령의 규정에 의하거나 수사 목적으로 법령에 정해진 절차와 방법에 따라 수사기관의 요구가 있는 경우
+                                </p>
+                                <p>
+                                    3. 당사는 취득한 개인정보를 수집한 목적에 필요한 범위에서 적합하게 처리하고 그 목적 외의 용도로 사용하지 않으며 개인정보를 제공한 계약당사자는
+                                    언제나 자신이
+                                    입력한 개인정보를 열람·수정 및 정보제공에 대한 철회할 수 있습니다.
+                                </p>
+                                <p>
+                                    4. 지원자는 본 안내에 따른 개인정보의 수집, 이용, 제공 및 위탁 등과 관련한 위 사항에 대하여 원하지 않는 경우 동의를 거부할 수
+                                    있습니다.<br />
+                                    다만, 본 안내에 따른 개인정보의 수집, 이용등과 관련한 위 사항은 필수적인 항목으로 이에 대하여 동의하지 않는 경우 서비스에 제한이 있을 수 있는
+                                    점을
+                                    안내드립니다.
+                                </p>
+                                <p>
+                                    <br />개인정보 수집 및 이용안내, 제3자 정보제공 동의를 모두 읽었으며, 아래 내용에 모두 동의합니다.
+                                </p>
+                            </aura:set>
+                        </aura:if>
+
+                    </section>
+                </div>
+            </div>
+        </aura:renderIf>
+    </section>
+</aura:component>

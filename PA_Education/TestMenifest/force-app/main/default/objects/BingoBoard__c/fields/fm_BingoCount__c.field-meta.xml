@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>fm_BingoCount__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(Cell_00__c + Cell_01__c + Cell_02__c + Cell_03__c + Cell_04__c = 5, 1, 0) +
+IF(Cell_10__c + Cell_11__c + Cell_12__c + Cell_13__c + Cell_14__c = 5, 1, 0) +
+IF(Cell_20__c + Cell_21__c + Cell_22__c + Cell_23__c + Cell_24__c = 5, 1, 0) +
+IF(Cell_30__c + Cell_31__c + Cell_32__c + Cell_33__c + Cell_34__c = 5, 1, 0) +
+IF(Cell_40__c + Cell_41__c + Cell_42__c + Cell_43__c + Cell_44__c = 5, 1, 0) +
+
+IF(Cell_00__c + Cell_10__c + Cell_20__c + Cell_30__c + Cell_40__c = 5, 1, 0) +
+IF(Cell_01__c + Cell_11__c + Cell_21__c + Cell_31__c + Cell_41__c = 5, 1, 0) +
+IF(Cell_02__c + Cell_12__c + Cell_22__c + Cell_32__c + Cell_42__c = 5, 1, 0) +
+IF(Cell_03__c + Cell_13__c + Cell_23__c + Cell_33__c + Cell_43__c = 5, 1, 0) +
+IF(Cell_04__c + Cell_14__c + Cell_24__c + Cell_34__c + Cell_44__c = 5, 1, 0) +
+
+IF(Cell_00__c + Cell_11__c + Cell_22__c + Cell_33__c + Cell_44__c = 5, 1, 0) +
+IF(Cell_04__c + Cell_13__c + Cell_22__c + Cell_31__c + Cell_40__c = 5, 1, 0)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Bingo Count</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

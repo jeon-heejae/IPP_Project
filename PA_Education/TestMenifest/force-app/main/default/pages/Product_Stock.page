@@ -1,0 +1,124 @@
+<!--
+
+-->
+<apex:page controller="ProductManage" tabstyle="TabProductManage__tab">
+	<head>
+		<apex:stylesheet value="{!URLFOR($Resource.CssMenu, '/menu_source/styles.css')}" />
+		<apex:stylesheet value="{!URLFOR($Resource.jquery_ui, 'themes/base/jquery-ui.css')}"/>
+		<style>
+		input#InputBarcode {
+			ime-mode: disabled;
+		}
+		</style>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'jquery-1.10.2.js')}"/>
+		<script type="text/javascript" src="{!URLFOR($Resource.jquery_ui,'ui/jquery-ui.js')}"/>
+		
+		<script type="text/javascript">
+			var $j = jQuery.noConflict();
+			$j(function() {
+				$j( "#dialog-modal" ).dialog({
+					autoOpen: true,
+					height: 140,
+					modal: true,
+					open: function(event, ui) { $j(".ui-dialog-titlebar-close").hide(); }
+				});
+			});
+		</script>
+		<script type="text/javascript">
+			function barcode_select(){
+				var text_input = document.getElementById ('InputBarcode');
+				text_input.focus();
+				text_input.select();
+			}
+			function showDialog(){
+				$j("#dialog-modal").dialog( "open" );
+				return false;
+			}
+			
+			function hideDialog(){
+				$j("#dialog-modal").dialog( "close" );
+				document.getElementById('InputBarcode').focus();
+				barcode_select();
+				return false;
+			}
+			function formInit() {
+				hideDialog();
+			}
+			
+			function focus(targetId){
+				document.getElementById(targetId).focus();
+			}
+			
+			try {
+				window.addEventListener('load',formInit,false);
+			}catch(e){
+				window.attachEvent('onload',formInit);
+			}
+		</script>
+		<script type="text/javascript">
+			function KeyPressIvName(e, strSeq, targetId){
+				var keynum;
+				if(window.event){		// IE
+					keynum = e.keyCode;
+				}
+				if(keynum == 13){
+					InputBarcodeForPage(document.getElementById('InputBarcode').value, strSeq);
+					return false;
+				}
+			}
+		</script>
+	</head>
+	<apex:form id="mainFrm">
+		<apex:actionStatus onstart="showDialog();" onstop="hideDialog();"  id="IngStatus"/>
+		
+		<!-- 바코드 등록 -->
+        <apex:actionFunction action="{!InputBarcodeForPage}" name="InputBarcodeForPage" rerender="mainFrm" status="IngStatus">
+			<apex:param name="getVal" assignTo="{!InputBarcodeGetVal}" value="" />
+            <apex:param name="seq" assignTo="{!InputBarcodeSeq}" value="" />
+        </apex:actionFunction>
+		
+		<apex:sectionHeader title="제품관리" />
+		<apex:pageMessages escape="false" />
+		<div id='cssmenu'>
+			<ul>
+			   <li class=''><a href='/apex/Product_Search'><span>제품 조회</span></a></li>
+			   <!-- <li class=''><a href='/apex/Product_Box'><span>제품 Box 처리</span></a></li> -->
+			   <li class='active last'><a href='#'><span>입고 처리</span></a></li>			   
+			   <li class='last'><a href='/apex/Product_Barcode'><span>제품 Box 바코드 출력</span></a></li>
+			</ul>
+		</div>
+		<apex:pageBlock title="입고처리" id="pgBlock">
+			<b>{!$ObjectType.Inventory__c.Fields.Warehouse__c.Label}</b> 
+			<!-- <apex:inputField value="{!SearchIV.Warehouse__c}" /> -->
+			<apex:selectlist value="{!sel_warehouse}" size="1">
+            	<apex:selectOptions value="{!Warehouse}" />
+            </apex:selectlist>
+			<br/>
+			<br/>
+		    <apex:pageBlockTable value="{!cIVs}" var="item" id="pgBlockTable">
+		    	<apex:column headerValue="Seq" value="{!item.Seq}"/>
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Name.Label}" id="clBar">
+		    		<apex:outputField id="IV_Name" value="{!item.IV.Name}" rendered="{!item.state<>1}" />
+		    		<apex:outputPanel rendered="{!item.state==1}">
+			    		<input type="text" id="InputBarcode" 
+			    			value="{!InputBarcodeGetVal}"
+			    			onkeypress="return KeyPressIvName(event, '{!item.Seq}', '{!$Component.IV_Name}');"
+			    		/>
+		    		</apex:outputPanel>
+		    	</apex:column>
+		    	
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Item__c.Label}" value="{!item.IV.Item__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.CntInventory2__c.Label}" value="{!item.IV.CntInventory2__c}"/>
+		    	<apex:column headerValue="{!$ObjectType.Inventory__c.Fields.Warehouse__c.Label}" value="{!item.IV.Warehouse__c}"/>
+		    </apex:pageBlockTable>
+			<apex:pageBlockButtons location="bottom">
+				<apex:commandButton value="입고처리" action="{!StockProcess}" rendered="{! !IsAllSaved}" status="IngStatus"/>
+			</apex:pageBlockButtons>
+		</apex:pageBlock>
+	</apex:form>
+
+	<div id="dialog-modal" title="처리중...">
+		<p>처리중입니다.</p>
+	</div>
+
+</apex:page>

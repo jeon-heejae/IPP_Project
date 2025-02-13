@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DoNotFill_WorkingTime</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(OR( ISPICKVAL(HolidayWork__r.Status__c, &apos;계획작성중&apos;) ,
+        ISPICKVAL(HolidayWork__r.Status__c, &apos;계획승인요청&apos;)) ,
+    NOT( ISPICKVAL( WorkingTime__c,  &apos;&apos;))
+        )</errorConditionFormula>
+    <errorDisplayField>WorkingTime__c</errorDisplayField>
+    <errorMessage>계획승인이 완료된 후에 근무시간을 작성할 수 있습니다.</errorMessage>
+</ValidationRule>

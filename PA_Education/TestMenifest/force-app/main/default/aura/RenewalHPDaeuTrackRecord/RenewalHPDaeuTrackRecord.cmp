@@ -1,0 +1,171 @@
+<!--
+ - @description       : Trek Records of Homepage Renewal Project
+ - @author            : Chan Kang
+ - @group             : Boundary
+ - Modifications Log
+ - Ver   Date          Author             Modification
+ - 1.0   2021.12.24   Chan Kang        Initial Version
+   1.1   2022.04.17   Myeonghwan Kim   Load english data conditionally
+                                       Add event handler to load english data
+                                       Add isEnglish parameter to APEX callout
+-->
+
+<aura:component
+    implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes"
+    access="global" controller="RenewalHPDaeuTrekRecord">
+    <aura:attribute name="trekRecords" type="List" />
+    <aura:attribute name="trekRecordItem" type="TrekRecord__c" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:attribute name="isEnglish" type="boolean" access="global" default="false" />
+    <aura:handler event="c:i18nEvent" action="{!c.init}" />
+    <aura:attribute name="hasMore" type="Boolean" />
+    <section>
+        <div class="contents" id="record">
+            <p class="pageTitle">
+                Track Record
+            </p>
+
+
+            <aura:if isTrue="{!v.isEnglish}">
+
+                <!--                English -->
+                <h1 class="is_pc">
+                    Daeu Nextier has variety <b class="textDeepBlue">success stories</b> through
+                    <b class="textDeepBlue">valuable cooperation with our customers.</b>
+                </h1>
+                <h1 class="is_mobile">
+                    Daeu Nextier has variety <b class="textDeepBlue">success stories</b> through
+                    <b class="textDeepBlue">valuable cooperation with our customers.</b>
+                </h1>
+                <h2 class="is_pc">
+                    We have various success stories in all fields with:
+                    <ul class="list">
+                        <li>System Strategy Establishment</li>
+                        <li>Implementation &amp; Operation</li>
+                    </ul>
+                    For customers’ strategic Digital Transformation,<br />
+                    our experts build not only Salesforce platform CRM system,<br />
+                    but also support customers' core business area.
+                </h2>
+                <h2 class="is_mobile">
+                    We have various success stories in all fields with:
+                    <ul class="list">
+                        <li>System Strategy Establishment</li>
+                        <li>Implementation &amp; Operation</li>
+                    </ul>
+                    For customers’ strategic Digital Transformation,<br />
+                    our experts build not only Salesforce platform CRM system,<br />
+                    but also support customers' core business area.
+                </h2>
+
+                <!--                Korean -->
+                <aura:set attribute="else">
+                    <h1 class="is_pc">
+                        <b class="textDeepBlue">우리는</b><br />
+                        <b class="textDeepBlue">고객과 구성원들의 값진 협업</b>으로 달성한<br />
+                        <b class="textDeepBlue">다양한 성공 사례</b>를 가지고 있습니다.<br />
+                    </h1>
+                    <h1 class="is_mobile">
+                        <b class="textDeepBlue">우리는</b><br />
+                        <b class="textDeepBlue">고객과 구성원들의 값진 협업</b>으로 달성한<br />
+                        <b class="textDeepBlue">다양한 성공 사례</b>를 가지고 있습니다.<br />
+                    </h1>
+                    <h2 class="is_pc">
+                        시스템 전략수립, 구축과 운영 등 전 분야에 걸친 다양한 성공사례를 가지고 있습니다.<br />
+                        고객의 Digital Transformation 전략이 온전히 실현되도록, <br />
+                        Salesforce Platform 기반의 CRM 단순 구현에 그치지 않고<br />
+                        고객의 핵심 비즈니스 영역까지 지원하는 전략과 시스템을 구현해오고 있습니다. <br />
+                    </h2>
+                    <h2 class="is_mobile">
+                        시스템 전략수립, 구축과 운영 등 전 분야에 걸친 다양한 성공사례를 가지고 있습니다.<br />
+                        고객의 Digital Transformation 전략이 온전히 실현되도록, <br />
+                        Salesforce Platform 기반의 CRM 단순 구현에 그치지 않고<br />
+                        고객의 핵심 비즈니스 영역까지 지원하는 전략과 시스템을 구현해오고 있습니다. <br />
+                    </h2>
+                </aura:set>
+            </aura:if>
+
+
+            <div class="records">
+                <aura:if isTrue="{!v.isEnglish}">
+                    <aura:iteration items="{!v.trekRecords}" var="trekRecord">
+                        <div class="recordsItem" id="{!trekRecord.Id}" onclick="{!c.showRecordModal}">
+                            <p class="recordsSubTitle">{!trekRecord.Account__r.NameEng__c}</p>
+                            <p class="recordsTitle">{!trekRecord.ProjectNameEng__c}</p>
+                            <p class="recordsYear">{!trekRecord.StartYear__c}</p>
+                        </div>
+                    </aura:iteration>
+                    <aura:set attribute="else">
+                        <aura:iteration items="{!v.trekRecords}" var="trekRecord">
+                            <div class="recordsItem" id="{!trekRecord.Id}" onclick="{!c.showRecordModal}">
+                                <p class="recordsSubTitle">{!trekRecord.Account__r.Name}</p>
+                                <p class="recordsTitle">{!trekRecord.ProjectName__c}</p>
+                                <p class="recordsYear">{!trekRecord.StartYear__c}</p>
+                            </div>
+                        </aura:iteration>
+                    </aura:set>
+                </aura:if>
+            </div>
+            <div style="text-align: center;">
+                <a style="display: inline-block;" class="loadMore" href="./trek-records-list">
+                    <aura:if isTrue="{!v.isEnglish}">
+                        View More
+                        <aura:set attribute="else">
+                            더 보기
+                        </aura:set>
+                    </aura:if>
+                </a>
+            </div>
+        </div>
+        <div class="modal-background" aura:id="modal" onclick="{!c.hideRecordModal}">
+            <div class="modal">
+                <aura:renderIf isTrue="{!not(empty(v.trekRecordItem))}">
+                    <aura:if isTrue="{!v.isEnglish}">
+                        <header>
+                            <h2>{!v.trekRecordItem.Account__r.NameEng__c}</h2>
+                            <button class="close" onclick="{!c.hideRecordModal}">
+                                &times;
+                            </button>
+                            <div class="titleArea">
+                                <h1>{!v.trekRecordItem.ProjectNameEng__c}</h1>
+                                <h2>{!v.trekRecordItem.StartYear__c}</h2>
+                            </div>
+                        </header>
+                        <section>
+                            <h1>Project Challenge</h1>
+                            <p>
+                                <lightning:formattedRichText value="{!v.trekRecordItem.ChallengeEng__c}" />
+                            </p>
+                            <h1>Our Approach</h1>
+                            <p>
+                                <lightning:formattedRichText value="{!v.trekRecordItem.OurApproachEng__c}" />
+                            </p>
+                        </section>
+                        <aura:set attribute="else">
+                            <header>
+                                <h2>{!v.trekRecordItem.Account__r.Name}</h2>
+                                <button class="close" onclick="{!c.hideRecordModal}">
+                                    &times;
+                                </button>
+                                <div class="titleArea">
+                                    <h1>{!v.trekRecordItem.ProjectName__c}</h1>
+                                    <h2>{!v.trekRecordItem.StartYear__c}</h2>
+                                </div>
+                            </header>
+                            <section>
+                                <h1>Project Challenge</h1>
+                                <p>
+                                    <lightning:formattedRichText value="{!v.trekRecordItem.Challenge__c}" />
+                                </p>
+                                <h1>Our Approach</h1>
+                                <p>
+                                    <lightning:formattedRichText value="{!v.trekRecordItem.OurApproach__c}" />
+                                </p>
+                            </section>
+                        </aura:set>
+                    </aura:if>
+                </aura:renderIf>
+            </div>
+        </div>
+    </section>
+</aura:component>

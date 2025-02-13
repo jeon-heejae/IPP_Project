@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prescription__c</fullName>
+    <externalId>false</externalId>
+    <inlineHelpText>시효기간이 있는 경우에만 숫자를 입력하세요</inlineHelpText>
+    <label>시효기간(제조일로부터 개월수)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

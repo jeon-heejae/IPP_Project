@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Type_Equal_to_null</fullName>
+    <active>true</active>
+    <description>타입이 Null일 경우 에러</description>
+    <errorConditionFormula>or(
+ ISPICKVAL(HolidayAction_Type__c,&apos;&apos;),
+ ISPICKVAL(HolidayAction_Type__c,&quot;&quot;)
+)</errorConditionFormula>
+    <errorMessage>Type이 선택되지 않았습니다.</errorMessage>
+</ValidationRule>

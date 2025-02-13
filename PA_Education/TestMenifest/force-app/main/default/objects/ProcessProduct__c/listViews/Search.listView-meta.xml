@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Search</fullName>
+    <columns>NAME</columns>
+    <columns>ProcessMachine__c</columns>
+    <columns>TraceabilityAssemsetId__c</columns>
+    <columns>TraceabilitySmtsetId__c</columns>
+    <columns>Smtset_Key__c</columns>
+    <columns>ProcessInfo__c</columns>
+    <columns>Date__c</columns>
+    <columns>State__c</columns>
+    <columns>CntProduct__c</columns>
+    <columns>PartList__c</columns>
+    <columns>PartListSimple__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Smtset_Key__c</field>
+        <operation>notEqual</operation>
+    </filters>
+    <filters>
+        <field>ProcessProductDetailCount__c</field>
+        <operation>equals</operation>
+        <value>0</value>
+    </filters>
+    <label>검색</label>
+    <language>ko</language>
+</ListView>

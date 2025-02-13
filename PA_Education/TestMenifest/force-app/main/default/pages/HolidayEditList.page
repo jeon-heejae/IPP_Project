@@ -1,0 +1,87 @@
+<apex:page controller="HolidayEditListController">
+    <apex:sectionHeader title="Holiday manage." subtitle="Holiday Info" description="View Holiday info. Add or deduct day, Create, Add given days over company. "/>
+    <apex:pageMessages id="msg"/>
+    <apex:form >
+        <apex:pageBlock title="Global Action">
+            <apex:pageBlockSection columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel >
+                    <apex:commandButton value="Create" action="{!doCreate}" rerender="list,msg"/>
+                    <apex:outputLabel value="Create new employee's Holiday Info."/>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel >
+                    <apex:commandButton value="Send" action="{!doSend}" rerender="msg,list"/>
+                    <apex:outputLabel value="Send Holiday Information Email for checked employee."/>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel >
+                    <apex:commandButton value="Reset" action="{!doResetUnpaid}" rerender="list,msg"/>
+                    <apex:outputLabel value="Reset checked employee's Unpaid-Holiday count."/>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel >
+                    <apex:commandButton value="Reset" action="{!doResetUncountable}" rerender="list,msg"/>
+                    <apex:outputLabel value="Reset checked employee's Uncountable-Holiday count."/>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel >
+                        <apex:commandButton value="Add" action="{!doAdd}" rerender="list,msg"/>
+                        <apex:outputLabel value="Add given day for checked employee."/>
+                        <apex:outputLabel >Days : </apex:outputLabel>
+                        <apex:inputText value="{!addDays}" style="width:20px;"/>
+                        <apex:outputLabel >Reason : </apex:outputLabel>
+                        <apex:inputText value="{!addDesc }" style="width:200px;"/>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputPanel >
+                        <apex:inputCheckbox style="padding:20px" value="{!resignChk}" onclick="isChecked()"/>                                                        
+                        <apex:actionFunction name="isChecked" rerender="list,msg,p1" action="{!search}" />
+                        <apex:outputText value="{!$Label.Resigner}" style="font-weight:bold;font-size:13px"/>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+
+        <apex:pageBlock title="List Holiday Info" id="list">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="{!chkStr}" action="{!checkChange}" rerender="list"/>
+                <apex:commandButton value="Save" action="{!doSave}" rerender="list,msg"/>
+                <apex:commandButton value="Cancel" Action="{!doCancel}"/>   
+            </apex:pageBlockButtons>
+            <apex:outputPanel id="p1">
+            <apex:pageBlockTable value="{!hldChkLst}" var="hldChk">
+                <apex:column headerValue="Check">
+                    <apex:inputCheckbox value="{!hldChk.chk}"/>
+                </apex:column>
+                <apex:column headerValue="{!$ObjectType.Holiday__c.fields.Name.Label}" >
+                    <apex:outputLink value="/{!hldChk.hld.Id}">{!hldChk.hld.name}</apex:outputLink>
+                </apex:column>
+                <apex:column headerValue="{!$ObjectType.Holiday__c.fields.Holiday_User__c.Label}" value="{!hldChk.hld.Holiday_User__c}"/>
+                <apex:column headerValue="{!$ObjectType.Holiday__c.fields.Holiday_IsActive__c.Label}" value="{!hldChk.hld.Holiday_IsActive__c}"/>
+                <apex:column headerValue="{!$ObjectType.Holiday__c.fields.Holiday_JoinDate__c.Label}">
+                    <apex:inputField value="{!hldChk.hld.Holiday_JoinDate__c}" />
+                </apex:column>
+                <apex:column headerValue="{!$ObjectType.Holiday__c.fields.Holiday_IsAnnualleave__c.Label}" value="{!hldChk.hld.Holiday_IsAnnualleave__c}"/>
+                <apex:column headerValue="{!$ObjectType.Holiday__c.fields.Holiday_PeriodEnd__c.Label}" value="{!hldChk.hld.Holiday_PeriodEnd__c}"/>
+                <apex:column headerValue="{!$ObjectType.Holiday__c.fields.Holiday_WorkingYears__c.Label}" value="{!hldChk.hld.Holiday_WorkingYears__c}"/>
+                <apex:column headerValue="{!$ObjectType.Holiday__c.fields.Holiday_NoticeLevel__c.Label}" value="{!hldChk.hld.Holiday_NoticeLevel__c}"/>
+                <apex:column headerValue="{!$ObjectType.Holiday__c.fields.Holiday_Calculated__c.Label}" value="{!hldChk.hld.Holiday_Calculated__c}"/>
+                <apex:column headerValue="{!$ObjectType.Holiday__c.fields.Holiday_GivenHolidays__c.Label}" value="{!hldChk.hld.Holiday_GivenHolidays__c}"/>
+                <apex:column headerValue="{!$ObjectType.Holiday__c.fields.Holiday_UseDays__c.Label}" value="{!hldChk.hld.Holiday_UseDays__c}"/>
+                <apex:column headerValue="{!$ObjectType.Holiday__c.fields.Holiday_Remain__c.Label}" value="{!hldChk.hld.Holiday_Remain__c}"/>
+                <apex:column headerValue="{!$ObjectType.Holiday__c.fields.Holiday_Uncountable__c.Label}" value="{!hldChk.hld.Holiday_Uncountable__c}"/>
+                <apex:column headerValue="{!$ObjectType.Holiday__c.fields.Holiday_Unpaid__c.Label}" >
+                    <apex:inputField value="{!hldChk.hld.Holiday_Unpaid__c}"/>
+                </apex:column>
+                <apex:column headerValue="{!$ObjectType.Holiday__c.fields.Holiday_LastActivity__c.Label}" value="{!hldChk.hld.Holiday_LastActivity__c}"/>
+            </apex:pageBlockTable>   
+            </apex:outputPanel>     
+        </apex:pageBlock> 
+    </apex:form>
+</apex:page>

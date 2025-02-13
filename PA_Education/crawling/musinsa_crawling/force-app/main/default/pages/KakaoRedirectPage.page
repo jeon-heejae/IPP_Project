@@ -1,0 +1,7 @@
+<apex:page controller="KakaoAuthController" action="{!processAuthorizationCode}" showHeader="false" sidebar="false">
+    <h1>Processing Authorization Code...</h1>
+    <p>If you see this message, the code is being processed in the constructor. 
+        code: {!authorizationCode}
+        
+    </p>
+</apex:page>

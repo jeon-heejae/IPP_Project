@@ -1,0 +1,64 @@
+<aura:component controller="ProfilePictureController" implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    
+    <!-- Id of the Record the page hosting this component is showing -->
+    <aura:attribute name="recordId" type="Id"/>
+    
+    <!-- 
+    <aura:attribute name="record" type="Object" 
+                    description="The record object to be displayed"/>
+    <aura:attribute name="simpleRecord" type="Object" 
+                    description="A simplified view record object to be displayed"/>
+    <aura:attribute name="recordError" type="String" 
+                    description="An error message bound to force:recordData"/>
+    <force:recordData aura:id="record"
+                      layoutType="FULL"
+                      recordId="{!v.recordId}"
+                      targetError="{!v.recordError}"
+                      targetRecord="{!v.record}"
+                      targetFields ="{!v.simpleRecord}"
+                      mode="VIEW"/>
+     -->
+
+    <aura:attribute name="pictureSrc" type="String" 
+            default="https://s3-us-west-1.amazonaws.com/sfdc-demo/image-placeholder.png"/>
+
+    <aura:attribute name="message" type="String" default="Drag profile picture here"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}" />
+    
+    <lightning:card>
+        <div class="slds-grid slds-gutters slds-align_absolute-center">
+            <div ondragover="{!c.onDragOver}" ondrop="{!c.onDrop}" class="slds-col">
+                <img src="{!v.pictureSrc}" class="slds-border_top slds-border_bottom slds-border_left slds-border_right"/>
+                <p>{!v.message}</p>
+            </div>
+            <div class="slds-col">
+                <div class="slds-text-align_left slds-box">
+                    <lightning:recordViewForm recordId="{!v.recordId}" objectApiName="Employee__c">
+
+                            <lightning:recordForm 
+                                                  recordId="{!v.recordId}" 
+                                                  objectApiName="Employee__c"
+                                                  layoutType="Compact" 
+                                                  columns="1"
+                                                  mode="READONLY" /> 
+
+                    </lightning:recordViewForm>
+                </div>
+            </div> 
+        </div>
+        <!--
+                 -->
+
+        <aura:set attribute="footer" >
+            <div class="slds-grid slds-gutters slds-align_absolute-center">
+                <div class="slds-col">
+                    <input type="file" class="file" aura:id="file" onchange="{!c.save}"/>
+                </div>
+                <div class="slds-col">
+                </div>
+            </div>           
+        </aura:set>
+    </lightning:card>
+    
+</aura:component>

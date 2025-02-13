@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ProjectSummary__c</fullName>
+    <inlineHelpText>프로젝트 배경, 목적, 범위, 추진방안, 특이사항 등을 간략히 기재한다.</inlineHelpText>
+    <label>프로젝트 개요</label>
+    <length>32768</length>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackTrending>false</trackTrending>
+    <type>Html</type>
+    <visibleLines>10</visibleLines>
+</CustomField>

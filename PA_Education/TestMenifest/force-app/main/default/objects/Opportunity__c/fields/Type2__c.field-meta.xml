@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Type2__c</fullName>
+    <label>영업기회 제품군</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Type1__c</controllingField>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>클라우드 전환 컨설팅</fullName>
+                <default>false</default>
+                <label>클라우드 전환 컨설팅</label>
+            </value>
+            <value>
+                <fullName>ISP 컨설팅</fullName>
+                <default>false</default>
+                <label>ISP 컨설팅</label>
+            </value>
+            <value>
+                <fullName>소셜미디어 분석 리포팅</fullName>
+                <default>false</default>
+                <label>소셜미디어 분석 리포팅</label>
+            </value>
+            <value>
+                <fullName>변화관리</fullName>
+                <default>false</default>
+                <label>변화관리</label>
+            </value>
+            <value>
+                <fullName>빅데이터 컨설팅</fullName>
+                <default>false</default>
+                <label>빅데이터 컨설팅</label>
+            </value>
+            <value>
+                <fullName>기타</fullName>
+                <default>false</default>
+                <label>기타</label>
+            </value>
+            <value>
+                <fullName>Sales</fullName>
+                <default>false</default>
+                <label>Sales</label>
+            </value>
+            <value>
+                <fullName>Service</fullName>
+                <default>false</default>
+                <label>Service</label>
+            </value>
+            <value>
+                <fullName>Marketing</fullName>
+                <default>false</default>
+                <label>Marketing</label>
+            </value>
+            <value>
+                <fullName>Force.com</fullName>
+                <default>false</default>
+                <label>Force.com</label>
+            </value>
+            <value>
+                <fullName>Community</fullName>
+                <default>false</default>
+                <label>Community</label>
+            </value>
+            <value>
+                <fullName>복합 (Sales+Service+Force.com 등)</fullName>
+                <default>false</default>
+                <label>복합 (Sales+Service+Force.com 등)</label>
+            </value>
+            <value>
+                <fullName>클라우드 관리</fullName>
+                <default>false</default>
+                <label>클라우드 관리</label>
+            </value>
+            <value>
+                <fullName>IFRS 관리</fullName>
+                <default>false</default>
+                <label>IFRS 관리</label>
+            </value>
+            <value>
+                <fullName>그 외</fullName>
+                <default>false</default>
+                <label>그 외</label>
+            </value>
+            <value>
+                <fullName>Salesforce Admin 교육</fullName>
+                <default>false</default>
+                <label>Salesforce Admin 교육</label>
+            </value>
+            <value>
+                <fullName>Salesforce Development 교육</fullName>
+                <default>false</default>
+                <label>Salesforce Development 교육</label>
+            </value>
+            <value>
+                <fullName>Radian6 사용자 교육</fullName>
+                <default>false</default>
+                <label>Radian6 사용자 교육</label>
+            </value>
+            <value>
+                <fullName>인사/재무</fullName>
+                <default>false</default>
+                <label>인사/재무</label>
+            </value>
+            <value>
+                <fullName>부품추적성</fullName>
+                <default>false</default>
+                <label>부품추적성</label>
+            </value>
+            <value>
+                <fullName>POS</fullName>
+                <default>false</default>
+                <label>POS</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>전략/프로세스</controllingFieldValue>
+            <valueName>클라우드 전환 컨설팅</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>전략/프로세스</controllingFieldValue>
+            <valueName>ISP 컨설팅</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>전략/프로세스</controllingFieldValue>
+            <valueName>소셜미디어 분석 리포팅</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>전략/프로세스</controllingFieldValue>
+            <valueName>변화관리</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>전략/프로세스</controllingFieldValue>
+            <valueName>빅데이터 컨설팅</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>전략/프로세스</controllingFieldValue>
+            <valueName>기타</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce 구축</controllingFieldValue>
+            <valueName>Sales</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce 구축</controllingFieldValue>
+            <valueName>Service</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce 구축</controllingFieldValue>
+            <valueName>Marketing</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce 구축</controllingFieldValue>
+            <valueName>Force.com</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce 구축</controllingFieldValue>
+            <valueName>Community</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salesforce 구축</controllingFieldValue>
+            <valueName>복합 (Sales+Service+Force.com 등)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>시스템 관리</controllingFieldValue>
+            <valueName>클라우드 관리</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>시스템 관리</controllingFieldValue>
+            <valueName>IFRS 관리</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>시스템 관리</controllingFieldValue>
+            <valueName>그 외</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>교육</controllingFieldValue>
+            <valueName>Salesforce Admin 교육</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>교육</controllingFieldValue>
+            <valueName>Salesforce Development 교육</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>교육</controllingFieldValue>
+            <valueName>Radian6 사용자 교육</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>솔루션</controllingFieldValue>
+            <valueName>인사/재무</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>솔루션</controllingFieldValue>
+            <valueName>부품추적성</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>솔루션</controllingFieldValue>
+            <valueName>POS</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

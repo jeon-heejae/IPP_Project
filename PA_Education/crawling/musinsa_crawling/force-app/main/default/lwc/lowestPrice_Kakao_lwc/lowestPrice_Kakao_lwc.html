@@ -1,0 +1,35 @@
+<template>
+    <lightning-card title="최저가 상품 알림" icon-name="action:announcement">
+        <lightning-input type="text" label="검색어 입력" value={query} onchange={handleQueryChange}></lightning-input>
+	    <lightning-button label="카카오 로그인" onclick={openKakaoLogin}></lightning-button>
+        <lightning-button label="카카오톡 메시지 전송" onclick={handleSend} disabled={isLoading}></lightning-button>
+        <lightning-button label="매일 알림 받기" onclick={handleRegister}></lightning-button>
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="로딩 중"></lightning-spinner>
+        </template>
+
+        <lightning-tabset>
+            <lightning-tab label="Request Body">
+                <div class="textarea-container">
+                    <!-- 텍스트 영역 -->
+                    <textarea
+                        class="custom-textarea"
+                        readonly
+                    >{requestBody}</textarea>
+            
+                </div>
+            </lightning-tab>
+            <lightning-tab label="Response Body">
+                <div class="textarea-container">
+                    <!-- 텍스트 영역 -->
+                    <textarea
+                        class="custom-textarea"
+                        readonly
+                    >{responseBody}</textarea>
+            
+                </div>
+            </lightning-tab>
+        </lightning-tabset>
+    
+    </lightning-card>
+</template>

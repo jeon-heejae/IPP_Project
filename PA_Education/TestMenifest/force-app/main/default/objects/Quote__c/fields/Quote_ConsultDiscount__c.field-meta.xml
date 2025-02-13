@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Quote_ConsultDiscount__c</fullName>
+    <description>Sum() QuoteItem_ConsultDiscountAmount__c RecordType = Consult</description>
+    <inlineHelpText>단위:원, VAT 별도</inlineHelpText>
+    <label>할인(컨설팅)</label>
+    <summarizedField>QuoteItem__c.QuoteItem_ConsultDiscountAmount__c</summarizedField>
+    <summaryFilterItems>
+        <field>QuoteItem__c.RecordTypeId</field>
+        <operation>equals</operation>
+        <value>컨설팅</value>
+    </summaryFilterItems>
+    <summaryForeignKey>QuoteItem__c.QuoteItem_Quote__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

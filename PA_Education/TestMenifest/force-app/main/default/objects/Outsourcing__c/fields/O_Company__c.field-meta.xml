@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>O_Company__c</fullName>
+    <deleteConstraint>Restrict</deleteConstraint>
+    <description>외주 계약사</description>
+    <inlineHelpText>계약사 정보</inlineHelpText>
+    <label>외주계약사</label>
+    <referenceTo>Account</referenceTo>
+    <relationshipLabel>외주인력</relationshipLabel>
+    <relationshipName>O_Company_R</relationshipName>
+    <required>true</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Detail_Key__c</fullName>
+    <description>인터페이스 상세항목에서 항목구분이 OUT이면서 소스필드타입이 MAP 또는 LIST인 경우인 필드 항목ID을 기재</description>
+    <externalId>false</externalId>
+    <inlineHelpText>인터페이스 상세항목에서 항목구분이 OUT이면서 소스필드타입이 MAP 또는 LIST인 경우인 필드 항목ID을 기재</inlineHelpText>
+    <label>I/F 상세항목ID</label>
+    <length>100</length>
+    <required>true</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

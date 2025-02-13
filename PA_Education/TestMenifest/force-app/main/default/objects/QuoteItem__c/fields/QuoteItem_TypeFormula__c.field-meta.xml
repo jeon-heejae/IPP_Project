@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>QuoteItem_TypeFormula__c</fullName>
+    <description>QuoteItem_ConsultType__c의 값이 늘어날때마다 수식을 추가해야함
+Trigger로 처리 할 수 있으나 일단 필드 설정만으로 해결</description>
+    <externalId>false</externalId>
+    <formula>HYPERLINK(&apos;/&apos;&amp;Id,  BLANKVALUE(QuoteItem_TrainingDescription__c,BLANKVALUE( QuoteItem_LicenseType__c ,  
+IF(INCLUDES(QuoteItem_ConsultType__c,&quot;Project Manager&quot;),&quot;Project Manager;&quot;,&quot;&quot;)&amp;
+IF(INCLUDES(QuoteItem_ConsultType__c,&quot;Project Leader&quot;),&quot;Project Leader;&quot;,&quot;&quot;)&amp;
+IF(INCLUDES(QuoteItem_ConsultType__c,&quot;Business Analyst&quot;),&quot;Business Analyst;&quot;,&quot;&quot;)&amp;
+IF(INCLUDES(QuoteItem_ConsultType__c,&quot;SFDC Administrator&quot;),&quot;SFDC Administrator;&quot;,&quot;&quot;)&amp;
+IF(INCLUDES(QuoteItem_ConsultType__c,&quot;SFDC Platform Developer&quot;),&quot;SFDC Platform Developer;&quot;,&quot;&quot;)&amp;
+IF(INCLUDES(QuoteItem_ConsultType__c,&quot;SFDC Consultant&quot;),&quot;SFDC Consultant;&quot;,&quot;&quot;)&amp;
+IF(INCLUDES(QuoteItem_ConsultType__c,&quot;SFDC Pardot Consultant&quot;),&quot;SFDC Pardot Consultant;&quot;,&quot;&quot;)&amp;
+IF(INCLUDES(QuoteItem_ConsultType__c,&quot;SFDC Sales Cloud Consultant&quot;),&quot;SFDC Sales Cloud Consultant;&quot;,&quot;&quot;)&amp;
+IF(INCLUDES(QuoteItem_ConsultType__c,&quot;SFDC Service Cloud Consultant&quot;),&quot;SFDC Service Cloud Consultant;&quot;,&quot;&quot;)&amp;
+IF(INCLUDES(QuoteItem_ConsultType__c,&quot;SFDC Marketing Cloud Consultant&quot;),&quot;SFDC Marketing Cloud Consultant;&quot;,&quot;&quot;)&amp;
+IF(INCLUDES(QuoteItem_ConsultType__c,&quot;SFDC Field Service Lightning Consultant&quot;),&quot;SFDC Field Service Lightning Consultant;&quot;,&quot;&quot;)&amp;
+IF(INCLUDES(QuoteItem_ConsultType__c,&quot;SFDC System Architect&quot;),&quot;SFDC System Architect;&quot;,&quot;&quot;)&amp;
+IF(INCLUDES(QuoteItem_ConsultType__c,&quot;SFDC Technical Architect&quot;),&quot;SFDC Technical Architect;&quot;,&quot;&quot;)&amp;
+IF(INCLUDES(QuoteItem_ConsultType__c,&quot;SFDC Application Architect&quot;),&quot;SFDC Application Architect;&quot;,&quot;&quot;)&amp;
+IF(INCLUDES(QuoteItem_ConsultType__c,&quot;I/F Specialist&quot;),&quot;I/F Specialist;&quot;,&quot;&quot;)&amp;
+IF(INCLUDES(QuoteItem_ConsultType__c,&quot;Migration Expert&quot;),&quot;Migration Expert;&quot;,&quot;&quot;)&amp;
+IF(INCLUDES(QuoteItem_ConsultType__c,&quot;Front-end Developer&quot;),&quot;Front-end Developer;&quot;,&quot;&quot;)&amp;
+IF(INCLUDES(QuoteItem_ConsultType__c,&quot;Mobile Developer&quot;),&quot;Mobile Developer;&quot;,&quot;&quot;)&amp;
+IF(INCLUDES(QuoteItem_ConsultType__c,&quot;App Developer&quot;),&quot;App Developer;&quot;,&quot;&quot;)&amp;
+IF(INCLUDES(QuoteItem_ConsultType__c,&quot;Web Publisher&quot;),&quot;Web Publisher;&quot;,&quot;&quot;)&amp;
+IF(INCLUDES(QuoteItem_ConsultType__c,&quot;Business Architecture&quot;),&quot;Business Architecture;&quot;,&quot;&quot;)&amp;
+IF(INCLUDES(QuoteItem_ConsultType__c,&quot;Platform Architecture&quot;),&quot;Platform Architecture;&quot;,&quot;&quot;)&amp;
+IF(INCLUDES(QuoteItem_ConsultType__c,&quot;Web Designer&quot;),&quot;Web Designer;&quot;,&quot;&quot;))))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>구분</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

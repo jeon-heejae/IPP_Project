@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BusinessManager__c</fullName>
+    <defaultValue>false</defaultValue>
+    <inlineHelpText>작성자가 사업부장일 경우에 체크</inlineHelpText>
+    <label>사업부장</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

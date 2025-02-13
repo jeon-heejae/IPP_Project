@@ -1,0 +1,376 @@
+.THIS {
+	width: 100%;
+    height: auto;
+    background: #ffffff;
+}
+
+.THIS .contents {
+    width: 1280px;
+    height: auto;
+    margin: 0 auto;
+    padding: 120px 0;
+}
+
+.THIS .loadMore {
+    padding: 17.5px 96px;
+    background: none;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 32px;
+    cursor: pointer;
+}
+
+.THIS .pageTitle {
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 67.2px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.85);
+}
+
+.THIS .jobPositionInformations {
+    display: grid;
+    grid-auto-rows: auto;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    margin-top: 80px;
+}
+
+.THIS .jobPositionInformations > div {
+    box-shadow: 0px 2px 12px 2px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 24px;
+    position: relative;
+    padding-bottom: 64px;
+    cursor: pointer;
+}
+
+.THIS .jobPositionInformations > div .clickArea {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.THIS .clickArea.withFooter {
+    bottom: 65px !important;
+}
+
+.THIS .jobPositionInformations > div .titleArea {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 24px;
+}
+
+.THIS .jobPositionInformations > div .title {
+    font-size: 20px;
+    line-height: 28px;
+    color: rgba(0, 0, 0, 0.85);
+    flex: 1;
+    overflow: hidden;
+}
+
+.THIS .jobPositionInformations > div .status {
+    font-size: 20px;
+    line-height: 28px;
+    color: rgba(0, 0, 0, 0.85);
+    margin-left: 12px;
+}
+
+.THIS .jobPositionInformations > div .status.disabled {
+    color: rgba(0, 0, 0, 0.2);
+}
+
+.THIS .jobPositionInformations > div footer {
+    padding: 17px 0;
+    width: 100%;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.THIS .jobPositionInformations > div footer a {
+    display: block;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 400;
+    color: #179FE0;
+    text-decoration: none;
+}
+
+.THIS .jobPositionInformations > div footer button {
+    width: 100%;
+    display: block;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 400;
+    color: #179FE0;
+    text-decoration: none;
+    border: none;
+}
+
+.THIS .infoItem {
+    width: 50%;
+    display: inline-block;
+    margin-bottom: 24px;
+}
+
+.THIS .infoItem .itemTitle {
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.4);
+    margin-bottom: 6px;
+}
+
+.THIS .infoItem .itemContent {
+    font-size: 15px;
+    line-height: 21px;
+    color: rgba(0, 0, 0, 0.85);
+}
+
+.THIS hr {
+    width: 100%;
+    height: 1px;
+    background: #efefef;
+    margin-top: 0;
+    margin-bottom: 24px;
+    border-top: none;
+}
+
+.THIS .modal-background {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 99;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.THIS .modal-background.active {
+    display: flex;
+}
+
+.THIS .modal {
+    width: 80%;
+    height: 90%;
+    padding: 24px 40px;
+    background: #ffffff;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.THIS .modal header {
+    height: auto;
+    position: relative;
+    border-bottom: 1px solid #efefef;
+    padding-bottom: 24px;
+}
+
+.THIS .modal header h1 {
+    font-size: 32px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.85);
+    text-align: center;
+}
+
+.THIS .modal section h1 {
+    font-size: 20px;
+    line-height: 36px;
+    color: rgba(0, 0, 0, 0.85);
+    margin-top: 24px;
+    font-weight: 700;
+    text-align: left;
+}
+
+.THIS .modal section p,
+.THIS .modal section pre{
+    font-size: 20px;
+    line-height: 36px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.85);
+    word-break: inherit;
+}
+
+.THIS .modal .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: none;
+    border: none;
+    font-size: 48px;
+    line-height: 0.6;
+    font-weight: 300;
+}
+
+.THIS .modal label {
+    display: block;
+    width: 100%;
+    font-size: 15px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.85);
+    float: none;
+    max-width: inherit;
+    flex-basis: inherit;
+    padding-top: 0;
+}
+
+.THIS .modal .slds-form-element {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.THIS .modal .slds-form-element__control {
+    padding-left: 0;
+    margin-top: 12px;
+}
+
+/*.THIS .modal .slds-form-element__control .clipImageInput {*/
+/*    padding-left: 0;*/
+/*    margin-top: -10px;*/
+/*    position: relative;*/
+/*    width: 20px;*/
+/*    height: 23px;*/
+/*    overflow: hidden;*/
+/*    cursor: pointer;*/
+/*    background-image: url('/resource/1650249507000/clipImageInput?');*/
+/*}*/
+
+.THIS .modal textarea {
+    background: rgba(0, 0, 0, 0.05);
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 14px 16px;
+}
+
+.THIS .modal input {
+    background: rgba(0, 0, 0, 0.05);
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 14px 16px;
+}
+
+.THIS .modal input[type="file"] {
+    background: none;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+}
+
+.THIS .modal input[type="checkbox"] {
+    margin: 12px 0;
+}
+
+.THIS .modal .submitBtn {
+    display: block;
+    width: 136px;
+    height: 56px;
+    background: #179FE0;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0 auto;
+    margin-top: 40px;
+    border: 0;
+    border-radius: 4px;
+}
+
+.THIS .modal footer {
+    width: 100%;
+    padding: 32px 0;
+    border-top: 1px solid #efefef;
+    margin-top: 32px;
+}
+
+.THIS .modal footer button {
+    display: block;
+    margin: 0 auto;
+    font-size: 16px !important;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.THIS .row {
+    display: flex;
+    flex-direction: row;
+}
+
+.THIS .row > div {
+    flex: 1;
+}
+
+@media (min-width: 769px) {
+    .THIS .is_mobile {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .THIS .is_pc {
+        display: none;
+    }
+
+    .THIS .contents {
+        width: calc(100% - 40px);
+        height: auto;
+        margin: 0 20px;
+        padding: 56px 0;
+    }
+
+    .THIS .pageTitle {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .THIS h1 {
+        font-size: 28px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 39.2px;
+        letter-spacing: -2px;
+        text-align: left;
+        color: rgba(0, 0, 0, 0.85);
+        margin-top: 56px;
+        word-break: break-word;
+    }
+
+    .THIS h2 {
+        font-size: 20px;
+        line-height: 36px;
+        text-align: left;
+        word-break: break-word;
+    }
+
+    .THIS .jobPositionInformations {
+        display: grid;
+        grid-auto-rows: max-content;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 40px;
+        margin-top: 56px;
+    }
+
+    .THIS .jobPositionInformations > div {
+        width: 100% !important;
+    }
+
+    .THIS .modal {
+        width: calc(100% - 40px) !important;
+        padding: 20px 40px !important;
+    }
+    
+    .THIS .modal .close {
+        top: -36px;
+    }
+}

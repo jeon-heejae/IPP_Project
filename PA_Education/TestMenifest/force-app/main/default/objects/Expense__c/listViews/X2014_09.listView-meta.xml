@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>X2014_09</fullName>
+    <columns>NAME</columns>
+    <columns>OWNER.ALIAS</columns>
+    <columns>ApprovalStatus__c</columns>
+    <columns>UseYear__c</columns>
+    <columns>UseMonth__c</columns>
+    <columns>TotalAmount__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>UseMonth__c</field>
+        <operation>equals</operation>
+        <value>9</value>
+    </filters>
+    <filters>
+        <field>UseYear__c</field>
+        <operation>equals</operation>
+        <value>2014</value>
+    </filters>
+    <label>2014.09</label>
+</ListView>

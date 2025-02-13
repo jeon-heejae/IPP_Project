@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Billing_Result</fullName>
+    <active>false</active>
+    <errorConditionFormula>IF( 
+( 
+( NOT(ISNULL(CollectionDate__c)) &amp;&amp; ISNULL(CollectionAmount__c ) ) 
+&amp;&amp; 
+( NOT(ISNULL(CollectionAmount__c )) &amp;&amp; ISNULL(CollectionDate__c) ) 
+) 
+, NOT(ISNULL(CollectionAmount__c )) &amp;&amp; NOT(ISNULL(CollectionDate__c)) 
+, ( 
+( NOT(ISNULL(CollectionDate__c)) &amp;&amp; ISNULL(CollectionAmount__c ) ) 
+|| 
+( NOT(ISNULL(CollectionAmount__c )) &amp;&amp; ISNULL(CollectionDate__c) ) 
+) 
+)</errorConditionFormula>
+    <errorMessage>&quot;수령일자&quot; , &quot;수령금액&quot; 필수입력항목.</errorMessage>
+</ValidationRule>

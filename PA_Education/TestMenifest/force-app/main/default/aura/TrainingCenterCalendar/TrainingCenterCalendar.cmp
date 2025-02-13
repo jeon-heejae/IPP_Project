@@ -1,0 +1,128 @@
+<!--
+* ==================================================================================
+*   File Name   : TrainingCenterCalendar.cmp
+*   Author      : Kwanwoo.Jeon
+*   Date        : 2023.10.16
+*   Description : Schedule Tab Component
+*   Modification Log
+* ==================================================================================
+*   Ver     Date          Author          Modification
+* ==================================================================================
+*   1.0     2023.10.16    Kwanwoo.Jeon       Create
+* ==================================================================================
+-->
+
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes"
+                access="global"
+                controller="TrainingCenterCalendarController">
+    <ltng:require scripts="{!join(',', $Resource.TrainingCenterCalendar + '/moment.min.js', $Resource.TrainingCenterCalendar + '/moment-timezone.min.js', $Resource.TrainingCenterCalendar + '/jquery.min.js', $Resource.TrainingCenterCalendar + '/fullcalendar.min.js')}"
+                  afterScriptsLoaded="{!c.scriptsLoaded}" />
+
+    <!--AnyCalendar Attribute-->
+    <aura:attribute name="sObjectName"          type="String"       default="Event"         description='Target Object'/>
+    <aura:attribute name="eventBackgroundColor" type="String"       default="#eeeeee"       description='Calendar Backgroud Color'/>
+    <aura:attribute name="eventBorderColor"     type="String"       default="#ffffff"       description='Event Border Color in Calendar'/>
+    <aura:attribute name="eventTextColor"       type="String"       default="#00396b"       description='Event Text Color in Calendar'/>
+    <aura:attribute name="eventsMap"            type="Map"                                  description='Event Data used in Calendar'/>
+
+    <!-- AnyCalendar invalid Attribute   -->
+    <aura:attribute name="sObjectLabel"         type="String"       default="Event"/>
+    <aura:attribute name="weekends"             type="Boolean"      default="true"/>
+    <aura:attribute name="showModal"            type="Boolean"      default="false"/>
+    <aura:attribute name="isCreateActive"       type="Boolean"      default="true"/>
+    <aura:attribute name="DateNextMonth"        type="String"         />
+
+    <!--Custom Attribute-->
+    <!-- 필터 - 체크박스 -->
+    <aura:attribute name="mapCheckboxValue"     type="Map"          default="{main: true, gram1: true, gram2: true, gram3: true, gram4: true}"  description='체크박스 값 Map'/>
+    <!-- 필터 - 픽리스트 -->
+    <aura:attribute name="SelectedPick"           type="String"       default="All"           description='픽리스트 선택값'/>
+
+    <!-- 모달 온/오프 체크 -->
+    <aura:handler name="change" value="{!v.showModal}" action="{!c.fnChangeShowModal}"/>
+
+
+    <div class="slds">
+        <div class="slds-grid" style="max-height:80vh">
+            <div class="slds-size_10-of-12"  >
+                <div class="slds-card slds-scrollable_y">
+                    <c:TrainingCenterCalendarChild
+                            events="{!v.eventsMap}"
+                            sObjectName="{!v.sObjectName}"
+                            weekends="{!v.weekends}"
+                            eventBackgroundColor="{!v.eventBackgroundColor}"
+                            eventBorderColor="{!v.eventBorderColor}"
+                            eventTextColor="{!v.eventTextColor}"
+                            DateNextMonth = "{!v.DateNextMonth}"/>
+                </div>
+            </div>
+            <div class="slds-size_2-of-12" style="font-size: large; margin-left: 0.3rem; margin-right: 0.3rem;">
+                <div>
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutItem size="12">
+                            <div class="slds-p-around_x-small" style="font-size: medium">
+                                <lightning:layout multipleRows="true" class="slds-p-top_small">
+
+                                    <lightning:layoutItem size="12" padding="horizontal-small" class="layoutItem">
+                                        <div>
+                                            <legend class="slds-form-element__legend slds-form-element__label" style="font-size: large">
+                                                <abbr class="slds-required" title="required" >*</abbr> Filter </legend>
+                                        </div>
+                                    </lightning:layoutItem>
+
+                                    <lightning:layoutItem size="12" padding="horizontal-small" class="layoutItem">
+                                        <lightning:select label="" name="select1" aura:id="Region" value="{!v.SelectedPick}">
+                                            <aura:iteration items="['All', '확정', '신청 현황']" var="s"
+                                                            indexVar="idx">
+                                                <option value="{!s}" text="{!s}"
+                                                        label="{!s}"
+                                                        id="categoryOption"/>
+                                            </aura:iteration>
+                                        </lightning:select>
+                                    </lightning:layoutItem>
+                                    <lightning:layoutItem size="12" padding="horizontal-small">
+                                        <fieldset class="slds-form-element slds-is-required">
+                                            <div class="slds-form-element__control">
+                                                <div class="slds-checkbox" style="font-size: medium">
+                                                    <lightning:input type="checkbox" aura:id="cbMain" label="🏠 본채"
+                                                                     checked="{!v.mapCheckboxValue.main}" />
+                                                    <lightning:input type="checkbox" aura:id="cbGram1" label="🏕️ 글램핑1"
+                                                                     checked="{!v.mapCheckboxValue.gram1}"/>
+                                                    <lightning:input type="checkbox" aura:id="cbGram2" label="🏕️ 글램핑2"
+                                                                     checked="{!v.mapCheckboxValue.gram2}"/>
+                                                    <lightning:input type="checkbox" aura:id="cbGram3" label="🏕️ 글램핑3"
+                                                                     checked="{!v.mapCheckboxValue.gram3}"/>
+                                                    <lightning:input type="checkbox" aura:id="cbGram4" label="🏕️ 글램핑4"
+                                                                     checked="{!v.mapCheckboxValue.gram4}"/>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </lightning:layoutItem>
+
+
+
+                                    <lightning:layoutItem class="searchBtnLayout" size="12" padding="horizontal-small" >
+                                        <lightning:button class="searchBtn" variant="brand" label="Search" stretch="true"
+                                                          onclick="{!c.fnSearch}" />
+                                    </lightning:layoutItem>
+                                </lightning:layout>
+                            </div>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </div>
+
+                <div  class="slds-card__footer">
+                    <lightning:button
+                            variant="neutral" label="수련원 신청" stretch="true" disabled="{!not(v.isCreateActive)}"
+                            onclick="{!c.fnCreate}" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <aura:if isTrue="{!v.showModal}">
+        <c:CreateTrainingCenterModal    showModal = "{!v.showModal}"/>
+    </aura:if>
+
+
+</aura:component>

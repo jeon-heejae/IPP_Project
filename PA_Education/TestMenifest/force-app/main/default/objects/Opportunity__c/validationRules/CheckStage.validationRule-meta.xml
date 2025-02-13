@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CheckStage</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+  OR(
+      ISCHANGED(Stage__c),
+      ISNEW()
+  ),
+  ISPICKVAL(Stage__c, &apos;06. Closed&apos;), 
+  NOT(
+    OR(
+      ISPICKVAL(StageDetail__c, &apos;06-1. Close Won&apos;), 
+      ISPICKVAL(StageDetail__c, &apos;06-2. Close Lost&apos;), 
+      ISPICKVAL(StageDetail__c, &apos;06-3. Drop&apos;), 
+      ISPICKVAL(StageDetail__c, &apos;06-4. Holding&apos;) 
+    )
+  )
+)</errorConditionFormula>
+    <errorDisplayField>Stage__c</errorDisplayField>
+    <errorMessage>상태를 06. Closed로 변경하기 위해서
+영업단계를 변경하셔야 합니다. 
+Key Fields 중 영업단계를변경하면 자동 적용됩니다.</errorMessage>
+</ValidationRule>

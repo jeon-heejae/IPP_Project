@@ -1,0 +1,12 @@
+.THIS {
+}
+
+
+.THIS .custom_datatable {
+	height: 45rem;
+}
+
+.THIS lightning-button > button {
+	font-family: 'Salesforce Sans',Arial,sans-serif;
+	color: rgb(0, 109, 204);
+}

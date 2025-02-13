@@ -1,0 +1,50 @@
+<!--
+  * ===============================================================
+  * File Name   : QuoteItemNew.page
+  * Author      : Soyoung.Jung
+  * Date        : 2019.01.15
+  * Description : Related list에서 견적 상세 생성
+  * Modification Log
+  * ===============================================================
+  * Ver     Date        Author          Modification
+  * ===============================================================
+  * 1.0     2019.01.15  Soyoung.Jung    Create
+  * ===============================================================
+-->
+
+<apex:page >
+	
+    <script src="../../soap/ajax/37.0/connection.js" type="text/javascript"></script>
+    <script>
+        // Parameter Check
+        var parameter = decodeURIComponent(window.location.search.substring(1));
+        var parameterMap = parameter.split("&");
+        var parameterDetail, key, value;
+
+        console.log(parameterMap);
+        
+        if(parameter !== "") {
+            for(var index = 0, maxIndex = parameterMap.length; index < maxIndex; index++) {
+                parameterDetail = parameterMap[index].split("=");
+                
+                key = parameterDetail[0];
+                value = parameterDetail[1];
+
+                console.log("key : " + key + ", value : " + value);
+                
+                if(key === "id") {
+                    if(SfdcApp.projectOneNavigator) {
+                        SfdcApp.projectOneNavigator.fireContainerEvent("force:navigateToComponent", {
+                            componentDef: 'c:QuoteItemNew',
+                            componentAttributes: {
+                                idParentRecord : value
+                            },
+                            resetHistory: false
+                        });      
+                    }
+                }
+            }
+        }
+    </script> 
+
+</apex:page>

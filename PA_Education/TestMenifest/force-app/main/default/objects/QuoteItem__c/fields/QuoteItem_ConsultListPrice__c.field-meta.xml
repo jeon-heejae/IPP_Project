@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>QuoteItem_ConsultListPrice__c</fullName>
+    <externalId>false</externalId>
+    <inlineHelpText>SFDC Consultant	Chief	   26,000,000 
+SFDC Consultant	Principal	   22,000,000 
+SFDC Consultant	Supervisor  16,000,000 
+SFDC Developer	Chief	   22,000,000 
+SFDC Developer	Principal	   16,000,000 
+SFDC Developer	Supervisor  12,000,000</inlineHelpText>
+    <label>표준단가 M/M</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>
