@@ -4,7 +4,7 @@
         console.log("doInit listSelectId: " + listSelectId);
 
         // 대괄호와 따옴표 제거: split과 join 사용
-        if (listSelectId.length > 2) {
+        if (listSelectId.length > 2) { //아무것도 선택하지 않았을 때 길이:2
             listSelectId = listSelectId.split('[').join('').split(']').join('').split('"').join('');
             console.log("doInit listSelectId (Processed): " + listSelectId);
 

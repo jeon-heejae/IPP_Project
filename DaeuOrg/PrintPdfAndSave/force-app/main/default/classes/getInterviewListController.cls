@@ -71,7 +71,8 @@ public with sharing class getInterviewListController {
 
             List<String> listRecordsId=new List<String>();
             listRecordsId=listSelectId.split(',');
-
+            System.debug('listRecordsId: '+listRecordsId);
+            
             List<Interview__c> listInterviews=new List<Interview__c>();
             listInterviews=[
                 SELECT RecordType.Name

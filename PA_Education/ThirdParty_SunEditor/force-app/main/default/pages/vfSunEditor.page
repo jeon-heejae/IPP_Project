@@ -1,10 +1,12 @@
 <apex:page
         controller="sunEditorController">
     <apex:includeScript value="{!URLFOR($Resource.SunEditor2, 'suneditor241206/dist/suneditor.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.pdfgen4, '/dom-to-image.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.pdfgen4, '/jspdf.min.js')}"/>
     <apex:stylesheet value="{!URLFOR($Resource.SunEditor2, 'suneditor241206/dist/css/suneditor.min.css')}"/>
     
 
-    <div>
+    <div id="canvasUse" class="se-container se-wrapper-inner se-wrapper-wysiwyg sun-editor-editable">
         <textarea id="editor" style="width: 100%; height: 100%;"></textarea>
     </div>
 
@@ -15,25 +17,7 @@
         console.log('page lexOrigin: '+lexOrigin);
 
         var editor;
-        // SunEditor 초기화
-        // editor = SUNEDITOR.create(document.getElementById("editor"), {
-        //         // plugins: ['image','table'],
-        //         buttonList: [
-        //             ['bold', 'italic', 'underline', 'strike'], 
-        //             ['font', 'fontSize', 'formatBlock'], 
-        //             ['align', 'list', 'table'], 
-        //             ['link', 'image', 'video'], 
-        //             ['codeView'],
-        //             ['fontColor'],
-        //             ['save', 'template']
-        //         ],
-        //         // attributesWhitelist: {
-        //         //     img: 'src|alt|style|width|height' // img 태그에 허용할 속성 설정
-        //         // },
-        //         height: 600,
-        //         imageWidth: 200, // 이미지의 기본 너비
-        //         imageHeight: 200
-        //     });
+        
         document.addEventListener("DOMContentLoaded", function() {
             editor = SUNEDITOR.create(document.getElementById("editor"), {
                 // plugins: ['image','table'],
@@ -46,12 +30,13 @@
                     ['fontColor'],
                     ['save', 'template']
                 ],
-                // attributesWhitelist: {
-                //     img: 'src|alt|style|width|height' // img 태그에 허용할 속성 설정
-                // },
                 height: 600,
                 imageWidth: 200, // 이미지의 기본 너비
-                imageHeight: 200
+                imageHeight: 200,
+                imageAlignShow : true, //이미지 가로정렬 옵션
+                imageRotation : true, // 이미지 회전 옵션
+                iframe : true, //context 메뉴, 이미지클릭시 영역을 벗어날 경우 이상동작으로 인해 iframe 옵션을 준다.
+                fullPage : true // contents 추출 시 html 문서 형태로 추출 (doctype, head, body tag포함됨)
             });
             
             // editor.readOnly(true);
@@ -80,6 +65,17 @@
                     console.warn("Origin mismatch. Message rejected.");
                     return;
                 }
+
+                console.log(JSON.stringify(event.data));
+                strRecordId = event.data.currRecordId;
+
+                if(event.data.type == "DATA"){ //초기 저장된 데이터를 editor에 표시
+                    editor.setContents(event.data.data);
+                }
+                else if(event.data.type == "PREVIEW"){
+                    preview();
+                }
+                
 
                 console.log("Valid message received: ", event.data);
                 
@@ -118,6 +114,51 @@
                 
                 }
             }, false);
+
+            function preview(){
+                const canvasUse = document.getElementById("canvasUse");
+                canvasUse.style.display = "block";
+                canvasUse.innerHTML = editor.getContents();
+
+                domtoimage.toPng(canvasUse)
+                    .then(function (dataUrl) {
+                        let img = new Image();
+                        img.onload = function () {
+                            let imgWidth = 170; // 이미지 가로 길이(mm), A4 기준으로 설정
+                            let pageHeight = imgWidth * 1.414; // 출력 페이지 세로 길이
+                            let imgHeight = img.height * imgWidth / img.width;
+                            let heightLeft = imgHeight;
+                            let margin = 20; // 출력 페이지 여백 설정
+                            let doc = new jsPDF('p', 'mm');
+                            let position = 10;
+
+                            window.scrollTo(0, 0);
+                            canvasUse.style.display = "none";
+
+                            // 첫 페이지 출력
+                            doc.addImage(dataUrl, 'PNG', margin, position, imgWidth, imgHeight);
+                            heightLeft -= pageHeight;
+
+                            // 여러 페이지 출력 처리
+                            while (heightLeft >= 20) {
+                                position = heightLeft - imgHeight;
+                                position -= 20;
+                                doc.addPage();
+                                doc.addImage(dataUrl, 'PNG', margin, position, imgWidth, imgHeight);
+                                heightLeft -= pageHeight;
+                            }
+
+                            // SFDC로 저장이 필요할 경우 주석 후 fileUpload 함수 호출
+                            // window.open(doc.output('bloburl'));
+                            fileUpload(doc.output('datauristring'));
+                        };
+                        img.src = dataUrl;
+                    })
+                    .catch(function (error) {
+                        console.error("oops, something went wrong!", error);
+                    });
+            }
+    
     </script>
    
 

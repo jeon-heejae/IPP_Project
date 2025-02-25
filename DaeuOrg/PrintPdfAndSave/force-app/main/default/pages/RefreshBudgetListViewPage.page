@@ -1,0 +1,24 @@
+<apex:page standardController="Project__c" extensions="RefreshBudgetListController" recordSetVar="stdSetController">
+    <apex:includeLightning />
+    <div id="lightning"></div>
+
+ 
+        <script type="text/javascript">
+            if(SfdcApp.projectOneNavigator){
+                SfdcApp.projectOneNavigator.fireContainerEvent(
+                    "force:navigateToComponent",
+                    {
+                        componentDef: 'c:BudgetRefresh',
+                        componentAttributes: {
+                            'listSelectId' : '{!setSelectedId}'
+                        },
+                        isredirect: 'true'
+                    }
+                );
+            }
+
+            console.log('2.'+ `{!setSelectedId}`);
+ 
+        </script>
+ 
+</apex:page>
