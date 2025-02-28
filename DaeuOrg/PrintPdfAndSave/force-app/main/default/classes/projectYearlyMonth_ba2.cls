@@ -1,16 +1,29 @@
 public with sharing class projectYearlyMonth_ba2 implements Database.Batchable<SObject>, Database.Stateful {
    
     private Map<String, YearlyAmount__c> mapYearlyAmount = new Map<String, YearlyAmount__c>();
-    private List<YearlyAmount__c> listDeleteForUpdate=new List<YearlyAmount__c>();
     private String query;
  
     public projectYearlyMonth_ba2() {
- 
-        //프로젝트 전체 조회
+
+        //기존 YearlyAmount조회
+        List<YearlyAmount__c> listYearly = [
+            SELECT Id, Project__c, Type__c, Year__c, Name,
+            month1__c, month2__c, month3__c, month4__c, month5__c, month6__c,
+            month7__c, month8__c, month9__c, month10__c, month11__c, month12__c
+            FROM YearlyAmount__c
+        ];
+        System.debug('[YearlyAmount 조회] 조회된 개수: ' + listYearly.size());
+       
+         //업데이트 위해 존재하는 YearlyAmount 레코드 전부 삭제
+         if(!listYearly.isEmpty()){
+            delete listYearly;
+            System.debug('[YearlyAmount 삭제 완료]');
+        }
+        //예산이 배정된 프로젝트 전체 조회
         query = 'SELECT Id, ru_Budget__c, Name, ' +
-                            'StartDate__c, EndDate__c, ru_Amount__c, fm_NetAmount__c ' +
+                            'ru_Amount__c, fm_NetAmount__c ' +
                             'FROM Project__c '+
-                            'WHERE ru_Budget__c != 0 And Id='+'\'a2TF7000002N7dQMAS\'';
+                            'WHERE ru_Budget__c != 0 ';
  
         System.debug('Query 실행됨: ' + query);
     }
@@ -34,32 +47,13 @@ public with sharing class projectYearlyMonth_ba2 implements Database.Batchable<S
             setProjectId.add(project.Id);
             System.debug('[Project ID] ' + project.Id + ' - ' + project.Name);
         }
- 
-        deleteYearlyAmounts(setProjectId); //프로젝트가 삭제된 경우 관련 YearlyAmount 레코드들 삭제
-       
-        //기존 YearlyAmount조회
-        List<YearlyAmount__c> listYearly = [
-            SELECT Id, Project__c, Type__c, Year__c, Name,
-            month1__c, month2__c, month3__c, month4__c, month5__c, month6__c,
-            month7__c, month8__c, month9__c, month10__c, month11__c, month12__c
-            FROM YearlyAmount__c
-            WHERE Project__c IN :setProjectId
-            ORDER BY Year__c ASC
-        ];
-        System.debug('[YearlyAmount 조회] 조회된 개수: ' + listYearly.size());
-       
-         //싹다 밀어버리기
-         if(!listYearly.isEmpty()){
-            delete listYearly;
-            System.debug('[YearlyAmount 삭제 완료]');
-        }
         
        
         // 프로젝트별 예산 상세 조회
         List<ProjectBudgetDetail__c> listDetail = [
             SELECT Amount__c, Category2__c, ProjectBudget__r.Project__c, effectiveStartDate__c, effectiveEndDate__c
             FROM ProjectBudgetDetail__c
-            WHERE ProjectBudget__r.Project__c IN :setProjectId
+            WHERE ProjectBudget__r.Project__c IN :setProjectId AND effectiveStartDate__c!=null AND effectiveEndDate__c!=null
         ];
 
         System.debug('[ProjectBudgetDetail 조회] 조회된 개수: ' + listDetail.size()); 
@@ -87,21 +81,10 @@ public with sharing class projectYearlyMonth_ba2 implements Database.Batchable<S
             mapListProjectDetail.put(projectId, mapListDetail);
         }
  
+        //월별 예산 계산 후 맵에 담기
         mapYearlyAmount=calculateYearlyAmount(listProject, mapListProjectDetail);
- 
- 
-    }
-   
-    /*
-    ** Batch finish
-    */
-    public void finish(Database.BatchableContext BC) {
-        if(!listDeleteForUpdate.isEmpty()){
-            //업데이트 해야할 것들 삭제
-            System.debug('[YearlyAmount 삭제 개수] ' + listDeleteForUpdate.size());
-            delete listDeleteForUpdate;
-            System.debug('[YearlyAmount Delete 완료]');
-        }
+
+        
         if (!mapYearlyAmount.isEmpty()) {
             // 리스트에 추가 후 insert 실행
             List<YearlyAmount__c> listYearlyAmount = new List<YearlyAmount__c>(mapYearlyAmount.values());
@@ -112,18 +95,12 @@ public with sharing class projectYearlyMonth_ba2 implements Database.Batchable<S
         }
     }
    
-    //YearlyAmount 삭제
-    private void deleteYearlyAmounts(Set<Id> setProjectId) {
-        List<YearlyAmount__c> listToDeleteYearly = [
-            SELECT Id FROM YearlyAmount__c WHERE Project__c NOT IN :setProjectId
-        ];
-        System.debug('[삭제 대상 YearlyAmount 개수] ' + listToDeleteYearly.size());
- 
-        if (!listToDeleteYearly.isEmpty()) {
-            delete listToDeleteYearly;
-            System.debug('[YearlyAmount 삭제 완료]');
-        }
+    /*
+    ** Batch finish
+    */
+    public void finish(Database.BatchableContext BC) {
     }
+   
    
     /*
     * 프로젝트의 연간 월별 예산을 계산하는 메서드 
@@ -163,17 +140,21 @@ public with sharing class projectYearlyMonth_ba2 implements Database.Batchable<S
                     Integer endDay = endDate.day();
                     Integer dayDiff = startDate.daysBetween(endDate) + 1;
     
-                    Decimal decProject = (Decimal) objDetail.Amount__c;
-                    Decimal dayByProject=0;
+                    Decimal decProject = (Decimal) objDetail.Amount__c; //세부예산
+                    Decimal dayByProject=0; //월별일할 예산
 
-                    if (decProject == 0) {
+                    if (decProject == 0) { //세부 예산이 0인 경우 프로젝트 기간이 변동되었다고 판단 후 해당 로직 실행
+                        //유효시작일 이후 배정되었던 월별 일할 예산들의 총합을 계산하는 메서드
                         decProject = redistributeExistingBudget(project, mapKey, mapYearlyDetailAmount, startYear, endYear, startMonth, endMonth);
+
                         dayByProject = decProject / Decimal.valueOf(dayDiff);
+                        //변동된 프로젝트 기간만큼 월별 일할 예산을 다시 재분배하는 메서드
                         distributeBudget(project, mapKey, mapYearlyDetailAmount, startYear, endYear, startMonth, endMonth, startDay, endDay, dayByProject);
                     }
                     else{
                         dayByProject=decProject / Decimal.valueOf(dayDiff);
-                        CalculateBudget(project, mapKey, mapYearlyDetailAmount, startYear, endYear, startMonth, endMonth, startDay, endDay, dayByProject);
+                        //월별 일할 예산을 계산하는 메서드
+                        CalculateBudget(project, mapKey, mapYearlyDetailAmount, startYear, endYear, startMonth, endMonth, startDay, endDay, dayByProject,decProject);
                     }
                 }
                 
@@ -188,13 +169,13 @@ public with sharing class projectYearlyMonth_ba2 implements Database.Batchable<S
     }
     
     /*
-    * 기존 예산을 재분배하는 메서드
+    * 유효시작일 이후 배정되었던 월별 일할 예산들의 총합을 계산하고 해당 월의 예산을 0으로 초기화시키는 메서드
     */
     private Decimal redistributeExistingBudget(
         Project__c project, String mapKey, Map<String, YearlyAmount__c> mapYearlyDetailAmount,
         Integer startYear, Integer endYear, Integer startMonth, Integer endMonth
     ) {
-        Decimal totalAmount = 0;
+        Decimal totalAmount = 0; //유효시작일 이후 배정되었던 월별 일할 예산들의 총합을 보관
         for (Integer year = startYear; year <= endYear; year++) {
             String strYearKey = project.Id + '-' + year + '-' + mapKey;
 
@@ -227,18 +208,20 @@ public with sharing class projectYearlyMonth_ba2 implements Database.Batchable<S
     }
     
     /*
-    * 예산을 연도 및 월별로 배분하는 메서드 (프로젝트 기간 변동 시)
+    * 예산을 변동된 프로젝트 기간만큼 월별 일할 계산을 통해 다시 재분배하는 메서드 
     */
     private void distributeBudget(
         Project__c project, String mapKey, Map<String, YearlyAmount__c> mapYearlyDetailAmount,
         Integer startYear, Integer endYear, Integer startMonth, Integer endMonth,
         Integer startDay, Integer endDay, Decimal dayByProject
     ) {
+
         for (Integer year = startYear; year <= endYear; year++) {
             String strYearKey = project.Id + '-' + year + '-' + mapKey;
 
             if (!mapYearlyDetailAmount.containsKey(strYearKey)) {
-                mapYearlyDetailAmount.put(strYearKey, createYearlyAmountRecord(project, mapKey, year));
+                //새로운 YearlyAmount 레코드 생성 후 맵에 담기
+                mapYearlyDetailAmount.put(strYearKey, createYearlyAmountRecord(project, mapKey, year)); 
             }
             
             YearlyAmount__c objYearlyAmount = mapYearlyDetailAmount.get(strYearKey);
@@ -247,6 +230,7 @@ public with sharing class projectYearlyMonth_ba2 implements Database.Batchable<S
             Integer lastMonth = (year == endYear) ? endMonth : 12;
 
             for (Integer month = firstMonth; month <= lastMonth; month++) {
+                //해당 월의 일 수를 판단하는 메서드
                 Integer day = getEffectiveDaysInMonth(year, month, startYear, endYear, startMonth, endMonth, startDay, endDay);
                 Decimal monthProject = dayByProject * Decimal.valueOf(day);
 
@@ -261,17 +245,20 @@ public with sharing class projectYearlyMonth_ba2 implements Database.Batchable<S
     }
 
     /*
-    * 예산을 연도 및 월별로 배분하는 메서드
+    * 예산을 월별 일할 예산을 계산하는 메서드
     */
     private void CalculateBudget(
         Project__c project, String mapKey, Map<String, YearlyAmount__c> mapYearlyDetailAmount,
         Integer startYear, Integer endYear, Integer startMonth, Integer endMonth,
-        Integer startDay, Integer endDay, Decimal dayByProject
+        Integer startDay, Integer endDay, Decimal dayByProject, Decimal decProject
     ) {
+        Decimal decRemainAmount=0; //총예산과 일할 계산들의 차액을 보관할 변수
+
         for (Integer year = startYear; year <= endYear; year++) {
             String strYearKey = project.Id + '-' + year + '-' + mapKey;
 
             if (!mapYearlyDetailAmount.containsKey(strYearKey)) {
+                //새로운 YearlyAmount 레코드 생성 후 맵에 담기
                 mapYearlyDetailAmount.put(strYearKey, createYearlyAmountRecord(project, mapKey, year));
             }
             
@@ -282,16 +269,23 @@ public with sharing class projectYearlyMonth_ba2 implements Database.Batchable<S
 
             for (Integer month = firstMonth; month <= lastMonth; month++) {
                 Integer day = getEffectiveDaysInMonth(year, month, startYear, endYear, startMonth, endMonth, startDay, endDay);
-                Decimal monthProject = dayByProject * Decimal.valueOf(day);
+                Decimal monthProject = Math.round(dayByProject * Decimal.valueOf(day)); //정수로 반올림
 
+                decRemainAmount+=monthProject;
+
+                if(year==endYear && month==endMonth){
+                    //연말은 차액만큼 더해서 저장(총예산 합을 유지하기 위함)
+                    monthProject+=decProject-decRemainAmount;
+                }
+                
                 String monthFieldName = 'month' + String.valueOf(month) + '__c';
                 
                 if (objYearlyAmount.get(monthFieldName) == null) {
                     objYearlyAmount.put(monthFieldName, monthProject);
                 } else {
                     Decimal monthAmount=(Decimal) objYearlyAmount.get(monthFieldName);
-                    monthAmount+=monthProject;
-                    if(monthAmount<0){
+                    monthAmount+=monthProject; //예산 증액 되는 경우 계산
+                    if(monthAmount<0){ //음수값 나오지 않게 하기 위함
                         monthAmount=0;
                     }
                     objYearlyAmount.put(monthFieldName, monthAmount);
@@ -316,7 +310,7 @@ public with sharing class projectYearlyMonth_ba2 implements Database.Batchable<S
     }
     
     /*
-    * 각 월에 대한 유효 일수를 계산하는 메서드
+    * 각 월에 대한 일수를 계산하는 메서드
     */
     private Integer getEffectiveDaysInMonth(
         Integer year, Integer month, Integer startYear, Integer endYear,
